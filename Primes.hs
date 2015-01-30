@@ -56,9 +56,9 @@ fprimes' = 2:[p | p<- [1..], odd p ,--doesn't seem so.
   let xs = [1..(floor.sqrt.intToFloat) p] in 
    [ x  | x <- xs, p`mod`x == 0 ] == [1] ]
 -- ################ work in progress
-    ---psuedoprimes
--- mkBlanket :: Int -> StdGen
--- mkBlanket cozy = mkStdGen cozy
+    --- psuedoprimes
+ -- mkBlanket :: Int -> StdGen
+ -- mkBlanket cozy = mkStdGen cozy
 
 -- These aren't as good as pPrime as found in Pprimes.hs anyway
 lil'toller :: Prime->Int-> Bool  -- why is this so much faster when clean is so much slower?
