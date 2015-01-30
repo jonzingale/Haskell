@@ -9,11 +9,13 @@ sarah_j = (fromGregorian 1985 5 14)
 
 daysold name = do   putChar '\n';
 			        (y,m,d) <- fmap (toGregorian.localDay.zonedTimeToLocalTime) getZonedTime;
-			        (putStr.(++ " days old, a ").show) $ diffDays (fromGregorian y m d) name;
-			        putStr $ if prime (diffDays (fromGregorian y m d) name) then "Prime." else "Composite.";
-			        let p = (diffDays (fromGregorian y m d) name) in
-			        let next = head [i|i<-[p..],prime i] in
-			        putStr $ "\nMy next prime day is in "++show(next - p)++" days \n\n";
+			        let p = diffDays (fromGregorian y m d) name in
+			        let str1 = show p ++ " days old, a " in 
+							let str2 = if prime p then "Prime." else "Composite." in
+			        let next = show $ (head [i|i<-[p..],prime i])-p in
+			        let msg = foldr(++) "" 
+			        		[str1,str2,"\nMy next prime day is in ",next," days \n\n"] in
+			        putStr$msg;
 
 sarahPrimes = do c <- getCurrentTime;
 							let z = (utctDay) c in
@@ -32,7 +34,6 @@ aliPrimes = do c <- getCurrentTime;
 					let diffs x = diffDays (addDays x z) ali in
 					let primes = [(addDays d z, diffs d) |d<-[0..364], (prime.diffs) d] in
 					(putStr.unlines.map show) primes
-
 
 
 prime p = ffactors p == [1]
