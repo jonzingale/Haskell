@@ -8,20 +8,12 @@ jon = (fromGregorian 1980 5 10)
 sarah_j = (fromGregorian 1985 5 14)
 
 daysold name = do   putChar '\n';
-			        b <- getCurrentTime; 
-			        let (y,m,d) = (toGregorian.utctDay) b in
-			        (putStr.(++ " days old").show) $ diffDays (fromGregorian y m d) name;
-			        putChar '\n';
-			        b <- getCurrentTime;
-			        let (z,n,e) = (toGregorian.utctDay) b in
-			        let p = diffDays (fromGregorian z n e) name in
-			        putStr $ if prime p then "Prime" else "Composite";
-			        putChar '\n';
-			        b <- getCurrentTime;
-			        let (z,n,e) = (toGregorian.utctDay) b in
-			        let p = diffDays (fromGregorian z n e) name in
+			        (y,m,d) <- fmap (toGregorian.localDay.zonedTimeToLocalTime) getZonedTime;
+			        (putStr.(++ " days old, a ").show) $ diffDays (fromGregorian y m d) name;
+			        putStr $ if prime (diffDays (fromGregorian y m d) name) then "Prime." else "Composite.";
+			        let p = (diffDays (fromGregorian y m d) name) in
 			        let next = head [i|i<-[p..],prime i] in
-			        putStr $ "next prime day is in "++show(next - p)++" days "++"\n"++"\n";
+			        putStr $ "\nMy next prime day is in "++show(next - p)++" days \n\n";
 
 sarahPrimes = do c <- getCurrentTime;
 							let z = (utctDay) c in
