@@ -1,4 +1,4 @@
-module Approximations (beanwildtownes,jrootk,streak,stirapprx,ecoclean) where
+module Approximations (freek,beanwildtownes,jrootk,streak,stirapprx,ecoclean) where
 import Categoria
 import System.Random
 import Data.Char
