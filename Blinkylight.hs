@@ -5,14 +5,15 @@
 -- life glider runs blinkylight with glider setup
 module Blinkylight where
 import Data.Char
---import Test
+import Data.List
+import Data.Time
 import SortsShuffles
 import System.Random
 
 width :: Int
-width = 26
+width = 260
 height :: Int
-height =40
+height =50
 
 type Board = [Pos]
 type Pos = (Int,Int)
@@ -51,6 +52,8 @@ tenner = let x = div width 2
          in [(x,y),(x,y+1),(x,y+2),(x,y+3),(x,y+4),
              (x,y+5),(x,y+6),(x,y+7),(x,y+8),(x,y+9)]
 
+
+
 band :: Board
 band = [(x,y) |x<-[1..width],y<-[div height 2]]
 
@@ -62,12 +65,13 @@ pentaboo :: Board
 pentaboo = let x = div width 2
                in [(x,10),(x,11),(x,12),(x+1,10),(x-1,11)]
 
-
-
+random_board :: Int -> Board
+random_board s = let rs = ((randomRs (0,div width 2)).mkBlanket) in
+                nub [(x,y)|(x,y)<-((take (7*width)).zip (rs s)) (rs (s+1)) ]
 
 -- Display the cells and decide their state
 showcells :: Board -> IO ()
-showcells b = seqn [writeat p "X" | p <- (knuffle b)]
+showcells b = seqn [writeat p "o" | p <- (knuffle b)]
 
 isAlive :: Board -> Pos -> Bool
 isAlive b p = elem p b
@@ -117,82 +121,9 @@ nextgen b = survivors b ++ births b
 life :: Board -> IO()
 life b = do cls
             showcells b
-            wait 5060
+            wait 109060
             life (nextgen b)
 
 --wait performs a given number of dummy actions 
 wait :: Int -> IO()
 wait n = seqn [return () | _ <- [1..n]]
-
-
-
-{--
-
-
------------1 Dimensional Automata:
-type Rule = Int
-type State = [Int]
---some Seeds
-empty::[a]
-empty = []
-
-n216 :: [Integer]
-n216 = ones 216
-
-ninety1s :: [Integer]
-ninety1s = ones 90
-
-scattered :: String->[Integer]
-scattered word = (toBin.fst.randomR (0,2^196)) ((mkBlanket.length) word)
-
-sizable :: Integer->[Integer]
-sizable n = shuffle ((ones (n`div`2))++(zeros (n`div`2)))
-
-biased :: Integer->Integer->[Integer]
-biased one zero = shuffle (ones one++(zeros zero))
-
----------- 
-
-newmexico :: (Integral a)=>[a]->Rule->IO()
-newmexico binyseed roos = 
-  let quo= (incl8.map fromIntegral) binyseed in  
-     do cls
-	seqn[writeat (0,i) (take 220 q)| (i,q)<- zip walk (blink roos quo)]
-	putChar '\n'	
-
-blink :: Rule->State->[String]
-blink roos quo =
-   (showstate (transition roos quo)):(blink roos (transition roos quo))
-
-transition :: Rule->State->State
-transition roos st =
-     	1: [ ((incl8.toBin) roos)!!n | n<-(train roos (st++[0,0,0]) [])]
-      where
-       train rz (a:b:[c]) st' = st' 
-       train rz (a:b:c:zs) st'= train rz (b:c:zs) (st'++[bin2Int [a,b,c]])
-
-showstate :: State->String
-showstate [] = ""
-showstate (st:quo) = ([" ","`"]!!st)++(showstate quo)
-
-
---
-charch :: String->String
-charch [] = ""
-charch (n:ns)| (ord n)==49 = " "++(charch ns)
-charch (n:ns)|otherwise = "`"++(charch ns)
-
-bin2Int :: Integral a=> [a] -> a-- bin2int [1,1,0] -> 3
-bin2Int = foldr (\x y->x+2*y) 0
-toBin :: (Integral a)=>a -> [a] --binar 6 = [0,1,1]
-toBin 0 = []
-toBin n = (mod n 2):toBin(div n 2)--[0,1,1,0,0,0,0,0]
-incl8 :: Integral a=>[a]->[a]
-incl8 ns | length ns>=8  =ns
-	 | otherwise = incl8 (ns++[0])
-
-zeros :: (Integral a)=>a->[a]
-zeros n = [0*k|k<-[1..n]]
-walk :: (Integral a)=> [a]
-walk = [0..]
---}
