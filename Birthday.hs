@@ -14,7 +14,7 @@ daysold name = do   putChar '\n';
 							let str2 = if prime p then "Prime." else "Composite." in
 			        let next = show $ (head [i|i<-[p..],prime i])-p in
 			        let msg = foldr(++) "" 
-			        		[str1,str2,"\nMy next prime day is in ",next," days \n\n"] in
+			        		[str1,str2,"\nThe next prime day is in ",next," days \n\n"] in
 			        putStr$msg;
 
 sarahPrimes = do c <- getCurrentTime;
