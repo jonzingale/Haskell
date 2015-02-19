@@ -1,6 +1,6 @@
 module Test where
 import System.Random
-import List
+import Data.List
 
 type Lattice = [[Z]]
 type Z = Integer
@@ -417,3 +417,37 @@ flo (a,b)= (fromIntegral a)/(fromIntegral b)
 
 heathen::[Float]
 heathen = [ flo w |w<-lithow]
+
+
+
+
+----- coefficients in 7's tricks
+
+ps_and_ks = takeWhile ((<1000).(fst)) [(p,k)|p<-fprimes,k<-[1..p],(10*k)`mod`p==1]
+
+p_cycles :: Z -> Z -> [Z]
+p_cycles n k = 
+
+  {-- 
+    check if n yields a decision for k
+      1) divmod by 10 on n to get a head and tail
+      2) multiply tail by k
+      3) sum the two (or subtrack additive inverse) and take absolute value
+      4) iterate
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
