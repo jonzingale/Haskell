@@ -1,5 +1,5 @@
 module SortsShuffles where
-
+import Data.List
 import Typehandling
 import System.Random
 
@@ -59,3 +59,10 @@ msort (a:b:cs) = mstep (mstep [a] [b]) (msort cs)
  	        | otherwise = mstep ( (takeWhile (< y) x) ++ 
 		 	 	 [y] ++ 
 				  (dropWhile (<y) x)) ys
+
+
+
+--rmdups :: Eq a => [a] -> [a]
+--rmdups [] = []
+--rmdups (x:xs)   | x `elem` xs   = rmdups xs
+--                | otherwise     = x : rmdups xs

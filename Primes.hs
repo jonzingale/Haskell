@@ -1,9 +1,9 @@
-
 module Primes where
 import System.Random
 import Printables
 import SortsShuffles
 import Typehandling
+import Data.List
 
 type Z = Integer
 type Prime = Integer
@@ -13,7 +13,8 @@ type Rand = Z
 
 
 -- :set +s for testing run time speed
--- Cleaner is a function to work on that would make probable prime checking much faster. . .
+-- Cleaner is a function to work on that 
+-- would make probable prime checking much faster. . .
 
 
 phone :: Int -> Int --Try phone with area code here.
