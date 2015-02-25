@@ -69,13 +69,11 @@ n_group n =  ((split n).decode.m_table.toInteger) n
 --								 | otherwise = f xs
 							 	 
 
-
 ----hop :: Dyn -> Dyn -- not even close, but close
 ----hop (d:dyn) = d : ((uncurry zip).g.f.unzip) dyn
 ----	where 
 ----		f (xs,zs) = (xs, [ y-1 | y <- zs]	)
 ----		g (xs,zs) = (xs,(snd.partition (<0)) zs)
-
 --}
 
 type Dyn = [(Int,Int)]
@@ -90,16 +88,15 @@ dyn1 = dyn_n [0,0,0,0,1,2,2,3,3,3]
 dyn2 = dyn_n [0,0,0,2,2,1]
 dyn3 = dyn_n [0,0,1,2,3]
 
--- dyn_TT :: Dyn -> Dyn -> [((Integer,Integer),(Integer,Integer))]
-dyn_TT as bs = [((a,b),(s,t))|(a,s)<-as,(b,t)<-bs]
-
-sqr dyn = cl [(n,f b)|((a,b),n)<-zip (d_sqr dyn) [0..] ]
+dTT :: Dyn -> Dyn -> Dyn
+dTT cyn dyn = cl [(n,f b)|((a,b),n)<-zip (dyn_TT cyn dyn) [0..] ]
 			where
-				f b = head $ findIndices (== b) $ (sources.d_key.d_sqr) dyn
+				dyn_TT as bs = [((a,b),(s,t))|(a,s)<-as,(b,t)<-bs]
+				f b = head $ findIndices (== b) $ (sources.d_key.dyn_TT cyn) dyn
 				d_key dyn = [a|a<-zip (sources dyn) [0..]]
-				d_sqr x = dyn_TT x x
 				cl = ((map swap).sort.(map swap)) -- orders by target, could be better
 
+hop :: Dyn -> Dyn
 hop dyn = zip [0..] $ t_hop ((t_drop.targets) dyn) (targets dyn)
 	where
 		t_hop [] _ = [] -- blink
@@ -111,7 +108,7 @@ pretty :: Show a => [a] -> IO ()
 pretty xs = putStr $foldr ((++).(++ "\n").show) "\n"  $ xs
 
 dynamate dyn = pretty $ (takeWhile (/=[(0,0)])  (iterate hop dyn)) ++ [[(0,0)]]
-pretty_dyn dyn = putStr $foldr ((++).(++ "\n").show) "\n"  $ (clean_dyn.sqr) dyn
+pretty_dyn dyn = pretty $ clean_dyn dyn
 	where
 		clean_dyn [] = [] -- [ (target,[sources]),#sources ]
 		clean_dyn ((s,t):dyn) = let it = partition ((== t).snd) ((s,t):dyn) in
