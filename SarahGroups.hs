@@ -1,4 +1,5 @@
 module SarahGroups where
+import Data.Function (on)
 import Data.List
 import Data.Tuple
 
@@ -49,32 +50,8 @@ n_group n =  ((split n).decode.m_table.toInteger) n
 0,3,0,3,0,3,
 0,4,2,0,4,2,
 0,5,4,3,2,1
-
--- try to cut down on the swaps
---sqr dyn = cl [(f b,n)|((a,b),n)<-zip (d_sqr dyn) [0..length (d_sqr dyn)-1] ]
---			where
---				f b = head $ findIndices (== b) $ (fst.unzip.d_key.d_sqr) dyn
---				d_key dyn = [a|a<-zip ((fst.unzip)dyn) [0..length dyn-1]]
---				d_sqr x = dyn_TT x x
---				cl = (map swap).sort -- orders by target, could be better
-
----- this won't work so long as i dont think about the indexing probem. target o target
----- everything there is to talk about is in the collection
---hop :: Dyn -> Dyn
---hop (d:dyn) = d : f dyn
--- 	where
---		f [] = []
---		f ((s,t):xs) | t-1 == 0 = (s,0) : f xs 
---								 | t /= 1 = (s,t-1) : f xs
---								 | otherwise = f xs
-							 	 
-
-----hop :: Dyn -> Dyn -- not even close, but close
-----hop (d:dyn) = d : ((uncurry zip).g.f.unzip) dyn
-----	where 
-----		f (xs,zs) = (xs, [ y-1 | y <- zs]	)
-----		g (xs,zs) = (xs,(snd.partition (<0)) zs)
 --}
+
 
 type Dyn = [(Int,Int)]
 type Source = Int
@@ -92,9 +69,8 @@ dTT :: Dyn -> Dyn -> Dyn
 dTT cyn dyn = cl [(n,f b)|((a,b),n)<-zip (dyn_TT cyn dyn) [0..] ]
 			where
 				dyn_TT as bs = [((a,b),(s,t))|(a,s)<-as,(b,t)<-bs]
-				f b = head $ findIndices (== b) $ (sources.d_key.dyn_TT cyn) dyn
-				d_key dyn = [a|a<-zip (sources dyn) [0..]]
-				cl = ((map swap).sort.(map swap)) -- orders by target, could be better
+				f b = head $ findIndices (== b) $ (sources.dyn_TT cyn) dyn
+				cl = sortBy (compare `on` (snd))
 
 hop :: Dyn -> Dyn
 hop dyn = zip [0..] $ t_hop ((t_drop.targets) dyn) (targets dyn)
