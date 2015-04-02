@@ -52,7 +52,6 @@ n_group n =  ((split n).decode.m_table.toInteger) n
 0,5,4,3,2,1
 --}
 
-
 type Dyn = [(Int,Int)]
 type Source = Int
 type Target = Int
@@ -79,6 +78,8 @@ hop dyn = zip [0..] $ t_hop ((t_drop.targets) dyn) (targets dyn)
 		t_hop (x:xs) ts = ts!!x : t_hop xs ( ts)
 		t_drop (x:xs) = x: dropWhile(==0) xs
 
+--s_hop :: Dyn -> Dyn -- drops ends.
+
 -- TO DISPLAY A DYN IN PARTS
 pretty :: Show a => [a] -> IO ()
 pretty xs = putStr $foldr ((++).(++ "\n").show) "\n"  $ xs
@@ -88,5 +89,6 @@ pretty_dyn dyn = pretty $ clean_dyn dyn
 	where
 		clean_dyn [] = [] -- [ (target,[sources]),#sources ]
 		clean_dyn ((s,t):dyn) = let it = partition ((== t).snd) ((s,t):dyn) in
-								(t,(sources.fst) it,(length.fst)it ) : (clean_dyn .dropWhile((== t).snd)) dyn
+														let unclean = (clean_dyn.dropWhile((== t).snd)) in
+														(t,(sources.fst) it,(length.fst)it) : unclean dyn
 
