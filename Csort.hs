@@ -1,8 +1,8 @@
---module Csort {--(cls,cSort,samplesort,cPrimesieve1,cPrimesieve2,
---		randput,naturalV,randV,antarticaV,sampleshuffle,
---		comonadicshuffle,randomV,wordV,navierStokes,blocksV)--} where
+module Csort (cls,cSort,samplesort,cPrimesieve1,cPrimesieve2,
+		randput,naturalV,randV,antarticaV,sampleshuffle,
+		comonadicshuffle,wordV,navierStokes,blocksV) where
 
-module Csort where
+--module Csort where
 
 import System.Random
 import SortsShuffles
@@ -27,14 +27,17 @@ naturalV = V zeros [0,1] [2..]
 randV r= V zeros [1,0] (randomRs (0,999) (mkBlanket r))
 antarticaV= V zeros [0,1] (clean 1000 ++ [9999..])
 rand2V r= V (randomRs (-99,99) (mkBlanket r)) [1,0] (randomRs (-99,99) (mkBlanket r))
+
 wordV =
   V (randomRs ('a','z') (mkBlanket 42)) ['Q','R'] (randomRs ('a','z') (mkBlanket 24))
 ringwordV = V it ['a','a'] (['a'|j<-[0..300]]++it)  
  where it = foldr (++) [] $ repeat ([' ']++['a'..'z'])
+
 streakV n =
    V (foldr (++) []  (repeat (['*']++(take n (repeat ' ') )) ))
        ['L','R'] 
          ( foldr (++) [] $ repeat (['*']++(take n (repeat ' ') ))) 
+
 blocksV n =  let it = foldr (++) [] [((take n).repeat) a|a<-['a'..'z']] in
 	 V ("FUCK"++it) ['A','Z'] $" FUCK IT INDEED ! ! !"++[' '|j<-[1..(4*n)]]++it
 
@@ -165,8 +168,8 @@ cShuffle :: (Show y ,Ord y)=> V y -> Int -> IO ()
 cShuffle v window =
           putStr $
           unlines $
-          take 40 $ 
-          map (show.{--dropWhile (==0).--}toList window (window+30).pr2V) $
+          take 40 $ -- the window is how big, the take is how long
+          map (show.{--dropWhile (==0).--}toList window (window+200).pr2V) $
           iterate swapthatshit (zipV wordV v)
 -- where the wordV is there once was a randoms.
 -- I suspect it would be better to have a working
