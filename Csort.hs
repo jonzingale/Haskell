@@ -150,10 +150,10 @@ randput r =
 
 ------------Comonadically Key Shuffling:
 type LowNum = Int
---sampleshuffle = cShuffle (shift 0 zahlenV) 0
---comonadicshuffle v = cShuffle v 0
---navierStokes :: LowNum->LowNum->IO ()
---navierStokes j k = cShuffle (streakV j) k
+sampleshuffle = cShuffle (shift 0 zahlenV) 0
+comonadicshuffle v = cShuffle v 0
+navierStokes :: LowNum->LowNum->IO ()
+navierStokes j k = cShuffle (streakV j) k
 
 --randomsV = randomV
 --key v = zipV randomV v
@@ -166,13 +166,13 @@ pr1V (V a b c) = V [i|(i,j)<-a] [i|(i,j)<-b] [i|(i,j)<-c]
 pr2V (V a b c) = V [j|(i,j)<-a] [j|(i,j)<-b] [j|(i,j)<-c]
 
 --IO bitches
---cShuffle :: (Show y ,Ord y)=> V y -> Int -> IO ()
---cShuffle v window =
---          putStr $
---          unlines $
---          take 40 $ 
---          map (show.{--dropWhile (==0).--}toList window (window+30).pr2V) $
---          iterate swapthatshit (zipV randomV v)
+cShuffle :: (Show y ,Ord y)=> V y -> Int -> IO ()
+cShuffle v window =
+          putStr $
+          unlines $
+          take 40 $ 
+          map (show.{--dropWhile (==0).--}toList window (window+30).pr2V) $
+          iterate swapthatshit (zipV wordV v)
 
 
 --------------------------
