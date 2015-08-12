@@ -27,7 +27,6 @@ naturalV = V zeros [0,1] [2..]
 randV r= V zeros [1,0] (randomRs (0,999) (mkBlanket r))
 antarticaV= V zeros [0,1] (clean 1000 ++ [9999..])
 rand2V r= V (randomRs (-99,99) (mkBlanket r)) [1,0] (randomRs (-99,99) (mkBlanket r))
---randomV = V ((randoms.mkBlanket)42) [0,1] ((randoms.mkBlanket)41)
 wordV =
   V (randomRs ('a','z') (mkBlanket 42)) ['Q','R'] (randomRs ('a','z') (mkBlanket 24))
 ringwordV = V it ['a','a'] (['a'|j<-[0..300]]++it)  
@@ -146,8 +145,6 @@ randput r =
           map (show.dropWhile (== 1).differance.toList 0 (r+1)) $
           iterate sieveV (shift (-1) primeV)
 
-
-
 ------------Comonadically Key Shuffling:
 type LowNum = Int
 sampleshuffle = cShuffle (shift 0 zahlenV) 0
@@ -155,8 +152,6 @@ comonadicshuffle v = cShuffle v 0
 navierStokes :: LowNum->LowNum->IO ()
 navierStokes j k = cShuffle (streakV j) k
 
---randomsV = randomV
---key v = zipV randomV v
 -- zipV       
 zipV :: V x-> V y-> V (x,y)
 zipV (V a b c) (V x y z) = V (zip a x) (zip b y) (zip c z)
@@ -173,7 +168,9 @@ cShuffle v window =
           take 40 $ 
           map (show.{--dropWhile (==0).--}toList window (window+30).pr2V) $
           iterate swapthatshit (zipV wordV v)
-
+-- where the wordV is there once was a randoms.
+-- I suspect it would be better to have a working
+-- version of that instead.
 
 --------------------------
 {--
