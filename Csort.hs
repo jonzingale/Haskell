@@ -1,7 +1,11 @@
-module Csort {--(cls,cSort,samplesort,cPrimesieve1,cPrimesieve2,
-		randput,naturalV,randV,antarticaV,sampleshuffle,
-		comonadicshuffle,randomV,wordV,navierStokes,blocksV)--} where
+--module Csort {--(cls,cSort,samplesort,cPrimesieve1,cPrimesieve2,
+--		randput,naturalV,randV,antarticaV,sampleshuffle,
+--		comonadicshuffle,randomV,wordV,navierStokes,blocksV)--} where
+
+module Csort where
+
 import System.Random
+import SortsShuffles
 import Primes
 import Data.Char
 
@@ -23,7 +27,7 @@ naturalV = V zeros [0,1] [2..]
 randV r= V zeros [1,0] (randomRs (0,999) (mkBlanket r))
 antarticaV= V zeros [0,1] (clean 1000 ++ [9999..])
 rand2V r= V (randomRs (-99,99) (mkBlanket r)) [1,0] (randomRs (-99,99) (mkBlanket r))
-randomV = V ((randoms.mkBlanket)42) [0,1] ((randoms.mkBlanket)41)
+--randomV = V ((randoms.mkBlanket)42) [0,1] ((randoms.mkBlanket)41)
 wordV =
   V (randomRs ('a','z') (mkBlanket 42)) ['Q','R'] (randomRs ('a','z') (mkBlanket 24))
 ringwordV = V it ['a','a'] (['a'|j<-[0..300]]++it)  
@@ -41,14 +45,14 @@ instance Show a => Show (V a) where
 ---------
 
 instance Functor V where
- fmap f (V a b c) = V (map f a) (map f b) (map f c)
+  fmap f (V a b c) = V (map f a) (map f b) (map f c)
 
 class Functor w => Comonad w where
-   (=>>)    :: w a -> (w a -> b) -> w b
-   coreturn :: w a -> a
-   coret    :: w a -> a
-   cojoin   :: w a -> w (w a)
-   x =>> f = fmap f (cojoin x)
+  (=>>)    :: w a -> (w a -> b) -> w b
+  coreturn :: w a -> a
+  coret    :: w a -> a
+  cojoin   :: w a -> w (w a)
+  x =>> f = fmap f (cojoin x)
 
 {--Cojoin is a mess 
 cojoining V x gives (V [V x] [x] [V x]) 
@@ -146,13 +150,13 @@ randput r =
 
 ------------Comonadically Key Shuffling:
 type LowNum = Int
-sampleshuffle = cShuffle (shift 0 zahlenV) 0
-comonadicshuffle v = cShuffle v 0
-navierStokes :: LowNum->LowNum->IO ()
-navierStokes j k = cShuffle (streakV j) k
+--sampleshuffle = cShuffle (shift 0 zahlenV) 0
+--comonadicshuffle v = cShuffle v 0
+--navierStokes :: LowNum->LowNum->IO ()
+--navierStokes j k = cShuffle (streakV j) k
 
-randomsV = randomV
-key v = zipV randomV v
+--randomsV = randomV
+--key v = zipV randomV v
 -- zipV       
 zipV :: V x-> V y-> V (x,y)
 zipV (V a b c) (V x y z) = V (zip a x) (zip b y) (zip c z)
@@ -162,13 +166,13 @@ pr1V (V a b c) = V [i|(i,j)<-a] [i|(i,j)<-b] [i|(i,j)<-c]
 pr2V (V a b c) = V [j|(i,j)<-a] [j|(i,j)<-b] [j|(i,j)<-c]
 
 --IO bitches
-cShuffle :: (Show y ,Ord y)=> V y -> Int -> IO ()
-cShuffle v window =
-          putStr $
-          unlines $
-          take 40 $ 
-          map (show.{--dropWhile (==0).--}toList window (window+30).pr2V) $
-          iterate swapthatshit (zipV randomV v)
+--cShuffle :: (Show y ,Ord y)=> V y -> Int -> IO ()
+--cShuffle v window =
+--          putStr $
+--          unlines $
+--          take 40 $ 
+--          map (show.{--dropWhile (==0).--}toList window (window+30).pr2V) $
+--          iterate swapthatshit (zipV randomV v)
 
 
 --------------------------
