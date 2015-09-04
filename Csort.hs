@@ -168,7 +168,7 @@ cShuffle :: (Show y ,Ord y)=> V y -> Int -> IO ()
 cShuffle v window =
           putStr $
           unlines $
-          take 40 $ -- the window is how big, the take is how long
+          take 4000 $ -- the window is how big, the take is how long
           map (show.{--dropWhile (==0).--}toList window (window+200).pr2V) $
           iterate swapthatshit (zipV wordV v)
 -- where the wordV is there once was a randoms.
