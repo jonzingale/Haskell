@@ -6,6 +6,7 @@ import Data.Time
 pop = (fromGregorian 1942 2 18)
 ali = (fromGregorian 1977 8 23)
 jon = (fromGregorian 1980 5 10)
+zeke = (fromGregorian 1981 11 6)
 sarah_j = (fromGregorian 1985 5 14)
 
 daysold name = do   putChar '\n';
