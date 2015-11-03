@@ -8,8 +8,15 @@ import Data.Char
 
 type N = Integer
 
+it = TT 4 6 
+
+--data TT s = Nil
+--						| Pr { left :: TT s,
+--										value :: s,
+--										right :: TT s
+--									}
+
 data TT s = TT s s
-lit = TT 3 4
 pr1 (TT a b) = a
 pr2 (TT a b) = b
 
@@ -28,6 +35,8 @@ class Functor m => Gonad m where
 instance Gonad TT where
   unit b = TT b b
   mult (TT (TT a b) (TT c d)) = TT a d
+  --mult (TT (TT a b) (TT c d)) = TT (pr1 (TT a b)) (pr2 (TT a b))
+
 
 -- note the f :: a -> m b
 -- :t pr1(lit >>>= unit)
