@@ -2,6 +2,8 @@ module Monad where
 import System.Random
 import Data.Char
 
+-- how about Dyn!
+
 -- Todo: Reverse the arrows all the way down
 -- Product x -> TT (x,y)
 -- Set x -> P (x)
