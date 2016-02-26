@@ -1,5 +1,7 @@
 module Garbage where
 import System.Random
+import Control.Applicative
+import Control.Monad
 import Data.Char
 
 type N = Integer
@@ -25,12 +27,13 @@ data G s = G s Entropy deriving (Show)
 
 counit (G s n) = G s (Entropy 10)
 
+instance Applicative G where
+  pure = unit
+  (<*>) = ap
+
 instance Functor G where
   fmap f (G s t) = G (f s) t
-
---instance Monad G where
-	--return b = G b Nil
-	--(G a t) >>= f = mult $ fmap f (G a t)
+ --example: fmap (++ "y") it
 
 class Functor m => Garbage m where
   (>>>=) :: m a -> (a -> m b) -> m b
@@ -42,9 +45,27 @@ instance Garbage G where
   unit b = G b Nil
   mult (G (G a t) _) = G a t
 
--- note the f :: a -> m b
--- :t pr1(lit >>>= unit)
--- :t lit
+instance Monad G where
+  return b = G b Nil
+  (G a t) >>= f = join $ fmap f (G a t)
+--  example: it >>= (return)
+
+{--
+instance Functor G where
+  fmap = liftM
+
+instance Applicative G where
+  pure = return
+  (<*>) = ap
+
+instance Monad G where
+  return b = G b Nil
+  (G a t) >>= f = join $ fmap f (G a t)
+--  example: it >>= (return)
+--}
+
+
+
 
 --USEFUL EXAMPLE
 --instance Show a => Show (State a) where
