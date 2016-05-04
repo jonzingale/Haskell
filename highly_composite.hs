@@ -29,10 +29,25 @@ comblist n = (\n -> [comb n k | k <- [0..n]]) n
 strlist n = foldr ((++).show) "" n
 
 
+-- (\n -> [combstr n k | k <-[0..n+1]]) 4
+-- ["1","01111","0010110111","0001001011","00001","0"]
+
+{-- combstr 4 k
+1
+011111
+001011011101111
+00010010110010110111
+000010001001011
+000001
+0
+--}
+
+-- 
+
 -- string versions
 combstr _ 0 = "1"
 combstr n k | k > n = "0"
-			  	  | otherwise = combstr (n-1) k ++ combstr (n-1) (k-1)
+			  	  | otherwise = combstr (n-1) k ++ "*" ++ combstr (n-1) (k-1)
 
 fibstr 0 = "0"
 fibstr 1 = "1"
