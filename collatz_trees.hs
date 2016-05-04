@@ -52,6 +52,14 @@ jens_ary str = innerfun (reverse str) [1,1,0]
 evalStr str n = eval (jens_ary str) n
 	where eval (a:b:c:[]) n = a * (n*b + c)
 
+
+--evalStr str n = clean $ eval (jens_ary str) n
+--	where
+--		eval (a:b:c:[]) n = a * (n*b + c)
+--		clean n | n < 10**5 = ceiling n
+--						| otherwise = n
+
+
 --ruby line equations
 --it derives from jens_ary
 --it.map{|a,b,c| "#{b.to_i}/#{(1/a).to_i} + #{c.to_i}/#{b.to_i}"}
@@ -59,8 +67,17 @@ evalStr str n = eval (jens_ary str) n
 
 
 --data W = Int | Diverge
-ary2weight (a:b:c:[]) = ceiling $ (1-b*a)/(c*b)
+{-- 
+0 => always converges
+-1 => always diverges
+n => convergence limit
+--}
+leafLimits n = [(ary2weight.jens_ary) str | str<-jens n] 
 
+ary2weight (a:b:c:[]) = clean $ (1/c)*(1/a-b)
+	where clean n | n < 0 = -1
+								| n < 10^5 = ceiling n
+								| otherwise = 0
 
 
 
