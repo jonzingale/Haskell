@@ -358,4 +358,19 @@ challenge47 = head [j| j<-[0..] , and [(length.pfactors) k == 4 | k<-[j..j+3]] ]
 chal47' :: (Z,Z,Z,Z)
 chal47' = head [(j,j+1,j+2,j+3) | j<-[0..] , and [(length.pfactors) k == 4 | k<-[j..j+3]] ]
 
+{--Challenge544
+hotmomma 1112131415
+[[5,1],[17,1],[59,1],[211,1],[1051,1]]
 
+Let F(r,c,n) be the number of ways to color a rectangular grid with r rows and c columns using at most n colors such that no two adjacent cells share the same color. Cells that are diagonal to each other are not considered adjacent.
+
+For example, F(2,2,3) = 18, F(2,2,20) = 130340, and F(3,4,6) = 102923670.
+
+Let S(r,c,n) = ∑nk=1∑k=1n F(r,c,k).
+
+For example, S(4,4,15) mod 109+7 = 325951319.
+
+Find S(9,10,1112131415) mod 109+7.
+--}
+
+--challenge544 :: Z
