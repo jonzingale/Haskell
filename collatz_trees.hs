@@ -72,7 +72,17 @@ evalStr str n = eval (jens_ary str) n
 -1 => always diverges
 n => convergence limit
 --}
+
+
 leafLimits n = [(ary2weight.jens_ary) str | str<-jens n] 
+largestLimit n = maximum [(a,b)| (a,b) <-zip (leafLimits n) [1..]]
+
+largeLimitRatio n = let lim = leafLimits n in
+			let ratio = (fromIntegral.snd.largestLimit) n/((fromIntegral.length) lim) in
+			[ratio, (fromIntegral.fst.largestLimit) n]
+
+ppLLR n = [largeLimitRatio k | k<-[1..n]]
+
 
 ary2weight (a:b:c:[]) = clean $ (1/c)*(1/a-b)
 	where clean n | n < 0 = -1
