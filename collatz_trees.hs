@@ -53,43 +53,60 @@ evalStr str n = eval (jens_ary str) n
 	where eval (a:b:c:[]) n = a * (n*b + c)
 
 
---evalStr str n = clean $ eval (jens_ary str) n
---	where
---		eval (a:b:c:[]) n = a * (n*b + c)
---		clean n | n < 10**5 = ceiling n
---						| otherwise = n
-
-
---ruby line equations
---it derives from jens_ary
---it.map{|a,b,c| "#{b.to_i}/#{(1/a).to_i} + #{c.to_i}/#{b.to_i}"}
-
-
-
---data W = Int | Diverge
 {-- 
 0 => always converges
 -1 => always diverges
 n => convergence limit
 --}
 
-
 leafLimits n = [(ary2weight.jens_ary) str | str<-jens n] 
 largestLimit n = maximum [(a,b)| (a,b) <-zip (leafLimits n) [1..]]
 
+largeststr n =  maximum [(a,str)| (a,str) <-zip (leafLimits n) (jens n)]
+
+-- 37 seems to be the largest height possible with resources.
 largeLimitRatio n = let lim = leafLimits n in
 			let ratio = (fromIntegral.snd.largestLimit) n/((fromIntegral.length) lim) in
 			[ratio, (fromIntegral.fst.largestLimit) n]
 
 ppLLR n = [largeLimitRatio k | k<-[1..n]]
+limits n = (fst.largestLimit) n
 
-
-ary2weight (a:b:c:[]) = clean $ (1/c)*(1/a-b)
+ary2weight (a:b:c:[]) = clean $ (a*c/(1-a*b))
 	where clean n | n < 0 = -1
-								| n < 10^5 = ceiling n
-								| otherwise = 0
+								| otherwise = ceiling n
+								-- | n < 10^10 = ceiling n
+								-- | otherwise = 0
+
+
+qsort :: Ord a => [a]->[a]  
+qsort [] = []
+qsort (x:xs) = qsort smaller ++ [x] ++ qsort larger
+           where
+             smaller = [s | s<-xs, s<=x]
+             larger  = [l | l<-xs, l > x]
+
+countEm xs = (ff.qsort) xs
+	where
+		ff [] = []
+		ff (x:xs) = [ce (x:xs) 0] ++ (ff.(dropWhile (== x))) (x:xs)
+
+		ce [] _ = 0
+		ce (x:[]) n = n+1
+		ce (x:y:xs) n | x == y = ce (y:xs) (n+1)
+									| otherwise = n + 1
 
 
 
+-- collatz to path
+collatz 1 as = as
+collatz n as | n `mod` 2 == 0 = collatz (n`div`2) (as++ "f")
+						 | otherwise = collatz (3*n + 1) (as++ "g")
+
+clean_it "" = ""
+clean_it (x:"") = x:""
+clean_it (x:xs) 	| x == 'f' = x:(clean_it xs)
+clean_it (x:y:zs) | x:y:"" == "gf" = "M" ++ (clean_it zs)
+									| otherwise = x:y:(clean_it zs)
 
 
