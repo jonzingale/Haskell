@@ -8,7 +8,6 @@ type Z = Integer
 cls :: IO()
 cls = putStr "\ESC[2J"
 
-
 -------That all three of these are combinatorial is neat.
 --Powerset
 subsets :: [a] -> [[a]]
@@ -107,14 +106,15 @@ prime p = factors' p == [1,p]
 --Notice that factors' and primesto had to be named funny because of multiple declarations.
 --------
 
-
 --By freeing the generation of prime numbers from the constraint of finiteness,
 --we have obtained a modular program on which different control parts can be used
 --in different situations. For example.
 primes :: [Z]         -- take 10 primes = [2,3,5,7,11,13,17,19,23,29]
 primes = sieve [2..]  --takeWhile (<10) primes = [2,3,5,7]
 
+--building a comprehension is WAY slow.
 sieve :: [Z] -> [Z]
+sieve [] = []
 sieve (p:xs) = p:sieve [x | x<-xs, mod x p /= 0]
 
 --Freqency tables for a give language, Ceasar ciphers, and Chi Squared to match
@@ -133,7 +133,7 @@ int2let :: Int -> Char
 int2let n = chr (ord 'a' + n)
 
 positions :: Eq a => a -> [a] -> [Int]
-positions x xs = [i|(x',i)<-zip xs [0..n], x==x']
+positions x xs = [i | (x',i)<-zip xs [0..n], x==x']
                   where n = length xs -1
 
 engFreqTable :: [Float]
@@ -151,7 +151,7 @@ count :: Char -> String -> Int
 count x xs = length [x' | x'<-xs, x == x']
 
 lowers :: String -> Int
-lowers xs = length [x| x<-xs, isLower x]
+lowers xs = length [x | x<-xs, isLower x]
 
 ---
 chisqr :: [Float] ->[Float]->Float
@@ -223,17 +223,4 @@ returnings n = [(ns,k,(fromIntegral ns)/(fromIntegral k))|
       (ns,k) <- zip (map fact (walk n)) (fixedfreesN n),k/=0]
 
 invreturnings n = [ (a,b,1/c) |(a,b,c)<-returnings n] 
-
-
-
-
-
-
-
-
-
-
-
-
--------------------
 
