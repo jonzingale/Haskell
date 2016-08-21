@@ -21,11 +21,7 @@
 
 import Data.List
 -- :set +s
---nums = [1..]
---odds = [ 2*k + 1 | k<-[1..]]
-
 oddify x = 2*x + 1
-
 limit lim = (div lim 2) - 2
 j_limit lim = div (limit lim - 1) 3
 
