@@ -24,6 +24,8 @@ import Data.List
 odds :: [Integer]
 odds = [ 2*k + 1 | k<-[1..]]
 
+nums = [1..]
+
 limit lim = (div lim 2) - 2
 j_limit lim = div (((limit lim) - 1)) 3
 
@@ -35,5 +37,7 @@ oddify x = 2*x + 1
 sundaram lim =  takeWhile (<=  lim) $
                 odds \\ ((map oddify).composite_cores) lim
 
+sundaram2 lim = map oddify $ [1..limit lim] \\ (composite_cores lim)
+
 main = putStrLn $ show $ sundaram (10^3)
---main = putStrLn "yo"
+
