@@ -105,7 +105,7 @@ lil'ma red int = (and.take int) troofs == True
 
 --Method four using iterative function hermit to make Z lists
 pandaspit :: [Z]
-pandaspit = [chops|chops<-[2..],panda chops 3 ==True]
+pandaspit = [chops |chops<-[2..],panda chops 3 ==True]
 
 panda :: Prime->Int->Bool
 panda tex mex = purple tex mex []
@@ -141,7 +141,7 @@ clean loving = let icky = fromIntegral loving - 1 in
 	take icky ((lookout.randomRs (1,icky)) (mkBlanket 42) )
 	where
 	lookout [] = []
-	lookout (phaker:xs) = phaker:lookout [x|x<-xs, x/=phaker]
+	lookout (phaker:xs) = phaker:lookout [x |x<-xs, x/=phaker]
 	-- suggest an n and receive a random permutation of the list [1..n-1]
 
 
