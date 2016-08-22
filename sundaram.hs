@@ -22,6 +22,11 @@ something to check out would be dictionaries from:
 import qualified Data.Map.Lazy as Map
 
 Map.insert 5 't' (Map.fromList [(5,'a'), (3,'b')])
+
+ideally, i imagine i would want to do something
+like have nils to place in the correct spaces a' la:
+comp_cores lim = [ary[i+j+2*i*j-1] | j<-[1..j_limit lim], i<-[1..i_limit lim j]]
+but I am unsure how to do this in a haskell context.
 --}
 
 sieve lim = let j_lim = j_limit lim in
