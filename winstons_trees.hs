@@ -1,15 +1,14 @@
 import Data.List
 import Control.Applicative
  
-data Btree a = Leaf a
-             | Fork (Btree a) (Btree a) 
+data Btree a = Leaf a | Fork (Btree a) (Btree a) 
              deriving (Show , Eq)
  
 trees [] = []
 trees [x] = [Leaf x]
 trees xs = do
     (branchL, branchR) <- splits xs
-    Fork <$> (trees branchL) <*> (trees branchR)
+    liftA2 Fork (trees branchL) $ trees branchR
 
 splits xs = filter noEmpty $ map aux (powerset xs)
     where aux = \ set -> (set, xs \\ set)
