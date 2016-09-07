@@ -19,9 +19,10 @@ powerset [] = [[]]
 powerset (x:xs) = xs' ++ map (x:) xs'
     where xs' = powerset xs
 
-splits' (x:xs) = let comb = \ x -> (tail.zip x) in
-			  	 			 let first = (reverse.map (x:)) (powerset xs) in
-			  	 			 comb first (powerset xs) ++ comb (powerset xs) first
+splits' (x:xs) = let pow = powerset xs in
+								 let comb = \ x -> (tail.zip x) in
+			  	 			 let row = (reverse.map (x:)) pow in
+			  	 			 comb pow row ++ comb row pow
 
 -- cleaner but slower.
 --splits' xs =
