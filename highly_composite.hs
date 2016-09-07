@@ -18,7 +18,7 @@ foldrn xs = foldr (*) (head xs) (tail xs)
 comb :: (Num a, Num a1, Ord a1) => a1 -> a1 -> a
 comb _ 0 = 1
 comb n k | k > n = 0
-			   | otherwise = comb (n-1) k + comb (n-1) (k-1)
+		 | otherwise = comb (n-1) k + comb (n-1) (k-1)
 
 fib 0 = 0
 fib 1 = 1
