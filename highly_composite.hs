@@ -47,7 +47,7 @@ strlist n = foldr ((++).show) "" n
 -- string versions
 combstr _ 0 = "1"
 combstr n k | k > n = "0"
-			  	  | otherwise = combstr (n-1) k ++ "*" ++ combstr (n-1) (k-1)
+			| otherwise = combstr (n-1) k ++ "" ++ combstr (n-1) (k-1)
 
 fibstr 0 = "0"
 fibstr 1 = "1"
