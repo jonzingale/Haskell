@@ -10,12 +10,12 @@ trees [x] = [Leaf x]
 trees xs = do
     (branchL, branchR) <- splits xs
     liftA2 Fork (trees branchL) $ trees branchR
+ 
+powerset xs = filterM (\x -> [True, False]) xs
 
 splits xs = filter noEmpty $ map aux (powerset xs)
     where aux = \ set -> (set, xs \\ set)
           noEmpty = \ (p, p') -> p /= [] && p' /= []
- 
-powerset xs = filterM (\x -> [True, False]) xs
 
 splits' (x:xs) = let pow = powerset xs in
 								 let comb = \ x -> (tail.zip x) in
