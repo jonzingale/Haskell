@@ -11,7 +11,7 @@ instance Applicative List where
   (<*>) = ap
 
 instance Monad List where
-  return n = incl n
+  return = pure
   m >>= f = (mu.fmap f) m
 
 incl :: a -> List a
