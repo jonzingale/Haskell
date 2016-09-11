@@ -14,6 +14,8 @@ instance Applicative List where
 incl :: a -> List a
 incl = pure
 
+-- not quite right as id :: a -> a not a -> ma
+-- yet i can pass id as f to >>=
 mu :: List(List a) -> List a
 mu mm = List $ concat.getList.fmap getList $ mm
 
