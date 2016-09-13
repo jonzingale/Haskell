@@ -22,8 +22,6 @@ prune n (Fork tree_a tree_b) | odd n = Fork (prune (n `div` 2) tree_a)
 																						(prune (n `div` 2 + 1) tree_b)
 														 | otherwise = Fork (prune (n `div` 2) tree_a) 
 														 										(prune (n `div` 2) tree_b)
-
-
 iota 1 = unit
 iota n = prune n $ (growTree.treeHeight) n $ unit
 
