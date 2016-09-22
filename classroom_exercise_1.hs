@@ -24,14 +24,3 @@ prune n (Fork tree_a tree_b) | odd n = Fork (prune (n `div` 2) tree_a)
 														 										(prune (n `div` 2) tree_b)
 iota 1 = unit
 iota n = prune n $ (growTree.treeHeight) n $ unit
-
---class Monad m where
---	return :: a -> ma
---	(>>=) :: ma -> (a -> mb) -> mb
-
---instance Applicative Btree where
---	pure = iota
-
---instance Monad Btree where
-  --return = iota
-  --m >>= f = (mu.fmap f) m
