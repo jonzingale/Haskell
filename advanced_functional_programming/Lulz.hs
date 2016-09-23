@@ -47,4 +47,4 @@ m1 = incl 4
 m2 = incl.incl $ 4
 mix = List[List [5], List[6]]
 lol = Lulz m2
-it = η $ η 3
+it = η . η $ 3
