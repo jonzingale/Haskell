@@ -48,9 +48,10 @@ ff = \x -> Lulz(List[List [x], List[x]])
 m1 = incl 4
 m2 = incl.incl $ 4
 mix = List[List [5], List[6]]
+lix = Lulz mix
 lol = Lulz m2
 its = η . η $ 3
 it = η 2
 
 left_id = it >>= ff
-
+right_id = lol >>= (\x-> η x)
