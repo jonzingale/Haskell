@@ -43,8 +43,14 @@ instance Monad Lulz where
 μ :: Lulz(Lulz a) -> Lulz a
 μ (Lulz(List[List [lulz]])) = lulz
 
+ff = \x -> Lulz(List[List [x], List[x]])
+
 m1 = incl 4
 m2 = incl.incl $ 4
 mix = List[List [5], List[6]]
 lol = Lulz m2
-it = η . η $ 3
+its = η . η $ 3
+it = η 2
+
+left_id = it >>= ff
+
