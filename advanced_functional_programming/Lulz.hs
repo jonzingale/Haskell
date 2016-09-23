@@ -38,7 +38,7 @@ instance Monad Lulz where
   m >>= f = μ.fmap f $ m
 
 η :: a -> Lulz a
-η = \x -> Lulz $ (incl . incl) x
+η = \x -> Lulz $ incl . incl $ x
 
 μ :: Lulz(Lulz a) -> Lulz a
 μ (Lulz(List[List [lulz]])) = lulz
