@@ -30,21 +30,21 @@ instance Functor Lulz where
   fmap f (Lulz (List [List xs])) = Lulz $ List [List (map f xs)]
 
 instance Applicative Lulz where
-  pure = eta
+  pure = η
   (<*>) = ap
 
 instance Monad Lulz where
   return = pure
-  m >>= f = (mu_lulz.fmap f) m
+  m >>= f = μ.fmap f $ m
 
-eta :: a -> Lulz a
-eta = \x -> Lulz $ (incl . incl) x
+η :: a -> Lulz a
+η = \x -> Lulz $ (incl . incl) x
 
-mu_lulz :: Lulz(Lulz a) -> Lulz a
-mu_lulz (Lulz(List[List [lulz]])) = lulz
+μ :: Lulz(Lulz a) -> Lulz a
+μ (Lulz(List[List [lulz]])) = lulz
 
 m1 = incl 4
 m2 = incl.incl $ 4
 mix = List[List [5], List[6]]
 lol = Lulz m2
-it = eta $ eta 3
+it = η $ η 3
