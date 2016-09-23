@@ -41,10 +41,10 @@ eta :: a -> Lulz a
 eta = \x -> Lulz $ (incl . incl) x
 
 mu_lulz :: Lulz(Lulz a) -> Lulz a
-mu_lulz (Lulz(List[List lulz])) = head lulz
+mu_lulz (Lulz(List[List [lulz]])) = lulz
 
 m1 = incl 4
 m2 = incl.incl $ 4
 mix = List[List [5], List[6]]
 lol = Lulz m2
-it = eta . eta $ 3
+it = eta $ eta 3
