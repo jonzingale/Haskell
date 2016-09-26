@@ -48,9 +48,3 @@ unionL (List x) (List y) = List $ union x y
 
 unionFL :: Eq a => [List a] -> List a
 unionFL = foldr unionL (List [])
-
-unionP :: Eq a => Powerset a -> Powerset a -> Powerset a
-unionP (P x) (P y) = P $ [unionL (unionFL x) (unionFL y)]
-
-unionFP :: Eq a => [Powerset a] -> Powerset a
-unionFP = foldr unionP (P [])
