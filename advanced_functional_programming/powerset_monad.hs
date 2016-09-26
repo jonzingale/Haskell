@@ -7,12 +7,12 @@ data Powerset a = P [List a] deriving (Show, Eq)
 
 powerset xs = M.filterM (\x -> [True, False]) xs
 
-class Functor f where
-  fmap :: (Functor f, Eq b) => (a -> b) -> f a -> f b
-
 instance Functor List where
   fmap f (List []) = List []
   fmap f (List xs) = List $ map f xs
+
+class Functor f where
+  fmap :: (Functor f, Eq b) => (a -> b) -> f a -> f b
 
 instance Functor Powerset where
   fmap f (P []) = P []
