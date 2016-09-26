@@ -1,7 +1,7 @@
 data Plus = P | E deriving (Show)
-data Protrudent a = Pro Plus a Plus deriving (Show)
-data Hardness a = Hard Plus a Plus deriving (Show)
-data Size a = Size Plus a Plus deriving (Show)
+data Protrudent a = Pro Plus Int Plus deriving (Show)
+data Hardness a = Hard Plus Int Plus deriving (Show)
+data Size a = Size Plus Int Plus deriving (Show)
 
 data TriggerPoint a = TrP (Protrudent a) (Hardness a ) (Size a) deriving (Show)
 
