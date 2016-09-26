@@ -2,7 +2,7 @@ import qualified Control.Monad as M
 import Prelude hiding (fmap, Functor, Monad) 
 import Data.List
 
-newtype List a = List [a] deriving (Show, Eq)
+data List a = List [a] deriving (Show, Eq)
 data Powerset a = P [List a] deriving (Show, Eq)
 
 powerset xs = M.filterM (\x -> [True, False]) xs
