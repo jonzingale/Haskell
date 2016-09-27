@@ -62,4 +62,11 @@ that = TT (TT 2 3) (TT 4 5)
 fun :: Int -> Product Int
 fun = \x -> TT (x+2) (x+4)
 
+gun :: Int -> Product Int
+gun = \x -> TT (x-2) (x-4)
+
 main = putStrLn.show $ this >>= fun
+
+left_id = (return 3 >>= fun) == fun 3
+right_id = (this >>= return) == this
+associativity = (this >>= fun >>= gun) == (this >>= (\x-> fun x >>= gun))
