@@ -48,3 +48,5 @@ unionL (List x) (List y) = List $ union x y
 
 unionFL :: Eq a => [List a] -> List a
 unionFL = foldr unionL (List [])
+
+main = putStrLn.show $ id_this
