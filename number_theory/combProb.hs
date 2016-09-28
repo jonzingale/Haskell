@@ -4,7 +4,7 @@ import System.Random
 import Data.List
 import SortsShuffles
 import Typehandling 
-		--thrufloat
+--thrufloat
 
 type Z = Integer
 type Lattice = [[Z]]
@@ -30,14 +30,10 @@ new x yss = [x]:yss
 glue :: a->[[a]]->[[a]]
 glue x (ys:yss) = (x:ys) : yss
 
-
-
 -- IO ()
 printit [] = putStrLn ""
 printit (x:xs) = do (putStrLn.show) x ;
-					 printit xs
-
-
+                    printit xs
 
 -- helpers
 listToZ :: [Z]->Z
@@ -45,8 +41,5 @@ listToZ [] = 0
 listToZ (x:xs) = x * 10^(length xs) + listToZ xs
 zTolist z = (reverse.f) z
   where 
-  		f 0 = []
-  		f z = z`mod`10:f (z`div`10) 
-		  
-
-		  
+      f 0 = []
+      f z = z`mod`10:f (z`div`10) 

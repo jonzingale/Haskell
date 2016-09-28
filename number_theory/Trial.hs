@@ -20,10 +20,9 @@ maxtrials :: Apples-> Bins -> Trials -> (Apples,Trials)
 maxtrials n r t = (blip.maxfreq.trials n r) t
 freq [] = [] --wonderfully modular and useful elsewhere
 freq as = ((length.takeWhile (== x))(x:xs),x) : (freq.dropWhile (==x)) xs
-	where (x:xs) = rsort as
+    where (x:xs) = rsort as
 maxfreq xs = (maximum.freq) xs
 trials n r t =  (fst.unzip.map maxfreq) $ take t [array n r s | s<-[1..]] 
-
 
 -- Give the percentage of total balls expected in the bin with the most
 tMaxx n = fromIntegral (n `choose` (n`div`2)) / fromIntegral (2^n)
@@ -42,8 +41,7 @@ sanitycheck :: Coupons -> Bool
 sanitycheck xs = and [x==y|(x,y)<-zip (everybody xs) [1..]]
 everybody [] = []
 everybody as = x: (everybody.dropWhile (==x)) xs
-	where (x:xs) = rsort as
-
+  where (x:xs) = rsort as
 
 ---Helpers
 blip (x,y)=(y,x)
