@@ -12,14 +12,14 @@ instance Functor Product where
   -- Alternatively,
   -- fmap f axb = product $ fmap f $ CxC (pr1 axb, pr2 axb)
 
-eta :: a -> Product a
-eta x = product.diagonal $ x
-
 pr1 :: Product a -> a
 pr1 (TT x y) = x
 
 pr2 :: Product a -> a
 pr2 (TT x y) = y
+
+eta :: a -> Product a
+eta x = product.diagonal $ x
 
 diagonal :: a -> Pair a
 diagonal x = CxC (x, x)
