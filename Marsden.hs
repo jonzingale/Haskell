@@ -44,7 +44,7 @@ scalarproduct :: Num a=> [a]->[a]->a
 scalarproduct xs ys = sum[ x*y | (x,y)<- zip xs ys]
 crossproduct :: Num a=> [a]->[a]->[a]
 crossproduct (a:[b]) (x:[y]) = crossproduct [a,b,0] [x,y,0]
-crossproduct (a:b:[c]) (x:y:[z]) = [(b*z-c*y),(a*z-c*x),(a*y-b*x)]	
+crossproduct (a:b:[c]) (x:y:[z]) = [(b*z-c*y),(a*z-c*x),(a*y-b*x)]
 crosstring :: (Show a,Num a)=> [a]->[a]->String
 crosstring (a:b:c:[]) (x:y:z:[]) = 
         show (b*z-c*y)++"i+ "++show (a*z-c*x)++"j+ "++show (a*y-b*x)++"k"
@@ -64,11 +64,11 @@ anglestring :: [R]->[R]->String
 anglestring a b = show (realtopair(angleradians a b/pi))++" pi"
 isorthogonal :: (Num a,Eq a)=>[a]->[a]->Bool
 isorthogonal x y |or [vectorsum x y==x,vectorsum x y==y] = False 
-		 |otherwise= scalarproduct x y == 0
+                 |otherwise= scalarproduct x y == 0
 components :: [R]->[R]->[R]->(R,R)
 components a b c | isorthogonal a b = --how can we test that c is in the plane?
    (scalarproduct a c/(scalarproduct a a),scalarproduct b c/(scalarproduct b b))
-		 | otherwise = (0,0)
+                 | otherwise = (0,0)
 projections :: [R]->[R]->[R]->([R],[R]) --This is also unclear. review and return.
 projections a b c =(scaleby ((fst.components a b)c) a,scaleby ((snd.components a b)c) b)
 
@@ -108,9 +108,8 @@ nxndet (x:xs) =
 randtrix ::(Num a,Random a,Integral b)=> Int->b->[[a]]
 randtrix seed n = star seed n 0 []
  where star s n t ys
-        | t==n = ys		---Random nxn matrix
-        | otherwise = [ r|r<-(take (fromIntegral n)(randomRs (-200,200) (mkBlanket s)))]
-		:star ((fst.next.mkBlanket) s) n (t+1) ys
+        | t==n = ys   ---Random nxn matrix
+        | otherwise = [ r|r<-(take (fromIntegral n)(randomRs (-200,200) (mkBlanket s)))] : star ((fst.next.mkBlanket) s) n (t+1) ys
 
 idMatx ::(Eq a,Num a)=>Int-> [[a]]
 idMatx 0 = []
@@ -130,8 +129,8 @@ blur :: [[R]]->[[R]]
 blur [] = []
 blur (x:xs) = (map mkzero x):blur xs
   where
-	mkzero r| r< (abs 0.0001) = 0.0
-		| otherwise = r
+    mkzero r | r< (abs 0.0001) = 0.0
+             | otherwise = r
 -- re :: (Z,Z) -> (Z,Z) --reduces two fractions.
 -- re (a,b) = (a `div` (gcd a b), b `div` (gcd a b))
 swap :: [a]->Int->[a]
@@ -147,7 +146,7 @@ perms [] = [[]]
 perms (x:xs) = concat (map(interleave x) (perms xs))
   where interleave x [] = [[x]]
         interleave x (y:ys) = (x:y:ys):map (y:) (interleave x ys)
-	--Probabilistic Permutation Signature
+  --Probabilistic Permutation Signature
 rsgn ::Ord a=> [a]->[a]->String
 rsgn xs ys = p xs 0 (mkBlanket 42)
    where 
@@ -162,6 +161,6 @@ rsig xs ys = p xs 0 (mkBlanket 42)
     p list t r
       | list == ys = if t`mod`2==0 then 1 else (-1)
       | otherwise =  p (swap list (((`mod`(length xs-1)).fst.next) r))(t+1)((snd.next) r)
-	----------
+  ----------
 
 

@@ -4,7 +4,7 @@ import Data.List
 import Data.Tuple
 
 count :: Integer -> [Integer]
-count n = [a|a<-[0..n-1]]
+count n = [a |a<-[0..n-1]]
 
 counts_count :: Integer -> Integer -> [(Integer,Integer)]
 counts_count n m = [(a,b)|a <- count n, b <- count m]
@@ -24,7 +24,7 @@ decode [] = []
 decode (x:xs) = find_by x key : decode xs
 
 find_by :: Eq a => a -> [(a,b)] -> b
-find_by n ns = head[j|(i,j)<-ns, n==i]
+find_by n ns = head[j |(i,j)<-ns, n==i]
 
 split :: Int -> [a] -> [[a]]
 split _ [] = []

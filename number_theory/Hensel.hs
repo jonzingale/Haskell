@@ -13,14 +13,14 @@ hensel_do polyx = do (putStr.unlines.map (prettyit.prett.show))
 hensel f m = bRoots f m : lift f (least_prime m) (bRoots f m)
 
 --some language for proper lifting
-least_prime m = head [p|p<-primes, mod m p == 0 ]
+least_prime m = head [p |p<-primes, mod m p == 0 ]
 singular (P x) m r = evalM (del (P x) ) (least_prime m) r == 0
 evalM (P x) m n = mod (eval (P x) n) m
-rootMs (P x) m = [a|a<-[0..(m-1)],evalM (P x) m a == 0 ]
+rootMs (P x) m = [a |a<-[0..(m-1)],evalM (P x) m a == 0 ]
 
 baseRoots :: Poly Integer -> Integer -> ([Integer], [Integer])
-baseRoots polyx m = ([r|r<-rootMs polyx (least_prime m), singular polyx m r],
-			[r|r<-rootMs polyx (least_prime m), (not.singular polyx m) r])
+baseRoots polyx m = ([r |r<-rootMs polyx (least_prime m), singular polyx m r],
+			[r |r<-rootMs polyx (least_prime m), (not.singular polyx m) r])
 
 -- *Hensel> bRoots niven2 7 = [(3,False,False),(4,True,True),(5,False,True)]
 bRoots polyx m = [(r, singular polyx m r, 
@@ -41,7 +41,7 @@ lift_it f p h ((r,sing,lifts):rs)
 above r p h = r:(takeWhile (/=r)[r+(p^h)*i`mod`(p^(h+1))|i<-[1..]])
 
 --quick and dirty
-primes = let fac n= [a|a<-[1..n],n`mod`a==0] in [p|p<-[2..], (length.fac) p < 3]
+primes = let fac n= [a |a<-[1..n],n`mod`a==0] in [p |p<-[2..], (length.fac) p < 3]
 rm :: [[a]]->[a]
 rm [] = []
 rm xs = head xs

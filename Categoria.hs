@@ -20,11 +20,11 @@ pr1 (f,g) = f
 pr2 :: (a, b) -> b
 pr2 (f,g) = g
 
-	----- (f,g) (a,b) -> (fa, gb)
+  ----- (f,g) (a,b) -> (fa, gb)
 merzbow :: ((a->y),(b->z)) ->(a,b) ->(y,z)
 merzbow (j,k) (n,m) = (j n, k m)
     ---can    merzbow   &  crossbow be one fun ction?
-	----- (f,g) X (j,k)
+  ----- (f,g) X (j,k)
 crossbow :: ((b->c),(y->z)) -> ((a->b),(x->y)) -> ((a->c),(x->z))
 crossbow (f,g) (j,k) = ( (f.j),(g.k) )
 
@@ -54,7 +54,7 @@ constan _ = 5
 -- primely n = fprimes!!(fromInteger (n-1))
 
 -- fact n | n<2 = 1
---		| otherwise = n*fact(n-1) 
+--  | otherwise = n*fact(n-1) 
 
 -- size ::  [a]->Integer
 -- size [] = 0
@@ -86,11 +86,11 @@ retractions d c = if d <= c then d^(c-d) else 0
 
 stirling :: Domain->Codomain->Z
 stirling d c = sum[(-1)^k*(comb c k)*(c-k)^d | k<-[0..c]]`div`(fact c)
-	where comb n k = div (fact n) (fact k * fact (n-k))
+  where comb n k = div (fact n) (fact k * fact (n-k))
 
 epis :: Domain-> Codomain -> Z
 epis d c = sum [((-1)^k * (comb c (c-k)) * (c-k)^d) | k <- [0..c] ] 
-	where comb n k = div (fact n) (fact k * fact (n-k))
+  where comb n k = div (fact n) (fact k * fact (n-k))
 ---------
 fourin :: (N->N)->(N->N)->N->N->([N],[N])
 fourin f g n m = (map f [0..n] ,map g [0..m] ) 
@@ -118,8 +118,8 @@ type Euclid = ( [R],[R])->([R],[R])
 picoord :: RCoord
 picoord (xs,ys) = let bo = map fromInteger xs in
                   let po = map fromInteger ys in
-		  let lb = fromInteger (size xs) in
-		  let lp = fromInteger (size ys) in
+    let lb = fromInteger (size xs) in
+    let lp = fromInteger (size ys) in
     ( [2*pi*k/lb |k<-bo] , [2*pi*k/lp |k<-po] ) 
 
       ---------IO Monad Grapher---
@@ -171,41 +171,41 @@ ploopta a b = [(a,k) | k<-[0..b]] ++ ploopta (a-1) b
 --------
 compo :: N->[Unary]->[Unary]->IO()
 compo n fs gs =
-	seqn[writeat (scalar 10 p) (val p n) |
-	p<-ploopta (length fs-1)(length gs-1)]
+  seqn[writeat (scalar 10 p) (val p n) |
+  p<-ploopta (length fs-1)(length gs-1)]
         where
-	val (x,y) t = show ( ((gs!!y).(fs!!x)) t)
+  val (x,y) t = show ( ((gs!!y).(fs!!x)) t)
 
 cuntruff :: N->[Unary]->[Unary]->IO() --composary table
 cuntruff n fs gs = 
-	do cls   --cuntruff 1 (tlisting (*) 1 14) (tlisting (monos) 1 14)
-	   compo n fs gs
-	   putChar '\n'
+  do cls   --cuntruff 1 (tlisting (*) 1 14) (tlisting (monos) 1 14)
+     compo n fs gs
+     putChar '\n'
 
 -------
 classico :: Binary->Model
 classico b f g x y =
-	seqn[writeat (scalar 10 p) (val f g p) |
-	p<-ploopta x y]
+  seqn[writeat (scalar 10 p) (val f g p) |
+  p<-ploopta x y]
         where
-	val l r (p,q) = show (b (l p)  (r q))
+  val l r (p,q) = show (b (l p)  (r q))
 classie :: Binary -> Model
 classie b f g x y =                     --Classic table
      do cls
-	classico b f g x y
-	putChar '\n'
+        classico b f g x y
+        putChar '\n'
 
 gennesse :: (Show c)=> (a->b->c)->(N->a)->(N->b)->N->N->IO()
 gennesse b f g x y = 
-	seqn[writeat (scalar 15 p) (val f g p) |
-	p<-ploopta x y]
+  seqn[writeat (scalar 15 p) (val f g p) |
+  p<-ploopta x y]
         where
-	val l r (p,q) = show (b (l p)  (r q))
+  val l r (p,q) = show (b (l p)  (r q))
 generoll :: (Show c)=> (a->b->c)->(N->a)->(N->b)->N->N->IO()
 generoll b f g x y=
-	do cls
-	   gennesse b f g x y
-	   putChar '\n'
+  do cls
+     gennesse b f g x y
+     putChar '\n'
 {--
 I would like to make this program a bit
 closer to grluck in format. nice and clean spacing of primes
@@ -213,7 +213,7 @@ closer to grluck in format. nice and clean spacing of primes
 -- primetyme :: IO()
 -- primetyme = let primers =map ((++" ").show) (takeWhile (<10000) fprimes) in
 --      do cls
--- 	seqn[writeat (scalar 6 (w `mod` 30,5+w`div`30)) p |(p,w)<-zip primers walk]
+--   seqn[writeat (scalar 6 (w `mod` 30,5+w`div`30)) p |(p,w)<-zip primers walk]
 
 
 
@@ -225,12 +225,12 @@ index list a b = [ (i,list!!(fromIntegral i)) |i<-[a..b] ]
 
 graphLxK :: (Show c)=>(a->b->c)->Int->N->N->N->N->[a]->[b]->IO()
 graphLxK bry scal a c x z as xs =
-	let axisa = index as a c in
-	let axisx = index xs x z in
-	let body = grphprod bry axisa axisx in
-	do cls
-           seqn [writeat (scalar scal p) (show q) | (p,q)<-body]  
-	   putChar '\n'
+  let axisa = index as a c in
+  let axisx = index xs x z in
+  let body = grphprod bry axisa axisx in
+  do cls
+     seqn [writeat (scalar scal p) (show q) | (p,q)<-body]  
+     putChar '\n'
 grphprod :: (a->b->c)->[(N,a)]->[(N,b)]->[( (N,N),c) ]
 grphprod b [] _ = []
 grphprod b ((i,fx):ns) ps =
@@ -239,12 +239,12 @@ grphprod b ((i,fx):ns) ps =
 -----doubled code.. write function f -> (0,10,0,10)
 grluck :: (Show c)=>(a->b->c)->[a]->[b]->IO()
 grluck bry as xs =
-	let axisa = index as 0 10 in
-	let axisx = index xs 0 10 in
-	let body = grprod bry axisa axisx in
-	do cls
-           seqn [writeat (scalar 2 p) (show q) | (p,q)<-body]  
-	   putChar '\n'
+  let axisa = index as 0 10 in
+  let axisx = index xs 0 10 in
+  let body = grprod bry axisa axisx in
+  do cls
+     seqn [writeat (scalar 2 p) (show q) | (p,q)<-body]  
+     putChar '\n'
 grprod ::(a->b->c)->[(N,a)]->[(N,b)]->[( (N,N),c) ]
 grprod b [] _ = []
 grprod b ((i,fx):ns) ps =
@@ -256,7 +256,7 @@ twist (a,b) = (b,a)
 -------WTF!!!!!!!!!!!
 epis' :: Z-> Z -> Z
 epis' d c = sum [((-1)^k * (comb c k) * (c-k)^d) | k <- [0..c] ] 
-	where comb n k = div (fact n) (fact k * fact (n-k))
+  where comb n k = div (fact n) (fact k * fact (n-k))
 
 epinski :: Z->Z->Z->Z
 epinski m d c = epis' d c `mod` m
@@ -279,11 +279,11 @@ graphLxK (monos) 0 10 0 10 [0..] [0..]
 
 graphmoney :: Binary->N->IO()
 graphmoney binary count=
-	do cls
-	   graphLxK binary 9 0 10 0 10 [count..] [count..]
-	   putChar '\n'
-	   wait (2*5^8)
-	   graphmoney binary (count+1)
+  do cls
+     graphLxK binary 9 0 10 0 10 [count..] [count..]
+     putChar '\n'
+     wait (2*5^8)
+     graphmoney binary (count+1)
 
 wait :: Int -> IO()
 wait n = seqn [return () | _ <- [1..n]]
@@ -304,34 +304,34 @@ wait n = seqn [return () | _ <- [1..n]]
 -- sqrfree n = sf n 2
  -- where
   -- sf a b| a`mod`(b^2)==0 = False
-	-- | and [b<a , a`mod`(b^2)/=0] = sf a (b+1)
-	-- | otherwise = True
+  -- | and [b<a , a`mod`(b^2)/=0] = sf a (b+1)
+  -- | otherwise = True
 -- }
 -- divides ::N->N->Bool
 -- divides a b| let f=fromIntegral in
-		-- (f b)/(f a)==f(b`div`a)=True
-	   -- | otherwise = False
+  -- (f b)/(f a)==f(b`div`a)=True
+     -- | otherwise = False
 -- diV :: N->N->N
 -- diV b a | a`divides`b = b`div`a
-	-- | otherwise = 0
+  -- | otherwise = 0
 -- 
 -- mulatto :: N->N->N
 -- mulatto b a |a`divides`b=(mu.diV b) a
-	    -- |otherwise = 0
+      -- |otherwise = 0
 
 -- nuluck :: N->IO()
 -- nuluck n =
  -- let ringy ds = (\ds->["o *"!!((fromIntegral.(+ 1).mulatto (n`diV`ds)) d)|d<-ffactors n]) ds in
      -- do cls
-	-- seqn[writeat (0,i) (ringy q)| (i,q)<- zip [0..] ((reverse.ffactors) n)]
-	-- putChar '\n'
+  -- seqn[writeat (0,i) (ringy q)| (i,q)<- zip [0..] ((reverse.ffactors) n)]
+  -- putChar '\n'
  -- "_ |" ,  "o *"
 -- spongy :: N->String->IO()
 -- spongy n xs=
  -- let ringy ds = (\ds->[xs!!((fromIntegral.(+ 1).mulatto (n`diV`ds)) d)|d<-ffactors n]) ds in
      -- do cls
-	-- seqn[writeat (0,i) (ringy q)| (i,q)<- zip [0..] ((ffactors) n)]
-	-- putChar '\n'
+  -- seqn[writeat (0,i) (ringy q)| (i,q)<- zip [0..] ((ffactors) n)]
+  -- putChar '\n'
 -- some favorite seeds
 -- sample :: Int->N
 -- sample n = product(take n fprimes)
@@ -373,7 +373,7 @@ Future Ideas regarding wrinkle curtain program.
 {--
 I would like to write nuluck to a txt file for printing.
 banner =do
-	writeFile "Wonderful2.doc" (map id inpStr)
+  writeFile "Wonderful2.doc" (map id inpStr)
 --}
 
 
@@ -389,8 +389,8 @@ ka * kb == 1 mod phi(m), (a,m)=1
 
 --}
 rsaGroup m = (\m-> (grrluck (rsap m)
-				[a |a <-[1..m],gcd a (totient m)==1] -- [1,3,5,7,9] for m =10
-				[a |a <-[1..m],gcd a (totient m)==1]) ) m
+  [a |a <-[1..m],gcd a (totient m)==1] -- [1,3,5,7,9] for m =10
+  [a |a <-[1..m],gcd a (totient m)==1]) ) m
 rsaGrp m = (\m->grrluck (rsap m) (take (fromIntegral m) walk) (take (fromIntegral m) walk)) m
 rsaGrp2 m = (\m->grrluck (rsaq m) [a |a<-[1..m],gcd a (totient m)==1 ] [a |a<-[1..m],gcd a (totient m)==1 ])m
 
@@ -403,12 +403,12 @@ rsaq m ka kb = (ka * kb) `mod` m
 
 grrluck :: (Show c)=>(a->b->c)->[a]->[b]->IO()
 grrluck bry as xs =
-	let axisa = index as 1 ((size as)-1) in
-	let axisx = index xs 1 ((size xs)-1) in
-	let body = grprod bry axisa axisx in
-	do cls
-           seqn [writeat (scalar 4 p) (show q) | (p,q)<-body]  
-	   putChar '\n'
+  let axisa = index as 1 ((size as)-1) in
+  let axisx = index xs 1 ((size xs)-1) in
+  let body = grprod bry axisa axisx in
+  do cls
+     seqn [writeat (scalar 4 p) (show q) | (p,q)<-body]  
+     putChar '\n'
 --rsa group tables mother lover. ring of units
 duckett m = -- <--- this is probably what I wanted above at rsaGroup
   grrluck (rsap m) 
