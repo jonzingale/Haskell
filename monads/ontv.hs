@@ -25,7 +25,7 @@ class Functor m => Monad m where
 
 -- Helpers
 
-camera :: String -> Tv String
+camera :: a -> Tv a
 camera person = Tv person
 
 hipster = Tv "dude"
