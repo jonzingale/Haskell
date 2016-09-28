@@ -389,10 +389,10 @@ ka * kb == 1 mod phi(m), (a,m)=1
 
 --}
 rsaGroup m = (\m-> (grrluck (rsap m)
-				[a|a<-[1..m],gcd a (totient m)==1] -- [1,3,5,7,9] for m =10
-				[a|a<-[1..m],gcd a (totient m)==1]) ) m
+				[a |a <-[1..m],gcd a (totient m)==1] -- [1,3,5,7,9] for m =10
+				[a |a <-[1..m],gcd a (totient m)==1]) ) m
 rsaGrp m = (\m->grrluck (rsap m) (take (fromIntegral m) walk) (take (fromIntegral m) walk)) m
-rsaGrp2 m = (\m->grrluck (rsaq m) [a|a<-[1..m],gcd a (totient m)==1 ] [a|a<-[1..m],gcd a (totient m)==1 ])m
+rsaGrp2 m = (\m->grrluck (rsaq m) [a |a<-[1..m],gcd a (totient m)==1 ] [a |a<-[1..m],gcd a (totient m)==1 ])m
 
 rsa m k a b = ((a^k `mod` m) *  (b^k `mod` m)) `mod` m
 rsap m ka kb = (ka * kb) `mod` (totient m) 
@@ -412,5 +412,5 @@ grrluck bry as xs =
 --rsa group tables mother lover. ring of units
 duckett m = -- <--- this is probably what I wanted above at rsaGroup
   grrluck (rsap m) 
-   (1:[a|a<-[0..((totient m)`div`1)],gcd a (totient m)==1])
-     (1: [a|a<-[0..((totient m)`div`1)],gcd a (totient m) == 1])
+   (1:[a |a<-[0..((totient m)`div`1)],gcd a (totient m)==1])
+     (1: [a |a<-[0..((totient m)`div`1)],gcd a (totient m) == 1])
