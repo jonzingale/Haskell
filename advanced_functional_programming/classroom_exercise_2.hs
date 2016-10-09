@@ -15,7 +15,10 @@ instance Functor ZipRoseTree where
   fmap f zRose = ZipRoseTree (fmap f (getZipRoseTree zRose))
 
 instance Applicative ZipRoseTree where
-  pure x = ZipRoseTree (pure x)
+  -- pure x = ZipRoseTree (pure x) -- see winstons comment
+  pure v = ZipRoseTree $ Node v trees
+    where trees = repeat (Node v trees)
+
   f_tree <*> r_tree = let fs = getZipRoseTree f_tree in
                       let rs = getZipRoseTree r_tree in
                       ZipRoseTree $ zipWith eval fs rs
@@ -64,5 +67,9 @@ test_id = foo == foo <<= counit
 zip_test = f_tree (+2) <*> foo
 zip_id t = (\x -> ((pure id) <*> (ZipRoseTree (pure x))) == (pure x)) t
 
--- An Idea
-thing = fmap (\x -> baz) foo
+zip_id2 x = (pure id <*> (ZipRoseTree (pure x))) == (ZipRoseTree (pure x))
+-- Winston notes that pure for Applicative isn't legit
+-- (<*>) :: Applicative f => f (a -> b) -> f a -> f b
+-- pure id <*> x == x
+-- pure v = ZipRoseTree $ Node v trees
+-- where trees = repeat (Node v trees)
