@@ -10,6 +10,10 @@ existential and universal quantification.
 P*(S) <= X
 ----------
 S <= P#(X)
+
+First, create all Pairs CxD
+for the f: D->C. Then lift via powerset P(CxD),
+and consider f*(D): P(C) -> P(CxD).
 --}
 
 import qualified Control.Monad as M
@@ -62,3 +66,10 @@ unionL (List x) (List y) = List $ union x y
 
 unionFL :: Eq a => [List a] -> List a
 unionFL = foldr unionL (List [])
+
+--________________
+_Im :: (a -> b) -> [a] -> [(a,b)] 
+_Im f as = zip as (map f as)
+
+_X_ :: [a] -> [b] -> [(a,b)]
+_X_ as bs = [(a,b) | a<-as, b<-bs]
