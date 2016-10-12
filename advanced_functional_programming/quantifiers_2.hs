@@ -30,6 +30,9 @@ empty :: Set a
 -- data PairsPart f = S f (V [a]) | Nothing deriving (Show , Eq)
 data V = One | Two | Three | Four deriving (Show , Eq)
 data Vx_ a = P [a] | Empty deriving (Show , Eq)
+data VxS a = PS (Set a) deriving (Show , Eq)
+
+example = PS (fromList [1,2,3])
 
 vs = [One, Two]
 
@@ -44,6 +47,12 @@ pr2 Empty = []
 fibers :: [a] -> [Vx_ a]
 fibers xs = map P $ map (:[]) xs
 p_star = fibers -- [P[1],P[2],P[3]]
+
+-- choose a point of the space P(Uxv)
+-- _S :: Int -> Vx_ a
+-- _S n | n >= (length.powerbase.pr1) example || n < 0 = Empty 
+     -- | otherwise = uncurry P (unzip(((powerbase.pr1) example)!!n))
+_S = powerset $ eval (P [1,2,3])
 
 -- pairs (P xs ys) = zip xs ys
 -- pairs Empty = []
