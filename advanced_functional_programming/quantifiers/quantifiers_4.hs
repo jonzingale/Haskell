@@ -1,28 +1,32 @@
 -- an attempt to encode the quantifiers
-
 import Control.Monad
-import Data.Set hiding (map, foldr, foldl)
 
-data Fiber v = V [v] | Fiber deriving (Show, Eq, Ord)
-data UxV u v = P u (Fiber v) deriving (Show)
+data UxV u = P u [u] deriving (Show)
+type Fibers u = [UxV u]
+type Z = Integer
 
-type Fibers u v = [UxV u v]
+another = P 1 [2,3,4]
+them = p_star [7,7,7] [1,2,3]
+up_two = lift another them
 
-example = P 2 Fiber
-another = P 1 (V [2,3,4])
-them = fibers [7,7,7] [1,2,3]
-up_two = lift another [1,1,1]
+numbers = p_star [2..10] [2..20]
+
+eval (P u v) = [ (u, y) | y <- v]
+eval_fibers = concat . map eval
 
 pr1 (P a b) = a
 pr2 (P a b) = b
 
--- this makes the full product space.
-fibers :: [v] -> [u] -> Fibers u v
-fibers vs us = map lift us <*> [vs]
+p_star :: [u] -> [u] -> Fibers u
+p_star vs us = map lift us <*> [vs]
 
-lift u vs = P u (V vs)
+lift u vs = P u vs
 
---perhaps fmap should modify the fiber
--- kind UxV u v is no good for functor.
--- instance Functor ((UxV u) v) where
-  -- fmap f g = (\vs -> (g f))
+fermat :: Integral n => (n, n) -> Bool
+fermat (p, a) | a == mod (a^p) p = True
+              | otherwise = False
+
+_S :: ((Z, Z) -> Bool) -> [(Z, Z)]
+_S f = filter f $ eval_fibers numbers
+
+fermat_S = _S fermat
