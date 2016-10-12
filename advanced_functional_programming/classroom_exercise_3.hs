@@ -25,9 +25,9 @@ foo = Ternary (Binary (A ()) (G ())) (C ()) (Ternary (G ()) (G ())
               (Binary (Unary (C ())) (T ())))
 
 instance Functor Tree where
-  fmap f (Ternary aee bee cee) = Ternary (fmap f aee) (fmap f bee) (fmap f cee)
-  fmap f (Binary aee bee) = Binary (fmap f aee) (fmap f bee)
-  fmap f (Unary aee) = Unary (fmap f aee) 
+  fmap f (Ternary a b c) = Ternary (fmap f a) (fmap f b) (fmap f c)
+  fmap f (Binary a b) = Binary (fmap f a) (fmap f b)
+  fmap f (Unary a) = Unary (fmap f a) 
   fmap f (A n) = A (f n)
   fmap f (G n) = G (f n)
   fmap f (C n) = C (f n)
