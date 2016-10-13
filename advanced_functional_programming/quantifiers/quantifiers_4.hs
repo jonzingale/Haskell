@@ -6,9 +6,13 @@ data UxV u = P u [u] deriving (Show)
 type Fibers u = [UxV u]
 type Z = Integer
 
-them = p_star [7,7,7] [1,2,3]
-up_two = lift another them
-another = P 1 [2,3,4]
+fermat_S = _S fermat numbers
+
+for_all_example = forall (_S fermat them) them
+exists_example = exists (_S fermat them) them
+
+them :: Fibers Z
+them = p_star [7,7,7] [2,3,4]
 
 numbers :: Fibers Z
 numbers = p_star [2..10] [2..20]
@@ -21,17 +25,14 @@ pr2 (P a b) = b
 
 p_star :: [u] -> [u] -> Fibers u
 p_star vs us = map lift us <*> [vs]
-
-lift u vs = P u vs
+  where lift u vs = P u vs
 
 fermat :: Integral n => (n, n) -> Bool
 fermat (p, a) | mod a p == mod (a^p) p = True
               | otherwise = False
 
-_S :: ((t, t) -> Bool) -> [UxV t] -> [(t, t)]
+_S :: ((t, t) -> Bool) -> Fibers t -> [(t, t)]
 _S f fibered = filter f $ eval_fibers fibered
-
-fermat_S = _S fermat numbers
 
 -- lub cylinder in S
 exists :: Ord a => [(a, b)] -> Fibers t -> [a]
@@ -45,4 +46,4 @@ forall someS (fibs:xs) = hh someS
     roundup ss = ff ss : roundup (gg ss)
     ff ((x,y):tt) = (x, y : ((snd.unzip.takeWhile ((== x).fst)) tt))
     gg ((x,y):tt) = dropWhile ((== x).fst) tt
-    hh = (map fst . filter (\(x,y)->y == pr2 fibs) . roundup) 
+    hh = map fst . filter (\(x,y)->y == pr2 fibs) . roundup
