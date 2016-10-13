@@ -34,8 +34,8 @@ _S f fibered = filter f $ eval_fibers fibered
 fermat_S = _S fermat numbers
 
 -- direct_image
-exists :: Ord a => [(a, b)] -> [a]
-exists someS = S.toList $ S.fromList $ map fst someS
+exists :: Ord a => [(a, b)] -> Fibers t -> [a]
+exists someS _ = S.toList . S.fromList . map fst $ someS
 
 -- glb cylinder in S
 forall :: (Eq b, Eq t) => [(b, t)] -> Fibers t -> [b]
