@@ -17,7 +17,7 @@ them = p_star [7,7,7] [2,3,4]
 numbers :: Fibers Z
 numbers = p_star [2..10] [2..20]
 
-eval (P u v) = [ (u, y) | y <- v]
+eval (P u v) = [(u, y) | y <- v]
 eval_fibers = concat . map eval
 
 pr1 (P a b) = a
