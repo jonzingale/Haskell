@@ -1,0 +1,23 @@
+add -1 times the 1st row to the 2nd row
+interchange the 2nd row and the 3rd row
+add -1 times the 3rd row to the 4th row
+add -1 times the 4th row to the 5th row
+interchange the 5th row and the 6th row
+add -1 times the 6th row to the 7th row
+add -1 times the 7th row to the 8th row
+add -1 times the 7th row to the 5th row
+add -1 times the 6th row to the 5th row
+add -1 times the 5th row to the 4th row
+add -1 times the 4th row to the 2nd row
+add -1 times the 3rd row to the 2nd row
+add -1 times the 2nd row to the 1st row
+
+
+ 1   0   0   0   0   0   0   1 
+ 0   1   0   0   0   0   0   -1 
+ 0   0   1   0   0   0   0   0 
+ 0   0   0   1   0   0   0   1 
+ 0   0   0   0   1   0   0   -1 
+ 0   0   0   0   0   1   0   0 
+ 0   0   0   0   0   0   1   1 
+ 0   0   0   0   0   0   0   0 
