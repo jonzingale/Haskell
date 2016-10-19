@@ -1,23 +1,36 @@
 module Homology where
-import Data.List
+import Matrix
+
 {--
 Here is an attempt to define some of
 the basic operations of homology.
+
+think of wrapping simplexes σ^m in
+chains (abelian groups).
+
+∑ gi . σi^m <-> <gi...gm>
+
 --}
 
-type Index = Int
-data Simplex a = S [a] deriving (Show)
+data Chain a = C [Chain a] | S [a] deriving (Show)
 
+facet :: Int -> Chain a -> Chain a 
+facet n (S xs) = S $ [xs!!n]
+facet n (C xs) = xs!!n  
 
--- i suspect I need an fmap for boundary
+instance Functor Chain where
+  fmap f chain = case chain of
+    S a -> S (map f a)
+    C a -> C (map (fmap f) a)
 
--- ith_face :: Simplex a -> Simplex a
-
-boundary :: Simplex a -> Simplex (Simplex a)
-boundary (S []) = S []
-boundary (S xs) = S $ map S [ take_and_drop i xs | i <- [0..length xs - 1] ]
+del :: Num a => Chain a -> Chain a
+del (S []) = C []
+del (C xs) = C $ map del xs
+del (S xs) = C [ fx i xs| i <- ary ]
   where
-    take_and_drop n list = take n list ++ drop (n+1) list
+    ary = [0..length xs - 1]
+    gx n list = map (* (- 1)^n) list
+    fx n list = S . gx n $ take n list ++ drop (n+1) list
 
-k3 :: Simplex Int
-k3 = S [0,1,2]
+k3 :: Chain Integer
+k3 = S [1,2,3]
