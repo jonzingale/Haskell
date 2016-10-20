@@ -14,11 +14,9 @@ chains (abelian groups).
 
 data Chain a = C [Chain a] | S [a] deriving (Show)
 
--- this isn't right. the ith face of (S abc)
--- isn't the ith member of [a,b,c]
--- facet :: Int -> Chain a -> Chain a 
--- facet n (S xs) = S [xs!!n]
--- facet n (C xs) = xs!!n
+facet :: Num a => Int -> Chain a -> Chain a 
+facet n (S xs) = (facet n).del $ (S xs)
+facet n (C xs) = xs!!n
 
 instance Functor Chain where
   fmap f chain = case chain of
@@ -32,8 +30,8 @@ is_cycle :: (Num a, Eq a) => Chain a -> Bool
 is_cycle chain = (f.del) chain == 0
   where
     f (S []) = 0
-    f (S (x:xs)) = x + f (S xs)
     f (C []) = 0
+    f (S (x:xs)) = x + f (S xs)
     f (C xs) = foldr (+) 0 (map f xs)
 
 del :: Num a => Chain a -> Chain a
