@@ -116,7 +116,7 @@ alismethod :: N->N->N->N->Prob
 alismethod r b n k=
 	(n`choose`k,1) `x` ((r`perms`k)*(b`perms`(n-k)),(r+b)`perms`n )
 redblack :: N->N->N->N->Prob --4 kings 48 nonkings 5 card hand chances of 2 kings
-redblack r b n k = 
+redblack r b n k =
 	re ( r`choose`k * (b `choose`(n-k)), (r+b)`choose`n )
 redblackdistr :: N->N->N->Distribution --trumps? redblackdist 22 56 10 
 redblackdistr r b n = let bawl = redblack r b n in
@@ -129,7 +129,7 @@ colorballs cs ks = let chew = (\y->fst y`choose`snd y) in
 
 ----An experiment
 last9s :: Unary->[Prime]->N
-last9s f ps = size [nines|nines<-ps,(f nines)`mod`10==9]
+last9s f ps = size [nines | nines <-ps,(f nines)`mod`10==9]
 
 diggit :: Unary->[(N,Prime,Percent,Percent)]
 diggit z=
