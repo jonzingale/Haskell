@@ -23,7 +23,7 @@ instance Functor Chain where
     S a -> S (map f a)
     C a -> C (map (fmap f) a)
 
--- determinant as del
+-- determinant as del, likely not.
 -- det :: Matrix -> Int
 
 is_cycle :: (Num a, Eq a) => Chain a -> Bool
@@ -48,3 +48,8 @@ k3 = S [1,2,3]
 
 k4 :: Chain Integer
 k4 = S [1,2,3,4]
+
+k1 :: Chain Integer -- two triangles meeting at a boundary, one without a face.
+k1 = C [S [1,2,3,0],S [1,2,3],S [1,2,0],S [1,2],
+        S [1,3],S [1,0],S [1],S [2,3,0],S [2,3],S [2,0],
+        S [2],S [3,0],S [3],S [0],S []]
