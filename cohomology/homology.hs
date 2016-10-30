@@ -14,7 +14,7 @@ chains (abelian groups).
 
 data Chain a = C [Chain a] | S [a] deriving (Show)
 
-facet :: Num a => Int -> Chain a -> Chain a 
+facet :: Num a => Int -> Chain a -> Chain a
 facet n (S xs) = (facet n).del $ (S xs)
 facet n (C xs) = xs!!n
 
