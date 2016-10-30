@@ -6,7 +6,6 @@ chars = ['a','v','c']
 wax :: [String]
 wax = ["fluke", "endgame"]
 
-
 int2char x = show x
 
 fun :: [Integer -> Integer]
