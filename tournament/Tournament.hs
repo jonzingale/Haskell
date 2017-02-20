@@ -1,4 +1,4 @@
-module Tournament where
+module Tournament (density, list, standard_dev, avg, examples)where
 import HavelHakimi
 -- :set +s
 
@@ -22,20 +22,20 @@ examples = [(n, density $ tournament n) | n <-[8..], even n]
 density :: [Edge] -> Float
 density edges = let datums = map snd $ counts edges in
                 let std = floor $ standard_dev edges in
-                let mu = foldr (+) 0 datums `div` (length datums) in
-                let cond n = abs(mu - n) < std in
-  (f.filter cond $ datums) / (f datums)
+                let cond n = abs(avg datums - n) < std in
+  (f.filter cond) datums / f datums
   where
     f = fromIntegral.length
 
 standard_dev :: [Edge] -> Float -- ~ 4 for 10 verts.
 standard_dev pair_list = sqrt.fromIntegral.pair_to_var $ pair_list
 
+avg :: [Int] -> Int
+avg xs = foldr (+) 0 xs `div` length xs
+
 pair_to_var :: [Edge] -> Int
 pair_to_var edges = let vals = map snd $ counts edges in
   avg [((avg vals) - x)^2 | x <- vals]
-  where
-    avg edges = foldr (+) 0 edges `div` (length edges)
 
 -- low to high
 counts :: [Edge] -> [(Vertex, Int)]
