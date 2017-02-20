@@ -40,7 +40,7 @@ tournament n | n < 8 || odd n = []
 hh :: [Edge] -> [(Degree, Vertex)] -> [Edge]
 hh edge_list [] = edge_list
 hh edge_list pairs = let sorted = qsort pairs in
-  hh (edge_list ++ edges sorted) (f sorted)
+  hh (edge_list ++ edges sorted) $ f sorted
   where
     f ((a,b):as) = qsort $ fst_map (+ (-1)) (take a as) ++ drop a as
     edges ((a,b):as) = [(b, q) | (p,q) <- take a as]
