@@ -1,4 +1,4 @@
-module HavelHakimi (havelhakimi, true_for, tournament, qsort) where
+module HavelHakimi (havelhakimi, true_for, tournament) where
 -- :set +s
 
 type Edge = (Int, Int)
