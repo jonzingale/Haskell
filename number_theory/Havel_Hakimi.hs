@@ -3,6 +3,7 @@ module HavelHakimi (havelhakimi, true_for, tournament) where
 
 type Edge = (Int, Int)
 type Vertex = Int
+type Degree = Int
 
 {-- Tournaments:
 A Tournament where each competitor plays seven distinct competitors
@@ -36,14 +37,14 @@ tournament :: Int -> [Edge]
 tournament n | n < 8 || odd n = []
              | otherwise = hh [] $ zip (sevens n) $ take n [1..]
 
-hh :: [Edge] -> [(Vertex, Int)] -> [Edge]
+hh :: [Edge] -> [(Degree, Vertex)] -> [Edge]
 hh edge_list [] = edge_list
 hh edge_list pairs = let sorted = qsort pairs in
   hh (edge_list ++ edges sorted) (f sorted)
   where
     f ((a,b):as) = qsort $ fst_map (+ (-1)) (take a as) ++ drop a as
-    edges ((a,b):as) = [(b,q) | (p,q) <- take a as]
-    fst_map f xs =  [(f a, b) | (a, b)<- xs]
+    edges ((a,b):as) = [(b, q) | (p,q) <- take a as]
+    fst_map f xs =  [(f a, b)  | (a,b) <- xs]
 
 --- helpers
 sevens n = take n $ repeat 7
