@@ -37,6 +37,9 @@ stats graph = (avg.muse $ graph, var.vares $ graph)
 all_stats :: [Graph] -> [(Int, Int)]
 all_stats graphs = map stats graphs 
 
+dev :: [Int] -> Float
+dev vs = sqrt.fromIntegral.var $ vs
+
 avg :: [Int] -> Int
 avg xs = foldr (+) 0 xs `div` length xs
 
@@ -45,10 +48,10 @@ var vs = avg [(v - (avg vs))^2 | v <- vs]
 
 --- About each vertex
 muse :: Graph -> [Int]
-muse es = [ avg as | (v, as) <- s_and_ts es ]
+muse es = map (avg.snd) $ s_and_ts es 
 
 vares :: Graph -> [Int]
-vares es = [ var as | (v, as) <- s_and_ts es ]
+vares es = map (var.snd) $ s_and_ts es 
 
 s_and_ts :: Graph -> [(Vertex, [Int])] -- see counts
 s_and_ts [] = []
