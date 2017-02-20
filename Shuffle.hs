@@ -20,8 +20,8 @@ qsort :: (Ord a) => [a]->[a]
 qsort [] = []
 qsort (x:xs) = qsort (less x xs) ++ [x] ++ qsort (more x xs)
  where
- 	less a bs = [b|b<-bs,b<=a]
-	more a bs = [b|b<-bs,b>a]
+ 	less a bs = [b | b <-bs, b <= a]
+	more a bs = [b | b <-bs, b > a]
 	
 --some typehandling
 thrufloat :: (RealFrac a, Integral b) => (a->a) -> b -> b
