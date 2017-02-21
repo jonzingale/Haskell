@@ -73,17 +73,7 @@ pair_to_var :: Graph -> Int
 pair_to_var edges = var.map snd $ counts edges
 
 -- low to high
-counts :: Graph -> [(Vertex, Int)]
-counts [] = []
-counts edges = let biggie = maximum.flatten $ edges in
-  [(n, countem n edges) | n<-[1..biggie]]
-  where
-    flatten [] = []
-    flatten ((u,v):xs) = u : v : flatten xs
-    countem n [] = 0
-    countem n ((u,v):xs) | u == n = v + countem n xs
-                         | v == n = u + countem n xs
-                         | otherwise = countem n xs
+counts g = [(i, sum j)| (i,j) <- s_and_ts g]
 
 --- Graph building
 tournament :: Int -> Graph
