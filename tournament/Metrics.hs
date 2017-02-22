@@ -22,6 +22,16 @@ t5 = [(8,2),(8,7),(8,6),(5,3),(5,4),(5,1),(4,2),(4,3),(7,6),(7,1),(6,2),(1,3)]
   of this variance is minimum gives the graph which is most
   'fair' to each player. So far in the 8 competitor situation,
   the most fair is a disjoint graph of two tetrahedrons, t1 above.
+
+  Sarah suggests that the two metrics which
+  matter matter most are: 
+  1) the variance of the variance about each node as
+     a way to minimize the difference in ranking
+     spread each competitor will face.
+  2) how well centered the average rank is
+     about the rank of each competitor.
+     (8, [7,6,5]) is better than (8, [1,2,3]).
+     min.max $ [it-mu(it)].
 --}
 -- Stats: starting from known graphs
 best_var :: [Graph] -> Graph -- gives t1 for the above.
@@ -102,7 +112,7 @@ part_shuffle ((x,y):xs) = let cond = (== x).fst in
 key_shuffle :: Ord a => [a] -> [a]
 key_shuffle xs = map snd $ qsort.zip (rands xs) $ xs
   where
-    rands as = take (length as) $ spitRandos 120 (2^(length as))
+    rands as = take (length as) $ spitRandos 17 (2^(length as))
 
 spitRandos :: Int -> Int -> [Int]
 spitRandos s n = randomRs (0,n) (mkBlanket s)

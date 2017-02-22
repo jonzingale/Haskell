@@ -21,7 +21,7 @@ true_for = [ i | i <- [1..], havelhakimi $ sevens i]
 
 havelhakimi :: [Int] -> Bool
 havelhakimi (a:[]) = a == 0
-havelhakimi (a:as) = havelhakimi.qsort $
+havelhakimi (a:as) = havelhakimi.qsort $ 
   map (+ (-1)) (take a as) ++ drop a as
 
 {--
