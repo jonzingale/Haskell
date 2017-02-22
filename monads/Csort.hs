@@ -30,7 +30,7 @@ rand2V r= V (randomRs (-99,99) (mkBlanket r)) [1,0] (randomRs (-99,99) (mkBlanke
 
 wordV =
   V (randomRs ('a','z') (mkBlanket 42)) ['Q','R'] (randomRs ('a','z') (mkBlanket 24))
-ringwordV = V it ['a','a'] (['a'|j<-[0..300]]++it)  
+ringwordV = V it ['a','a'] (['a' | j<-[0..300]]++it)  
  where it = foldr (++) [] $ repeat ([' ']++['a'..'z'])
 
 streakV n =
@@ -122,7 +122,7 @@ cPrimesieve2 =
           iterate sieveV (shift (-1) primeV)
 
 
-primeV = V [1|k<-zeros] [2,3] [4..]
+primeV = V [1 | k<-zeros] [2,3] [4..]
 
 sieveV = relax.(=>> sieveleft).relax.(=>>sieveright)
 
@@ -160,8 +160,8 @@ zipV :: V x-> V y-> V (x,y)
 zipV (V a b c) (V x y z) = V (zip a x) (zip b y) (zip c z)
 --projections
 pr1V :: V (x,x) -> V x
-pr1V (V a b c) = V [i|(i,j)<-a] [i|(i,j)<-b] [i|(i,j)<-c]
-pr2V (V a b c) = V [j|(i,j)<-a] [j|(i,j)<-b] [j|(i,j)<-c]
+pr1V (V a b c) = V [i |(i,j)<-a] [ i | (i,j) <-b] [i | (i,j)<-c]
+pr2V (V a b c) = V [j |(i,j)<-a] [ j | (i,j)<-b] [j | (i,j)<-c]
 
 --IO bitches
 cShuffle :: (Show y ,Ord y)=> V y -> Int -> IO ()
