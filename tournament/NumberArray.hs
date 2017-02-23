@@ -21,9 +21,9 @@ instance (Num a, Integral a) => Num (NumArray a) where
   x - y | x == BAD || y == BAD = BAD
         | otherwise = incl (eval x - eval y)
 
-  -- div x y | x == BAD || y == BAD = BAD
-  --         | otherwise = N (div x y)
----
+-- instance (Num a, Integral a) => Integral (NumArray a) where
+--   div x y | x == BAD || y == BAD = BAD
+--           | otherwise = N (mod x y)
 
 -- type N = NumArray Integer
 type N = Integer
