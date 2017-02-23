@@ -28,8 +28,8 @@ filter b ns = f b ns 0
 
 qsort :: N -> N
 qsort 0 = 0
-qsort ns = (qsort.smaller (head ns) $ tail ns) ++ (head ns) ++
-           (qsort.larger  (head ns) $ tail ns)
+qsort ns = branch smaller ns ++ head ns ++ branch larger ns
   where
+    branch f xs = qsort.f (head xs) $ tail xs
     smaller n ns = filter (<= n) ns
     larger n ns  = filter (>  n) ns
