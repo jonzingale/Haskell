@@ -1,11 +1,7 @@
 module Metrics where
-import System.Random
+import Tournament
 
 -- :set +s
-type Weighted = [(Degree, Vertex)]
-type Graph = [(Int, Int)]
-type Vertex = Int
-type Degree = Int
 
 t1, t2, t3, t4, t5 :: Graph -- tournaments under different seeds.
 t1 = [(8,7),(8,6),(8,5),(4,3),(4,2),(4,1),(7,6),(7,5),(3,2),(3,1),(6,5),(2,1)]
@@ -82,39 +78,3 @@ standard_dev pair_list = sqrt.fromIntegral.pair_to_var $ pair_list
 pair_to_var :: Graph -> Int
 pair_to_var edges = var.map snd $ [(i, sum j)| (i,j) <- s_and_ts edges]
 
---- Graph building
---- the part_shuffle should have a seed to get different correct graphs.
-tournament :: Int -> Graph
-tournament n | n < 8 || odd n = []
-             | otherwise = hh [] $ zip (take n $ repeat 3 ) $ take n [1..]
-  where
-    f ((a,b):as) = qsort $ fst_map (+ (-1)) (take a as) ++ drop a as
-    edges ((a,b):as) = [(b, q) | (p,q) <- take a as]
-    fst_map f xs =  [(f a, b)  | (a,b) <- xs]
-    hh edge_list [] = edge_list
-    hh edge_list pairs = let sorted = part_shuffle.qsort $ pairs in
-      hh (edge_list ++ edges sorted) $ f sorted
-
--- shuffling/sorting
-mkBlanket = mkStdGen
-
-part_shuffle :: Weighted -> Weighted
-part_shuffle [] = []
-part_shuffle ((x,y):xs) = let cond = (== x).fst in
-  (key_shuffle.takeWhile cond) ((x,y):xs) ++
-  (part_shuffle.dropWhile cond) ((x,y):xs)
-
-key_shuffle :: Ord a => [a] -> [a]
-key_shuffle xs = map snd $ qsort.zip (rands xs) $ xs
-  where
-    rands as = take (length as) $ spitRandos 17 (2^(length as)) -- SEED
-
-spitRandos :: Int -> Int -> [Int]
-spitRandos s n = randomRs (0,n) (mkBlanket s)
-
-qsort :: Ord a => [a] -> [a]
-qsort [] = []
-qsort (x:xs) = qsort larger ++ [x] ++ qsort smaller
-           where
-             smaller = [s | s <- xs, s <= x]
-             larger  = [l | l <- xs, l > x]
