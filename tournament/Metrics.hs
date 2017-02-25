@@ -56,14 +56,14 @@ avg xs = foldr (+) 0 xs `div` length xs
 var :: [Int] -> Int
 var vs = avg [(v - (avg vs))^2 | v <- vs]
 
---- About each vertex
+--- About each Vertex
 muse :: Graph -> [Int]
 muse es = map (avg.snd) $ s_and_ts es 
 
 vares :: Graph -> [Int]
 vares es = map (var.snd) $ s_and_ts es 
 
-s_and_ts :: Graph -> [(Vertex, [Int])] -- see counts
+s_and_ts :: Graph -> [(Vertex, [Int])]
 s_and_ts [] = []
 s_and_ts edges = let biggie = maximum.flatten $ edges in
   [(n, countem n edges) | n<-[1..biggie]]
@@ -80,44 +80,37 @@ standard_dev :: Graph -> Float -- ~ 4 for 10 verts.
 standard_dev pair_list = sqrt.fromIntegral.pair_to_var $ pair_list
 
 pair_to_var :: Graph -> Int
-pair_to_var edges = var.map snd $ counts edges
-
--- low to high
-counts g = [(i, sum j)| (i,j) <- s_and_ts g]
+pair_to_var edges = var.map snd $ [(i, sum j)| (i,j) <- s_and_ts edges]
 
 --- Graph building
+--- the part_shuffle should have a seed to get different correct graphs.
 tournament :: Int -> Graph
 tournament n | n < 8 || odd n = []
              | otherwise = hh [] $ zip (take n $ repeat 3 ) $ take n [1..]
-
--- the part_shuffle should have a seed
--- to get different correct graphs.
-hh :: Graph -> Weighted -> Graph
-hh edge_list [] = edge_list
-hh edge_list pairs = let sorted = part_shuffle.qsort $ pairs in
-  hh (edge_list ++ edges sorted) $ f sorted
   where
     f ((a,b):as) = qsort $ fst_map (+ (-1)) (take a as) ++ drop a as
     edges ((a,b):as) = [(b, q) | (p,q) <- take a as]
     fst_map f xs =  [(f a, b)  | (a,b) <- xs]
+    hh edge_list [] = edge_list
+    hh edge_list pairs = let sorted = part_shuffle.qsort $ pairs in
+      hh (edge_list ++ edges sorted) $ f sorted
 
 -- shuffling/sorting
+mkBlanket = mkStdGen
+
 part_shuffle :: Weighted -> Weighted
 part_shuffle [] = []
 part_shuffle ((x,y):xs) = let cond = (== x).fst in
   (key_shuffle.takeWhile cond) ((x,y):xs) ++
   (part_shuffle.dropWhile cond) ((x,y):xs)
 
--- Note: the seed for different graphs lives here.
 key_shuffle :: Ord a => [a] -> [a]
 key_shuffle xs = map snd $ qsort.zip (rands xs) $ xs
   where
-    rands as = take (length as) $ spitRandos 17 (2^(length as))
+    rands as = take (length as) $ spitRandos 17 (2^(length as)) -- SEED
 
 spitRandos :: Int -> Int -> [Int]
 spitRandos s n = randomRs (0,n) (mkBlanket s)
-
-mkBlanket = mkStdGen
 
 qsort :: Ord a => [a] -> [a]
 qsort [] = []
