@@ -1,6 +1,11 @@
 module MatrixMetrics where
 import qualified Numeric.LinearAlgebra.HMatrix as H
 
+{--
+This is a module for computing matrix metrics 
+such as the spectrum of a graph.
+--}
+
 type DMatrix = H.Matrix Double
 type HComplex = H.Complex Double
 
