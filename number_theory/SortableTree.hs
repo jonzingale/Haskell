@@ -9,6 +9,21 @@ ex_1 = qsort 2937452435798
 ex_2 :: [Integer]
 ex_2 = qsort [2,9,3,7,4,5,2,4,3,5,7,9,8]
 
+t1 = Node 1 [Node 2 [], Node 3 []]
+t2 = Node 4 [Node 1 [], Node 5 []]
+
+instance (Num a, Ord a, Show a) => Ord (Tree a) where
+  (<=) t s | rootLabel t <= rootLabel s = True
+           | otherwise = False
+
+instance (Num a, Ord a, Show a) => Sortable (Tree a) where
+  push tree (Node b ts) = Node b (tree : ts)
+  (++) (Node a ss) (Node b ts) = Node b (ss ++ ts)
+  tail (Node n []) = Node n []
+  tail n = (subForest n)!!0
+  unit = Node 0 []
+  head n = n
+
 instance Sortable Integer where
   (++) n m = m + n * 10^(length m)
   push n ns = n + ns * 10
