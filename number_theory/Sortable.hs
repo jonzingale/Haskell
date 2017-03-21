@@ -23,13 +23,13 @@ instance ArrayLike Integer where
       f b js accum | (b.head) js = f b (tail js) $ push (head js) accum
                    | otherwise   = f b (tail js) accum
 
--- instance ArrayLike s where
---   qsort mempty = mempty
---   qsort ns = branch smaller ns ++ head ns ++ branch larger ns
---     where
---       branch f xs = qsort.f (head xs) $ tail xs
---       smaller n ns = filter (<= n) ns
---       larger n ns  = filter (>  n) ns
+-- qsort :: (ArrayLike a, Ord a) => a -> a
+qsort 0 = mempty
+qsort ns = branch smaller ns ++ head ns ++ branch larger ns
+  where
+    branch f xs = qsort.f (head xs) $ tail xs
+    smaller n ns = filter (<= n) ns
+    larger n ns  = filter (>  n) ns
 
 class (Ord s, Eq s, Show s, Monoid s) => ArrayLike s where
   head :: s -> s
@@ -38,7 +38,4 @@ class (Ord s, Eq s, Show s, Monoid s) => ArrayLike s where
   (++) :: s -> s -> s
   push :: s -> s -> s
   filter :: (s -> Bool) -> s -> s
-  qsort :: s -> s
 
--- class (Ord s, ArrayLike s) => Sortable s where
---   qsort :: s -> s
