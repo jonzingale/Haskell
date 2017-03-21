@@ -39,7 +39,7 @@ class (Ord s, Show s) => Sortable s where
   filter b ns = f b ns unit
     where
       f b js accum | js == unit = accum
-                   | (b.head) js = f b (tail js) $ push (head js) accum
+                   | (b.head) js = f b (tail js) $ head js ++ accum
                    | otherwise   = f b (tail js) accum
 
   qsort ns | ns == unit = unit
