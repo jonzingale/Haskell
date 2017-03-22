@@ -1,7 +1,6 @@
 -- {-# OPTIONS_GHC -fno-warn-tabs #-}
 module Sortable where
 import Prelude hiding (head, (++), tail, length, filter)
-import Data.Tree
 
 ex_1 :: Integer
 ex_1 = qsort 2937452435798
