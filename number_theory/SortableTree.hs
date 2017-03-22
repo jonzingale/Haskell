@@ -2,9 +2,6 @@
 module SortableTrees where
 import Prelude hiding (head, (++), tail, length, filter)
 
-ex_2 :: [Integer]
-ex_2 = qsort [2,9,3,7,4,5,2,4,3,5,7,9,8]
-
 t1 = Fork (Leaf 4) (Leaf 1)
 t2 = Fork (Leaf 3) t1
 t3 = t1 ++ t2
@@ -34,13 +31,6 @@ instance (Ord a, Show a) => Sortable (Btree a) where
   head (Fork l _) = l
   unit = Empty
 
-instance (Ord a, Show a) => Sortable [a] where
-  (++) [] b = b
-  (++) (a:as) bs = a : (as ++ bs)
-  head (n:ns) = [n]
-  tail (n:ns) = ns
-  unit = []
-
 class (Ord s, Show s) => Sortable s where
   filter :: (s -> Bool) -> s -> s
   head, tail, qsort :: s -> s
@@ -55,7 +45,7 @@ class (Ord s, Show s) => Sortable s where
     where
       f bool js accum | js == unit = accum
                       | (bool.head) js = f bool (tail js) $  head js ++ accum
-                      | otherwise   = f bool (tail js) accum
+                      | otherwise = f bool (tail js) accum
 
   qsort ns | ns == unit = unit
            | otherwise = branch smaller ns ++ head ns ++ branch larger ns
