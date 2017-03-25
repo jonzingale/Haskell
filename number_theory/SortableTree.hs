@@ -5,6 +5,7 @@ import Prelude hiding (head, (++), tail, length, filter)
 t1 = Fork (Leaf 4) (Leaf 1)
 t2 = Fork (Leaf 3) t1
 t3 = t1 ++ t2
+t4 = t2 ++ t1
 
 data Btree a = Leaf a | Fork (Btree a) (Btree a) | Empty
   deriving (Show , Eq)
@@ -14,6 +15,7 @@ instance Functor Btree where
   fmap f (Fork l r) = Fork (fmap f l) (fmap f r)
 
 instance (Ord a, Show a) => Ord (Btree a) where
+  (<=) Empty t = True
   (<=) t Empty = t == Empty
   (<=) (Leaf a) (Leaf b) = a <= b
   (<=) (Leaf a) (Fork l r) = (Leaf a) <= l
@@ -25,10 +27,10 @@ instance (Ord a, Show a) => Sortable (Btree a) where
   (++) left right = Fork left right
   tail Empty = Empty
   tail (Leaf a) = Empty
-  tail (Fork _ r) = r
+  tail (Fork l r) = r
   head Empty = Empty
   head (Leaf a) = Leaf a
-  head (Fork l _) = l
+  head (Fork l r) = l
   unit = Empty
 
 class (Ord s, Show s) => Sortable s where
