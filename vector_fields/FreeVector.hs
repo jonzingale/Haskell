@@ -45,7 +45,6 @@ k2 = Mod 7 2
 inv_k :: Integral k => FiniteField k -> FiniteField k
 inv_k (Mod n k) | prime n = inv (Mod n k)
                 | otherwise = BAD
-
-prime :: Integral k => k -> Bool
-prime n = let root = (\x -> floor $ (fromIntegral x) ** 0.5) in
-  foldr (&&) True [False | k <- [2..root n], n `mod` k == 0]
+  where
+    prime n = foldr (&&) True [False | k <- [2..root n], n `mod` k == 0]
+    root = \x -> floor $ (fromIntegral x) ** 0.5
