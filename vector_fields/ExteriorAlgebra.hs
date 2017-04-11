@@ -10,16 +10,16 @@ type Form n = Ext Integer Char
 form :: Form n
 form = Ext [1,2,3] ""
 
-del :: Form n -> Form n
-del (Ext ns "") = Ext ns "dx dy dz" -- gen this.
+dd :: Form n -> Form n
+dd (Ext ns "") = Ext ns "dx dy dz" -- gen this.
 
 (^) :: Form n -> Form n -> Form n
 (^) (Ext (x:xs) "") (Ext (y:ys) "") = Ext xs "dx"
-
 
 ---Helpers
 {--
 Useful would be methods for string handling.
 for instance, given a form (Ext [1..n] ""),
-del would give back (Ext [1..n] "d1 ... dn").
+dd would give back (Ext [1..n] "d1 ... dn").
 --}
+
