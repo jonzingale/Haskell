@@ -26,3 +26,12 @@ f = (x1 .. xn)
 df = ∑ ∂i(f) dxi = ∂1(f) dx1 + ... + ∂n(f) dxn
 *df = (-1)**(i-1) Σ ∂i(f) dx1 ^...^ dx(i-1) ^ dx(i+1) ^...^ dxn
 --}
+
+{--
+One of the stumbling blocks here is the desire to have
+dependent types. I would like to be able to apply the same
+ideas to any scalar-valued function regardless of the
+dimension of the functions domain. Perhaps, I can get at
+this by developing a type class which demands instances
+of summing and product etc...
+--}
