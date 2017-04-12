@@ -15,7 +15,7 @@ f3 = Lf $ \x y z -> x * z + x * y + z^2
 
 test1 = eval (3 * (f3 + f2)) 5 2 1
 test2 f = eval1 (pr1 f) 1 + eval1 (pr2 f) 2 + eval1 (pr3 f) 3 == eval f 1 2 3
--- test2 is only generally true when linearly independent?
+-- test2 is only generally true when linearly independent
 
 data Functional a = C a | Lf (a -> a -> a -> a) | Pi (a -> a)
 
