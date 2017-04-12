@@ -5,13 +5,13 @@ data Ext f s = Rval f String |
                Del (Ext f String) |
                Wedge (Ext f String) (Ext f String)
 
-type V1 = Ext (Integer->Integer) String
-type V2 = Ext (Integer->Integer->Integer) String
-
 instance Show (Ext f s) where
   show (Wedge dx dy) = show dx ++ " ^ " ++ show dy
   show (Del dx) = "d" ++ show dx
   show (Rval f s) = s
+
+type V1 = Ext (Integer->Integer) String
+type V2 = Ext (Integer->Integer->Integer) String
 
 df1, df2 :: V1
 df1 = Del $ Rval (\n -> 1) "f1"
