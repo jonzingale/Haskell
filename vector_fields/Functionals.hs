@@ -16,4 +16,4 @@ instance (Num a) => Num (Functional a) where
   (*) (Lf f) (Lf g) = Lf $ \x -> f x * g x
   (*) (C a)  (Lf f) = Lf $ \x -> a * f x
   fromInteger = C . fromIntegral
-  -- negate f = -1 * f -- not sane.
+  negate f = C (-1) * f
