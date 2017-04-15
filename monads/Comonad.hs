@@ -103,7 +103,7 @@ lls (U x y z) = (head x + y + bang (U x y z)) `mod` 10
 	|otherwise = (bang.right) (U a b (c:cs))
 
 --Comonadic primeSieve !!!!
-clPrimes n= [p|p<-cPrimes n,p/=1]
+clPrimes n= [p |p<-cPrimes n,p/=1]
 cPrimes m = (\m->toList 2 (m+1) $(=>> pSieve) nU) m		      
 pSieve (U (a:as) b c ) | a == 1 = b
 	               | b `mod` a /= 0 = pSieve (U as b c)
@@ -113,7 +113,7 @@ pSieve (U (a:as) b c ) | a == 1 = b
 boolU   = U (repeat False) True (repeat False)
 seedU   = U zeros 1 zeros
 zU      = U (neg walk) 0 walk
-nU	= U [1|x<-walk] 1 walk
+nU	= U [1 |x<-walk] 1 walk
 randU   = U (randomRs(0,9) (mkBlanket 43)) 2 zeros
 
 --helpers
