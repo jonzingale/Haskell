@@ -6,10 +6,9 @@ f\ /g    given f & d: invertible d (section)
   r      give f & g: linear map (coalgebra?)
 --}
 
-data Vect a = V [a] | Lf [a -> a] | Zero | Bad
+data Vect a = V [a] | Lf [a -> a] | Bad
 
 ff = Lf [\i -> 2*i, \j -> 3*j, \k -> 5*k]
-fake = V [\i -> 2*i, \j -> 3*j, \k -> 5*k]
 vv = V [1, 2, 3]
 ww = V [-1, 0, 1]
 
