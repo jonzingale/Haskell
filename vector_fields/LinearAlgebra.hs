@@ -1,50 +1,65 @@
 module LinearAlgebra where
 {--
-  d
-M -> N   given d & f: pullback
-f\ /g    given f & d: invertible d (section)
-  r      give f & g: linear map (coalgebra?)
+  Given any pair, derive the other.
+
+  given d & f: pullback
+  given f & d: invertible d (section)
+  give f & g: linear map (coalgebra?)
+
+       φ
+    A ---> B
+     \    /
+    f \  / g
+       R
 --}
 
-data Vect a = V [a] | Lf [a -> a] | Bad
+data Vector x = S x | V2 x x | V3 x x x deriving Show
 
-ff = Lf [\i -> 2*i, \j -> 3*j, \k -> 5*k]
-vv = V [1, 2, 3]
-ww = V [-1, 0, 1]
+scalar = S 5
+v2 = V2 3 4
+v3 = V3 1 2 3
+f2 = V2 (\i j -> i + 2*j) (\i j -> 3*i + j)
 
-uG (V vs) = vs -- uG $ ff <|> vv <|> ww
+instance Functor Vector where
+  -- fmap :: (a -> b) -> f a -> f b
+  fmap f (V3 x y z) = V3 (f x) (f y) (f z)
+  fmap f (V2 x y) = V2 (f x) (f y)
+  fmap f (S x) = S $ f x
 
-instance Num a => Linear (Vect a) where
-  (<|>) (Lf fs) (V vs) = V [ f x | (f, x) <- zip fs vs]
-  (<|>) (V vs) (V ws) = tr (V vs) <|> V ws
-  tr (V vs) = Lf [ (* v) | v <- vs]
-  tr (Lf fs) = V [ f 1 | f <- fs]
+instance Applicative Vector where
+  -- (<*>) :: Applicative f => f (a -> b) -> f a -> f b
+  (V3 f g h) <*> (V3 x y z) = V3 (f x) (g y) $ h z
+  (V2 f g) <*> (V2 x y) = V2 (f x) $ g y
+  (S f) <*> (S x) = S $ f x
 
-instance (Num a, Eq a) => Num (Vect a) where
-  (+) (V vs) (V ws) = V [ v + w | (v, w) <- zip vs ws]
-  (+) (Lf fs) (Lf gs) = Lf [ \x -> f x + g x | (f, g) <- zip fs gs]
-  -- test (+) with an identity using tr.
-  (*) (V [v]) (V ws) = V $ map (* v) ws
-  (*) (V vs) (V ws) = V [ v * w | (v, w) <- zip vs ws]
-  (*) (Lf fs) (Lf gs) = Lf [ \x -> f x * g x | (f, g) <- zip fs gs]
-  -- is (*) composition? f <|> g == f * g
-  (-) (V vs) (V ws) = V [ v - w | (v, w) <- zip vs ws]
-  fromInteger c = V [fromIntegral c]
-  abs (V vs) =  tr (V vs) <|> V vs
-  abs (Lf fs) = (Lf fs) <|> tr (Lf fs)
-  signum (V vs) | abs (V vs) == (V vs) = 1
-                | otherwise = -1
+instance Num x => Num (Vector x)  where
+  fromInteger x = S $ fromInteger x
+  (+) (V3 a b c) (V3 s t u) = V3 (a + s) (b + t) (c + u)
+  (+) (V2 s t) (V2 u v) = V2 (s + u) (t + v)
+  (+) (S s) (S u) = S (s + u)
 
-class Linear v where
+  (*) (S r) vect = (<$>) (\j -> j*r) vect -- transpose (S r) ?
+
+  abs v = v <|> v -- what about V* <|> V
+  -- negate v = (S (-1)) * v
+  -- signum vect =  
+
+class Num v => Linear v where
   (<|>) :: v -> v -> v
+  eval :: v -> v
   tr :: v -> v
 
--- in preparation for a monad distinguishing Rank
-zipp :: Vect t -> Vect t1 -> Vect (t, t1)
-zipp (V vs) (V ws) | length vs == length ws = V $ zip vs ws
-                   | otherwise = Bad
+-- tr :: Num a => Vector a -> Vector (a -> a -> a)
+-- tr (V2 x y) = S (\i j -> x*i + y*j)
 
---- Founding Classes
-instance (Eq a, Num a) => Eq (Vect a) where
-  (==) (Lf fs) (Lf gs) = tr (Lf fs) == tr (Lf gs)
-  (==) (V as) (V bs) = as == bs
+instance Num v => Linear (Vector v) where
+  (<|>) (V3 a b c) (V3 x y z) = V3 (a * x) (b * y) (c * z)
+  (<|>) (V2 a b) (V2 x y) = V2 (a * x) (b * y)
+  (<|>) (S a) (S x) = S $ a * x
+
+  eval (V3 x y z) = S (x + y + z)
+  eval (V2 x y) = S (x + y)
+  eval (S a) = S a
+
+  -- tr (V2 x y) = S (\x -> x) --S (\i j -> x*i + y*j)
+
