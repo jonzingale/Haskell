@@ -37,6 +37,3 @@ instance Num v => Linear (Functional v) (Vector v) where
 
 class Linear f v where
   (<|>) :: f -> v -> v -- eval
-
-trr (V3 x y z) = (\x y z -> x + y + z)
-hmm = (\f i -> f (i*2) 10 0) (trr v3) 3
