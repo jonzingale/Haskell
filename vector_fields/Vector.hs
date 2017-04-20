@@ -18,21 +18,4 @@ instance Num v => Num (Vector v)  where
   (*) v w = (*) <$> v <*> w
   abs v = v * v
   negate v = S (-1) * v
-  signum x = S 1 -- figure this out
-
--- Below: This is nice for general Transformations,
--- but will not work as nicely for Functionals
--- defined nearby.
-
--- class Num v => Linear v where
---   (<|>) :: v -> v -> v
---   eval :: v -> v
-
--- instance Num v => Linear (Vector v) where
---   (<|>) (V3 a b c) (V3 x y z) = V3 (a * x) (b * y) (c * z)
---   (<|>) (V2 a b) (V2 x y) = V2 (a * x) (b * y)
---   (<|>) (S a) (S x) = S $ a * x
-
---   eval (V3 x y z) = S (x + y + z)
---   eval (V2 x y) = S (x + y)
---   eval (S a) = S a
+  signum x = S 1 -- arbitrary
