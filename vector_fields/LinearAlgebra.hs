@@ -1,4 +1,5 @@
- {-# LANGUAGE MultiParamTypeClasses #-}
+{-# LANGUAGE MultiParamTypeClasses #-}
+{-# LANGUAGE FunctionalDependencies #-}
 
 module LinearAlgebra where
 import Functional
@@ -25,6 +26,7 @@ f1 = T $ \i j k-> 2*i + 3*j + 5*k
 
 this = (tr_dn.tr_up) v3
 that = (tr_up v3) <|> v3
+thap = (tr_up v3) <|> v1
 
 tr_up :: Num v => Vector v -> Functional v
 tr_up (V3 x y z) = T $ \i j k -> i*x + j*y + k*z
@@ -35,5 +37,5 @@ tr_dn f = V3 (pr1 f 1) (pr2 f 1) (pr3 f 1)
 instance Num v => Linear (Functional v) (Vector v) where
   (<|>) f (V3 x y z) = S $ pr1 f x + pr2 f y + pr3 f z
 
-class Linear f v where
+class Linear f v | v -> f where
   (<|>) :: f -> v -> v -- eval
