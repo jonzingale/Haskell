@@ -1,6 +1,6 @@
 module Vector where
 
-data Vector x = S x | V3 x x x deriving Show
+data Vector x = S x | V3 x x x deriving (Show, Eq)
 
 instance Functor Vector where
   fmap f (V3 x y z) = V3 (f x) (f y) (f z)
