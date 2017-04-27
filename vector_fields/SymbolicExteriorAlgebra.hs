@@ -10,6 +10,12 @@ all the while acting on strings. My thinking is that
 for now, Forms will be defined in terms of R^3.
 --}
 
+{--
+  Todo: incorporate the work on LinearAlgebra
+  here so that funtions in Ext are extended to Num.
+--}
+
+
 df1, df2, df0 :: V3
 df0 = Rval (\i j k -> 1) "f(x y z)"
 df1 = Del $ Rval (\i j k -> 1) "g(x y z) dy"
