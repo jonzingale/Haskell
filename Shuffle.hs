@@ -4,7 +4,7 @@ import System.Random
 
 
 ----The Shuffle itself
-knuffle :: (Ord a) =>[a]->[a]					
+knuffle :: (Ord a) =>[a]->[a]			
 knuffle xs = (snd.unzip.qsort.zip ((pmonicrandos.length) xs)) xs
 
 ----Random
@@ -20,9 +20,9 @@ qsort :: (Ord a) => [a]->[a]
 qsort [] = []
 qsort (x:xs) = qsort (less x xs) ++ [x] ++ qsort (more x xs)
  where
- 	less a bs = [b | b <-bs, b <= a]
-	more a bs = [b | b <-bs, b > a]
-	
+  less a bs = [b | b <-bs, b <= a]
+  more a bs = [b | b <-bs, b > a]
+
 --some typehandling
 thrufloat :: (RealFrac a, Integral b) => (a->a) -> b -> b
 thrufloat f n = (floor.f.fromIntegral) n
