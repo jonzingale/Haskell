@@ -12,7 +12,7 @@ for now, Forms will be defined in terms of R^3.
 
 {--
   Todo: incorporate the work on LinearAlgebra
-  here so that funtions in Ext are extended to Num.
+  here so that functions in Ext are extended to Num.
 --}
 
 
