@@ -37,5 +37,8 @@ tr_dn f = V3 (pr1 f 1) (pr2 f 1) (pr3 f 1)
 instance Num v => Linear (Functional v) (Vector v) where
   eval f (V3 x y z) = S $ pr1 f x + pr2 f y + pr3 f z
 
+-- perhaps <|> when there is a Riesz representation?
+-- when an inner product space, there is an iso v↦⟨v,−⟩.
+-- Think Gauge.
 class Linear f v | v -> f where
   eval :: f -> v -> v
