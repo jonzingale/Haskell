@@ -11,6 +11,13 @@ import Data.Function
 import Data.Functor.Contravariant (Contravariant (..))
 --}
 
+data F a = F (a -> Int)
+
+instance Contravariant F where
+  contramap f (F g) = F (g . f)
+
+--------
+
 data List a = List [a] deriving (Show, Eq)
 data Powerset a = P [List a] deriving (Show, Eq)
 
@@ -36,10 +43,6 @@ eta x = P $ map List (powerset [x])
 etaP :: a -> Powerset (Powerset a)
 etaP = eta.eta
 
-this = eta 3  -- P [List [3],List []]
-that = etaP 3 -- P [List [P [List [3],List []]],List []]
-id_this = mu that == this && this Main.>>= eta == this
-
 class Monad m where
   return :: a -> m a
   (>>=) :: Eq b => m a -> (a -> m b) -> m b
@@ -57,5 +60,3 @@ unionL (List x) (List y) = List $ union x y
 
 unionFL :: Eq a => [List a] -> List a
 unionFL = foldr unionL (List [])
-
-main = putStrLn.show $ id_this
