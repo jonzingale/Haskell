@@ -25,6 +25,8 @@ we1 = Wedge df1 df2
 -- the Vn refers to the number of arguments in the function.
 type V3 = Ext (Integer -> Integer -> Integer -> Integer) String
 
+-- perhaps better than passing around strings would
+-- be to generate the string in a show method on Exts.
 data Ext f s = Rval f String | Zero |
                Del (Ext f String) |
                Wedge (Ext f String) (Ext f String)
