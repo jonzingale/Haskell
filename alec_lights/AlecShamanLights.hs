@@ -35,7 +35,7 @@ solve sol = actions (sortem sol) zeros
 
 sortem :: (Integral a, Integral a1) => [a1] -> [[a]]
 sortem [] = []
-sortem (i:is) = them!!(fromIntegral (i-1)) : sortem is
+sortem (i:is) = shaman_lights!!(fromIntegral (i-1)) : sortem is
 
 actions :: Integral a => [[a]] -> [a] -> [a]
 actions [] xs = xs
