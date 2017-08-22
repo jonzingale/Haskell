@@ -1,21 +1,35 @@
--- :set +s for testing run time speed
+ -- :set +s for testing run time speed
 module Diagonals2 where
 type N = Integer
 
-jt = [2,2,0]
-test1 = (itop jt, ibot jt)
+good_list = [[2,2,0],[0,0,1],[1,0,1]]
+bad_list = [[2,2,0],[0,2,1],[1,0,1]]
+infinite_bad = [[2,2,0],[0,0,1],[1,0,1]] ++ infinite_bad
 
-itop, ibot :: [N] -> [N]
-itop ns = ns ++ [0]
-ibot ns = 0 : ns
+top :: [N] -> N
+top [] = 0
+top (n:ns) | n == 2 = 1 * 10^length(ns) + top ns
+           | n == 1 = 1 * 10^length(n:ns) + top ns
+           | otherwise = top ns
 
--- top
--- 0 -> [0,0]
--- 1 -> [1,0]
--- 2 -> [0,1]
+bot :: [N] -> N
+bot [] = 0
+bot (n:ns) | n == 1 = 1 * 10^length(ns) + bot ns
+           | n == 2 = 1 * 10^length(n:ns) + bot ns
+           | otherwise = bot ns
 
--- z2top :: [N] -> [N]
--- z2top [] = []
--- z2top (x:y:zs) | x == 1 = 1 : z2top (y:zs)
-               -- | x == 2 = 
-               -- | otherwise = 0 : z2top (y:zs)
+join :: [N] -> [N] -> Bool
+join ts bs = validV $ bot ts + top bs
+
+validV :: N -> Bool
+validV n | n < 2 = True
+         | mod n 10 == 2 = False
+         | otherwise = validV $ div n 10
+
+vand :: Bool -> Bool -> Bool
+vand n m = and [n, m]
+
+processList :: [[N]] -> Bool
+processList [] = True
+processList (n:m:[]) = join n m
+processList (n:m:ps) = vand (join n m) $ processList (m:ps)
