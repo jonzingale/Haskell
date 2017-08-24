@@ -33,3 +33,14 @@ processList :: [[N]] -> Bool
 processList [] = True
 processList (n:m:[]) = join n m
 processList (n:m:ps) = vand (join n m) $ processList (m:ps)
+
+
+-----All 7 x 7s
+{--
+To count maxima, covered_corners/2.
+3^7 Vectors thus (3^7)^7 == 3^49
+239299329230617529590083 matrices.
+but only 2^64 == 18446744073709551616 ?
+That can't be right.
+--}
+
