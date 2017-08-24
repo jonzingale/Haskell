@@ -41,36 +41,40 @@ To count maxima, covered_corners/2.
 3^7 Vectors thus (3^7)^7 == 3^49
 239299329230617529590083 matrices.
 
-perhaps start with the occupancy
-problem of the individual vectors.
-2^7 with only ones, 2^7 only twos,
-and some number with a mixture.
-
 still only 3^7 = 2187 vectors so,
 how many less are valid?
-
-pairwise sums to 3 are out. effectively,
-these are powers of 11 in ternary.
-
-5,7 are good to test.
 --}
 
 jt = (vects 7)!!42
+
+vects n = map tern [0..3^n-1] -- only n digit numbers.
+
+goodVs n = [vv | vv <- vects n, validV vv] -- 255 == 2^8 - 1
+
+tern :: N -> N
+tern n = f n 0
+  where
+    f n i | n < 3 = n * 10^i
+          | otherwise = mod n 3 * 10^i + f (div n 3) (i+1)
 
 validV :: N -> Bool
 validV n | n < 10 = True
          | mod (mod n 100) 3 == 0 = False 
          | otherwise = validV.div n $ 10
 
-vects n = map tern [0..3^n-1] -- only n digit numbers.
 
-goodVs = [vv | vv<-vects 7, validV vv] -- 255 == 2^8 - 1
 
-tern :: N -> N
-tern n = f n 0
-  where
-    f n i | n < 3 = n * 10^i
-          | otherwise = (mod n 3) * 10^i + f (div n 3) (i+1)
+
+
+
+
+
+
+
+
+
+-- proof:
+vs_sub_k = [length.goodVs $ k | k<-[1..30]]
 
 
 
