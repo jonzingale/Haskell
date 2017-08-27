@@ -1,7 +1,15 @@
  -- :set +s for testing run time speed
 module Diagonals2 where
-import SevenVectors
 import System.Random
+import SevenVectors
+import DynDistr
+import Sorts
+
+{--
+seven_vectors, qsort, sort_lasts
+target_distributions, count_distr
+--}
+
 type N = Integer
 
 good_list = [[2,2,0],[0,0,1],[1,0,1]]
@@ -36,6 +44,11 @@ processList [] = True
 processList (n:m:[]) = join n m
 processList (n:m:ps) = vand (join n m) $ processList (m:ps)
 
+targets :: [N] -> [[N]]
+targets ss = [tt | tt <- seven_vectors, join ss tt]
+
+all_targets :: [([Integer], Int)] -- returns distribution of targets
+all_targets = sort_lasts [(vv, (length.targets) vv) | vv <- seven_vectors]
 
 -----All 7 x 7s
 {--
