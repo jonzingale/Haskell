@@ -1,5 +1,7 @@
  -- :set +s for testing run time speed
 module Diagonals2 where
+import SevenVectors
+import System.Random
 type N = Integer
 
 good_list = [[2,2,0],[0,0,1],[1,0,1]]
@@ -23,8 +25,8 @@ join ts bs = valid_pairing $ bot ts + top bs
 
 valid_pairing :: N -> Bool
 valid_pairing n | n < 2 = True
-         | mod n 10 == 2 = False
-         | otherwise = valid_pairing $ div n 10
+                | mod n 10 == 2 = False
+                | otherwise = valid_pairing $ div n 10
 
 vand :: Bool -> Bool -> Bool
 vand n m = and [n, m]
@@ -43,13 +45,17 @@ To count maxima, covered_corners/2.
 
 still only 3^7 = 2187 vectors so,
 how many less are valid?
+577/2187 = 0.2638317329675354
+21292697885552828353 matrices, 577^7.
+still, which of these are valid?
 --}
 
-jt = (vects 7)!!42
-
 vects n = map tern [0..3^n-1] -- only n digit numbers.
+goodVs n = [vv | vv <- vects n, validV vv]
 
-goodVs n = [vv | vv <- vects n, validV vv] -- 255 == 2^8 - 1
+-- [3,7,17,41,99,239,577,1393,3363,8119,19601,47321,114243
+-- on remark, every 4th is divisible by 3. why?
+vs_sub_k = [length.goodVs $ k | k<-[1..20]]
 
 tern :: N -> N
 tern n = f n 0
@@ -59,22 +65,27 @@ tern n = f n 0
 
 validV :: N -> Bool
 validV n | n < 10 = True
-         | mod (mod n 100) 3 == 0 = False 
+         | sum_tail n == 3 = False
          | otherwise = validV.div n $ 10
 
+sum_tail :: N -> N
+sum_tail n = uncurry (+) $ divMod (mod n 100) 10
 
+vectorize :: N -> [N]
+vectorize n | div n 10 == 0 = [n]
+            | otherwise = vectorize (div n 10) ++ [mod n 10]
 
+sevenpad :: [N] -> [N]
+sevenpad ns | length ns > 6 = ns
+            | otherwise = sevenpad (0:ns)
 
+all_sevens = map (sevenpad.vectorize) $ goodVs 7
 
-
-
-
-
-
-
-
--- proof:
-vs_sub_k = [length.goodVs $ k | k<-[1..30]]
-
-
-
+{--
+Here I should perhaps think about file systems
+and random matrices or something. The idea is
+to eventually define a poisson process or a
+Birthdays distribution so randomly search the
+space of all matrices. When valid matrices are
+found, store them in a file.
+--}
