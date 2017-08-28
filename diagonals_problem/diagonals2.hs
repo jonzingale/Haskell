@@ -44,12 +44,6 @@ processList [] = True
 processList (n:m:[]) = join n m
 processList (n:m:ps) = vand (join n m) $ processList (m:ps)
 
-targets :: [N] -> [[N]]
-targets ss = [tt | tt <- seven_vectors, join ss tt]
-
-all_targets :: [([Integer], Int)] -- returns distribution of targets
-all_targets = sort_lasts [(vv, (length.targets) vv) | vv <- seven_vectors]
-
 -----All 7 x 7s
 {--
 To count maxima, covered_corners/2.
