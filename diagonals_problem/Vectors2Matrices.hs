@@ -40,11 +40,32 @@ ranged n seed = randomRs (0,n) $ mkBlanket seed
 
 random_matrix s = [seven_vectors!!(fromIntegral rand) | rand <- take 7 (ranged 576 s)]
 
-valid_rands n | processList (random_matrix n) =  countem(random_matrix n) : (valid_rands (n+1))
+valid_rands n | and[processList (random_matrix n), countem(random_matrix n) > 25] =
+                (random_matrix n, countem(random_matrix n), n) : (valid_rands (n+1))
               | otherwise = valid_rands (n+1)
 
 countem :: [[N]] -> Int
 countem [] = 0
-countem (n:ns) = (length [x | x<-n, x/=0]) + countem ns
+countem (n:ns) = (length [x | x <- n, x /= 0]) + countem ns
 
--- 7223
+-- 166869588 but days ago.
+
+{--
+Let's try attack these in order
+until a better idea comes along ;)
+--}
+
+good_matrices mt = and [processList mt, countem mt > 28]
+non_zeros = tail seven_vectors
+
+all_valids = [[a, b, c, d, e, f, g] | a<-non_zeros, b<-non_zeros,
+                                      c<-non_zeros, d<-non_zeros,
+                                      e<-non_zeros, f<-non_zeros,
+                                      g<-non_zeros,
+                                      good_matrices [a, b, c, d, e, f, g] ]
+
+{--
+The newest bad idea is to make an adjacency
+matrix for the 577 valid vectors and to attempt
+to lift such a graph to one of matrices.
+--}
