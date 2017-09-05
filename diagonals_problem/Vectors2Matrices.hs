@@ -18,7 +18,6 @@ all_targets = sort_lasts [(vv, (length.targets) vv) | vv <- seven_vectors]
 -- everyone.
 
 vect = [1,1,0,2,0,0,1]
-branches = [[0,0,0,0,0,0,1],[0,0,0,0,0,1,0],[0,0,0,0,0,1,1],[0,0,0,0,0,2,0],[0,0,0,0,1,0,0],[0,0,0,0,1,0,1],[0,0,0,0,1,1,0],[0,0,0,0,1,1,1],[0,0,0,0,2,0,0],[0,0,0,0,2,0,1],[0,0,0,0,2,2,0],[0,0,0,2,0,0,0],[0,0,0,2,0,0,1],[0,0,0,2,0,1,0],[0,0,0,2,0,1,1],[0,0,0,2,0,2,0],[0,0,0,2,2,0,0],[0,0,0,2,2,0,1],[0,0,0,2,2,2,0],[1,0,0,0,0,0,0],[1,0,0,0,0,0,1],[1,0,0,0,0,1,0],[1,0,0,0,0,1,1],[1,0,0,0,0,2,0],[1,0,0,0,1,0,0],[1,0,0,0,1,0,1],[1,0,0,0,1,1,0],[1,0,0,0,1,1,1],[1,0,0,0,2,0,0],[1,0,0,0,2,0,1],[1,0,0,0,2,2,0],[1,0,0,2,0,0,0],[1,0,0,2,0,0,1],[1,0,0,2,0,1,0],[1,0,0,2,0,1,1],[1,0,0,2,0,2,0],[1,0,0,2,2,0,0],[1,0,0,2,2,0,1],[1,0,0,2,2,2,0]]
 
 all_nodes :: [N] -> [[N]]
 all_nodes vv = f [vv] []
@@ -55,7 +54,7 @@ Let's try attack these in order
 until a better idea comes along ;)
 --}
 
-good_matrices mt = and [processList mt, countem mt > 28]
+good_matrices mt = and [countem mt > 28, processList mt]
 non_zeros = tail seven_vectors
 
 all_valids = [[a, b, c, d, e, f, g] | a<-non_zeros, b<-non_zeros,
@@ -64,8 +63,10 @@ all_valids = [[a, b, c, d, e, f, g] | a<-non_zeros, b<-non_zeros,
                                       g<-non_zeros,
                                       good_matrices [a, b, c, d, e, f, g] ]
 
-{--
-The newest bad idea is to make an adjacency
-matrix for the 577 valid vectors and to attempt
-to lift such a graph to one of matrices.
---}
+
+
+
+
+
+
+
