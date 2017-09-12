@@ -3,7 +3,18 @@ import DiagonalTrees
 
 anIdentity = (exampleTree, []) -: goLeft -: goRight  -: topMost ==  (exampleTree, [])
 
-test = (freeTree, []) -: goRight -:goLeft -:goRight -:goCenter -:goLeft -: focus
+test = freeZip -: goRight -:goLeft -:goRight -:goCenter -:goLeft -: focus
+
+freeZip = (freeTree, [])
+
+list2tree :: [Integer] -> Zipper a -> a
+list2tree [] z = focus z
+list2tree (a:as) z = list2tree as $ tern2tree a z 
+
+tern2tree :: Integer -> Zipper a -> Zipper a
+tern2tree 1 z = z -: goLeft
+tern2tree 0 z = z -: goCenter
+tern2tree 2 z = z -: goRight
 
 freeTree :: Tree Integer
 freeTree = tree 1
