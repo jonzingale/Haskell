@@ -1,6 +1,5 @@
 module DiagonalTrees where
 {--
-* Free generate a diagonals tree.
 * Work out a search algorithm, tree traversal.
 --}
 
