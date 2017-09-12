@@ -52,16 +52,23 @@ countem (n:ns) = (length [x | x <- n, x /= 0]) + countem ns
 {--
 Let's try attack these in order
 until a better idea comes along ;)
+
+Some assumptions, some founded.
+*solutions beginning with 1 are
+mirrored by those beginning with 2.
+*
+
 --}
 
-good_matrices mt = and [countem mt > 28, processList mt]
+good_matrices mt = and [countem mt > 27, processList mt]
 non_zeros = tail seven_vectors
 
-all_valids = [[a, b, c, d, e, f, g] | a<-non_zeros, b<-non_zeros,
+all_valids = [[a, b, c, d, e, f, g] | a<-reduced_seven_vectors, b<-non_zeros,
                                       c<-non_zeros, d<-non_zeros,
                                       e<-non_zeros, f<-non_zeros,
                                       g<-non_zeros,
                                       good_matrices [a, b, c, d, e, f, g] ]
+
 
 
 
