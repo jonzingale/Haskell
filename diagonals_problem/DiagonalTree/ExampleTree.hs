@@ -3,7 +3,7 @@ import DiagonalTrees
 
 anIdentity = (exampleTree, []) -: goLeft -: goRight  -: topMost ==  (exampleTree, [])
 
-test = (freeTree, []) -: goRight -:goLeft -:goRight -: focus
+test = (freeTree, []) -: goRight -:goLeft -:goRight -:goCenter -:goLeft -: focus
 
 freeTree :: Tree Integer
 freeTree = tree 1
