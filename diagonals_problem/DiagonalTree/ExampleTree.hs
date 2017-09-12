@@ -3,7 +3,7 @@ import DiagonalTrees
 
 anIdentity = (exampleTree, []) -: goLeft -: goRight  -: topMost ==  (exampleTree, [])
 
-test = freeZip -: goRight -:goLeft -:goRight -:goCenter -:goLeft -: focus
+test = list2tree [1,1,2,0,2,1,0,0,1] freeZip
 
 freeZip = (freeTree, [])
 
