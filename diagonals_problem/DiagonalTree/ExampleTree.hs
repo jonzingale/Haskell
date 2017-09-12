@@ -8,8 +8,8 @@ test = list2tree [2,1,1,2,0,2,1,0,0,1] freeZip
 freeZip = (freeTree, [])
 
 list2tree :: [Integer] -> Zipper a -> a
-list2tree [] z = focus z
 list2tree (a:as) z = list2tree as $ tern2tree a z 
+list2tree [] z = focus z
 
 tern2tree :: Integer -> Zipper a -> Zipper a
 tern2tree 1 z = z -: goLeft
