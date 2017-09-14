@@ -8,6 +8,7 @@ data Crumb a = LeftCrumb a (Tree a) (Tree a)   |
                CenterCrumb a (Tree a) (Tree a) |
                RightCrumb a (Tree a) (Tree a) deriving (Show, Eq)
 
+type Indices = (Integer, Integer)
 type BreadCrumbs a = [Crumb a]
 type Zipper a = (Tree a, BreadCrumbs a)
 

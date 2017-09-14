@@ -1,11 +1,12 @@
 module ExampleTree where
 import DiagonalTrees
 
-anIdentity = (exampleTree, []) -: goLeft -: goRight  -: topMost ==  (exampleTree, [])
-
-test = list2tree [2,1,1,2,0,2,1,0,0,1] freeZip
-
-freeZip = (freeTree, [])
+{--
+freeTree defaults to 1 in it's first node.
+this ensures that all nodes along a path
+contribute to the length of the accumulated
+string.
+--}
 
 list2tree :: [Integer] -> Zipper a -> a
 list2tree (a:as) z = list2tree as $ tern2tree a z 
@@ -21,7 +22,7 @@ freeTree = tree 1
   where
     tree n = Node n (tree (1+n*10)) (tree (n*10)) (tree (2+n*10))
 
-exampleTree :: Tree Int
+exampleTree :: Tree Integer
 exampleTree =
   Node 0
     (Node 01
