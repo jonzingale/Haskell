@@ -1,8 +1,9 @@
 module TreeTraversal where
 import ExampleTree
+import DiagonalTrees
 
-exampleZip = (exampleTree, [])
-freeZip = (freeTree, [])
+exampleZip = (exampleTree, [], 0)
+freeZip = (freeTree, [], 0)
 
 test = list2tree [2,1,1,2,0,2,1,0,0,1] freeZip
 test2 = list2tree [2,1,1]  exampleZip
