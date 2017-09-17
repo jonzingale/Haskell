@@ -8,19 +8,11 @@ contribute to the length of the accumulated
 string.
 --}
 
-list2tree :: [Integer] -> Zipper a -> (a, Integer)
-list2tree (a:as) z = list2tree as $ tern2tree a z 
-list2tree [] z = (focus z, height z)
-
-tern2tree :: Integer -> Zipper a -> Zipper a
-tern2tree 1 z = z -: goLeft
-tern2tree 0 z = z -: goCenter
-tern2tree 2 z = z -: goRight
-
-freeTree :: Tree Integer
-freeTree = tree 1
+freeTree :: Tree (Integer, Int)
+freeTree = tree (1, 1)
   where
-    tree n = Node n (tree (1+n*10)) (tree (n*10)) (tree (2+n*10))
+    tree (n, h) =
+      Node (n, h) (tree (1+n*10, h+1)) (tree (n*10, h+1)) (tree (2+n*10, h+1))
 
 exampleTree :: Tree Integer
 exampleTree =

@@ -1,14 +1,36 @@
 module TreeTraversal where
+import Prelude hiding (traverse) 
 import ExampleTree
 import DiagonalTrees
 
-exampleZip = (exampleTree, [], 0)
-freeZip = (freeTree, [], 0)
+exampleZip = (exampleTree, [], Zero)
+freeZip = (freeTree, [], Zero)
+theVerge = list2tree [2,1,1,2,0,2,1,0,0,1] (freeTree, [], Two)
 
-test = list2tree [2,1,1,2,0,2,1,0,0,1] freeZip
-test2 = list2tree [2,1,1]  exampleZip
+test = focus $ list2tree [2,1,1,2,0,2,1,0,0,1] freeZip
+test2 = focus $ list2tree [2,1,1] exampleZip
 
-type N = Integer
+{--
+I do need a Traversal data structure.
+There needs to be a stack of instructions
+which are unambiguous at each step of the
+computation. As I traverse, there needs
+to be a sense for where to proceed to next.
+--}
+
+traverse :: Zipper a -> Zipper a
+traverse (Node pq l c r, bs, flag) |
+  or [cond, flag == Two] = incrementFlag.goUp $ (Node pq l c r, bs, flag)
+                                   | otherwise = (Node pq l c r, bs, flag)
+  where
+    cond = True
+
+incrementFlag :: Zipper a -> Zipper a
+incrementFlag (t, bs, Zero) = (t, bs, One)
+incrementFlag (t, bs, One) = (t, bs, Two)
+incrementFlag (t, bs, Two) = (t, bs, Full)
+incrementFlag (t, bs, Full) = (t, bs, Full)
+
 
 {--
 * Define a tree traversal, starting from the
@@ -18,7 +40,14 @@ left and working its way up and to the right.
   - adjacency rules
   - CA like rules
 * Return valid strings.
+
+Where to start:
+Extend the data structure of the Zipper to
+include height and index data. perhaps height
+can be embedded directly into the Node information.
 --}
+
+type N = Integer
 
 upperNeigh :: N -> (N,N,N) -> Bool
 upperNeigh 0 _ = True
