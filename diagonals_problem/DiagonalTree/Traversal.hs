@@ -1,5 +1,5 @@
-module ExampleTree where
-import DiagonalTrees
+module Traversal where
+import ZipperTree
 
 {--
 freeTree defaults to 1 in it's first node.

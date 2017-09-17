@@ -1,7 +1,7 @@
 module TreeTraversal where
 import Prelude hiding (traverse)
-import ExampleTree
-import DiagonalTrees
+import Traversal
+import ZipperTree
 
 freeZip = (freeTree, [])
 

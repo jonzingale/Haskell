@@ -1,16 +1,13 @@
-module DiagonalTrees where
+module ZipperTree where
 -- Very general Tree and Zipper info here.
 
-{--
-* Work out a search algorithm, tree traversal.
---}
 data Tree a = E | Node a (Tree a) (Tree a) (Tree a) deriving (Show, Eq)
 data Crumb a = LeftCrumb a (Tree a) (Tree a)   |
                CenterCrumb a (Tree a) (Tree a) |
                RightCrumb a (Tree a) (Tree a) deriving (Show, Eq)
 
-type BreadCrumbs a = [Crumb a]
 type Zipper a = (Tree a, BreadCrumbs a)
+type BreadCrumbs a = [Crumb a]
 
 goLeft :: Zipper a -> Zipper a
 goLeft (Node x l c r, bs) = (l, LeftCrumb x c r :bs)
