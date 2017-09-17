@@ -27,28 +27,25 @@ goUp (t, CenterCrumb x l r:bs) = (Node x l t r, bs)
 goUp (t, RightCrumb x l c :bs) = (Node x l c t, bs)
 goUp (t, []) = (t, [])
 
-modify :: (a -> a) -> Zipper a -> Zipper a
-modify f (Node x l c r, bs) = (Node (f x) l c r, bs)
-modify f (E, bs) = (E, bs)
+-- modify :: (a -> a) -> Zipper a -> Zipper a
+-- modify f (Node x l c r, bs) = (Node (f x) l c r, bs)
+-- modify f (E, bs) = (E, bs)
 
-topMost :: Zipper a -> Zipper a
-topMost (t, []) = (t, [])
-topMost z = topMost (goUp z)
+-- topMost :: Zipper a -> Zipper a
+-- topMost (t, []) = (t, [])
+-- topMost z = topMost (goUp z)
 
-(-:) :: a -> (a -> b) -> b
-(-:) x f = f x
+-- (-:) :: a -> (a -> b) -> b
+-- (-:) x f = f x
 
-height :: Num b => Zipper (a, b) -> b
-height (Node (n, height) l c r, bs) = height
+-- focus :: Zipper a -> a
+-- focus (Node a r s t, bs) = a
 
-focus :: Zipper a -> a
-focus (Node a r s t, bs) = a
+-- list2tree :: [Integer] -> Zipper a -> Zipper a
+-- list2tree (a:as) z = list2tree as $ tern2tree a z 
+-- list2tree [] z = z
 
-list2tree :: [Integer] -> Zipper a -> Zipper a
-list2tree (a:as) z = list2tree as $ tern2tree a z 
-list2tree [] z = z
-
-tern2tree :: Integer -> Zipper a -> Zipper a
-tern2tree 1 z = z -: goLeft
-tern2tree 0 z = z -: goCenter
-tern2tree 2 z = z -: goRight
+-- tern2tree :: Integer -> Zipper a -> Zipper a
+-- tern2tree 1 z = z -: goLeft
+-- tern2tree 0 z = z -: goCenter
+-- tern2tree 2 z = z -: goRight

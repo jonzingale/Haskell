@@ -4,32 +4,36 @@ import ExampleTree
 import DiagonalTrees
 
 freeZip = (freeTree, [])
-theVerge = list2tree [2,1,1,2,0,2,1,0,0,1] (freeTree, [])
 
-test = focus $ list2tree [2,1,1,2,0,2,1,0,0,1] freeZip
--- test2 = focus $ blink theVerge
-{--
-I do need a Traversal data structure.
-There needs to be a stack of instructions
-which are unambiguous at each step of the
-computation. As I traverse, there needs
-to be a sense for where to proceed to next.
---}
+-- test = focus $ list2tree [2,1,1,2,0,2,1,0,0,1,2] freeZip
+-- test2 = focus $ traverse 50 freeZip
 
--- traverse :: (Ord b, Num b) => Int -> Zipper (a, b) -> Zipper (a, b)
--- traverse 0 zs = zs
--- traverse n zs = traverse (n-1) (blink zs)
+-- 49 log 49 ~ 191
+traverse :: Int -> Traversal Integer -> Traversal Integer
+traverse 0 zs = zs
+traverse n zs = traverse (n-1) $ blink zs
 
-cond :: (Ord b, Num b) => Tree (a, b, c) -> Bool
-cond (Node (p, height, flag) r s t) =  height >= 49
+cond :: Traversal Integer -> Bool
+cond trav = or [cond1 trav, cond2 trav]
 
--- This needs very much work.
-blink :: (Ord b, Num b) => Zipper (a, b, Flag) -> Zipper (a, b, Flag)
-blink (tree, bs) | and [cond tree, getFlag (tree, bs) == Zero] =
-                    incrFlag.goUp $ (tree, bs)
-                 | otherwise = goRight(tree, bs)
+cond1 :: Traversal a -> Bool -- height condition
+cond1 trav = getHeight trav >= 49
 
-incrFlag :: Zipper (a, b, Flag) -> Zipper (a, b, Flag) 
+cond2 :: Traversal Integer -> Bool -- adjacency condition
+cond2 trav = let (n, a) = divMod (getVal trav) 10 in
+             let b = mod n 10 in
+             a + b == 3
+
+blink :: Traversal Integer -> Traversal Integer
+blink trav | cond trav = incrFlag.goUp $ trav
+           | otherwise = step trav
+  where
+    step ts | getFlag ts == One = goLeft ts
+            | getFlag ts == Zero = goCenter ts
+            | getFlag ts == Two = goRight ts
+            | getFlag ts == Full = incrFlag.goUp $ ts
+
+incrFlag :: Traversal a -> Traversal a 
 incrFlag zs | getFlag zs == One = setFlag Zero zs
             | getFlag zs == Zero = setFlag Two zs
             | getFlag zs == Two = setFlag Full zs
