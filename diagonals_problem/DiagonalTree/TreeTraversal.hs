@@ -3,13 +3,11 @@ import Prelude hiding (traverse)
 import ExampleTree
 import DiagonalTrees
 
-exampleZip = (exampleTree, [], Zero)
-freeZip = (freeTree, [], Zero)
-theVerge = list2tree [2,1,1,2,0,2,1,0,0,1] (freeTree, [], Two)
+freeZip = (freeTree, [])
+theVerge = list2tree [2,1,1,2,0,2,1,0,0,1] (freeTree, [])
 
 test = focus $ list2tree [2,1,1,2,0,2,1,0,0,1] freeZip
-test2 = focus $ list2tree [2,1,1] exampleZip
-
+-- test2 = focus $ blink theVerge
 {--
 I do need a Traversal data structure.
 There needs to be a stack of instructions
@@ -18,18 +16,24 @@ computation. As I traverse, there needs
 to be a sense for where to proceed to next.
 --}
 
-traverse :: Zipper a -> Zipper a
-traverse (Node pq l c r, bs, flag) |
-  or [cond, flag == Two] = incrementFlag.goUp $ (Node pq l c r, bs, flag)
-                                   | otherwise = (Node pq l c r, bs, flag)
-  where
-    cond = True
+-- traverse :: (Ord b, Num b) => Int -> Zipper (a, b) -> Zipper (a, b)
+-- traverse 0 zs = zs
+-- traverse n zs = traverse (n-1) (blink zs)
 
-incrementFlag :: Zipper a -> Zipper a
-incrementFlag (t, bs, Zero) = (t, bs, One)
-incrementFlag (t, bs, One) = (t, bs, Two)
-incrementFlag (t, bs, Two) = (t, bs, Full)
-incrementFlag (t, bs, Full) = (t, bs, Full)
+cond :: (Ord b, Num b) => Tree (a, b, c) -> Bool
+cond (Node (p, height, flag) r s t) =  height >= 49
+
+-- This needs very much work.
+blink :: (Ord b, Num b) => Zipper (a, b, Flag) -> Zipper (a, b, Flag)
+blink (tree, bs) | and [cond tree, getFlag (tree, bs) == Zero] =
+                    incrFlag.goUp $ (tree, bs)
+                 | otherwise = goRight(tree, bs)
+
+incrFlag :: Zipper (a, b, Flag) -> Zipper (a, b, Flag) 
+incrFlag zs | getFlag zs == One = setFlag Zero zs
+            | getFlag zs == Zero = setFlag Two zs
+            | getFlag zs == Two = setFlag Full zs
+            | otherwise = zs
 
 
 {--

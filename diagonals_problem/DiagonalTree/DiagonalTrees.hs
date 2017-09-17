@@ -4,46 +4,45 @@ module DiagonalTrees where
 {--
 * Work out a search algorithm, tree traversal.
 --}
-data Flag = Zero | One | Two | Full deriving (Show, Eq)
 data Tree a = E | Node a (Tree a) (Tree a) (Tree a) deriving (Show, Eq)
 data Crumb a = LeftCrumb a (Tree a) (Tree a)   |
                CenterCrumb a (Tree a) (Tree a) |
                RightCrumb a (Tree a) (Tree a) deriving (Show, Eq)
 
 type BreadCrumbs a = [Crumb a]
-type Zipper a = (Tree a, BreadCrumbs a, Flag)
+type Zipper a = (Tree a, BreadCrumbs a)
 
 goLeft :: Zipper a -> Zipper a
-goLeft (Node x l c r, bs, flag) = (l, LeftCrumb x c r :bs, flag)
+goLeft (Node x l c r, bs) = (l, LeftCrumb x c r :bs)
 
 goCenter :: Zipper a -> Zipper a
-goCenter (Node x l c r, bs, flag) = (c, CenterCrumb x l r :bs, flag)
+goCenter (Node x l c r, bs) = (c, CenterCrumb x l r :bs)
 
 goRight :: Zipper a -> Zipper a
-goRight (Node x l c r, bs, flag) = (r, RightCrumb x l c :bs, flag)
+goRight (Node x l c r, bs) = (r, RightCrumb x l c :bs)
 
 goUp :: Zipper a -> Zipper a
-goUp (t, LeftCrumb x c r:bs, flag) = (Node x t c r, bs, flag)
-goUp (t, CenterCrumb x l r:bs, flag) = (Node x l t r, bs, flag)
-goUp (t, RightCrumb x l c :bs, flag) = (Node x l c t, bs, flag)
-goUp (t, [], flag) = (t, [], flag)
+goUp (t, LeftCrumb x c r:bs) = (Node x t c r, bs)
+goUp (t, CenterCrumb x l r:bs) = (Node x l t r, bs)
+goUp (t, RightCrumb x l c :bs) = (Node x l c t, bs)
+goUp (t, []) = (t, [])
 
 modify :: (a -> a) -> Zipper a -> Zipper a
-modify f (Node x l c r, bs, flag) = (Node (f x) l c r, bs, flag)
-modify f (E, bs, flag) = (E, bs, flag)
+modify f (Node x l c r, bs) = (Node (f x) l c r, bs)
+modify f (E, bs) = (E, bs)
 
 topMost :: Zipper a -> Zipper a
-topMost (t, [], flag) = (t, [], flag)
+topMost (t, []) = (t, [])
 topMost z = topMost (goUp z)
 
 (-:) :: a -> (a -> b) -> b
 (-:) x f = f x
 
 height :: Num b => Zipper (a, b) -> b
-height (Node (n, height) l c r, bs, flag) = height
+height (Node (n, height) l c r, bs) = height
 
 focus :: Zipper a -> a
-focus (Node a r s t, bs, flag) = a
+focus (Node a r s t, bs) = a
 
 list2tree :: [Integer] -> Zipper a -> Zipper a
 list2tree (a:as) z = list2tree as $ tern2tree a z 
@@ -53,6 +52,3 @@ tern2tree :: Integer -> Zipper a -> Zipper a
 tern2tree 1 z = z -: goLeft
 tern2tree 0 z = z -: goCenter
 tern2tree 2 z = z -: goRight
-
-getFlag :: Zipper a -> Flag
-getFlag (tree, bs, flag) = flag
