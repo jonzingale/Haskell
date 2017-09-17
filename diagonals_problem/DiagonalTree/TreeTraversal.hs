@@ -1,5 +1,5 @@
 module TreeTraversal where
-import Prelude hiding (traverse) 
+import Prelude hiding (traverse)
 import ExampleTree
 import DiagonalTrees
 
