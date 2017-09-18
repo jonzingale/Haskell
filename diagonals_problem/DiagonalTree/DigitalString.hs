@@ -1,16 +1,30 @@
 module DigitalString where
 
--- Motivation
--- upperNeigh :: N -> (N,N,N) -> Bool
--- upperNeigh 0 _ = True
--- upperNeigh 1 ns = any (== ns) $ both ++ [(0,0,2), (0,1,0), (0,1,1), (2,0,2)]
--- upperNeigh 2 ns = any (== ns) $ both ++ [(0,2,0), (1,0,0), (1,0,1), (2,2,0)]
--- both = [(0,0,0), (0,0,1), (2,0,0), (2,0,1)]
+{-- Motivation
+* Define a tree traversal, starting from the
+left and working its way up and to the right.
+* Write bounding functions:
+  - only 49 deep
+  - adjacency rules
+  - CA like rules
+* Return valid strings.
+
+Where to start:
+Extend the data structure of the Zipper to
+include height and index data. perhaps height
+can be embedded directly into the Node information.
+
+upperNeigh :: N -> (N,N,N) -> Bool
+upperNeigh 0 _ = True
+upperNeigh 1 ns = any (== ns) $ both ++ [(0,0,2), (0,1,0), (0,1,1), (2,0,2)]
+upperNeigh 2 ns = any (== ns) $ both ++ [(0,2,0), (1,0,0), (1,0,1), (2,2,0)]
+both = [(0,0,0), (0,0,1), (2,0,0), (2,0,1)]
+--}
 
 data Flag = One | Zero | Two | Full deriving (Eq, Show)
-type Focus = (Integer, Height, Flag)
-type N = Integer
+type Focus = (N, Height, Flag)
 type Height = Int
+type N = Integer
 
 good, bad :: Focus
 good = (10222010102, 11, Two) -- is actually bad by above
@@ -34,4 +48,22 @@ neigh (n, h, f) | f == Zero = False
                 | otherwise = True
 
 smallN :: Focus -> Bool -- here is is assumed h > 7
-smallN (n, h, f) = 
+smallN n = True
+-- smallN (n, h, f) | flag == One =
+--   let (a, b) = get67 n in
+    
+
+num = 9876543210
+
+nth :: N -> N -> N
+nth i n = div (mod n (10^(i+1))) $ 10^i
+
+get76 n = div (mod n (10^8)) $ 10^6
+get876 n = div (mod n (10^9)) $ 10^6
+
+upperNeigh :: N -> (N,N,N) -> Bool
+upperNeigh 0 _ = True
+upperNeigh 1 ns = any (== ns) $ both ++ [(0,0,2), (0,1,0), (0,1,1), (2,0,2)]
+upperNeigh 2 ns = any (== ns) $ both ++ [(0,2,0), (1,0,0), (1,0,1), (2,2,0)]
+both = [(0,0,0), (0,0,1), (2,0,0), (2,0,1)]
+

@@ -38,32 +38,3 @@ incrFlag zs | getFlag zs == One = setFlag Zero zs
             | getFlag zs == Two = setFlag Full zs
             | otherwise = zs
 
-
-{--
-* Define a tree traversal, starting from the
-left and working its way up and to the right.
-* Write bounding functions:
-  - only 49 deep
-  - adjacency rules
-  - CA like rules
-* Return valid strings.
-
-Where to start:
-Extend the data structure of the Zipper to
-include height and index data. perhaps height
-can be embedded directly into the Node information.
---}
-
-type N = Integer
-
-upperNeigh :: N -> (N,N,N) -> Bool
-upperNeigh 0 _ = True
-upperNeigh 1 ns = any (== ns) $ both ++ [(0,0,2), (0,1,0), (0,1,1), (2,0,2)]
-upperNeigh 2 ns = any (== ns) $ both ++ [(0,2,0), (1,0,0), (1,0,1), (2,2,0)]
-both = [(0,0,0), (0,0,1), (2,0,0), (2,0,1)]
-
-lengthSeven :: N -> Bool
-lengthSeven n = f n 0
-  where
-    f 0 i = i == 7
-    f n i = f (div n 10) (i+1)
