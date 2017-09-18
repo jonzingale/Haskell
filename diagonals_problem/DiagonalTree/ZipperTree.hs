@@ -1,5 +1,4 @@
 module ZipperTree where
--- Very general Tree and Zipper info here.
 
 data Tree a = E | Node a (Tree a) (Tree a) (Tree a) deriving (Show, Eq)
 data Crumb a = LeftCrumb a (Tree a) (Tree a)   |
