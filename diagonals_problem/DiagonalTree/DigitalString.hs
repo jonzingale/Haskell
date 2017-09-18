@@ -26,9 +26,11 @@ type Focus = (N, Height, Flag)
 type Height = Int
 type N = Integer
 
-good, bad :: Focus
+good, bad, firstOne, lastOne :: Focus
 good = (10222010102, 11, Two) -- is actually bad by above
 bad  = (10222012, 8, Two) -- not yet because of above.
+firstOne = (10222012, 8, Two)
+lastOne = (10222010102001, 14, Two)
 
 len :: N -> N
 len n | n < 10 = 1
@@ -40,17 +42,15 @@ last14 n = mod n $ 10^(len n - 7)
 -- Are there any Neighborhood restrictions?
 neigh :: Focus -> Bool
 neigh (n, h, f) | f == Zero = False
-                | div h 7 == 0 = False
-                | and [f == One, mod h 7 == 1] = False
-                | and [f == One, mod h 7 == 0] = smallN (n, h, f)
+                | div h 7 == 0 = False -- any first row is ok
+                | and [f == One, mod h 7 == 1] = False -- first place 1 is ok
+                | and [f == One, mod h 7 == 0] = smallN n -- last 1 
                 | and [f == Two, mod h 7 == 0] = False
-                | and [f == Two, mod h 7 == 1] = smallN (n, h, f)
+                | and [f == Two, mod h 7 == 1] = smallN n -- first 1
                 | otherwise = True
 
-smallN :: Focus -> Bool -- here is is assumed h > 7
-smallN n = True
--- smallN (n, h, f) | flag == One =
---   let (a, b) = get67 n in
+smallN :: Integer -> Bool -- here is is assumed h > 7
+smallN n = any (== get76 n) [10, 2, 12]
     
 
 num = 9876543210
