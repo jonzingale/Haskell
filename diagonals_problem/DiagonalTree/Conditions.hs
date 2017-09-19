@@ -6,13 +6,14 @@ import Traversal
 -- cond :: Traversal Integer -> Bool
 -- cond trav = or [cond1 trav, cond2 trav, cond3 trav]
 
-freeZip = (freeTree, [])
+testZip = (freeTree, [])
+cond1test = cond1 (list2tree [0 | i<-[1..48]] testZip)
+cond2test = cond2 (list2tree [1,0,2,0,1,1,2] testZip)
 
-cond1test = cond1 (list2tree [0 | i<-[1..48]] freeZip)
 cond1 :: Traversal a -> Bool -- height condition
 cond1 trav = getHeight trav >= 49 -- single node has height 1
 
-cond2test = cond2 (list2tree [1,0,2,0,1,1,2] freeZip)
+
 cond2 :: Traversal Integer -> Bool -- adjacency condition
 cond2 trav | mod (getHeight trav) 7 == 1 = False
            | otherwise =
@@ -20,7 +21,6 @@ cond2 trav | mod (getHeight trav) 7 == 1 = False
              let b = mod n 10 in
              a + b == 3
 
--- cond3test = 
 cond3 :: Traversal Integer -> Bool -- neighbor condition
 cond3 trav = neigh (getFocus trav)
 
