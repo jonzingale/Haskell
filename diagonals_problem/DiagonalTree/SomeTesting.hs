@@ -5,13 +5,15 @@ import Conditions
 import ZipperTree
 import Traversal
 
--- rewrite this as corecursion so as
--- to not fill up memory.
-
+-- something isn't yet sitting right with
+-- testing incrementing on i. verify what
+-- should be done here.
 test :: [Integer]
-test = let trav j = (\t -> traverse t $ freeZip) j in 
-  [getVal.trav $ i | i<-[0..],
-    and [triOrBetter (trav i), (getHeight.trav) i == 49]]
+test = ff 0
+  where
+    ff i | triOrBetter (traverse i freeZip) =
+            (getVal.traverse i) freeZip : ff (i+1)
+         | otherwise = ff (i+1)
 
 triNum :: Integer -> Integer
 triNum n = div (n^2 + n) 2
