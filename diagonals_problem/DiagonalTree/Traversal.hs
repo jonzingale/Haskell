@@ -17,7 +17,7 @@ freeTree = tree (1, 1, One)
   where
     tree (n, h, flag) = Node (n, h, flag)
                         (tree (1+n*10, h+1, One))
-                        (tree ( n*10,  h+1, One))
+                        (tree (  n*10, h+1, One))
                         (tree (2+n*10, h+1, One))
 
 getFlag :: Traversal a -> Flag

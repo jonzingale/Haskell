@@ -19,24 +19,29 @@ triNum :: Integer -> Integer
 triNum n = div (n^2 + n) 2
 
 triOrBetter :: Traversal Integer -> Bool
-triOrBetter trav = (counts.getVal) trav >= (triNum 7)
-  where
-    counts 0 = 0
-    counts n | (mod n 10) == 0 = counts $ div n 10
-             | otherwise = counts (div n 10) + 1
+triOrBetter trav = (counts.getVal) trav >= (triNum (fromIntegral grid) + 0)
 
-{-- Todo
-  generalize functionality to work with any grid size.
---}
+counts :: Integer -> Integer
+counts 0 = 0
+counts n | (mod n 10) == 0 = counts $ div n 10
+         | otherwise = counts (div n 10) + 1
 
 pp :: Integer -> IO()
-pp n = putStr $ (show n) ++ "\n" ++ (unlines.ff.gg.show) n
+pp n = putStr $ (show (n, counts n)) ++ "\n" ++ (unlines.ff.gg.show) n
   where
     ff [] = []
-    ff str = take 7 str : ff (drop 7 str)
-    gg [] = "\n"
+    ff str = take grid str : ff (drop grid str)
+    gg [] = ""
     gg ('1':cs) = "\\" ++ gg cs
     gg ('0':cs) = '_' : gg cs
     gg ('2':cs) = '/' : gg cs
+
+fff [] = []
+fff str = take grid str : fff (drop grid str)
+
+ggg [] = ""
+ggg ('1':cs) = "\\" ++ ggg cs
+ggg ('0':cs) = '_' : ggg cs
+ggg ('2':cs) = '/' : ggg cs
 
 doit = mapM_ pp test

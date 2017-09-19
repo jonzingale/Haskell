@@ -10,9 +10,6 @@ traverse :: Int -> Traversal Integer -> Traversal Integer
 traverse 0 zs = zs
 traverse n zs = traverse (n-1) $ blink zs
 
-cond :: Traversal Integer -> Bool
-cond trav = or [cond1 trav, cond2 trav, cond3 trav]
-
 blink :: Traversal Integer -> Traversal Integer
 blink trav | cond trav = incrFlag.goUp $ trav
            | otherwise = step trav
