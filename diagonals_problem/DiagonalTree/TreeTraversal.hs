@@ -1,10 +1,21 @@
 module TreeTraversal where
 import Prelude hiding (traverse)
+import Conditions hiding (freeZip)
 import ZipperTree
 import Traversal
-import Conditions
 
-test = [(getFocus.traverse i) freeZip | i<-[0..300]]
+test :: [Integer]
+test = [(getVal.traverse i) freeZip | i<-[0..],
+          triOrBetter (traverse i freeZip)]
+
+triNum :: Integer -> Integer
+triNum n = div (n^2 + n) 2
+
+triOrBetter :: Traversal Integer -> Bool
+triOrBetter trav = (counts.getVal) trav >= triNum 7
+  where
+    counts n | (mod n 10) == 0 = counts $ div n 10
+             | otherwise = counts (div n 10) + 1
 
 freeZip = (freeTree, [])
 
@@ -13,7 +24,7 @@ traverse 0 zs = zs
 traverse n zs = traverse (n-1) $ blink zs
 
 cond :: Traversal Integer -> Bool
-cond trav = or [cond1 trav, cond2 trav]--, cond3 trav]
+cond trav = or [cond1 trav, cond2 trav, cond3 trav]
 
 blink :: Traversal Integer -> Traversal Integer
 blink trav | cond trav = incrFlag.goUp $ trav
