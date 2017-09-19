@@ -12,17 +12,16 @@ type N = Integer
 
 testZip = (freeTree, [])
 cond1test = cond1 (list2tree [0 | i<-[1..48]] testZip)
-cond2test = cond2 (list2tree [1,0,2,0,1,1,2] testZip)
+cond2test = cond2 (list2tree [1,0,2,0,2,1] testZip)
+
+-- 1 102 012
 
 cond1 :: Traversal a -> Bool -- height condition
 cond1 trav = getHeight trav >= 49 -- single node has height 1
 
 cond2 :: Traversal Integer -> Bool -- adjacency condition
 cond2 trav | mod (getHeight trav) 7 == 1 = False
-           | otherwise =
-             let (n, a) = divMod (getVal trav) 10 in
-             let b = mod n 10 in
-             a + b == 3
+           | otherwise = any (== mod (getVal trav) 100) [12, 21]
 
 cond3 :: Traversal Integer -> Bool -- neighbor condition
 cond3 trav = neigh (getFocus trav)
@@ -39,22 +38,23 @@ neigh (n, h, f) | lst n == 0 = False
                 | and [lst n == 2, mod h 7 /= 0] = or [get6 n == 2, get7 n == 1]
                 | otherwise = False
 
-neigh2 :: Focus -> Bool
-neigh2 (n, h, f) | lst n == 0 = False
-                 | div h 7 == 0 = False
-                 | lst n == 1 = onesCond (n, h)
-                 | lst n == 2 = twosCond (n, h)
-                 | otherwise = False
+-- Not the same conditions. why not?
+-- neigh :: Focus -> Bool
+-- neigh (n, h, f) | lst n == 0 = False
+--                 | div h 7 == 0 = False
+--                 | lst n == 1 = onesCond (n, h)
+--                 | lst n == 2 = twosCond (n, h)
+--                 | otherwise = False
 
-onesCond (n, h) | mod h 7 == 1 = get7 n == 2
-                | otherwise = or [get7 n == 2, get8 n == 1]
-twosCond (n, h) | mod h 7 == 0 = get7 n == 1
-                | otherwise = or [get6 n == 2, get7 n == 1]
-
+-- onesCond (n, h) | get7 n == 2 = True
+--                 | mod h 7 == 0 = get8 n == 1
+--                 | otherwise = False
+-- twosCond (n, h) | get7 n == 1 = True
+--                 | mod h 7 == 1 = get6 n == 2
+--                 | otherwise = False
 
 get6 n = div (mod n (10^7)) $ 10^6
 get7 n = div (mod n (10^8)) $ 10^7
 get8 n = div (mod n (10^9)) $ 10^8
--- get876 n = div (mod n (10^9)) $ 10^6
 lst n = mod n 10
 
