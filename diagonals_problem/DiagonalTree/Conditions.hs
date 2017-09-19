@@ -14,8 +14,6 @@ testZip = (freeTree, [])
 cond1test = cond1 (list2tree [0 | i<-[1..48]] testZip)
 cond2test = cond2 (list2tree [1,0,2,0,2,1] testZip)
 
--- 1 102 012
-
 cond1 :: Traversal a -> Bool -- height condition
 cond1 trav = getHeight trav >= 49 -- single node has height 1
 
