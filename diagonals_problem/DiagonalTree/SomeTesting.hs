@@ -13,7 +13,7 @@ triNum :: Integer -> Integer
 triNum n = div (n^2 + n) 2
 
 triOrBetter :: Traversal Integer -> Bool
-triOrBetter trav = (counts.getVal) trav >= triNum 7
+triOrBetter trav = (counts.getVal) trav >= (triNum 7 + 1)
   where
     counts 0 = 0
     counts n | (mod n 10) == 0 = counts $ div n 10
