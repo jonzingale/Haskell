@@ -13,7 +13,6 @@ cond2test = cond2 (list2tree [1,0,2,0,1,1,2] testZip)
 cond1 :: Traversal a -> Bool -- height condition
 cond1 trav = getHeight trav >= 49 -- single node has height 1
 
-
 cond2 :: Traversal Integer -> Bool -- adjacency condition
 cond2 trav | mod (getHeight trav) 7 == 1 = False
            | otherwise =
@@ -28,6 +27,10 @@ type Focus = (N, Height, Flag)
 type Height = Int
 type N = Integer
 
+
+--perhaps rewrite this with clearer
+--guard cases. Also for generalizing
+--to arbritrary grid sizes.
 neigh :: Focus -> Bool
 neigh (n, h, f) | lst n == 0 = False
                 | div h 7 == 0 = False
