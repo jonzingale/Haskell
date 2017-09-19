@@ -2,26 +2,18 @@ module TreeTraversal where
 import Prelude hiding (traverse)
 import ZipperTree
 import Traversal
+import Conditions
+
+test = [(getFocus.traverse i) freeZip | i<-[0..300]]
 
 freeZip = (freeTree, [])
 
--- 49 log 49 ~ 191
 traverse :: Int -> Traversal Integer -> Traversal Integer
 traverse 0 zs = zs
 traverse n zs = traverse (n-1) $ blink zs
 
 cond :: Traversal Integer -> Bool
-cond trav = or [cond1 trav, cond2 trav]
-
-cond1 :: Traversal a -> Bool -- height condition
-cond1 trav = getHeight trav >= 49
-
-cond2 :: Traversal Integer -> Bool -- adjacency condition
-cond2 trav | getHeight trav <= 7 = False
-           | otherwise =
-             let (n, a) = divMod (getVal trav) 10 in
-             let b = mod n 10 in
-             a + b == 3
+cond trav = or [cond1 trav, cond2 trav]--, cond3 trav]
 
 blink :: Traversal Integer -> Traversal Integer
 blink trav | cond trav = incrFlag.goUp $ trav
