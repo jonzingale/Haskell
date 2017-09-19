@@ -5,15 +5,20 @@ import Conditions
 import ZipperTree
 import Traversal
 
+-- something isn't yet sitting right with
+-- testing incrementing on i. verify what
+-- should be done here.
 test :: [Integer]
-test = [(getVal.traverse i) freeZip | i<-[0..],
-          triOrBetter (traverse i freeZip)]
+test = ff 0
+  where
+    ff i | triOrBetter (traverse i freeZip) = (getVal.traverse i) freeZip : ff (i+1)
+         | otherwise = ff (i+1)
 
 triNum :: Integer -> Integer
 triNum n = div (n^2 + n) 2
 
 triOrBetter :: Traversal Integer -> Bool
-triOrBetter trav = (counts.getVal) trav >= (triNum 7 + 1)
+triOrBetter trav = (counts.getVal) trav >= (triNum 7 )
   where
     counts 0 = 0
     counts n | (mod n 10) == 0 = counts $ div n 10
