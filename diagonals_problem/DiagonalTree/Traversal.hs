@@ -9,30 +9,36 @@ string.
 --}
 
 data Flag = Zero | One | Two | Full deriving (Show, Eq)
-
+data Print = Null | Print deriving (Show, Eq)
 --Perhaps I want a print flag?
 
-type Traversal a = Zipper (a, Integer, Flag)
+type Traversal a = Zipper (a, Integer, Flag, Print)
 
-freeTree :: Tree (Integer, Integer, Flag)
-freeTree = tree (1, 1, One)
+freeTree :: Tree (Integer, Integer, Flag, Print)
+freeTree = tree (1, 1, One, Null)
   where
-    tree (n, h, flag) = Node (n, h, flag)
-                        (tree (1+n*10, h+1, One))
-                        (tree (  n*10, h+1, One))
-                        (tree (2+n*10, h+1, One))
+    tree (n, h, flag, print) = Node (n, h, flag, print)
+                        (tree (1+n*10, h+1, One, Null))
+                        (tree (  n*10, h+1, One, Null))
+                        (tree (2+n*10, h+1, One, Null))
 
 getFlag :: Traversal a -> Flag
-getFlag (Node (n, h, flag) l c r, bs) = flag
+getFlag (Node (n, h, flag, print) l c r, bs) = flag
 
 getHeight :: Traversal a -> Integer
-getHeight (Node (n, height, flag) l c r, bs) = height
+getHeight (Node (n, height, flag, print) l c r, bs) = height
 
 getVal :: Traversal a -> a
-getVal (Node (n, height, flag) l c r, bs) = n 
+getVal (Node (n, height, flag, print) l c r, bs) = n 
 
-getFocus :: Traversal a -> (a, Integer, Flag)
+getFocus :: Traversal a -> (a, Integer, Flag, Print)
 getFocus (Node a l c r, bs) = a
 
+getPrint :: Traversal a -> Print
+getPrint (Node (n, h, f, print) l c r, bs)  = print
+
 setFlag :: Flag -> Traversal a -> Traversal a
-setFlag flag (Node (n, h, f) l c r, bs) = (Node (n, h, flag) l c r, bs)
+setFlag flag (Node (n, h, f, p) l c r, bs) = (Node (n, h, flag, p) l c r, bs)
+
+setPrint :: Print -> Traversal a -> Traversal a
+setPrint print (Node (n, h, f, p) l c r, bs) = (Node (n, h, f, print) l c r, bs)

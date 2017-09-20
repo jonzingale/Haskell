@@ -12,11 +12,11 @@ Some how I am double (quad) counting on the Tree /|\
 test :: [Traversal Integer]
 test = ff 0
   where
-    ff i | and [len i, triguy i] =
-            (traverse i) freeZip : ff (i+1)
+    ff i | and [len i, triguy i] = (traverse i) freeZip : ff (i+1)
          | otherwise = ff (i+1)
-    triguy j = triBool (traverse j freeZip) -- only print tri
-    len j = (grid^2) == (getHeight.traverse j) freeZip -- long
+    nextzip j = traverse j freeZip
+    triguy j = (triBool.nextzip) j -- only print triNums
+    len j = (grid^2) == (getHeight.nextzip) j -- long
 
 triBool :: Traversal Integer -> Bool
 triBool trav = (counts.getVal) trav == tri grid
@@ -36,7 +36,7 @@ pp trav = putStr $ tt trav
         take size str : ff (drop size str)
     gg [] = ""
     gg ('1':cs) = "\\" ++ gg cs
-    gg ('0':cs) = '_' : gg cs
+    gg ('0':cs) = ' ' : gg cs
     gg ('2':cs) = '/' : gg cs
 
 doit = mapM_ pp test
