@@ -11,7 +11,7 @@ traverse 0 zs = zs
 traverse n zs = traverse (n-1) $ blink zs
 
 blink :: Traversal Integer -> Traversal Integer
-blink trav | cond trav = incrFlag.goUp $ trav
+blink trav | cond trav = incrFlag.goUp $ trav -- <---- cond happens here.
            | otherwise = step trav
   where
     step ts | getFlag ts == One = goLeft ts

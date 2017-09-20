@@ -10,9 +10,11 @@ string.
 
 data Flag = Zero | One | Two | Full deriving (Show, Eq)
 
-type Traversal a = Zipper (a, Int, Flag)
+--Perhaps I want a print flag?
 
-freeTree :: Tree (Integer, Int, Flag)
+type Traversal a = Zipper (a, Integer, Flag)
+
+freeTree :: Tree (Integer, Integer, Flag)
 freeTree = tree (1, 1, One)
   where
     tree (n, h, flag) = Node (n, h, flag)
@@ -23,13 +25,13 @@ freeTree = tree (1, 1, One)
 getFlag :: Traversal a -> Flag
 getFlag (Node (n, h, flag) l c r, bs) = flag
 
-getHeight :: Traversal a -> Int
+getHeight :: Traversal a -> Integer
 getHeight (Node (n, height, flag) l c r, bs) = height
 
 getVal :: Traversal a -> a
 getVal (Node (n, height, flag) l c r, bs) = n 
 
-getFocus :: Traversal a -> (a, Int, Flag)
+getFocus :: Traversal a -> (a, Integer, Flag)
 getFocus (Node a l c r, bs) = a
 
 setFlag :: Flag -> Traversal a -> Traversal a
