@@ -2,10 +2,6 @@ module Conditions where
 import ZipperTree
 import Traversal
 
-type Focus = (N, Height, Flag)
-type Height = Integer
-type N = Integer
-
 grid = 5
 
 cond :: Traversal Integer -> Bool
@@ -25,16 +21,13 @@ cond3 trav = neigh (getFocus trav)
                        | div h grid == 0 = False
                        | lst n == 1 = onesCase n h
                        | lst n == 2 = twosCase n h
-                       -- | and [lst n == 1, mod h grid == 1] = get7 n==2
-                       -- | and [lst n == 1, mod h grid /= 1] = or [get7 n == 2, get8 n == 1]
-                       -- | and [lst n == 2, mod h grid == 0] = get7 n == 1
-                       -- | and [lst n == 2, mod h grid /= 0] = or [get6 n == 2, get7 n == 1]
                        | otherwise = False
 
     onesCase n h | mod h grid == 1 = get7 n == 2
                  | otherwise = or [get7 n == 2, get8 n == 1]
     twosCase n h | mod h grid == 0 = get7 n == 1
                  | otherwise = or [get6 n == 2, get7 n == 1]
+
     get6 n = div (mod n (10^grid)) $ 10^(grid-1)
     get7 n = div (mod n (10^(grid+1))) $ 10^grid
     get8 n = div (mod n (10^(grid+2))) $ 10^(grid+1)
