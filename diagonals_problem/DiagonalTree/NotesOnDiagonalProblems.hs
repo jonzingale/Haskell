@@ -1,4 +1,10 @@
 module NotesOnDiagonalProblems where
+import System.Random
+
+-- ################ work in progress
+    --- psuedoprimes
+mkBlanket :: Int -> StdGen
+mkBlanket cozy = mkStdGen cozy
 
 {--
   Here are some calculations for how
@@ -21,6 +27,23 @@ tribNum n = tribNum (n-1) + tribNum (n-2) + tribNum (n-1)
 
 tribs = [tribNum k | k<-[1..]]
 
+
+{--
+These heuristics show that on Average,
+I should expect to make a reversal once
+the height of the tree is 6.
+--}
+avg :: [Int] -> Int
+avg as = div (foldr (+) 0 as) (length as)
+
+randos :: Int -> Int
+randos seed = ff 0 0 0 (mkBlanket seed)
+  where
+    ff 1 2 k s = k
+    ff 2 1 k s = k
+    ff i j k s = let (a, b) = next s in
+      ff j (mod a 3) (k+1) b
+
 {--
 Exponential: Y = a x (b^X) 
 Y = 12.792(.1061255^x)
@@ -30,7 +53,6 @@ gives 5.7027, which is only negligibly
 better than from 0 to 3
 
 --}
-
 
 density :: [(Float, (Int, Integer))]
 density = [(ff k/gg (k-1), hh k) | k<-[1..] ]
