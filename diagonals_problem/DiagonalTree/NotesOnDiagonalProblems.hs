@@ -21,10 +21,19 @@ tribNum n = tribNum (n-1) + tribNum (n-2) + tribNum (n-1)
 
 tribs = [tribNum k | k<-[1..]]
 
--- Exponential: Y = a x (b^X) 
--- Y = 0.8798(0.9089^X)
+{--
+Exponential: Y = a x (b^X) 
+Y = 12.792(.1061255^x)
+
+Integrating on my TI-85 from 0 to 20
+gives 5.7027, which is only negligibly
+better than from 0 to 3
+
+--}
+
+
 density :: [(Float, (Int, Integer))]
-density = [(ff k/gg k, hh k) | k<-[1..] ]
+density = [(ff k/gg (k-1), hh k) | k<-[1..] ]
   where
     ff j = fromIntegral.tribNum $ j
     gg j = fromIntegral 3^j
