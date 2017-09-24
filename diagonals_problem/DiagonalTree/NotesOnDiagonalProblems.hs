@@ -11,14 +11,21 @@ module NotesOnDiagonalProblems where
   as the length of a string goes to infinity.
 -}
 
-tribstr 0 = "0"
-tribstr 1 = "1"
-tribstr n = tribstr (n-1) ++ tribstr (n-2) ++ tribstr (n-1)
+tribStr 0 = "0"
+tribStr 1 = "1"
+tribStr n = tribStr (n-1) ++ tribStr (n-2) ++ tribStr (n-1)
+
+tribNum 0 = 1
+tribNum 1 = 1
+tribNum n = tribNum (n-1) + tribNum (n-2) + tribNum (n-1)
+
+tribs = [tribNum k | k<-[1..]]
 
 -- Exponential: Y = a x (b^X) 
 -- Y = 0.8798(0.9089^X)
-tridensity :: [(Float, (Int, Integer))]
-tridensity = [((ff (k +1))/(gg k), (ff (k+1), 3^k))| k<-[1..] ]
+density :: [(Float, (Int, Integer))]
+density = [(ff k/gg k, hh k) | k<-[1..] ]
   where
-    ff j = fromIntegral.length.tribstr $ j
-    gg j = fromIntegral (3^j)
+    ff j = fromIntegral.tribNum $ j
+    gg j = fromIntegral 3^j
+    hh j = (ff j, gg (j-1))
