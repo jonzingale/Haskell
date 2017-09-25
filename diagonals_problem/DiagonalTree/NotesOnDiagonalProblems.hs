@@ -60,3 +60,18 @@ density = [(ff k/gg (k-1), hh k) | k<-[1..] ]
     ff j = fromIntegral.tribNum $ j
     gg j = fromIntegral 3^j
     hh j = (ff j, gg (j-1))
+
+{--
+Quick calculation of expected Waiting Time
+1/(1-x)^2 = Σ(n+1)x^n
+--}
+
+-- 1/(1-x)^2
+type Q = (Integer, Integer)
+
+wtExpect :: Q -> Q
+wtExpect p = subt (lefthand p) (limit p)
+  where
+    lefthand (n, d) = (d^2, (d-n)^2)
+    limit (n, d) = (n * (d - n), (d - n)^2)
+    subt (a, b) (c, d) = (a-c, d)
