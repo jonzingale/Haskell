@@ -28,7 +28,7 @@ tribNum n = tribNum (n-1) + tribNum (n-2) + tribNum (n-1)
 tribs = [tribNum k | k<-[1..]]
 
 
-{--
+{-- Note1
 These heuristics show that on Average,
 I should expect to make a reversal once
 the height of the tree is 6.
@@ -44,7 +44,7 @@ randos seed = ff 0 0 0 (mkBlanket seed)
     ff i j k s = let (a, b) = next s in
       ff j (mod a 3) (k+1) b
 
-{--
+{-- Note2
 Exponential: Y = a x (b^X) 
 Y = 12.792(.1061255^x)
 
