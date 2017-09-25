@@ -54,7 +54,7 @@ better than from 0 to 3
 
 --}
 
-density :: [(Float, (Int, Integer))]
+density :: [(Float, (Int, Int))]
 density = [(ff k/gg (k-1), hh k) | k<-[1..] ]
   where
     ff j = fromIntegral.tribNum $ j
@@ -64,10 +64,13 @@ density = [(ff k/gg (k-1), hh k) | k<-[1..] ]
 {--
 Quick calculation of expected Waiting Time
 1/(1-x)^2 = Σ(n+1)x^n
+
+goodOnes: [(1,1),(3,3),(7,9), (17,27),  (41,81),    (99,243)]
+waitingT: [(1,0),(9,0),(67,4),(559,100),(4921,1600),(44793,20736)]
 --}
 
 -- 1/(1-x)^2
-type Q = (Integer, Integer)
+type Q = (Int, Int)
 
 wtExpect :: Q -> Q
 wtExpect p = subt (lefthand p) (limit p)
