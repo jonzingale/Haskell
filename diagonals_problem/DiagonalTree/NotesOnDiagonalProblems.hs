@@ -65,6 +65,7 @@ density = [(ff k/gg (k-1), hh k) | k<-[1..] ]
 Quick calculation of expected Waiting Time
 1/(1-x)^2 = Σ(n+1)x^n
 
+map (wtExpect.snd) $ take 7 density:
 goodOnes: [(1,1),(3,3),(7,9), (17,27),  (41,81),    (99,243)]
 waitingT: [(1,0),(9,0),(63,4),(459,100),(3321,1600),(24057,20736)
 
