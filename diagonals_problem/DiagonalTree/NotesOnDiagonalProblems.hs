@@ -66,7 +66,9 @@ Quick calculation of expected Waiting Time
 1/(1-x)^2 = Σ(n+1)x^n
 
 goodOnes: [(1,1),(3,3),(7,9), (17,27),  (41,81),    (99,243)]
-waitingT: [(1,0),(9,0),(67,4),(559,100),(4921,1600),(44793,20736)]
+waitingT: [(1,0),(9,0),(63,4),(459,100),(3321,1600),(24057,20736)
+
+[Inf,Inf,15.75,4.59,2.076,1.160,0.725,0.487,0.342,0.249]
 --}
 
 -- 1/(1-x)^2
@@ -76,5 +78,5 @@ wtExpect :: Q -> Q
 wtExpect p = subt (lefthand p) (limit p)
   where
     lefthand (n, d) = (d^2, (d-n)^2)
-    limit (n, d) = (n * (d - n), (d - n)^2)
+    limit (n, d) = (d^2-d*n, (d-n)^2)
     subt (a, b) (c, d) = (a-c, d)
