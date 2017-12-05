@@ -29,4 +29,3 @@ euler4 = threes + fives_not_three
         f n 0 = f (n+5) 1
         f n 1 = n + f (n+5) 2
         f n 2 = n + f (n+5) 0
-
