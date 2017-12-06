@@ -29,3 +29,27 @@ euler4 = threes + fives_not_three
         f n 0 = f (n+5) 1
         f n 1 = n + f (n+5) 2
         f n 2 = n + f (n+5) 0
+
+lenN :: Integer -> Integer
+lenN 0 = 0
+lenN n = 1 + (lenN.div n) 10
+
+catN :: Integer -> Integer -> Integer
+catN al bl = al * 10^(lenN bl) + bl
+
+-- reverse, transpose, and ,or ,any ,all ,sum ,product ,maximum ,minimum
+
+revN :: Integer -> Integer
+revN 0 = 0
+revN ns = catN (mod ns 10) $ revN $ div ns 10
+
+transN :: [Integer] -> [Integer]
+transN ns | all (== 0) ns = []
+          | otherwise = foldr catN 0 (map lst ns) : transN (map rst ns)
+  where
+    rst t | t > 0 = ff mod t
+          | otherwise = 0
+    lst t | t > 0 = ff div t
+          | otherwise = 0
+    ff f = \x -> f x $ 10^(lenN x - 1)
+
