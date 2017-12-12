@@ -39,9 +39,15 @@ catN al bl = al * 10^(lenN bl) + bl
 
 -- reverse, transpose, and ,or ,any ,all ,sum ,product ,maximum ,minimum
 
+-- revN :: Integer -> Integer
+-- revN 0 = 0
+-- revN ns = catN (mod ns 10) $ revN $ div ns 10
+
 revN :: Integer -> Integer
-revN 0 = 0
-revN ns = catN (mod ns 10) $ revN $ div ns 10
+revN n = f n 0
+  where
+    f 0 es = es
+    f ns es =  (f.div ns) 10 $ es * 10 + mod ns 10
 
 transN :: [Integer] -> [Integer]
 transN ns | all (== 0) ns = []
