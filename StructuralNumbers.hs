@@ -3,6 +3,9 @@ module StructuralNumbers where
 prod :: [Integer] -> [Integer] -> [Integer]
 prod ns ms = [ n * m | n<-ns, m<-ms]
 
+diag :: (a -> b) -> a-> (b, b)
+diag f ns = (f ns, f ns)
+
 palindrome :: Integer -> Bool
 palindrome n = revN n == n
 
@@ -14,17 +17,17 @@ catN :: Integer -> Integer -> Integer
 catN al bl = al * 10^(lenN bl) + bl
 
 revN :: Integer -> Integer
-revN 0 = 0
-revN ns = catN (mod ns 10) $ revN $ div ns 10
-
-revM :: Integer -> Integer
-revM n = f n 0
+revN n = ff n 0
   where
-    f 0 es = es
-    f ns es =  (f.div ns) 10 $ es * 10 + mod ns 10
+    ff 0 es = es
+    ff ns es =  ff (div ns 10) (es * 10 + mod ns 10)
 
+euler4 :: Integer
 euler4 = let lst = reverse [100..999] in
   head $ dropWhile (not.palindrome) $ prod lst lst
 
-palN n k | (n * k) == revN (n * k) = (n * k)
-         | otherwise = palN n (k - 1)
+lockstep :: Integer -> Integer -> [(Integer, Integer)]
+lockstep 0 _ = []
+lockstep _ 0 = []
+lockstep n k | n <= k = (n, k) : lockstep n (k - 1)
+             | otherwise = (n, k) : lockstep (n - 1) k
