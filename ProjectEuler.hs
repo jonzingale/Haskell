@@ -226,7 +226,7 @@ permcode :: [a]->Z->[Z]
 permcode (x:xs) 0 = [0]
 permcode [] _ = []
 permcode (x:xs) n = let  d  =  (size(x:xs))-1 in
- 	            let blim d n = [a|a<-[1..n],(fact d)*a <= n] in
+ 	            let blim d n = [a | a <-[1..n],(fact d)*a <= n] in
 	            if blim d n == []
 	            then 0:(permcode xs n)
                     else ((maximum.blim d) n):
@@ -257,6 +257,16 @@ chubbly = (1,1):(1,2):[ ( fst(chubbly!!k) + fst(chubbly!!(k+1)) , k+3) |k<-[0..]
 
 chalice25 :: Z -> Z     --digitlength --> first number of that type.
 chalice25 honey = head [o | o <-fibonacci [0,1] , (size.baseList o) 10 >= honey]
+
+challenge28 :: Z
+challenge28 = foldr ((+).spiral) 0 [2,4,6,8] - 3
+
+spiral :: Integer -> Integer
+spiral n = ff n 1 500
+  where
+    ff n a 0 = 1
+    ff n a c = a + n + ff (n + 8) (a + n) (c - 1)
+
 
 --an exciting thought
 phi :: Double
@@ -353,7 +363,7 @@ irradecimal = "0123456789"++ (spunion 1)
 	 	What is the first of these numbers?--}
 
 challenge47 :: Z -- The answer is 134043
-challenge47 = head [j| j<-[0..] , and [(length.pfactors) k == 4 | k<-[j..j+3]] ]
+challenge47 = head [j | j<-[0..] , and [(length.pfactors) k == 4 | k<-[j..j+3]] ]
 
 chal47' :: (Z,Z,Z,Z)
 chal47' = head [(j,j+1,j+2,j+3) | j<-[0..] , and [(length.pfactors) k == 4 | k<-[j..j+3]] ]
@@ -374,3 +384,28 @@ Find S(9,10,1112131415) mod 109+7.
 --}
 
 --challenge544 :: Z
+
+{--Challenge616
+Alice plays the following game, she starts with a list of integers L and on each step she can either:
+
+* remove two elements a and b from L and add a^b to L
+* remove an element c from L that can be written as a^b, with a and b
+  being two integers such that a, b > 1, and add both a and b to L
+
+For example starting from the list L={8}, Alice can remove 8 and add 2 and 3
+resulting in L={2,3} in a first step. Then she can obtain L={9} in a second step.
+
+Note that the same integer is allowed to appear multiple times in the list.
+
+An integer n>1 is said to be creative if for any integer m>1 Alice can obtain
+a list that contains m starting from L={n}.
+
+Find the sum of all creative integers less than or equal to 10^12.
+
+
+NOTES:
+n must start with a number expressible as a power.
+
+
+
+}
