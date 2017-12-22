@@ -33,17 +33,9 @@ cycleP n = ff n 1
            | otherwise = ff n (k + 1)
 
 euler26 :: Integer
-euler26 = ff 1 1000 [3..]--eratosthenes2
-  where
-    ff k 0 xs = k
-    ff k n (x:xs) = ff (max (cycleP k) (cycleP x)) (n-1) xs
+euler26 = snd.maximum $ [ (cycleP k, k) | k <- takeWhile (< 10^3) eratosthenes2]
 
 
-
-
-
-
-
-
+period n = head $ [ p | p <- [1..], (10^p - 1) `mod` n == 0 ]
 
 

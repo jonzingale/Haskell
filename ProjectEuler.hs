@@ -258,6 +258,28 @@ chubbly = (1,1):(1,2):[ ( fst(chubbly!!k) + fst(chubbly!!(k+1)) , k+3) |k<-[0..]
 chalice25 :: Z -> Z     --digitlength --> first number of that type.
 chalice25 honey = head [o | o <-fibonacci [0,1] , (size.baseList o) 10 >= honey]
 
+challenge26 :: Z
+challenge26 = snd.maximum $ [ (cycleP k, k) | k <- takeWhile (< 10^3) eratosthenes2]
+
+eratosthenes2 :: [Z]
+eratosthenes2 = 2 : sieveP [1..] 2
+  where
+    sieveP (n:ns) xs | gg (2 * n + 1) xs = sieveP ns xs
+                     | otherwise = (2 * n + 1) : sieveP ns ((2 * n + 1)*xs)
+    gg n m = gcd n m > 1
+
+-- counts the length of a decimal cycle, 1/n. thanks internet.
+period n = head $ [ p | p <- [1..], (10^p - 1) `mod` n == 0 ]
+
+cycleP :: Z -> Z -- counts the length of a decimal cycle, 1/n.
+cycleP n = ff n 1
+  where
+    ff n k | mod n 2 == 0 = ff (div n 2) k
+           | mod n 5 == 0 = ff (div n 5) k
+           | mod (10^k) n == mod (10^(k+1)) n = 1
+           | mod (10^k) n == 1 = k
+           | otherwise = ff n (k + 1)
+
 challenge28 :: Z
 challenge28 = foldr ((+).spiral) 0 [2,4,6,8] - 3
 
