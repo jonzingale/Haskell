@@ -1,6 +1,14 @@
 module Challenge102 where
 import Triangles
 
+{--
+Four ideas for finding a zero in a triangle.
+* GeoCoding
+* 4 Quadrants
+* Barycentric
+* Ray Crossings
+--}
+
 euler102 = head triangles
 
 ex = T (V 448 617) (V (-988) 0) (V (-103) (-504)) -- has a zero
