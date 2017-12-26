@@ -220,17 +220,17 @@ challenge24 :: (Eq a)=>[a]->Z->[a] --counts from 0th, so 999999th.
 challenge24 as 0 = as
 challenge24 as n = (reverse.snd.fst.snatch) ((as,[]),(permcode' as n))
    where permcode' as n = (permcode as n)++replicate (length as -(length.permcode as) n) 0
-						--aye, a nasty bug fix.
+
 --Returns unique permutation identifier. 
 permcode :: [a]->Z->[Z]
 permcode (x:xs) 0 = [0]
 permcode [] _ = []
 permcode (x:xs) n = let  d  =  (size(x:xs))-1 in
- 	            let blim d n = [a | a <-[1..n],(fact d)*a <= n] in
-	            if blim d n == []
-	            then 0:(permcode xs n)
-                    else ((maximum.blim d) n):
-                         (permcode xs (n - (fact d *(maximum.blim d) n)))	
+              let blim d n = [a | a <-[1..n],(fact d)*a <= n] in
+              if blim d n == []
+              then 0:(permcode xs n)
+              else ((maximum.blim d) n):
+                    (permcode xs (n - (fact d *(maximum.blim d) n)))	
 			where 
 			 fact n = product [1..n]
 
@@ -427,7 +427,4 @@ Find the sum of all creative integers less than or equal to 10^12.
 
 NOTES:
 n must start with a number expressible as a power.
-
-
-
-}
+--}
