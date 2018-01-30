@@ -1,5 +1,6 @@
 module Challenge102 where
 import Triangles
+import System.Random
 
 -- Prelude> 34491/23568 -- haskell
 -- 1.4634674134419552
@@ -56,8 +57,9 @@ rotateT (T a b c) = (T a b c) : rotateT (T b c a)
 spinT :: Triangle -> [Bool]
 spinT tri = take 3 $ map (in_region zero) $ rotateT tri
 
--- Barycentric
+-- 4 Quadrants
 
-
-
+-- calculate y and x intercepts for each line.
+-- there must be a positive and negative intercept
+-- for each.
 
