@@ -4,10 +4,14 @@ module ListsAsNumbers where
 In this module, I aim to extend lists of numbers to the number class
 by considering the 0th index to be the 0th place value of a number.
 of course, this really only works for single digit list values.
-an inclusion method is likely a good idea. Further included numbers
-can not be negative!
+an inclusion method is likely a good idea.
 
 satisfactory methods for Num Class: + - * abs signum fromInteger
+
+1) Given listify how do we write an inclusion methods
+2) How do we write Num methods?
+3) can we generalize the binary operations?
+4) What about negative numbers?
 --}
 
 numl = N [1,2,3,4]
@@ -15,7 +19,7 @@ munl = N [-1,-2,-3,-4]
 
 data NumList = N [Integer] | BadNumList deriving (Show, Ord, Eq)
 
-incl n | n < 0 = N $ map (* (-1)) $ listify n
+incl n | n < 0 = N $ map (* (-1)) $ listify (-n)
        | otherwise = N $ listify n
   where
     listify 0 = []
@@ -39,5 +43,6 @@ instance Num NumList where
                 | all (< 0) ns = N [-1]
                 | otherwise = BadNumList
 
-  abs (N ns) | all (< 0) ns = N $ map (* (-1)) ns
-             | otherwise = (N ns)
+  abs (N ns) | all (>= 0) ns = N ns
+             | all (<= 0) ns = N $ map (* (-1)) ns
+             | otherwise = BadNumList
