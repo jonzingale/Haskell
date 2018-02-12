@@ -38,9 +38,9 @@ instance Num NumList where
 
   fromInteger n = incl n
 
-  signum (N ns) | all (> 0) ns = N [1]
-                | all (== 0) ns = N [0]
-                | all (< 0) ns = N [-1]
+  signum (N ns) | all (== 0) ns = N [0]
+                | all (>= 0) ns = N [1]
+                | all (<= 0) ns = N [-1]
                 | otherwise = BadNumList
 
   abs (N ns) | all (>= 0) ns = N ns
