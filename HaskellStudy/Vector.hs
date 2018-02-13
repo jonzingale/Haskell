@@ -1,5 +1,4 @@
 module Vector where
-import System.Random
 
 data Player = Player1 | Player2 | Tie deriving Show
 
@@ -22,14 +21,19 @@ bout p1 p2 | p1 == p2 = Tie
            | otherwise = Player2
 
 
-getBinary :: (Random a, Num a) => Int -> [a]
-getBinary seed = randomRs (0, 1) $ mkStdGen seed 
+data ThreeVect = V Float Float Float deriving (Show, Eq)
 
-toss::  (Num a, RandomGen g, Random a) => g -> (a, g)
-toss seed = randomR (0, 1) seed
--- toss seed | randomR (0, 1) seed == 0 = (Heads, (snd.randomR (0, 1)) seed)
-          -- | otherwise = (Tails, (snd.randomR (0, 1)) seed)
+vs = V 3 (-3) 1
+ws = V 4 9 2
 
+class Vector w where
+  (|+) :: w -> w -> w -- addition
+  (|*) :: Float -> w -> w -- scalar multiplication
+  (<|>) :: w -> w -> w -- dot product
+  (%) :: w -> w -> w -- cross product
 
--- srand :: a -> a
--- srand 
+instance Vector ThreeVect where
+  (|+) (V a b c) (V x y z) = V (a+y) (b+y) (c+z)
+  (|*) c (V x y z) = V (c*y) (c*y) (c*z)
+  (<|>) (V a b c) (V x y z) = V (a*y) (b*y) (c*z)
+  (%) (V a b c) (V x y z) = V (b*z-y*c) (c*x-a*z) (a*y-b*x)
