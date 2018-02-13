@@ -21,19 +21,28 @@ bout p1 p2 | p1 == p2 = Tie
            | otherwise = Player2
 
 
-data ThreeVect = V Float Float Float deriving (Show, Eq)
+data ThreeVect = V Float Float Float | ComplexRoot deriving (Show, Eq)
 
 vs = V 3 (-3) 1
 ws = V 4 9 2
 
 class Vector w where
-  (|+) :: w -> w -> w -- addition
-  (|*) :: Float -> w -> w -- scalar multiplication
-  (<|>) :: w -> w -> w -- dot product
   (%) :: w -> w -> w -- cross product
 
 instance Vector ThreeVect where
-  (|+) (V a b c) (V x y z) = V (a+y) (b+y) (c+z)
-  (|*) c (V x y z) = V (c*y) (c*y) (c*z)
-  (<|>) (V a b c) (V x y z) = V (a*y) (b*y) (c*z)
   (%) (V a b c) (V x y z) = V (b*z-y*c) (c*x-a*z) (a*y-b*x)
+
+instance Num ThreeVect where
+  (+) (V a b c) (V x y z) = V (a+x) (b+y) (c+z)
+  (*) (V a b c) (V x y z) = V (a*y) (b*y) (c*z) -- dot product
+  (-) (V a b c) (V x y z) = V (a-x) (b-y) (c-z)
+  signum (V a b c) = V (signum a) (signum b) (signum c)
+  abs vect = squareRoot $ vect * vect  
+
+  -- fascilitates scalar multiplication
+  fromInteger x = V (fromInteger x) (fromInteger x) (fromInteger x)
+
+squareRoot :: ThreeVect -> ThreeVect
+squareRoot (V a b c) = V (sqrt a) (sqrt b) (sqrt c)
+
+
