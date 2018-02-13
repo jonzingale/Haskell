@@ -5,9 +5,8 @@ data ThreeVect a = V a a a deriving (Show, Eq)
 instance Functor ThreeVect where
   fmap f (V a b c) = V (f a) (f b) (f c)
 
-vs, ws :: Floating v => ThreeVect v
-vs = V 3 (-3) 1
-ws = V 4 9 2
+vs = V 3.0 (-3.0) 1.0
+ws = V 4.0 9.0 2.0
 
 class Vector w where
   (%) :: w -> w -> w -- cross product
