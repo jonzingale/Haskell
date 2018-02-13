@@ -1,5 +1,3 @@
-module ListsAsNumbers where
-
 {--
 In this module, I aim to extend lists of numbers to the number class
 by considering the 0th index to be the 0th place value of a number.
@@ -14,35 +12,32 @@ satisfactory methods for Num Class: + - * abs signum fromInteger
 4) What about negative numbers?
 --}
 
-numl = N [1,2,3,4]
-munl = N [-1,-2,-3,-4]
+module ListsAsNumbers where
 
-data NumList = N [Integer] | BadNumList deriving (Show, Ord, Eq)
+listify :: Integer -> [Integer]
+listify 0 = []
+listify n = (listify (div n 10)) ++ [mod n 10]
 
-incl n | n < 0 = N $ map (* (-1)) $ listify (-n)
-       | otherwise = N $ listify n
-  where
-    listify 0 = []
-    listify n = (listify (div n 10)) ++ [mod n 10]
+-- incl :: Integer -> NumList
+-- eval :: NumList -> Integer
 
-binOp bin (N ns) (N ms) = N (f bin ns ms)
-  where
-    f bin [] ys = ys
-    f bin xs [] = xs
-    f bin (x:xs) (y:ys) =  bin x y : f bin xs ys
+listOp :: (a -> a -> a) -> [a] -> [a] -> [a]
+listOp bin [] ys = ys
+listOp bin xs [] = xs
+listOp bin (x:xs) (y:ys) = bin x y : listOp bin xs ys
+
+data NumList = N [Integer] deriving (Show, Eq)
+
+nl = N [1,2,3]
+ml = N [4,5,6]
 
 instance Num NumList where
-  numN * numM = binOp (*) numN numM
-  numN + numM = binOp (+) numN numM
-  numN - numM = binOp (-) numN numM
+  (+) (N xs) (N ys) = N $ listOp (+) xs ys
+  (-) (N xs) (N ys) = N $ listOp (-) xs ys
+  (*) (N xs) (N ys) = N $ listOp (*) xs ys
+  signum (N xs) = N $ map signum xs
+  abs (N xs) = N $ map abs xs
+  fromInteger x = N $ listify x
 
-  fromInteger n = incl n
-
-  signum (N ns) | all (== 0) ns = N [0]
-                | all (>= 0) ns = N [1]
-                | all (<= 0) ns = N [-1]
-                | otherwise = BadNumList
-
-  abs (N ns) | all (>= 0) ns = N ns
-             | all (<= 0) ns = N $ map (* (-1)) ns
-             | otherwise = BadNumList
+f :: Integer -> NumList
+f x = fromInteger x + (N [1,2,3])
