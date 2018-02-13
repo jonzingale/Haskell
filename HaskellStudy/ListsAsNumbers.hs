@@ -36,8 +36,8 @@ instance Num NumList where
   (-) (N xs) (N ys) = N $ listOp (-) xs ys
   (*) (N xs) (N ys) = N $ listOp (*) xs ys
   signum (N xs) = N $ map signum xs
-  abs (N xs) = N $ map abs xs
   fromInteger x = N $ listify x
+  abs (N xs) = N $ map abs xs
 
 f :: Integer -> NumList
 f x = fromInteger x + (N [1,2,3])
