@@ -1,5 +1,5 @@
-module MatrixFunctorial where
-import VectorNonFunc
+module Matrix where
+import Vector
 
 data ThreeMatrix = M { p1 :: ThreeVect,
                        p2 :: ThreeVect,

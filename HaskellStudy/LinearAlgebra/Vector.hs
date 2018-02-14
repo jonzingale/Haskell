@@ -1,4 +1,4 @@
-module VectorNonFunc where
+module Vector where
 
 data ThreeVect = V Double Double Double deriving (Show, Eq)
 
