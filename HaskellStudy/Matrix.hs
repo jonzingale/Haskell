@@ -21,15 +21,16 @@ evalM (M a b c) v = V (eval (a * v)) (eval (b * v)) (eval (c * v))
 tr :: ThreeMatrix -> ThreeMatrix
 tr (M (V a b c) (V d e f) (V g h i)) = M (V a d g) (V b e h) (V c f i)
 
+incl :: Double -> ThreeMatrix
+incl t = M (V t 0 0) (V 0 t 0) (V 0 0 t) -- t * idM
+
 trace :: ThreeMatrix -> ThreeVect
 trace (M (V a _ _) (V _ b _) (V _ _ c)) = V a b c
 
 instance Num ThreeMatrix where
-  fromInteger t = let tt = fromInteger t in
-    M (V tt 0 0) (V 0 tt 0) (V 0 0 tt) -- t * idM
-
-  abs m = mmap (vmap abs) $ m
+  fromInteger t = incl.fromInteger $ t
   signum m = mmap (vmap sqrt) $ m * m
+  abs m = mmap (vmap abs) $ m
 
   (+) (M a b c) (M x y z) = M (a + x) (b + y) (c + z)
   (-) (M a b c) (M x y z) = M (a - x) (b - y) (c - z)
