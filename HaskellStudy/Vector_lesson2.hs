@@ -20,7 +20,20 @@ bout p1 p2 | p1 == p2 = Tie
            | p1 > p2 = Player1
            | otherwise = Player2
 
+{--
+Create a Three Vector data type
+extend type to num class:
+  - vector addition
+  - dot product
+  - difference
+  - fromInteger (for scalar multiplication)
+  - norm
 
+introduce functor class
+  - rewrite ThreeVect as V a a a
+  - instance Floating v => Num (ThreeVect v) where
+  - fmap <$> makes abs, signum and fromInteger easy!
+--}
 data ThreeVect = V Float Float Float | ComplexRoot deriving (Show, Eq)
 
 vs = V 3 (-3) 1
