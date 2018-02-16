@@ -1,3 +1,5 @@
+{-# OPTIONS_GHC -Wno-missing-methods #-} -- because of signum.
+
 module ComplexVector where
 import Complex
 
@@ -34,5 +36,5 @@ instance (Floating v, Comp v, Num v) => Num (Vector v)  where
 
   fromInteger x = S $ fromInteger x
   abs v = S $ sqrt $ eval $ v <|> v
-  signum = id -- not sure what this means.
   negate v = fmap (* (-1)) v
+  -- signum = id
