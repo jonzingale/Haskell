@@ -6,7 +6,8 @@ import Text.Printf
 data Complex = C {real::Double, imag::Double} deriving (Eq)
 
 instance Show Complex where
-  show (C a b) = printf "%f+%fi" a b
+  show (C a b) | b < 0 = printf "%f%fi" a b
+               | otherwise = printf "%f+%fi" a b
 
 c1 :: Complex
 c1  = C 3 1
