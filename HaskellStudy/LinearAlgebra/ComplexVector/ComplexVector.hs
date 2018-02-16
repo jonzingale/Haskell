@@ -20,6 +20,7 @@ instance Applicative Vector where
   pure t = S t
 
 instance (Floating c, Num c, Comp c) => Comp (Vector c) where
+  -- (%) (V3 a b c) (V3 x y z) = fmap conj $ V3 (b*z-y*c) (c*x-a*z) (a*y-b*x)
   conj vect = fmap conj vect
   (<|>) a b = a * b
 
