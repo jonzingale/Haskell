@@ -11,6 +11,7 @@ instance Show Complex where
 c1 :: Complex
 c1  = C 3 1
 
+conj :: Complex -> Complex
 conj (C a b) = C a (-b)
 
 (<|>) :: Complex -> Complex -> Complex
