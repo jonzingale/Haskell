@@ -1,4 +1,5 @@
 -- Btw, there exists Data.Complex with its (a :+ b) notation
+{-# OPTIONS_GHC -Wno-missing-methods #-} -- because of Floating.
 
 module Complex where
 import Text.Printf
@@ -30,3 +31,13 @@ instance Num Complex where
                  | and [a>0, b<0] = 4
                  | and [a<0, b>0] = 2
                  | otherwise = 3
+
+instance Fractional Complex where
+  (/) cc dd = cc <|> dd
+  recip cc = conj cc
+  fromRational x = C (fromRational x) 0 
+
+-- ‘pi’, ‘exp’, ‘log’, ‘sin’, ‘cos’, ‘asin’, ‘acos’, ‘atan’, ‘sinh’,
+-- ‘cosh’, ‘asinh’, ‘acosh’, and ‘atanh’
+instance Floating Complex where
+  sqrt (C a b) = C (sqrt a) (sqrt b)

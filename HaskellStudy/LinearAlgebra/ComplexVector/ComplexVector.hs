@@ -1,7 +1,7 @@
 module ComplexVector where
 import Complex
 
-cv1 = V3 (C 1 (-1)) (C 2 3) (C 5 0) -- 2 * sqrt 10
+cv1 = V3 (C 1 (-1)) (C 2 3) (C 5 0)
 
 data Vector x = S x | V3 x x x | Bad deriving (Show, Eq)
 
@@ -33,6 +33,6 @@ instance (Floating v, Comp v, Num v) => Num (Vector v)  where
   (*) v w = (*) <$> v <*> (fmap conj w)
 
   fromInteger x = S $ fromInteger x
-  abs v = S $ sqrt.eval $ v <|> v
+  abs v = S $ sqrt $ eval $ v <|> v
   signum = id -- not sure what this means.
   negate v = fmap (* (-1)) v
