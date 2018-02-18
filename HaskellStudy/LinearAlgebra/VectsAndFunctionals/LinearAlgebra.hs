@@ -17,6 +17,12 @@ import Vector
      \    /
     f \  / g
        R
+
+consider a bra and ket notation:
+import Text.Printf
+instance Show Linear where
+  show (L a b) = printf "<%f|%f>" a b
+
 --}
 
 scalar = S 5
