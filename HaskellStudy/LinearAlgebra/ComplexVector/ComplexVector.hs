@@ -36,7 +36,7 @@ instance (Floating v, Comp v, Num v) => Num (Vector v)  where
   (*) (S a) (S b) = S $ a * b
   (*) (S a) (V3 d e f) = V3 (a*d) (a*e) (a*f)
   (*) (V3 d e f) (S a) = V3 (a*d) (a*e) (a*f)
-  (*) v w = (*) <$> v <*> (fmap conj w)
+  (*) v w = (*) <$> (fmap conj v) <*> w
 
   fromInteger x = S $ fromInteger x
   abs v = S $ sqrt $ eval $ v <|> v
