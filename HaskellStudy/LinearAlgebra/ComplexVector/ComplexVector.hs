@@ -24,6 +24,7 @@ instance Applicative Vector where
 instance (Floating c, Num c, Comp c) => Comp (Vector c) where
   -- note that for complex vectors cross product is sesquilinear
   (%) (V3 a b c) (V3 x y z) = fmap conj $ V3 (b*z-y*c) (c*x-a*z) (a*y-b*x)
+  -- (%) (V3 a b c) (V3 x y z) = fmap conj $ V3 (b*z-y*c) (c*x-a*z) (a*y-b*x) -- W x U* ?
   conj vect = fmap conj vect
   (<|>) a b = a * b
 

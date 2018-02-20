@@ -32,11 +32,10 @@ tailN = dropN 1
 
 lengthN :: Integer -> Integer
 lengthN 0 = 0
-lengthN n = 1 + lengthN (div n 10)
+lengthN n = 1 + lengthN (dropN 1 n)
 
--- comb 0 1 = 0
--- comb 1 0 = 1
--- comb 1 1 = 1
--- comb n k = comb (n-1) (k-1) + comb (n-1) k
+comb n 0 = 1
+comb 0 k = 0
+comb n k = comb (n-1) (k-1) + comb (n-1) k
 
 
