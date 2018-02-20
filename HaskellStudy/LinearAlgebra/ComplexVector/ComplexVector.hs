@@ -7,7 +7,11 @@ cv1 = V3 (C 1 (-1)) (C 2 3) (C 5 0)
 dd = V3 (C 0 0) (C 1 (-1)) (C 0 0)
 cc = V3 (C 1 0) (C 0 0) (C 0 0)
 
-data Vector x = S x | V3 x x x | Bad deriving (Show, Eq)
+data Vector x = S x | V3 x x x | Bad deriving Eq
+
+instance (Show a) => Show (Vector a) where
+  show (V3 a b c) = show [a, b, c]
+  show (S a) = show a
 
 eval :: Num x => Vector x -> x
 eval (V3 a b c) = a + b + c
