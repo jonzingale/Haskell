@@ -1,46 +1,43 @@
-{-# LANGUAGE OverloadedStrings #-} -- for Data.Text.Format
-
 module ComplexMatrix where
 import Complex
 import Vector
 
 import System.Random
 
--- towards eigenvectors via poweriteration.
-poweriteration :: Matrix Complex -> Vector Complex
-poweriteration mat =
-  let b_k = randVect in recursivef mat b_k 10
-    where
-      recursivef _ evect 0 = evect
-      recursivef m vect n = 
-          let b_k1 = multip m vect in
-          let b_k1_norm = abs b_k1 in
-          -- let bk = b_k1 / b_k1_norm in -- <-- division how?
-          let bk = b_k1 * b_k1_norm in -- divison as multiplication by conjugate
+data CompMatrix = CM CompVector CompVector CompVector deriving Eq
+data RealMatrix = RM RealVector RealVector RealVector deriving Eq
 
-          recursivef mat bk (n-1)
+instance Show CompMatrix where
+  show (CM a b c) = (unlines.map show) [a, b, c]
 
+instance Show RealMatrix where
+  show (RM a b c) = (unlines.map show) [a, b, c]
 
-data Matrix c = M (Vector c) (Vector c) (Vector c) deriving Eq
-
-instance Show c => Show (Matrix c) where
-  show (M a b c) = (unlines.map show) [a, b, c]
-
-randVect :: Vector Complex
+randVect :: CompVector
 randVect = let seed = mkStdGen 3 in
            let [a, b, c, d, e, f] = take 6 $ randomRs (0, 10) seed in
-           V3 (C a d) (C b e) (C c f)
+           CV (C a d) (C b e) (C c f)
 
-mm :: Matrix Complex
-mm = M cv1 dd cv1
+mm :: CompMatrix
+mm = CM cv dd cv
 
-rr :: Matrix Double
-rr = M (V3 1 2 3) (V3 4 5 6) (V3 7 8 8)
+rr :: RealMatrix
+rr = RM (RV 1 2 3) (RV 4 5 6) (RV 7 8 8)
 
-multip :: (Num c) => Matrix c -> Vector c -> Vector c -- simplify later by inheritance
-multip (M (V3 a b c) (V3 d e f) (V3 g h i)) (V3 x y z) =
-  V3 (a*x + b*y + c*z) (d*x + e*y + f*z) (g*x + h*y + i*z)
+-- likely needs functional dependencies for composition
+class Matrix m where
+  diag :: CompVector -> m
+  multip :: m -> CompVector -> CompVector  -- conjugate how?
 
+instance Matrix CompMatrix where
+  diag (CV a b c) = CM (CV a 0 0) (CV 0 b 0) (CV 0 0 c)
+  multip (CM (CV a b c) (CV d e f) (CV g h i)) (CV x y z) =
+    CV (a*x + b*y + c*z) (d*x + e*y + f*z) (g*x + h*y + i*z)
+
+-- instance Matrix RealMatrix where
+  -- diag (RV a b c) = RM (RV a 0 0) (RV 0 b 0) (RV 0 0 c)
+  -- multip (RM (RV a b c) (RV d e f) (RV g h i)) (RV x y z) =
+    -- CV (a*x + b*y + c*z) (d*x + e*y + f*z) (g*x + h*y + i*z)
 
 {--
 DEVELOPED FROM PYTHON EXAMPLE
