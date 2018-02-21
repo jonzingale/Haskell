@@ -34,7 +34,7 @@ instance (Floating c, Num c, Comp c) => Comp (Vector c) where
   (%) (V3 a b c) (V3 x y z) = fmap conj $ V3 (b*z-y*c) (c*x-a*z) (a*y-b*x)
   -- (%) (V3 a b c) (V3 x y z) = fmap conj $ V3 (b*z-y*c) (c*x-a*z) (a*y-b*x) -- W x U* ?
   conj vect = fmap conj vect
-  (<|>) a b = a * b
+  (<|>) a b = a * b  -- Hermitian
 
 instance (Floating v, Comp v, Num v) => Num (Vector v)  where
   (+) (S a) (S b) = S $ a + b
@@ -45,7 +45,7 @@ instance (Floating v, Comp v, Num v) => Num (Vector v)  where
   (*) (S a) (S b) = S $ a * b
   (*) (S a) (V3 d e f) = V3 (a*d) (a*e) (a*f)
   (*) (V3 d e f) (S a) = V3 (a*d) (a*e) (a*f)
-  (*) v w = (*) <$> w <*> (fmap conj v)
+  (*) v w = (*) <$> w <*> (fmap conj v) -- Hermitian
 
   fromInteger x = S $ fromInteger x
   abs v = S $ sqrt $ eval $ v <|> v
