@@ -1,3 +1,4 @@
+
 {-# OPTIONS_GHC -Wno-missing-methods #-} -- because of signum, fromInteger
 module ComplexMatrix where
 import Complex
@@ -19,8 +20,11 @@ randVect = let seed = mkStdGen 3 in
            let [a, b, c, d, e, f] = take 6 $ randomRs (0, 10) seed in
            CV (C a d) (C b e) (C c f)
 
-mm :: CompMatrix
+mm, nn :: CompMatrix
 mm = CM cv dd cv
+nn = CM (CV (C 1 2) (C 2 3) (C 3 4))
+        (CV (C 4 2) (C 5 3) (C 6 4))
+        (CV (C 7 2) (C 8 3) (C 8 4))
 
 rr :: RealMatrix
 rr = RM (RV 1 2 3) (RV 4 5 6) (RV 7 8 8)
@@ -43,7 +47,7 @@ instance Matrix CompMatrix where
 instance Num CompMatrix where
   (+) (CM a b c) (CM x y z) = CM (a+x) (b+y) (c+z)
   (-) (CM a b c) (CM x y z) = CM (a-x) (b-y) (c-z)
-  (*) (CM a b c) (CM x y z) = -- (AB)* = (A*)(B*)
+  -- (*) (CM a b c) (CM x y z) = -- (AB)* = (A*)(B*)
 
 
 {--
