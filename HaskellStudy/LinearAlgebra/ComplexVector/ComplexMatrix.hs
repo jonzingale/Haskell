@@ -1,8 +1,8 @@
 {-# LANGUAGE OverloadedStrings #-} -- for Data.Text.Format
 
 module ComplexMatrix where
-import ComplexVector
 import Complex
+import Vector
 
 import System.Random
 
