@@ -1,3 +1,4 @@
+{-# OPTIONS_GHC -Wno-missing-methods #-} -- because of signum, fromInteger
 module ComplexMatrix where
 import Complex
 import Vector
@@ -38,6 +39,12 @@ instance Matrix CompMatrix where
   -- diag (RV a b c) = RM (RV a 0 0) (RV 0 b 0) (RV 0 0 c)
   -- multip (RM (RV a b c) (RV d e f) (RV g h i)) (RV x y z) =
     -- CV (a*x + b*y + c*z) (d*x + e*y + f*z) (g*x + h*y + i*z)
+
+instance Num CompMatrix where
+  (+) (CM a b c) (CM x y z) = CM (a+x) (b+y) (c+z)
+  (-) (CM a b c) (CM x y z) = CM (a-x) (b-y) (c-z)
+ (*) (CM a b c) (CM x y z) = -- (AB)* = (A*)(B*)
+
 
 {--
 DEVELOPED FROM PYTHON EXAMPLE
