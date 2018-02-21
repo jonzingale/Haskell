@@ -43,7 +43,7 @@ instance Matrix CompMatrix where
 instance Num CompMatrix where
   (+) (CM a b c) (CM x y z) = CM (a+x) (b+y) (c+z)
   (-) (CM a b c) (CM x y z) = CM (a-x) (b-y) (c-z)
- (*) (CM a b c) (CM x y z) = -- (AB)* = (A*)(B*)
+  (*) (CM a b c) (CM x y z) = -- (AB)* = (A*)(B*)
 
 
 {--
