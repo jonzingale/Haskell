@@ -2,10 +2,14 @@
 
 module ComplexVector where
 import Complex
+-- import Data.Complex
 
 cv1 = V3 (C 1 (-1)) (C 2 3) (C 5 0)
 dd = V3 (C 0 0) (C 1 (-1)) (C 0 0)
 cc = V3 (C 1 0) (C 0 0) (C 0 0)
+
+ee = V3 (C 1 1) (C 2 (-1)) (C 0 0)
+ff = V3 (C 3 (-2)) (C 1 1) (C 0 0)
 
 data Vector x = S x | V3 x x x | Bad deriving Eq
 
@@ -41,9 +45,16 @@ instance (Floating v, Comp v, Num v) => Num (Vector v)  where
   (*) (S a) (S b) = S $ a * b
   (*) (S a) (V3 d e f) = V3 (a*d) (a*e) (a*f)
   (*) (V3 d e f) (S a) = V3 (a*d) (a*e) (a*f)
-  (*) v w = (*) <$> (fmap conj v) <*> w
+  (*) v w = (*) <$> w <*> (fmap conj v)
 
   fromInteger x = S $ fromInteger x
   abs v = S $ sqrt $ eval $ v <|> v
   negate v = fmap (* (-1)) v
-  -- signum = id
+  signum = id
+
+conjTest :: Vector Complex -> Vector Complex -> (Complex, Bool)
+conjTest (V3 a b c) (V3 x y z) = -- <(z,w)|(x,y)>*
+  let f = \a b c d -> (conj a * c) + (conj a * d) + (conj b * c) + (conj b * d) in
+  (f a b x y , (f a b x y) == (conj  (f x y a b)))
+
+
