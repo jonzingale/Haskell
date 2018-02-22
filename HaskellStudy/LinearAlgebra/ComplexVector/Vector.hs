@@ -1,6 +1,6 @@
 {-# OPTIONS_GHC -Wno-missing-methods #-} -- because of signum, fromInteger, *
 
-module Vector ((+), (-), (<|>), vconj, eval, norm, abs, wrap, ThreeVector(V3, S)) where
+module Vector ((+), (-), (<|>), conj, eval, norm, abs, wrap, ThreeVector(V3, S)) where
 import Complex
 
 cv = V3 (C 1 (-1)) (C 2 3) (C 5 0)
@@ -18,13 +18,16 @@ wrap f vect = getVect.fmap f $ Vect vect
 
 class Vector v where
   (<|>) :: v -> v -> v
-  vconj :: v -> v
   eval :: v -> v
   norm :: v -> v
 
+instance Comp a => Comp (ThreeVector a) where
+  conj = wrap conj
+  -- incl x = V3 x x x -- no sense for this one.
+
 instance (Floating a, Num a, Comp a) => Vector (ThreeVector a) where
   (<|>) (V3 a b c) (V3 x y z) = V3 (conj a *x) (conj b *y) (conj c*z) -- Hermitian
-  vconj = wrap conj -- perhaps extend Comp
+  -- vconj = wrap conj -- perhaps extend Comp
   eval (V3 a b c) = S $ a + b + c
   norm = eval.abs
 
