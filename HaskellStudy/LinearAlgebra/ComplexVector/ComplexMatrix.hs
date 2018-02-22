@@ -13,13 +13,13 @@ rv = V3 2.0 3.0 (-5.0)
 
 data ThreeMatrix a = M3 a a a deriving (Eq)
 
-newtype Matrix a = Matrix { getMatrix :: ThreeMatrix a }
+newtype Mtrx a = Mtrx { getMatrix :: ThreeMatrix a }
 
-instance Functor Matrix where
-  fmap f (Matrix (M3 x y z)) = Matrix $ M3 (f x) (f y) (f z)
+instance Functor Mtrx where
+  fmap f (Mtrx (M3 x y z)) = Mtrx $ M3 (f x) (f y) (f z)
 
 wrap :: (a -> a) -> ThreeMatrix a -> ThreeMatrix a
-wrap f matx = getMatrix.fmap f $ Matrix matx
+wrap f matx = getMatrix.fmap f $ Mtrx matx
 
 instance Show a => Show (ThreeMatrix a) where
   show (M3 a b c) = (unlines.map show) [a, b, c]
@@ -27,10 +27,16 @@ instance Show a => Show (ThreeMatrix a) where
 instance Comp a => Comp (ThreeMatrix a) where
   conj (M3 a b c) = wrap conj (M3 a b c) 
 
--- class Matrix m where
-  -- diag :: ThreeVector -> m
+class Matrix m where
+  diag :: ThreeVector a -> m
+  idM :: m
 
--- instance (Floating a, Num a, Comp a) => Num (Matrix a) where
+-- instance Matrix (ThreeMatrix a) where
+  -- idM = M3 (V3 id id id) (V3 id id id) (V3 id id id)
+  -- diag (V3 a b c) = M3 (V3 1 0 0) (V3 0 1 0) (V3 0 1 0)
+  -- diag (V3 a b c) = M3 (V3 a 0 0) (V3 0 b 0) (V3 0 c 0)
+
+-- instance (Floating a, Num a, Comp a) => Num (Mtrx a) where
   -- (+) (M a b c) (M x y z) = M (a+x) (b+y) (c+z)
   -- (-) (M a b c) (M x y z) = M (a-x) (b-y) (c-z)
   -- (*) (CM a b c) (CM x y z) = -- (AB)* = (A*)(B*)
