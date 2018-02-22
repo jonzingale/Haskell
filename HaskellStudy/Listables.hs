@@ -9,13 +9,15 @@ class Listable m where
   cons :: m -> m -> m
   unit :: m
 
-lengthL :: (Eq a, Listable a) => a -> Integer
-lengthL ls | unit == ls = 0
-           | otherwise = 1 + (lengthL.dropL 1) ls
+  lengthL :: m -> Integer
+  headL :: m -> m
+  tailL :: m -> m
 
-headL, tailL :: Listable a => a -> a
-headL = takeL 1
-tailL = dropL 1
+  -- headL = takeL 1
+  -- tailL = dropL 1
+  -- lengthL ls | unit == ls = 0
+  --            | otherwise = 1 + (lengthL.dropL 1) ls
+
 
 (+++) :: (Eq a, Listable a) => a -> a -> a -- error in ordering.
 (+++) ns ms | ms == unit = ns
