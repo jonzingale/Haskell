@@ -1,7 +1,7 @@
 
 {-# OPTIONS_GHC -Wno-missing-methods #-} -- because of signum, fromInteger
 
-module ComplexMatrix where
+module ComplexMatrix (randVect) where
 import Complex
 import Vector
 import Bit
@@ -11,16 +11,15 @@ import System.Random
 cv = V3 (C 1 (-1)) (C 2 3) (C 5 0)
 rv = V3 2.0 3.0 (-5.0)
 
--- data ThreeMatrix a = M3 (ThreeVector a) (ThreeVector a) (ThreeVector a) deriving Eq
 data ThreeMatrix a = M3 a a a deriving (Eq)
 
 newtype Matrix a = Matrix { getMatrix :: ThreeMatrix a }
 
-wrap :: (a -> a) -> ThreeMatrix a -> ThreeMatrix a
-wrap f matx = getMatrix.fmap f $ Matrix matx
-
 instance Functor Matrix where
   fmap f (Matrix (M3 x y z)) = Matrix $ M3 (f x) (f y) (f z)
+
+wrap :: (a -> a) -> ThreeMatrix a -> ThreeMatrix a
+wrap f matx = getMatrix.fmap f $ Matrix matx
 
 instance Show a => Show (ThreeMatrix a) where
   show (M3 a b c) = (unlines.map show) [a, b, c]
@@ -37,6 +36,11 @@ mm :: ThreeMatrix (ThreeVector Complex)
 mm = M3 (V3 (C 1 2) (C 2 3) (C 3 4))
         (V3 (C 4 2) (C 5 3) (C 6 4))
         (V3 (C 7 2) (C 8 3) (C 8 4))
+
+bb :: ThreeMatrix (ThreeVector Bit)
+bb = M3 (V3 Zero One One)
+        (V3 One Zero One)
+        (V3 One One Zero)
 
 -- class MatrixOp m a where -- NEWTYPE TRICK?
 --   diag :: ThreeVector a -> m a
