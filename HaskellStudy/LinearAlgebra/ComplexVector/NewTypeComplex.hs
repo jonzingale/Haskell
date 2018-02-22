@@ -1,16 +1,34 @@
+{-# OPTIONS_GHC -Wno-missing-methods #-} -- because of signum, fromInteger, *
+
 module NewTypeComplex where
 import Complex
 
-data ThreeVector a = V3 a a a deriving (Eq, Show)
+cv = V3 (C 1 (-1)) (C 2 3) (C 5 0)
+rv = V3 2.0 3.0 (-5.0)
 
-newtype Vector a = Vector { getVect :: ThreeVector a }
+data ThreeVector a = V3 a a a | S a deriving (Eq, Show)
 
-instance Functor Vector where
-  fmap f (Vector (V3 x y z)) = Vector $ V3 (f x) (f y) (f z)
+newtype Vect a = Vect { getVect :: ThreeVector a }
 
--- abs vect = let (CV a b c) = vect <|> vect in
---   CV (sqrt a) (sqrt b) (sqrt c)
+instance Functor Vect where
+  fmap f (Vect (V3 x y z)) = Vect $ V3 (f x) (f y) (f z)
 
+wrap :: (a -> a) -> ThreeVector a -> ThreeVector a
+wrap f vect = getVect.fmap f $ Vect vect
 
-sqrtV :: Floating a => ThreeVector a -> ThreeVector a
-sqrtV = \v -> getVect.fmap sqrt $ Vector v
+class Vector v where
+  (<|>) :: v -> v -> v
+  vconj :: v -> v
+  eval :: v -> v
+  norm :: v -> v
+
+instance (Floating a, Num a, Comp a) => Vector (ThreeVector a) where
+  (<|>) (V3 a b c) (V3 x y z) = V3 (conj a *x) (conj b *y) (conj c*z) -- Hermitian
+  vconj = wrap conj -- perhaps extend Comp
+  eval (V3 a b c) = S $ a + b + c
+  norm = eval.abs
+
+instance (Floating a, Num a, Comp a) => Num (ThreeVector a) where
+  (+) (V3 a b c) (V3 x y z) = V3 (a+x) (b+y) (c+z)
+  (-) (V3 a b c) (V3 x y z) = V3 (a-x) (b-y) (c-z)
+  abs vect = wrap sqrt (vect <|> vect)
