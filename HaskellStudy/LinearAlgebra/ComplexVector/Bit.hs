@@ -41,7 +41,5 @@ instance Fractional Bit where
 
 instance Comp Bit where
   conj = id
-  incl x | x == 0 = Zero
-         | otherwise = One
 
 bitVector = V3 One Zero One

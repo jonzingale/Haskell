@@ -17,15 +17,12 @@ instance Show Complex where
 
 class Comp c where
   conj :: c -> c
-  incl :: Double -> c
 
 instance Comp Double where
   conj = id
-  incl = id
 
 instance Comp Complex where
   conj (C a b) = C a (-b)
-  incl x = C x 0
 
 instance Num Complex where
   fromInteger x = C (fromInteger x) 0
