@@ -1,6 +1,7 @@
 {-# OPTIONS_GHC -Wno-missing-methods #-} -- because of signum, fromInteger, *
 
-module Vector ((+), (-), (<|>), conj, eval, norm, abs, wrap, ThreeVector(V3, S)) where
+module Vector ((+), (-), (<|>), conj, eval,
+               norm, abs, wrap, ThreeVector(V3, S)) where
 import Complex
 
 cv = V3 (C 1 (-1)) (C 2 3) (C 5 0)

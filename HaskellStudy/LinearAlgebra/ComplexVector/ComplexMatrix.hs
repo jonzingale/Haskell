@@ -11,20 +11,32 @@ import System.Random
 cv = V3 (C 1 (-1)) (C 2 3) (C 5 0)
 rv = V3 2.0 3.0 (-5.0)
 
-data Matrix a = M (ThreeVector a) (ThreeVector a) (ThreeVector a) deriving Eq
+-- data ThreeMatrix a = M3 (ThreeVector a) (ThreeVector a) (ThreeVector a) deriving Eq
+data ThreeMatrix a = M3 a a a deriving (Eq)
 
-instance Show a => Show (Matrix a) where
-  show (M a b c) = (unlines.map show) [a, b, c]
+newtype Matrix a = Matrix { getMatrix :: ThreeMatrix a }
+
+mwrap :: (a -> a) -> ThreeMatrix a -> ThreeMatrix a
+mwrap f matx = getMatrix.fmap f $ Matrix matx
+
+instance Functor Matrix where
+  fmap f (Matrix (M3 x y z)) = Matrix $ M3 (f x) (f y) (f z)
+
+instance Show a => Show (ThreeMatrix a) where
+  show (M3 a b c) = (unlines.map show) [a, b, c]
+
+instance Comp a => Comp (ThreeMatrix a) where
+  conj (M3 a b c) = mwrap conj (M3 a b c) 
 
 randVect :: ThreeVector Complex
 randVect = let seed = mkStdGen 3 in
            let [a, b, c, d, e, f] = take 6 $ randomRs (0, 10) seed in
            V3 (C a d) (C b e) (C c f)
 
-mm :: Matrix Complex
-mm = M (V3 (C 1 2) (C 2 3) (C 3 4))
-       (V3 (C 4 2) (C 5 3) (C 6 4))
-       (V3 (C 7 2) (C 8 3) (C 8 4))
+mm :: ThreeMatrix (ThreeVector Complex)
+mm = M3 (V3 (C 1 2) (C 2 3) (C 3 4))
+        (V3 (C 4 2) (C 5 3) (C 6 4))
+        (V3 (C 7 2) (C 8 3) (C 8 4))
 
 -- class MatrixOp m a where -- NEWTYPE TRICK?
 --   diag :: ThreeVector a -> m a
@@ -34,9 +46,9 @@ mm = M (V3 (C 1 2) (C 2 3) (C 3 4))
 --   multip (CM (CV a b c) (CV d e f) (CV g h i)) (CV x y z) =
 --     CV (a*x + b*y + c*z) (d*x + e*y + f*z) (g*x + h*y + i*z)
 
-instance (Floating a, Num a, Comp a) => Num (Matrix a) where
-  (+) (M a b c) (M x y z) = M (a+x) (b+y) (c+z)
-  (-) (M a b c) (M x y z) = M (a-x) (b-y) (c-z)
+-- instance (Floating a, Num a, Comp a) => Num (Matrix a) where
+  -- (+) (M a b c) (M x y z) = M (a+x) (b+y) (c+z)
+  -- (-) (M a b c) (M x y z) = M (a-x) (b-y) (c-z)
   -- (*) (CM a b c) (CM x y z) = -- (AB)* = (A*)(B*)
 
 
