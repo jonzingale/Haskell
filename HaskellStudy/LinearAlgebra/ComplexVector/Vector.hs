@@ -27,7 +27,6 @@ instance Comp a => Comp (ThreeVector a) where
 
 instance (Floating a, Num a, Comp a) => Vector (ThreeVector a) where
   (<|>) (V3 a b c) (V3 x y z) = V3 (conj a *x) (conj b *y) (conj c*z) -- Hermitian
-  -- vconj = wrap conj -- perhaps extend Comp
   eval (V3 a b c) = S $ a + b + c
   norm = eval.abs
 
