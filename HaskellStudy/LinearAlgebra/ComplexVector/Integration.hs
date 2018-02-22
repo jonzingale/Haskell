@@ -28,5 +28,4 @@ rungeKutta f v = let k1 = delT * f v in
                  let k2 = delT * f (v + k1 * delT) in
                  k1 + k2
 
-test = euler pendulum pt --  No instance nor default method for class operation *
--- pt * delT
+test = euler pendulum pt

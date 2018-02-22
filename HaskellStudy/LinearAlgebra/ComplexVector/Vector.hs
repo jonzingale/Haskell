@@ -31,5 +31,7 @@ instance (Floating a, Num a, Comp a) => Vector (ThreeVector a) where
 instance (Floating a, Num a, Comp a) => Num (ThreeVector a) where
   (+) (V3 a b c) (V3 x y z) = V3 (a+x) (b+y) (c+z)
   (-) (V3 a b c) (V3 x y z) = V3 (a-x) (b-y) (c-z)
+  (*) (V3 a b c) (S x) = V3 (a*x) (b*x) (x*x)
+  (*) (S x) (V3 a b c) = V3 (a*x) (b*x) (x*x)
   abs vect = wrap sqrt (vect <|> vect)
 
