@@ -27,6 +27,15 @@ instance Show a => Show (ThreeMatrix a) where
 instance Comp a => Comp (ThreeMatrix a) where
   conj (M3 a b c) = wrap conj (M3 a b c) 
 
+-- class Matrix m where
+  -- diag :: ThreeVector -> m
+
+-- instance (Floating a, Num a, Comp a) => Num (Matrix a) where
+  -- (+) (M a b c) (M x y z) = M (a+x) (b+y) (c+z)
+  -- (-) (M a b c) (M x y z) = M (a-x) (b-y) (c-z)
+  -- (*) (CM a b c) (CM x y z) = -- (AB)* = (A*)(B*)
+
+
 randVect :: ThreeVector Complex
 randVect = let seed = mkStdGen 3 in
            let [a, b, c, d, e, f] = take 6 $ randomRs (0, 10) seed in
@@ -41,20 +50,6 @@ bb :: ThreeMatrix (ThreeVector Bit)
 bb = M3 (V3 Zero One One)
         (V3 One Zero One)
         (V3 One One Zero)
-
--- class MatrixOp m a where -- NEWTYPE TRICK?
---   diag :: ThreeVector a -> m a
-
--- instance Matrix CompMatrix where
---   diag (CV a b c) = CM (CV a 0 0) (CV 0 b 0) (CV 0 0 c)
---   multip (CM (CV a b c) (CV d e f) (CV g h i)) (CV x y z) =
---     CV (a*x + b*y + c*z) (d*x + e*y + f*z) (g*x + h*y + i*z)
-
--- instance (Floating a, Num a, Comp a) => Num (Matrix a) where
-  -- (+) (M a b c) (M x y z) = M (a+x) (b+y) (c+z)
-  -- (-) (M a b c) (M x y z) = M (a-x) (b-y) (c-z)
-  -- (*) (CM a b c) (CM x y z) = -- (AB)* = (A*)(B*)
-
 
 {--
 DEVELOPED FROM PYTHON EXAMPLE
