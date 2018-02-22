@@ -1,52 +1,42 @@
 
 {-# OPTIONS_GHC -Wno-missing-methods #-} -- because of signum, fromInteger
+
 module ComplexMatrix where
 import Complex
 import Vector
+import Bit
 
 import System.Random
 
-data CompMatrix = CM CompVector CompVector CompVector deriving Eq
-data RealMatrix = RM RealVector RealVector RealVector deriving Eq
+cv = V3 (C 1 (-1)) (C 2 3) (C 5 0)
+rv = V3 2.0 3.0 (-5.0)
 
-instance Show CompMatrix where
-  show (CM a b c) = (unlines.map show) [a, b, c]
+data Matrix a = M (ThreeVector a) (ThreeVector a) (ThreeVector a) deriving Eq
 
-instance Show RealMatrix where
-  show (RM a b c) = (unlines.map show) [a, b, c]
+instance Show a => Show (Matrix a) where
+  show (M a b c) = (unlines.map show) [a, b, c]
 
-randVect :: CompVector
+randVect :: ThreeVector Complex
 randVect = let seed = mkStdGen 3 in
            let [a, b, c, d, e, f] = take 6 $ randomRs (0, 10) seed in
-           CV (C a d) (C b e) (C c f)
+           V3 (C a d) (C b e) (C c f)
 
-mm, nn :: CompMatrix
-mm = CM cv dd cv
-nn = CM (CV (C 1 2) (C 2 3) (C 3 4))
-        (CV (C 4 2) (C 5 3) (C 6 4))
-        (CV (C 7 2) (C 8 3) (C 8 4))
+mm :: Matrix Complex
+mm = M (V3 (C 1 2) (C 2 3) (C 3 4))
+       (V3 (C 4 2) (C 5 3) (C 6 4))
+       (V3 (C 7 2) (C 8 3) (C 8 4))
 
-rr :: RealMatrix
-rr = RM (RV 1 2 3) (RV 4 5 6) (RV 7 8 8)
+-- class MatrixOp m a where -- NEWTYPE TRICK?
+--   diag :: ThreeVector a -> m a
 
--- likely needs functional dependencies for composition
-class Matrix m where
-  diag :: CompVector -> m
-  multip :: m -> CompVector -> CompVector  -- conjugate how?
+-- instance Matrix CompMatrix where
+--   diag (CV a b c) = CM (CV a 0 0) (CV 0 b 0) (CV 0 0 c)
+--   multip (CM (CV a b c) (CV d e f) (CV g h i)) (CV x y z) =
+--     CV (a*x + b*y + c*z) (d*x + e*y + f*z) (g*x + h*y + i*z)
 
-instance Matrix CompMatrix where
-  diag (CV a b c) = CM (CV a 0 0) (CV 0 b 0) (CV 0 0 c)
-  multip (CM (CV a b c) (CV d e f) (CV g h i)) (CV x y z) =
-    CV (a*x + b*y + c*z) (d*x + e*y + f*z) (g*x + h*y + i*z)
-
--- instance Matrix RealMatrix where
-  -- diag (RV a b c) = RM (RV a 0 0) (RV 0 b 0) (RV 0 0 c)
-  -- multip (RM (RV a b c) (RV d e f) (RV g h i)) (RV x y z) =
-    -- CV (a*x + b*y + c*z) (d*x + e*y + f*z) (g*x + h*y + i*z)
-
-instance Num CompMatrix where
-  (+) (CM a b c) (CM x y z) = CM (a+x) (b+y) (c+z)
-  (-) (CM a b c) (CM x y z) = CM (a-x) (b-y) (c-z)
+instance (Floating a, Num a, Comp a) => Num (Matrix a) where
+  (+) (M a b c) (M x y z) = M (a+x) (b+y) (c+z)
+  (-) (M a b c) (M x y z) = M (a-x) (b-y) (c-z)
   -- (*) (CM a b c) (CM x y z) = -- (AB)* = (A*)(B*)
 
 
