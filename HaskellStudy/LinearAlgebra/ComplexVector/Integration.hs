@@ -20,7 +20,7 @@ euler f v = v + f v * delT
 improvedEuler :: (Fractional v, Floating v, Comp v, Num v) => Integration v
 improvedEuler f v = let ds = euler f v in
                     let dds = euler f ds in
-                    wrap (* 0.5) (ds + dds)
+                    (S 0.5) * (ds + dds)
 
 -- This needs to be completed.
 rungeKutta :: (Fractional v, Floating v, Comp v, Num v) => Integration v

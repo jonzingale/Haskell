@@ -16,8 +16,8 @@ data ThreeMatrix a = M3 a a a deriving (Eq)
 
 newtype Matrix a = Matrix { getMatrix :: ThreeMatrix a }
 
-mwrap :: (a -> a) -> ThreeMatrix a -> ThreeMatrix a
-mwrap f matx = getMatrix.fmap f $ Matrix matx
+wrap :: (a -> a) -> ThreeMatrix a -> ThreeMatrix a
+wrap f matx = getMatrix.fmap f $ Matrix matx
 
 instance Functor Matrix where
   fmap f (Matrix (M3 x y z)) = Matrix $ M3 (f x) (f y) (f z)
@@ -26,7 +26,7 @@ instance Show a => Show (ThreeMatrix a) where
   show (M3 a b c) = (unlines.map show) [a, b, c]
 
 instance Comp a => Comp (ThreeMatrix a) where
-  conj (M3 a b c) = mwrap conj (M3 a b c) 
+  conj (M3 a b c) = wrap conj (M3 a b c) 
 
 randVect :: ThreeVector Complex
 randVect = let seed = mkStdGen 3 in
