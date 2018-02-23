@@ -1,7 +1,8 @@
 {-# OPTIONS_GHC -Wno-missing-methods #-} -- because of signum, fromInteger, *
 
-module Vector ((+), (-), (<|>), conj, eval,
-               norm, abs, ThreeVector(V3, S), Vector) where
+module Vector ((+), (-), (<|>), conj, eval, norm, abs, randVect,
+                        ThreeVector(V3, S), Vector, Vect(Vect, getVect)) where
+import System.Random
 import Complex
 
 cv = V3 (C 1 (-1)) (C 2 3) (C 5 0)
@@ -17,13 +18,13 @@ instance Functor Vect where
 wrap :: (a -> a) -> ThreeVector a -> ThreeVector a
 wrap f vect = getVect.fmap f $ Vect vect
 
+instance Comp a => Comp (ThreeVector a) where
+  conj = wrap conj
+
 class Vector v where
   (<|>) :: v -> v -> v
   eval :: v -> v
   norm :: v -> v
-
-instance Comp a => Comp (ThreeVector a) where
-  conj = wrap conj
 
 instance (Floating a, Num a, Comp a) => Vector (ThreeVector a) where
   (<|>) (V3 a b c) (V3 x y z) = V3 (conj a *x) (conj b *y) (conj c*z) -- Hermitian
@@ -37,3 +38,7 @@ instance (Floating a, Num a, Comp a) => Num (ThreeVector a) where
   (*) (S x) (V3 a b c) = V3 (a*x) (b*x) (x*x)
   abs vect = wrap sqrt (vect <|> vect)
 
+randVect :: ThreeVector Complex
+randVect = let seed = mkStdGen 3 in
+           let [a, b, c, d, e, f] = take 6 $ randomRs (0, 10) seed in
+           V3 (C a d) (C b e) (C c f)

@@ -8,7 +8,7 @@ c1, c2 :: Complex
 c1 = C 3 1
 c2 = C 4 (-2) 
 
-data Complex = C {real::Double, imag::Double} deriving (Eq)
+data Complex = C {real::Double, imag::Double} deriving Eq
 
 instance Show Complex where
   show (C a b) | b < 0 = printf "%f%fi" a b
