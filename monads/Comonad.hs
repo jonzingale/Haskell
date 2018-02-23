@@ -30,20 +30,19 @@ instance Comonad U where
 
 ---- distance for zippers
 distance ::(Ord a) =>U a -> U a -> Int
-distance u v  = let pairs = takeUntil (cotequal (coreturn v))$zip (map coreturn(iterate left u)) (map coreturn(iterate right u)) in
-	
-	(sign(coreturn v) (last pairs)) * ((length pairs)-1)
-	
-	where 
-	  cotequal c (a,b) = and [a/=c,b/=c]
-	  sign c (a,b) | c==a = 1
-		       | otherwise = -1
-	  takeUntil b xs= take (((length.takeWhile b) xs)+1) xs
+distance u v  = let pairs = takeUntil (cotequal (coreturn v)) $ zip (map coreturn(iterate left u)) (map coreturn(iterate right u)) in
+  (sign(coreturn v) (last pairs)) * ((length pairs)-1)
+
+  where 
+  cotequal c (a,b) = and [a/=c,b/=c]
+  sign c (a,b) | c==a = 1
+               | otherwise = -1
+  takeUntil b xs= take (((length.takeWhile b) xs)+1) xs
 
 dTo_x ::(Ord a) =>U a -> a -> Int
 dTo_x  u a  = length $ takeWhile (cotequal a) $ 
    zip (map coreturn(iterate left u)) (map coreturn(iterate right u))
-	where cotequal c (a,b) = and [a/=c,b/=c]
+  where cotequal c (a,b) = and [a/=c,b/=c]
 
 uptoN rule n = head $ drop (fromIntegral n) $ iterate ( =>> rule) seedU
 -------
@@ -57,26 +56,26 @@ keyU a = a =>> randi
 randi :: U [z] -> [z]
 randi d =  let it = (length.coreturn) d in
   cycle_thr ((fst.randomR (1,it)) (mkBlanket it)) (coreturn d)
-	where
-	  cycle_thr 0 xs = xs
-	  cycle_thr n (x:xs) = cycle_thr (n-1) (xs++[x])
+  where
+    cycle_thr 0 xs = xs
+    cycle_thr n (x:xs) = cycle_thr (n-1) (xs++[x])
 
 
 
 -----
 
 -- dTo_eleven :: Match -> Iterations -> IO()
-dTo_eleven n us seed=do blosit lls seed (us+1);
-		        putChar '\n';
-			putStr$ "distance till "++show n;
-			putChar '\n';
-         	        (putStr.show) $ dTo_x (uptoN lls us) n;
-			putStr " from the center of the zipper"
-			putChar '\n';
-	   	
-	   
+dTo_eleven n us seed =
+  do blosit lls seed (us+1);
+     putChar '\n';
+     putStr$ "distance till "++show n;
+     putChar '\n';
+     (putStr.show) $ dTo_x (uptoN lls us) n;
+     putStr " from the center of the zipper"
+     putChar '\n';
+      
+     
 --rule (U (a:_) b (c:_)) = not (a && b && not c || (a==b))
-
 
 shift i u = (iterate (if i<0 then left else right) u) !! abs i
 
@@ -96,24 +95,23 @@ rule (U (a:_) b (c:_)) = not (a && b && not c || (a==b))
 pascal (U a b c) = b+ head a
 
 lls (U x y z) = (head x + y + bang (U x y z)) `mod` 10
- where
-  bang (U a b (c:cs))
-	| b + c < 9 = 0
-	| b + c > 9 = 1
-	|otherwise = (bang.right) (U a b (c:cs))
+  where
+    bang (U a b (c:cs)) | b + c < 9 = 0 
+                        | b + c > 9 = 1 
+                        |otherwise = (bang.right) (U a b (c:cs))
 
 --Comonadic primeSieve !!!!
 clPrimes n= [p |p<-cPrimes n,p/=1]
-cPrimes m = (\m->toList 2 (m+1) $(=>> pSieve) nU) m		      
+cPrimes m = (\m->toList 2 (m+1) $(=>> pSieve) nU) m       
 pSieve (U (a:as) b c ) | a == 1 = b
-	               | b `mod` a /= 0 = pSieve (U as b c)
-	               | otherwise = 1
+                       | b `mod` a /= 0 = pSieve (U as b c)
+                       | otherwise = 1
 
 --Objs in a Comonad U
 boolU   = U (repeat False) True (repeat False)
 seedU   = U zeros 1 zeros
 zU      = U (neg walk) 0 walk
-nU	= U [1 |x<-walk] 1 walk
+nU  = U [1 | x <- walk] 1 walk
 randU   = U (randomRs(0,9) (mkBlanket 43)) 2 zeros
 
 --helpers
@@ -123,24 +121,15 @@ digi = (intToDigit.abs.fromIntegral)
 
 -- testit seedU rule3 computes the 11's trick
 testit  u frule =
-          putStr $
-          unlines $
-          take 100 $
+          putStr $ unlines $ take 100 $
           map (map (\x -> if x/='0' then x else ' ') 
-          .goit. toList (0) 30) $
-          iterate (=>> frule) u
-blosit rule u n = 
-	  putStr $
-          unlines $ 
-	  (take n) $
-          map ((bloit.swdrp.toList (-80) n)) $
-          iterate (=>> rule) u
+          .goit. toList (0) 30) $ iterate (=>> frule) u
+
+blosit rule u n = putStr $ unlines $ (take n) $
+          map ((bloit.swdrp.toList (-80) n)) $ iterate (=>> rule) u
 
 
-llsit = 
-	  putStr $
-          unlines $ 
-	  (take 30) $
+llsit = putStr $ unlines $ (take 30) $
           map ((bloit.swdrp.toList (-80) 50)) $
           iterate (=>> lls) seedU
 
@@ -148,11 +137,12 @@ swdrp = (reverse.(dropWhile (==0)).reverse.(dropWhile (==0)))
 
 somefunction (x:xs) | x=='0' = somefunction (reverse xs)
                     | last (x:xs) =='0' = (somefunction.reverse.tail.reverse) (x:xs)
-		    | otherwise = (x:xs)   
+                    | otherwise = (x:xs)   
 goit = show.twostr
  where
   twostr [] =  0
   twostr (n:ns) = (n*10^(length ns)) + twostr ns
+
 bloit :: (Show a,Integral a) => [a]->String
 bloit = twostr
  where
@@ -188,9 +178,9 @@ returned.
 --}
 
 --natural to wordsized binary
-n2b n = take 8 (f n)	
+n2b n = take 8 (f n)  
   where 
-   f 0 = zeros	
+   f 0 = zeros  
    f n = mod n 2 : (n2b.div n) 2
 
 
@@ -214,9 +204,9 @@ ruleObj =
 
 
 rulesObj = let (U a b c) = zU in
-	U (map (rules.flip mod 256) a)
-	  (rules b)
-	  (map (rules.flip mod 256) c)
+  U (map (rules.flip mod 256) a)
+    (rules b)
+    (map (rules.flip mod 256) c)
 --}
 
 lefts n x = (iterate left x)!!n
