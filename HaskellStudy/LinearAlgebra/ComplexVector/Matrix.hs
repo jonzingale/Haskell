@@ -20,7 +20,7 @@ instance Show a => Show (ThreeMatrix a) where
   show (M3 a b c) = (unlines.map show) [a, b, c]
 
 -- Maybe extend ThreeMatrix to Vector
--- eval, norm, <|>, prs.
+-- eval, norm, <|>,
 instance Vector ThreeMatrix where
   prs (M3 a b c) = [a, b, c]
   (<|>) (M3 a b c) (M3 x y z) = --https://en.wikipedia.org/wiki/Frobenius_inner_product -- <A*,B>
