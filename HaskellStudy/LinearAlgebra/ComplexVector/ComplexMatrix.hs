@@ -1,5 +1,7 @@
+{-# LANGUAGE MultiParamTypeClasses #-} -- for matrix dependent on vector
+{-# LANGUAGE FunctionalDependencies #-} -- for matrix dependent on vector
 
--- {-# OPTIONS_GHC -Wno-missing-methods #-} -- because of signum, fromInteger
+{-# OPTIONS_GHC -Wno-missing-methods #-} -- for Num and Vector ThreeMatrix
 
 module ComplexMatrix where
 import Complex
@@ -17,18 +19,23 @@ instance Functor ThreeMatrix where
 instance Show a => Show (ThreeMatrix a) where
   show (M3 a b c) = (unlines.map show) [a, b, c]
 
-class Matrix m where
-  transpose :: m a -> m a -- Vector a =>  
-  -- det :: (Num a, Floating a, Comp a) => m a -> a 
-  -- diag :: ThreeVector a -> m a
-  -- unit :: a -> m a
+-- Maybe extend ThreeMatrix to Vector
+-- eval, norm, <|>, projections.
+instance Vector ThreeMatrix where
+  projections (M3 a b c) = [a, b, c]
 
-instance Matrix ThreeMatrix where
-   transpose (M3 x y z) = (M3 x y z)
-      -- let [a, b, c] = projections x in
-      -- let [d, e, f] = projections y in
-      -- let [g, h, i] = projections z in
-      -- M3 (V3 a d g) (V3 b e h) (V3 c f i)
+instance Comp a => Comp (ThreeMatrix a) where
+  conj = fmap conj
+
+class Matrix m v | v -> m where
+  transpose :: Comp v => m v -> m v
+
+instance Matrix ThreeMatrix (ThreeVector a) where
+  transpose (M3 x y z) = 
+    let [a, b, c] = projections x in
+    let [d, e, f] = projections y in
+    let [g, h, i] = projections z in
+    M3 (V3 a d g) (V3 b e h) (V3 c f i)
 
 
 -- instance (Floating a, Num a, Comp a) => Num (Mtrx a) where
@@ -42,7 +49,7 @@ mm = M3 (V3 (C 1 2) (C 2 3) (C 3 4))
         (V3 (C 7 2) (C 8 3) (C 8 4))
 
 bb :: ThreeMatrix (ThreeVector Bit)
-bb = M3 (V3 Zero One One)
+bb = M3 (V3 Zero One Zero)
         (V3 One Zero One)
         (V3 One One Zero)
 
