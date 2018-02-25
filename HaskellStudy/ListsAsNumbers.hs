@@ -14,29 +14,37 @@ satisfactory methods for Num Class: + - * abs signum fromInteger
 
 module ListsAsNumbers where
 
-listify :: Integer -> [Integer]
-listify 0 = []
-listify n = (listify (div n 10)) ++ [mod n 10]
+nl = N [1,2,3]
+ml = N [4,5,6]
 
--- incl :: Integer -> NumList
--- eval :: NumList -> Integer
+data NumList = N [Integer] deriving (Show, Eq)
+
+class NumericalList n where
+  listify :: Integer -> n
+  numbify :: n -> Integer
+
+instance NumericalList NumList where
+  listify n = N $ ff n
+    where
+      ff 0 = []
+      ff n = (ff (div n 10)) ++ [mod n 10]
+
+  numbify (N ls) = ff.reverse $ ls
+    where
+      ff [] = 0
+      ff (n:ns) = n + ff (map (*10) ns)
 
 listOp :: (a -> a -> a) -> [a] -> [a] -> [a]
 listOp bin [] ys = ys
 listOp bin xs [] = xs
 listOp bin (x:xs) (y:ys) = bin x y : listOp bin xs ys
 
-data NumList = N [Integer] deriving (Show, Eq)
-
-nl = N [1,2,3]
-ml = N [4,5,6]
-
 instance Num NumList where
   (+) (N xs) (N ys) = N $ listOp (+) xs ys
   (-) (N xs) (N ys) = N $ listOp (-) xs ys
   (*) (N xs) (N ys) = N $ listOp (*) xs ys
   signum (N xs) = N $ map signum xs
-  fromInteger x = N $ listify x
+  fromInteger x = listify x
   abs (N xs) = N $ map abs xs
 
 f :: Integer -> NumList
