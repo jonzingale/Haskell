@@ -23,6 +23,7 @@ instance Show a => Show (ThreeMatrix a) where
 -- eval, norm, <|>, prs.
 instance Vector ThreeMatrix where
   prs (M3 a b c) = [a, b, c]
+  (<|>) (M3 a b c) (M3 x y z) = --https://en.wikipedia.org/wiki/Frobenius_inner_product -- <A*,B>
   -- (<|>) (M3 a b c) (V3 x y z) = fmap (<|> (incl (V3 x y z))) (M3 a b c) -- bad typing
 
 instance Comp a => Comp (ThreeMatrix a) where
