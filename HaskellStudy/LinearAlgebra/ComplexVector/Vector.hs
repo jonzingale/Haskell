@@ -1,6 +1,6 @@
 {-# OPTIONS_GHC -Wno-missing-methods #-} -- because of signum, fromInteger, *
 
-module Vector ((+), (-), (<|>), conj, eval, norm, abs, randVect, projections,
+module Vector ((+), (-), (<|>), conj, eval, norm, abs, randVect, prs,
                         ThreeVector(V3, S), Vector) where
 import System.Random
 import Complex
@@ -20,12 +20,12 @@ class Vector v where
   (<|>) :: (Num a, Comp a) => v a -> v a -> v a
   norm :: (Floating a, Comp a) => v a -> v a
   eval :: Num a => v a -> v a
-  projections :: v a -> [a]
+  prs :: v a -> [a]
 
 instance Vector ThreeVector where
   (<|>) (V3 a b c) (V3 x y z) = V3 (conj a *x) (conj b *y) (conj c*z) -- Hermitian
-  projections (V3 a b c) = [a, b, c]
   eval (V3 a b c) = S $ a + b + c
+  prs (V3 a b c) = [a, b, c]
   norm = eval.abs
 
 instance (Floating a, Num a, Comp a) => Num (ThreeVector a) where
