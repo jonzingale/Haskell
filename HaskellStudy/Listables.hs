@@ -1,5 +1,4 @@
 module Listables where
-
 -- should be able to write everybody as some minimal basis of functions.
 -- take, drop, length, (!!), head, tail, (++), cons
 
