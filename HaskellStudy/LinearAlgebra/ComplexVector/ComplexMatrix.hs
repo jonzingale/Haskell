@@ -1,51 +1,40 @@
 
-{-# OPTIONS_GHC -Wno-missing-methods #-} -- because of signum, fromInteger
+-- {-# OPTIONS_GHC -Wno-missing-methods #-} -- because of signum, fromInteger
 
-module ComplexMatrix (randVect) where
+module ComplexMatrix where
 import Complex
 import Vector
 import Bit
 
-import System.Random
-
 cv = V3 (C 1 (-1)) (C 2 3) (C 5 0)
 rv = V3 2.0 3.0 (-5.0)
 
-data ThreeMatrix a = M3 a a a deriving (Eq)
+data ThreeMatrix a = M3 a a a deriving Eq
 
-newtype Mtrx a = Mtrx { getMatrix :: ThreeMatrix a }
-
-instance Functor Mtrx where
-  fmap f (Mtrx (M3 x y z)) = Mtrx $ M3 (f x) (f y) (f z)
-
-wrap :: (a -> a) -> ThreeMatrix a -> ThreeMatrix a
-wrap f matx = getMatrix.fmap f $ Mtrx matx
+instance Functor ThreeMatrix where
+  fmap f (M3 x y z) = M3 (f x) (f y) (f z)
 
 instance Show a => Show (ThreeMatrix a) where
   show (M3 a b c) = (unlines.map show) [a, b, c]
 
-instance Comp a => Comp (ThreeMatrix a) where
-  conj (M3 a b c) = wrap conj (M3 a b c) 
-
 class Matrix m where
-  diag :: ThreeVector a -> m
-  idM :: m
+  transpose :: m a -> m a -- Vector a =>  
+  -- det :: (Num a, Floating a, Comp a) => m a -> a 
+  -- diag :: ThreeVector a -> m a
+  -- unit :: a -> m a
 
--- instance Matrix (ThreeMatrix a) where
-  -- idM = M3 (V3 id id id) (V3 id id id) (V3 id id id)
-  -- diag (V3 a b c) = M3 (V3 1 0 0) (V3 0 1 0) (V3 0 1 0)
-  -- diag (V3 a b c) = M3 (V3 a 0 0) (V3 0 b 0) (V3 0 c 0)
+instance Matrix ThreeMatrix where
+   transpose (M3 x y z) = (M3 x y z)
+      -- let [a, b, c] = projections x in
+      -- let [d, e, f] = projections y in
+      -- let [g, h, i] = projections z in
+      -- M3 (V3 a d g) (V3 b e h) (V3 c f i)
+
 
 -- instance (Floating a, Num a, Comp a) => Num (Mtrx a) where
   -- (+) (M a b c) (M x y z) = M (a+x) (b+y) (c+z)
   -- (-) (M a b c) (M x y z) = M (a-x) (b-y) (c-z)
   -- (*) (CM a b c) (CM x y z) = -- (AB)* = (A*)(B*)
-
-
-randVect :: ThreeVector Complex
-randVect = let seed = mkStdGen 3 in
-           let [a, b, c, d, e, f] = take 6 $ randomRs (0, 10) seed in
-           V3 (C a d) (C b e) (C c f)
 
 mm :: ThreeMatrix (ThreeVector Complex)
 mm = M3 (V3 (C 1 2) (C 2 3) (C 3 4))
