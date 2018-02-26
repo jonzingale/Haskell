@@ -3,7 +3,6 @@
 
 module Bit where
 import Complex
-import Vector
 
 data Bit = One | Zero | Bad deriving (Show, Eq)
 
@@ -41,5 +40,3 @@ instance Fractional Bit where
 
 instance Comp Bit where
   conj = id
-
-bitVector = V3 One Zero One

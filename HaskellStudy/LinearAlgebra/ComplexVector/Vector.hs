@@ -4,9 +4,11 @@ module Vector ((+), (-), (<|>), conj, eval, norm, abs, randVect, prs,
                         ThreeVector(V3, S), Vector) where
 import System.Random
 import Complex
+import Bit
 
 cv = V3 (C 1 (-1)) (C 2 3) (C 5 0)
 rv = V3 2.0 3.0 (-5.0)
+bb = V3 One Zero One
 
 data ThreeVector a = V3 a a a | S a deriving (Eq, Show)
 
