@@ -3,6 +3,9 @@
 {-# LANGUAGE FunctionalDependencies #-} -- for matrix dependent on vector
 {-# OPTIONS_GHC -Wno-missing-methods #-} -- for Num and Vector ThreeMatrix
 
+-- {-# LANGUAGE FlexibleInstances #-} consider in place of funcDep and Multi
+-- See http://dev.stephendiehl.com/hask/#flexibleinstances
+
 module Matrix where
 import Complex
 import Vector
