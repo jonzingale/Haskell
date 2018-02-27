@@ -25,12 +25,12 @@ class Eq m => Listable m where
   reverseL ns = ff ns unit
     where
       ff ns accum | ns == unit = accum
-                  | otherwise = ff (tailL ns) $ headL ns `cons` accum
+                  | otherwise = ff (tailL ns) (headL ns `cons` accum)
 
 instance Listable Integer where
-  (+++) ns ms = (ns * 10^(lengthL ms)) + ms
-  dropL n zs = div zs (10^n)
-  takeL n zs = mod zs (10^n)
+  (+++) ns ms = ms + ns * 10 ^ lengthL ms
+  dropL n zs = div zs $ 10^n
+  takeL n zs = mod zs $ 10^n
   cons n ns = ns * 10 + n
   unit = 0
 
