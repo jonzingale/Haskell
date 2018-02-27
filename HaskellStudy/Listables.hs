@@ -3,21 +3,19 @@ module Listables where
 -- take, drop, length, (!!), head, tail, (++), cons, reverse
 
 class Eq m => Listable m where
-  takeL :: Integer -> m -> m
-  dropL :: Integer -> m -> m
+  takeL, dropL :: Integer -> m -> m
   cons :: m -> m -> m
   (+++) :: m -> m -> m
   unit :: m
 
   (!!!) :: m -> Integer -> m
   lengthL :: m -> Integer
+  headL, tailL :: m -> m
   reverseL :: m -> m
-  headL :: m -> m
-  tailL :: m -> m
 
+  (!!!) ls n = headL.dropL n $ ls
   headL = takeL 1
   tailL = dropL 1
-  (!!!) ls n = headL.dropL n $ ls
 
   lengthL ls | unit == ls = 0
              | otherwise = 1 + (lengthL.dropL 1) ls
@@ -25,7 +23,7 @@ class Eq m => Listable m where
   reverseL ns = ff ns unit
     where
       ff ns accum | ns == unit = accum
-                  | otherwise = ff (tailL ns) (headL ns `cons` accum)
+                  | otherwise = ff (tailL ns) $ headL ns `cons` accum
 
 instance Listable Integer where
   (+++) ns ms = ms + ns * 10 ^ lengthL ms
