@@ -21,3 +21,13 @@ main = do
         Left err -> putStrLn err
         Right (_, v) -> V.forM_ v $ \ p ->
             putStrLn $ name p ++ " earns " ++ show (salary p) ++ " dollars"
+
+type FileStub = String
+
+parseCsv :: FileStub -> IO()
+parseCsv file_stub = do
+  csvData <- BL.readFile file_stub
+  case decodeByName csvData of
+      Left err -> putStrLn err
+      Right (_, v) -> V.forM_ v $ \ p ->
+          putStrLn $ name p ++ " earns " ++ show (salary p) ++ " dollars"
