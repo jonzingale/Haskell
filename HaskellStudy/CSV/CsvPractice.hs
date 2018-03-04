@@ -1,10 +1,11 @@
 {-# LANGUAGE OverloadedStrings #-}
 -- https://hackage.haskell.org/package/cassava-0.5.1.0#readme
 -- https://hackage.haskell.org/package/cassava-0.5.1.0/docs/Data-Csv.html
-import Control.Applicative
+
+-- import Control.Applicative
 import qualified Data.ByteString.Lazy as BL
-import Data.Csv
 import qualified Data.Vector as V
+import Data.Csv
 
 data Person = Person
     { name   :: !String
@@ -26,8 +27,15 @@ type FileStub = String
 
 parseCsv :: FileStub -> IO()
 parseCsv file_stub = do
-  csvData <- BL.readFile file_stub
+  csvData <- BL.readFile file_stub -- :: BL.ByteString
   case decodeByName csvData of
       Left err -> putStrLn err
       Right (_, v) -> V.forM_ v $ \ p ->
           putStrLn $ name p ++ " earns " ++ show (salary p) ++ " dollars"
+
+-- writing data
+myData :: [(String, String)]
+myData = [("name","salary"), ("John Doe","50000"), ("Jane Doe", "60000")]
+
+writeData csvData = BL.writeFile "letters.csv" $ encode csvData
+
