@@ -56,10 +56,3 @@ rotateT (T a b c) = (T a b c) : rotateT (T b c a)
 
 spinT :: Triangle -> [Bool]
 spinT tri = take 3 $ map (in_region zero) $ rotateT tri
-
--- 4 Quadrants
-
--- calculate y and x intercepts for each line.
--- there must be a positive and negative intercept
--- for each.
-
