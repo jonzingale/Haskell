@@ -28,7 +28,7 @@ toQuad (pt:pts) = f pt : toQuad pts
 coords :: Triangle -> [Integer]
 coords [(a,b),(c,d),(e,f)] = [a,b,c,d,e,f]
 
-onZero :: Triangle -> Bool
+onZero :: Triangle -> Bool -- endpoint is at (0,0)
 onZero = any (== 0).coords
 
 verticalEdge :: Triangle -> Bool -- same Xs
@@ -36,7 +36,7 @@ verticalEdge [] = False
 verticalEdge ((p,q):ts) | any (== p) $ map fst ts = True
                         | otherwise = verticalEdge ts 
 
-sameQuadrant :: Triangle -> Bool
+sameQuadrant :: Triangle -> Bool -- endpoints are all in same Quadrant.
 sameQuadrant pts = f.toQuad $ pts
   where
     f (pt:pts) = all (== pt) pts
@@ -58,6 +58,9 @@ partsSameQuad = partition sameQuadrant
 
 quadI :: Triangle -> Bool -- endpoint ++ or II->IV line passes zero or higher.
 quadI triangle = any (== I) $ toQuad triangle
+
+-- hmmm. x- y- intercepts for lines, but these are segments.
+
 --all of these
 -- crossesPositiveY :: Triangle -> Bool
 -- crossesPositiveX :: Triangle -> Bool 
