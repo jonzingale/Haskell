@@ -15,6 +15,12 @@ data Person = Person
 instance FromNamedRecord Person where
     parseNamedRecord r = Person <$> r .: "name" <*> r .: "salary"
 
+instance ToNamedRecord Person where
+    toNamedRecord (Person name salary) = namedRecord [
+        "name" .= name, "salary" .= salary]
+
+sarahJ = toNamedRecord $ Person "Sarah J" (10^6)
+
 main :: IO ()
 main = do
     csvData <- BL.readFile "salaries.csv"
