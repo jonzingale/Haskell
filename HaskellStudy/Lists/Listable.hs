@@ -7,10 +7,7 @@ class Eq m => Listable m where
   filterL :: (m -> Bool) -> m -> m
   cons :: m -> m -> m
   (+++) :: m -> m -> m
-  -- mapL :: (a->b)-> m a -> m b
-  -- zipL :: m -> m -> m
   unit :: m
-
 
   (!!!) :: m -> Integer -> m
   lengthL :: m -> Integer
