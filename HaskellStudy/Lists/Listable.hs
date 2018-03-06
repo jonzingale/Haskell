@@ -1,12 +1,16 @@
-module Listables where
+module Listable where
 -- should be able to write everybody as some minimal basis of functions.
 -- take, drop, length, (!!), head, tail, (++), cons, reverse
 
 class Eq m => Listable m where
   takeL, dropL :: Integer -> m -> m
+  filterL :: (m -> Bool) -> m -> m
   cons :: m -> m -> m
   (+++) :: m -> m -> m
+  -- mapL :: (a->b)-> m a -> m b
+  -- zipL :: m -> m -> m
   unit :: m
+
 
   (!!!) :: m -> Integer -> m
   lengthL :: m -> Integer
@@ -24,6 +28,12 @@ class Eq m => Listable m where
     where
       ff ns accum | ns == unit = accum
                   | otherwise = ff (tailL ns) $ headL ns `cons` accum
+
+  filterL b ns = f b ns unit
+    where
+      f b js accum | js == unit  = accum
+                   | (b.headL) js = f b (tailL js) $ headL js +++ accum
+                   | otherwise   = f b (tailL js) accum
 
 instance Listable Integer where
   (+++) ns ms = ms + ns * 10 ^ lengthL ms
