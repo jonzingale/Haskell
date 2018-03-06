@@ -18,10 +18,10 @@ class (Ord s, Listable s) => Sortable s where
           | otherwise = branch smaller ns +++ headL ns +++ branch larger ns
     where
       branch f xs = sort.f (headL xs) $ tailL xs
-      smaller n ns = filterL (<= n) ns
-      larger  n ns = filterL (>  n) ns
+      smaller n = filterL (<= n)
+      larger  n = filterL (>  n)
 
-  shuffle ns = eval . (map snd) . sort . zipS randos $ ns
+  shuffle = eval . (map snd) . sort . zipS randos
     where
       eval = foldr cons unit
       zipS [] s = []
@@ -30,3 +30,4 @@ class (Ord s, Listable s) => Sortable s where
 
 instance Sortable Integer where
 instance Ord a => Sortable [a] where
+
