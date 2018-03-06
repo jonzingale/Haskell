@@ -4,11 +4,11 @@ module Listable where
 
 class Eq m => Listable m where
   takeL, dropL :: Integer -> m -> m
-  filterL :: (m -> Bool) -> m -> m
   cons :: m -> m -> m
   (+++) :: m -> m -> m
   unit :: m
 
+  filterL :: (m -> Bool) -> m -> m
   (!!!) :: m -> Integer -> m
   lengthL :: m -> Integer
   headL, tailL :: m -> m
