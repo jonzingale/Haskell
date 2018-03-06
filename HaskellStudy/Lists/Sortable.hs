@@ -3,6 +3,11 @@ import Control.Monad.Zip
 import System.Random
 import Listable
 
+{--
+Any instance of a Listable is immediately extended to be
+an instance of Sortable, so long as that Listable is Orderable.
+--}
+
 randos :: [Integer]
 randos = randomRs (0, 10^6) $ mkStdGen 32
 
@@ -14,18 +19,14 @@ class (Ord s, Listable s) => Sortable s where
     where
       branch f xs = sort.f (headL xs) $ tailL xs
       smaller n ns = filterL (<= n) ns
-      larger n ns  = filterL (>  n) ns
+      larger  n ns = filterL (>  n) ns
 
   shuffle ns = eval . (map snd) . sort . zipS randos $ ns
     where
-      zipS rands s = f rands s
-      f [] s = []
-      f (x:xs) s | s == unit = []
-                 | otherwise = (x, headL s) : f xs (tailL s)
-      eval [] = unit
-      eval (a:as) = a `cons` eval as
+      eval = foldr cons unit
+      zipS [] s = []
+      zipS (x:xs) s | s == unit = []
+                    | otherwise = (x, headL s) : zipS xs (tailL s)
 
 instance Sortable Integer where
 instance Ord a => Sortable [a] where
-
-
