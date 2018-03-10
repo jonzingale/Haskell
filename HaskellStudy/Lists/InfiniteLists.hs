@@ -35,8 +35,8 @@ class Shiftable w => BiShiftable w where
   down, up :: w a -> w a
 
 instance BiShiftable VeryWideArray where
-  down (Wide xs ys) = Wide xs (left ys)
-  up (Wide xs ys) = Wide xs (right ys)
+  down (Wide xs ys) = Wide xs $ left ys
+  up (Wide xs ys) = Wide xs $ right ys
 
 class Shiftable a => RightAbelian a where -- R x A -> A
   plus :: Integer -> a x -> a x
