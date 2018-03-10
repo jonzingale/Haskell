@@ -15,10 +15,11 @@ type Message = String
 --how many steps should a message take to decode?
 lil'orphan annie = do chisit annie
 
-chiSeed = message_lift someshit
-someshit :: Message
-someshit = "ftue tme dqmxxk nqqz eayq etuf"
-thatshit = encode (-12) someshit
+chiSeed = message_lift sometext
+
+sometext :: Message
+sometext = "ftue tme dqmxxk nqqz eayq etuf"
+encodedText = encode (-12) sometext
 
 message_lift :: Message -> U Distr
 message_lift = (periodU.prism)
