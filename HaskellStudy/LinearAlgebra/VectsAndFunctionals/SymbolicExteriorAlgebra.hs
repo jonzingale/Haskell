@@ -37,10 +37,10 @@ toSym (Del f) = toSym f
 toSym (Wedge f g) = (toSym f) ++ " + " ++ toSym g
 
 -- array here is gnar.
-toFun :: Ext f String -> [f]
-toFun (Rval f s) = [f]
-toFun (Del f) = toFun f
-toFun (Wedge f g) = (toFun f) ++ toFun g
+toFunc :: Ext f String -> [f]
+toFunc (Rval f s) = [f]
+toFunc (Del f) = toFunc f
+toFunc (Wedge f g) = (toFunc f) ++ toFunc g
 
 instance Show (Ext f s) where
   show (Wedge dx dy) = show dx ++ " ^ " ++ show dy
