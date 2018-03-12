@@ -10,7 +10,7 @@ import SortsShuffles
 import Data.List 
 import Data.Char
 import Primes
-import Challenge102
+import Triangles -- for 102
 
 type Lattice = [[Z]]
 type R = Float
@@ -231,9 +231,8 @@ permcode (x:xs) n = let  d  =  (size(x:xs))-1 in
               if blim d n == []
               then 0:(permcode xs n)
               else ((maximum.blim d) n):
-                    (permcode xs (n - (fact d *(maximum.blim d) n)))	
-			where 
-			 fact n = product [1..n]
+                   (permcode xs (n - (fact d *(maximum.blim d) n)))
+              where fact n = product [1..n]
 
 snatch :: (Eq a)=> (([a],[a]),[Z]) -> (([a],[a]),[Z])
 snatch (([],y),(n:ns)) = (([],y), ns)
@@ -314,7 +313,7 @@ remdups (x:xs) = x:remdups (filter (/= x) xs)
 
 raptors ::  Z -> [[Z]] -- fast factoria
 raptors n = let xs = [1..(floor.sqrt.intToFloat) n] in 
-             qsort'[ [x,n`div`x]  | x <- xs, n`mod`x == 0 ]	
+            qsort'[ [x,n`div`x]  | x <- xs, n`mod`x == 0 ]
 
 burts :: [([Z],Z)]
 burts = let b = raptors in
@@ -333,7 +332,7 @@ rotate n xs = drop n xs++take n xs
 
 rotaprime :: Z -> Bool
 rotaprime gian = and [ (prime.read.rotate (fromIntegral n)) (show gian) 
-					| n<-[0..((size.show) gian) - 1] ]
+          | n<-[0..((size.show) gian) - 1] ]
 ---
 chal35 :: Int
 chal35 = length [ p | p<-(takeWhile (<1000000) fprimes), rota' p == True ]
@@ -369,16 +368,18 @@ inBase b d | div d b == 0 = mod d b
 --}
 challenge40 :: Z --The Answer is 3125
 challenge40 = lebron 6
-	where lebron 0 = bogus (irradecimal!!1)
-	      lebron n = (bogus(irradecimal!!(10^n)))*lebron (n-1)
-              bogus dude = fromIntegral (ord dude - 48)        
+  where
+    lebron 0 = bogus $ irradecimal!!1
+    lebron n = bogus(irradecimal!!(10^n)) * (lebron (n-1))
+    bogus dude = fromIntegral (ord dude - 48)     
 
 rassilon :: String
 rassilon = "0123456789101112131415161718192021"
 
 irradecimal :: String
 irradecimal = "0123456789"++ (spunion 1) 
-  where spunion c = ((head.show) c):intersperse ((head.show) c) "0123456789" ++spunion (c+1)
+  where
+    spunion c = ((head.show) c):intersperse ((head.show) c) "0123456789" ++ spunion (c+1)
               
 
 {--Challenge47: Find the first four consecutive integers 
@@ -391,8 +392,59 @@ challenge47 = head [j | j<-[0..] , and [(length.pfactors) k == 4 | k<-[j..j+3]] 
 chal47' :: (Z,Z,Z,Z)
 chal47' = head [(j,j+1,j+2,j+3) | j<-[0..] , and [(length.pfactors) k == 4 | k<-[j..j+3]] ]
 
-challenge102 :: Z
-challenge102 = euler102
+challenge102 :: Int
+challenge102 = length.filter allQuads $ triangles
+
+data Quadrant = I | II | III | IV deriving (Eq, Show)
+data Segment = S Point Point deriving (Eq, Show)
+type Triangle = [(Double, Double)]
+type Point = (Double, Double)
+
+edges :: Triangle -> [Segment]
+edges [a, b, c] = [S a b, S a c, S b c]
+
+endToQuad :: Triangle -> [Quadrant]
+endToQuad [] = []
+endToQuad (pt:pts) = f pt : endToQuad pts
+  where
+    f (x,y) | and [x >= 0, y >= 0] = I
+    f (x,y) | and [x <= 0, y >= 0] = II
+    f (x,y) | and [x <= 0, y <= 0] = III
+    f (x,y) | otherwise = IV
+
+ceptToQuad :: Point -> [Quadrant]
+ceptToQuad (0,0) = [I, II, III, IV]
+ceptToQuad (0,y) | y > 0 = [I, II]
+                 | otherwise = [III, IV]
+ceptToQuad (x,0) | x > 0 = [I, IV]
+                 | otherwise = [II, III]
+
+xycept :: [Segment -> Point]
+xycept = [xcept, ycept]
+  where
+    ycept (S (a,b) (c,d)) = (0 ,(a*d - c*b) / (a-c))
+    xcept (S (a,b) (c,d)) = ((c*b - a*d) / (b-d), 0)
+
+lineMember :: Segment -> Point -> Bool
+lineMember (S (a,b) (c,d)) (p,q) | a < c = f a c p
+                                 | otherwise = f c a p
+  where
+    f x y t = and [x<t, t<y] 
+
+allQuads :: Triangle -> Bool -- in all Quads
+allQuads tri = (length.ceptData) tri == 4
+
+ceptData :: Triangle -> [Quadrant]
+ceptData tr = cleanConcat $ endToQuad tr : (map quadCepts (edges tr))
+  where
+    cleanConcat = remdups.concat
+    remdups [] = []
+    remdups (x:xs) = x : remdups [t | t<-xs, t /= x]
+
+quadCepts :: Segment -> [Quadrant]
+quadCepts seg = f $ xycept <*> [seg]
+  where
+    f = concat.(map ceptToQuad).filter (lineMember seg)
 
 {--Challenge544
 hotmomma 1112131415
