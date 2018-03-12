@@ -10,6 +10,7 @@ import SortsShuffles
 import Data.List 
 import Data.Char
 import Primes
+import Challenge102
 
 type Lattice = [[Z]]
 type R = Float
@@ -389,6 +390,9 @@ challenge47 = head [j | j<-[0..] , and [(length.pfactors) k == 4 | k<-[j..j+3]] 
 
 chal47' :: (Z,Z,Z,Z)
 chal47' = head [(j,j+1,j+2,j+3) | j<-[0..] , and [(length.pfactors) k == 4 | k<-[j..j+3]] ]
+
+challenge102 :: Z
+challenge102 = euler102
 
 {--Challenge544
 hotmomma 1112131415

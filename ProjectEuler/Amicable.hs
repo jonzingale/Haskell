@@ -2,10 +2,6 @@
 
 module Amicable where
 import Junk
-import Triangles
-
-
-
 
 euler21 :: Integer -> Integer
 euler21 n | n > 10^4 = 0

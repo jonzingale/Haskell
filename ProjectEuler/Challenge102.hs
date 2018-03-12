@@ -1,58 +1,74 @@
 module Challenge102 where
 import Triangles
-import System.Random
-
--- Prelude> 34491/23568 -- haskell
--- 1.4634674134419552
--- Prelude> 795058/547350 -- rubyprocessing
--- 1.4525586918790536
--- Prelude> 1338107/656561 --ruby
--- 2.038054346816214 
-
 
 {--
-Four ideas for finding a zero in a triangle.
-* GeoCoding
-* 4 Quadrants
-* Barycentric
-* Ray Crossings
+4 Quadrants
+
+II,  I
+III, IV
+
+calculate y and x intercepts for each line.
+verify that intercept exists on segment.
+each intercept straddles two regions, or all regions.
+verify that all four regions are present.
 --}
 
-euler102 = head triangles
+euler102 = length.filter allQuads $ triangles
 
--- GeoCoding
+data Quadrant = I | II | III | IV deriving (Eq, Show)
+data Segment = S Point Point deriving (Eq, Show)
+type Triangle = [(Double, Double)]
+type Point = (Double, Double)
 
-ex = T (V 448 617) (V (-988) 0) (V (-103) (-504)) -- has a zero
-badone = T (V 0 4) (V (-1) 1) (V 1 1)-- shouldn't have a zero
-
-tri = T (V 4 1) (V (-3) (-5)) (V (-3) 6)
-zero = V 0 0
-pt = V 2 4
-
-data Vect = V Integer Integer deriving Show
-data Triangle = T Vect Vect Vect deriving Show
-type Point = Vect
-
-(+|), (-|) :: Vect -> Vect -> Vect
-V a b +| V c d = V (a+c) (b+d)
-V a b -| V c d = V (a-c) (b-d)
-
-innerP :: Vect -> Vect -> Integer
-innerP (V a b) (V c d) = a*c + b*d
-
-orth :: Vect -> Vect
-orth (V x y) = V (-y) x
-
-in_region :: Vect -> Triangle -> Bool
-in_region pt (T a b c) =
-  let acute | condo (b -| a) (a -| c) = and
-            | otherwise = or in
-  acute [condo pt (b -| a), condo pt (a -| c)]
+endToQuad :: Triangle -> [Quadrant]
+endToQuad [] = []
+endToQuad (pt:pts) = f pt : endToQuad pts
   where
-    condo v w = innerP v (orth w) >= 0
+    f (x,y) | and [x >= 0, y >= 0] = I
+    f (x,y) | and [x <= 0, y >= 0] = II
+    f (x,y) | and [x <= 0, y <= 0] = III
+    f (x,y) | otherwise = IV
 
-rotateT :: Triangle -> [Triangle]
-rotateT (T a b c) = (T a b c) : rotateT (T b c a)
+ceptToQuad :: Point -> [Quadrant]
+ceptToQuad (0,0) = [I, II, III, IV]
+ceptToQuad (0,y) | y > 0 = [I, II]
+                 | otherwise = [III, IV]
+ceptToQuad (x,0) | x > 0 = [I, IV]
+                 | otherwise = [II, III]
 
-spinT :: Triangle -> [Bool]
-spinT tri = take 3 $ map (in_region zero) $ rotateT tri
+edges :: Triangle -> [Segment]
+edges [a, b, c] = [S a b, S a c, S b c]
+
+xycept :: [Segment -> Point]
+xycept = [xcept, ycept]
+  where
+    ycept (S (a,b) (c,d)) = (0 ,(a*d - c*b) / (a-c))
+    xcept (S (a,b) (c,d)) = ((c*b - a*d) / (b-d), 0)
+
+lineMember :: Segment -> Point -> Bool
+lineMember (S (a,b) (c,d)) (p,q) | a < c = f a c p
+                                 | otherwise = f c a p
+  where
+    f x y t = and [x<t, t<y] 
+
+allQuads :: Triangle -> Bool -- in all Quads
+allQuads tri = (length.ceptData) tri == 4
+
+ceptData :: Triangle -> [Quadrant]
+ceptData tr = cleanConcat $ endToQuad tr : (map quadCepts (edges tr))
+  where
+    cleanConcat = remdups.concat
+    remdups [] = []
+    remdups (x:xs) = x : remdups [t | t<-xs, t /= x]
+
+quadCepts :: Segment -> [Quadrant]
+quadCepts seg = f $ xycept <*> [seg]
+  where
+    f = concat.(map ceptToQuad).filter (lineMember seg) 
+
+throughOrigin :: Triangle -> Bool -- False for all!
+throughOrigin tri = any (== (0,0)) $ xycept <*> edges tri
+
+
+
+
