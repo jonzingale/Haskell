@@ -373,7 +373,6 @@ challenge40 :: Int --The Answer is 210
 challenge40 = product.map digitToInt $ [strings!!(10^i-1) | i<-[0..6]]
   where strings = concat $ map show [1..]
 
-
 {--Challenge47: Find the first four consecutive integers 
 		to have four distinct prime factors.
 	 	What is the first of these numbers?--}
