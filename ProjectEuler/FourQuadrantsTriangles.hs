@@ -1,5 +1,4 @@
 module FourQuadrantsTriangles where
-import Data.List -- for partition
 import Triangles
 
 {--
@@ -9,60 +8,67 @@ II,  I
 III, IV
 
 calculate y and x intercepts for each line.
-there must be a positive and negative intercept
-for each.
+verify that intercept exists on segment.
+each intercept straddles two regions, or all regions.
+verify that all four regions are present.
 --}
-type Triangle = [(Integer, Integer)]
+
+euler102 = length.filter allQuads $ triangles
 
 data Quadrant = I | II | III | IV deriving (Eq, Show)
+data Segment = S Point Point deriving (Eq, Show)
+type Triangle = [(Double, Double)]
+type Point = (Double, Double)
 
-toQuad :: Triangle -> [Quadrant]
-toQuad [] = []
-toQuad (pt:pts) = f pt : toQuad pts
+endToQuad :: Triangle -> [Quadrant]
+endToQuad [] = []
+endToQuad (pt:pts) = f pt : endToQuad pts
   where
     f (x,y) | and [x >= 0, y >= 0] = I
     f (x,y) | and [x <= 0, y >= 0] = II
     f (x,y) | and [x <= 0, y <= 0] = III
     f (x,y) | otherwise = IV
 
-coords :: Triangle -> [Integer]
-coords [(a,b),(c,d),(e,f)] = [a,b,c,d,e,f]
+ceptToQuad :: Point -> [Quadrant]
+ceptToQuad (0,0) = [I, II, III, IV]
+ceptToQuad (0,y) | y > 0 = [I, II]
+                 | otherwise = [III, IV]
+ceptToQuad (x,0) | x > 0 = [I, IV]
+                 | otherwise = [II, III]
 
-onZero :: Triangle -> Bool -- endpoint is at (0,0)
-onZero = any (== 0).coords
+edges :: Triangle -> [Segment]
+edges [a, b, c] = [S a b, S a c, S b c]
 
-verticalEdge :: Triangle -> Bool -- same Xs
-verticalEdge [] = False
-verticalEdge ((p,q):ts) | any (== p) $ map fst ts = True
-                        | otherwise = verticalEdge ts 
-
-sameQuadrant :: Triangle -> Bool -- endpoints are all in same Quadrant.
-sameQuadrant pts = f.toQuad $ pts
+xycept :: [Segment -> Point]
+xycept = [xcept, ycept]
   where
-    f (pt:pts) = all (== pt) pts
-{--
-perhaps a do block which recursively performs each
-function on a list, sums and passes the remaining list.
-The first list in the partition are the True values.
+    ycept (S (a,b) (c,d)) = (0 ,(a*d - c*b) / (a-c))
+    xcept (S (a,b) (c,d)) = ((c*b - a*d) / (b-d), 0)
 
-1) separately check verticalEdges first as they will not have slopes.
-2) include any with a zero endpoint.
-3) remove if every edge is in the same quadrant, because it doesn't contain 0.
---}
+lineMember :: Segment -> Point -> Bool
+lineMember (S (a,b) (c,d)) (p,q) | a < c = f a c p
+                                 | otherwise = f c a p
+  where
+    f x y t = and [x<t, t<y] 
 
-partsOnZero, partsOnVerts :: [Triangle] -> ([Triangle], [Triangle])
-partsOnVerts = partition verticalEdge
-partsOnZero = partition onZero
-partsSameQuad = partition sameQuadrant
+allQuads :: Triangle -> Bool -- in all Quads
+allQuads tri = (length.ceptData) tri == 4
+
+ceptData :: Triangle -> [Quadrant]
+ceptData tr = cleanConcat $ endToQuad tr : (map quadCepts (edges tr))
+  where
+    cleanConcat = remdups.concat
+    remdups [] = []
+    remdups (x:xs) = x : remdups [t | t<-xs, t /= x]
+
+quadCepts :: Segment -> [Quadrant]
+quadCepts seg = f $ xycept <*> [seg]
+  where
+    f = concat.(map ceptToQuad).filter (lineMember seg) 
+
+throughOrigin :: Triangle -> Bool -- False for all!
+throughOrigin tri = any (== (0,0)) $ xycept <*> edges tri
 
 
-quadI :: Triangle -> Bool -- endpoint ++ or II->IV line passes zero or higher.
-quadI triangle = any (== I) $ toQuad triangle
 
--- hmmm. x- y- intercepts for lines, but these are segments.
 
---all of these
--- crossesPositiveY :: Triangle -> Bool
--- crossesPositiveX :: Triangle -> Bool 
--- crossesNegativeY :: Triangle -> Bool 
--- crossesNegativeX :: Triangle -> Bool 
