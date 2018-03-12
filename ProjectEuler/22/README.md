@@ -16,7 +16,7 @@ import Data.Char
 import Names
 ```
 
-I begin by importing `Names` and `Data.Char`. `Names` a is module whose only function is `names :: [String]`.<br> `Data.Char` is useful because `ord :: Char -> Int` gives a way to convert character to numbers.<br>
+I begin by importing `Names` and `Data.Char`. The module `Names` exports its only function: `names :: [String]`.<br> `Data.Char` is useful because `ord :: Char -> Int` gives a way to convert character to numbers.<br>
 Next, I need a way to sort the list and so I implement a quick sort.
 
 
