@@ -22,13 +22,27 @@ Find the sum of all the positive integers which cannot be written
 as the sum of two abundant numbers.
 --}
 
-
 -- :set +s for testing run time speed
 
-
--- for numbers less than 28123
+import Data.Set (Set, (\\), singleton, empty, unions)
 
 sigmaDivisors :: Integer -> Integer
-sigmaDivisors n = sum [i + div n i | i <- [2..(root n)], mod n i == 0]
+sigmaDivisors n = 1 + sum [sig i n | i <- [2..root n], mod n i == 0]
   where
-    root n = floor.sqrt.fromInteger
+    root = floor.sqrt.fromInteger
+    sig i n | i^2 == n = i
+            | otherwise = i + div n i  
+
+abundant :: Integer -> Bool
+abundant n = n < sigmaDivisors n
+
+sumAbundantPairs :: Integer -> [Integer] -- sumAbundantPairs 10 => [4+4]
+sumAbundantPairs n = [x+y | x <- abundants, y <- abundants]
+  where abundants = filter abundant [1..n]
+
+listToSet :: Ord a => [a] -> Set a
+listToSet list = unions $ map singleton list
+
+challenge23 =  sum.diff [1..28123] $ sumAbundantPairs 28123
+  where
+    diff = \ x y -> listToSet x \\ listToSet y
