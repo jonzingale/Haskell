@@ -362,25 +362,17 @@ inBase :: Z->Z->Z
 inBase b d | div d b == 0 = mod d b
            | otherwise = mod d b + 10 * inBase b (div d b)
 
-{--Challenge40:  An irrational decimal fraction is created by 
-		concatenating the positive integers:
-		0.12345678910-1-112131415161718192021...
+{--Challenge40:
+    An irrational decimal fraction is created by concatenating the positive integers:
+    0.12345678910[1]112131415161718192021...
+    It can be seen that the 12th digit of the fractional part is 1.
+    If dn represents the nth digit of the fractional part, find the value of the following expression.
+    d1 × d10 × d100 × d1000 × d10000 × d100000 × d1000000
 --}
-challenge40 :: Z --The Answer is 3125
-challenge40 = lebron 6
-  where
-    lebron 0 = bogus $ irradecimal!!1
-    lebron n = bogus(irradecimal!!(10^n)) * (lebron (n-1))
-    bogus dude = fromIntegral (ord dude - 48)     
+challenge40 :: Int --The Answer is 210
+challenge40 = product.map digitToInt $ [strings!!(10^i-1) | i<-[0..6]]
+  where strings = concat $ map show [1..]
 
-rassilon :: String
-rassilon = "0123456789101112131415161718192021"
-
-irradecimal :: String
-irradecimal = "0123456789"++ (spunion 1) 
-  where
-    spunion c = ((head.show) c):intersperse ((head.show) c) "0123456789" ++ spunion (c+1)
-              
 
 {--Challenge47: Find the first four consecutive integers 
 		to have four distinct prime factors.
