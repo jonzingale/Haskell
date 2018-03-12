@@ -20,6 +20,9 @@ data Segment = S Point Point deriving (Eq, Show)
 type Triangle = [(Double, Double)]
 type Point = (Double, Double)
 
+edges :: Triangle -> [Segment]
+edges [a, b, c] = [S a b, S a c, S b c]
+
 endToQuad :: Triangle -> [Quadrant]
 endToQuad [] = []
 endToQuad (pt:pts) = f pt : endToQuad pts
@@ -35,9 +38,6 @@ ceptToQuad (0,y) | y > 0 = [I, II]
                  | otherwise = [III, IV]
 ceptToQuad (x,0) | x > 0 = [I, IV]
                  | otherwise = [II, III]
-
-edges :: Triangle -> [Segment]
-edges [a, b, c] = [S a b, S a c, S b c]
 
 xycept :: [Segment -> Point]
 xycept = [xcept, ycept]
@@ -64,11 +64,4 @@ ceptData tr = cleanConcat $ endToQuad tr : (map quadCepts (edges tr))
 quadCepts :: Segment -> [Quadrant]
 quadCepts seg = f $ xycept <*> [seg]
   where
-    f = concat.(map ceptToQuad).filter (lineMember seg) 
-
-throughOrigin :: Triangle -> Bool -- False for all!
-throughOrigin tri = any (== (0,0)) $ xycept <*> edges tri
-
-
-
-
+    f = concat.(map ceptToQuad).filter (lineMember seg)
