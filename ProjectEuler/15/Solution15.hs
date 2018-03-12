@@ -13,6 +13,8 @@ combs n k = combs (n-1) (k-1) + combs (n-1) k
 
 -- The above combinations algorithm is too slow, so instead:
 -- http://mattwetmore.me/posts/n-choose-k-the-haskell-way.html
+-- This algorithm imagines Lists [a] as polynomials and then
+-- performs some multiplications.
 
 instance Num a => Num [a] where
   fromInteger n = [fromInteger n]
@@ -25,12 +27,6 @@ instance Num a => Num [a] where
 choose :: Int -> Int -> Int
 choose n k = ([1,1]^n) !! k
 
-{-- 
-3x3:
-rrrddd
-rrdrdd
-6 choose 3
-
-so . . . 40 choose 20
-40 steps in which half are right and half are down.
---}
+-- 40 steps in which half are right and half are down.
+challenge15 :: Integer
+challenge15 = 40 `choose` 20
