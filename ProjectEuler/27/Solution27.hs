@@ -23,7 +23,7 @@ starting with n=0.
 --}
 
 module Solution27 where
-
+import Data.Ratio
 {-- 
 n^2 + a*n + b, where |a|<1000 and |b|≤1000
  
@@ -32,3 +32,4 @@ n^2 + a*n + b, where |a|<1000 and |b|≤1000
 * If these new values of a and b give the most primes,
   this let this be the new values to beat.
 --}
+
