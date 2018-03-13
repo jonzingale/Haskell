@@ -19,7 +19,7 @@ integers :: InfList Integer
 integers = IL (map negate [1..]) 0 [1..]
 
 limit :: Int -> InfList a -> InfList a
-limit n (IL a b c) = (IL (take n a) b (take n c))
+limit n (IL a b c) = IL (take n a) b (take n c)
 
 instance Functor InfList where
   fmap f (IL a b c ) = IL (map f a) (f b) (map f c)
