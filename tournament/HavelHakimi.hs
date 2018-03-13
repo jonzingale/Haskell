@@ -6,8 +6,8 @@ type Vertex = Int
 type Degree = Int
 
 {-- Tournaments:
-A Tournament where each competitor plays seven distinct competitors
-not including themselves exactly once is represented by a non-directed
+A Tournament where each competitor plays 7 other distinct
+competitors exactly once is represented by a non-directed
 graph where each vertex has degree 7.
 
 From Havel-Hakimi we find that there exist tournaments for
@@ -15,6 +15,19 @@ all even numbers of competitors larger than 7.
 
 note that `havelhakimi [2,2,2,1]` gives an example of an
 even length sequence which is not graphic.
+--}
+
+{--
+Alex notes that additional conditions are necessary
+for distinguishing tournaments where some player must
+sit out versus each player being involved in each round.
+I suspect that the condition is related to sub-graphs
+having an even number of vertices. For instance,
+two disjoint triangles leaves a player out.
+
+What sorts of real-valued functions of graphs and 
+ranking distributions correspond to what qualities
+of tournament?
 --}
 
 true_for = [ i | i <- [1..], havelhakimi $ sevens i]
@@ -35,7 +48,7 @@ algorithm in tournament directly.
 -- 300 people about 5 seconds, 1050 edges.
 tournament :: Int -> [Edge]
 tournament n | n < 8 || odd n = []
-             | otherwise = hh [] $ zip (sevens n) $ take n [1..]
+             | otherwise = hh [] [(7,k) | k <- [1..n]]
 
 hh :: [Edge] -> [(Degree, Vertex)] -> [Edge]
 hh edge_list [] = edge_list

@@ -16,14 +16,15 @@ type Seed = Int
 
 --- Graph building
 tournament :: Seed -> Int -> Graph
-tournament s n | n < 8 || odd n = []
-               | otherwise = hh s [] $ zip (take n $ repeat 3 ) $ take n [1..]
+tournament s n | n < 8 || odd n = [] -- 8 seems arbitrary, 4 a tetrahedron seems fine.
+               | otherwise = hh s [] $ zip (take n $ repeat 3 ) $ take n [1..] -- 3 is degree
   where
     f ((a,b):as) = qsort $ fst_map (+ (-1)) (take a as) ++ drop a as
     edges ((a,b):as) = [(b, q) | (p,q) <- take a as]
     fst_map f xs =  [(f a, b)  | (a,b) <- xs]
     hh seed edge_list [] = edge_list
-    hh seed edge_list pairs = let sorted = part_shuffle seed $ qsort $ pairs in
+    hh seed edge_list pairs =
+      let sorted = part_shuffle seed $ qsort pairs in
       hh seed (edge_list ++ edges sorted) $ f sorted
 
 -- shuffling/sorting
