@@ -46,3 +46,16 @@ class (Ord s, Listable s) => Sortable s where
 
 instance Sortable Integer where
 instance Ord a => Sortable [a] where
+
+
+-- Can Listable be Traversable so that Sortable is nicer?
+
+-- instance Traversable Tree where
+--    traverse f Empty = pure Empty
+--    traverse f (Leaf x) = Leaf <$> f x
+--    traverse f (Node l k r) = Node <$> traverse f l <*> f k <*> traverse f r
+
+-- instance Listable a => Traversable a where
+  -- traverse f e | e == unit = unit
+               -- | otherwise = 
+
