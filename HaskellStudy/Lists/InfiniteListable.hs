@@ -12,8 +12,6 @@ class Shiftable z where
   right, left :: z a -> z a
   focus :: z a -> a
 
---Perhaps Traversable?
---https://hackage.haskell.org/package/base-4.9.0.0/docs/Data-Traversable.html#t:Traversable
 instance Shiftable Zipper where
   right (Z as b (c:cs)) = Z (b:as) c cs
   left  (Z (a:as) b cs) = Z as a (b:cs)
@@ -21,6 +19,13 @@ instance Shiftable Zipper where
 
 instance Functor Zipper where
   fmap f (Z as b cs) = Z (map f as) (f b) (map f cs)
+
+-- instance Foldable Zipper where -- ‘foldMap’ or ‘foldr’
+-- foldr f b (Z xs y zs) = (foldr f b xs)
+
+--Perhaps Traversable?
+--https://hackage.haskell.org/package/base-4.9.0.0/docs/Data-Traversable.html#t:Traversable
+-- instance Traversable Zipper where
 
 -- instance Applicative Zipper where
  -- not really sure what,
