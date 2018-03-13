@@ -1,22 +1,13 @@
 module InfiniteList where
 import Text.Printf
 
-data InfList a = IL [a] a [a]
+data InfList a = IL {left :: [a], focus :: a, right :: [a]}
 
 instance Show a => Show (InfList a) where
    show (IL a b c) = printf format (ff reverse a) (show b) (ff id c)
     where
       format = "[..%s { %s } %s..]\n"
       ff f = unwords.(map show).f.(take 3)
-
-right :: InfList a -> [a]
-right (IL as b cs) = cs
-
-left :: InfList a -> [a]
-left (IL as b cs) = as
-
-focus :: InfList a -> a 
-focus (IL as b cs) = b 
 
 shiftLeft :: InfList a -> InfList a
 shiftLeft (IL (a:as) b cs) = IL as a (b:cs)
