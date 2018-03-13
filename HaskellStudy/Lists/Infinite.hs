@@ -44,3 +44,12 @@ instance Foldable InfList where -- ‘foldMap’?
       folds (IL [] x xs) _ = (x:xs) 
       folds (IL as b (c:cs)) 0 = b : folds (IL as c cs) 1
       folds (IL (a:as) b cs) 1 = b : folds (IL as a cs) 0
+
+
+{--
+Todo:
+Listable
+Sortable
+Traversable
+Monad
+--}
