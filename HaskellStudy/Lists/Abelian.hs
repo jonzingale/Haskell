@@ -1,10 +1,6 @@
-
-{-# LANGUAGE MultiParamTypeClasses #-}
-{-# LANGUAGE FunctionalDependencies #-}
-
 module Abelian where
-import Text.Printf
 import System.Random
+import Text.Printf
 import Data.Char
 
 testAbelianAction :: Char
@@ -21,17 +17,17 @@ alphabet = Z sahpla 'a' (tail alphas)
 
 data Zipper a = Z {left :: [a], focus :: a, right :: [a]} deriving (Eq, Ord)
 
-instance Show a => Show (Zipper a) where
-   show (Z a b c) = printf format (ff reverse a) (show b) (ff id c)
-    where
-      format = "[..%s { %s } %s..]\n"
-      ff f = unwords.(map show).f.(take 100)
-
 shiftLeft :: Zipper a -> Zipper a
 shiftLeft (Z (a:as) b cs) = Z as a (b:cs)
 
 shiftRight :: Zipper a -> Zipper a
 shiftRight (Z as b (c:cs)) = Z (b:as) c cs
+
+instance Show a => Show (Zipper a) where
+   show (Z a b c) = printf format (ff reverse a) (show b) (ff id c)
+    where
+      format = "[..%s { %s } %s..]\n"
+      ff f = unwords.(map show).f.(take 100)
 
 instance Functor Zipper where
   fmap f (Z a b c ) = Z (map f a) (f b) (map f c)
@@ -56,6 +52,7 @@ randomWalk = run.(randomRs (-10, 10)).mkStdGen $ 32
 
 -- both types are intended to be positive Int
 data Abelian = P Int | N Int
+
 instance Show Abelian where
   show (N m) = show.negate $ m
   show (P m) = show m
@@ -79,8 +76,7 @@ class Action v where -- actions: Ab x G -> G
   compose :: [Abelian] -> v -> v
 
 instance Action (Zipper v) where
-  eval (P n) zipper = (iterate shiftRight zipper)!!n
-  eval (N n) zipper = (iterate shiftLeft zipper)!!n
-  compose abs zipper = let val = (foldr mappend mempty abs) in eval val zipper
-
+  eval (P n) = (!! n).iterate shiftRight
+  eval (N n) = (!! n).iterate shiftLeft
+  compose abs = eval (foldr mappend mempty abs)
 
