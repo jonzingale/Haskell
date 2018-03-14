@@ -37,6 +37,13 @@ havelhakimi (a:[]) = a == 0
 havelhakimi (a:as) = havelhakimi.qsort $ 
   map (+ (-1)) (take a as) ++ drop a as
 
+havelLines :: [Int] -> String
+havelLines list = unwords.(map show).f $ list
+  where
+    f (a:[]) = [[a]]
+    f (a:as) = (a:as) : (f.g) (a:as)
+    g (a:as) = qsort $ (map (+ (-1)) (take a as)) ++ drop a as
+
 {--
 If havelhakimi n returns true, at each step add
 the edges (v1,v2), (v1,v3), ..., (v1,v(d1+1)) .
