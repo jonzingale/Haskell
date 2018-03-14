@@ -1,7 +1,13 @@
+
+{-# LANGUAGE MultiParamTypeClasses #-}
+{-# LANGUAGE FunctionalDependencies #-}
+
 module Abelian where
 import Text.Printf
--- import Sortable
--- import Listable
+import System.Random
+
+integers :: Zipper Integer
+integers = Z (map negate [1..]) 0 [1..]
 
 data Zipper a = Z {left :: [a], focus :: a, right :: [a]} deriving (Eq, Ord)
 
@@ -17,14 +23,6 @@ shiftLeft (Z (a:as) b cs) = Z as a (b:cs)
 shiftRight :: Zipper a -> Zipper a
 shiftRight (Z as b (c:cs)) = Z (b:as) c cs
 
-integers, ten, randos :: Zipper Integer
-integers = Z (map negate [1..]) 0 [1..]
-ten = limit 10 integers
-randos = Z [6,2,4,1] 7 [8,5,3]
-
-limit :: Int -> Zipper a -> Zipper a
-limit n (Z a b c) = Z (take n a) b (take n c)
-
 instance Functor Zipper where
   fmap f (Z a b c ) = Z (map f a) (f b) (map f c)
 
@@ -38,6 +36,39 @@ interface to Zipper, so that rotations and evaluations
 can be performed on pointers and then some minimal
 computations to return the actual value.
 --}
+randomWalk :: [Abelian]
+randomWalk = run.(randomRs (-10, 10)).mkStdGen $ 32
+  where
+    run (x:xs) | x >= 0 = P x : run xs
+               | otherwise = N (abs x) : run xs
 
-class Abelian z where
-  identity :: z a -> z a
+-- both types are intended to be positive Int
+data Abelian = P Int | N Int
+instance Show Abelian where
+  show (N m) = show.negate $ m
+  show (P m) = show m
+
+instance Eq Abelian where
+  (==) (P n) (N m) = (n==m) && (n==0)
+  (==) (P n) (P m) = n == m
+  (==) (N n) (N m) = n == m
+
+instance Monoid Abelian where
+  mappend (P n) (P m) = P $ n + m
+  mappend (P n) (N m) | n - m >= 0 = P $ n - m
+                      | otherwise = N $ n - m
+  mappend (N n) (P m) | m - n >= 0 = P $ m - n
+                      | otherwise = N $ m - n
+  mappend (N n) (N m) = P $ n + m
+  mempty = P 0
+
+class Action v where -- actions: Ab x G -> G
+  eval :: Abelian -> v -> v
+  compose :: [Abelian] -> v -> v
+
+instance Action (Zipper v) where
+  eval (P n) zipper = (iterate shiftRight zipper)!!n
+  eval (N n) zipper = (iterate shiftLeft zipper)!!n
+  compose abs zipper = let val = (foldr mappend mempty abs) in eval val zipper
+
+
