@@ -1,4 +1,4 @@
-module Sortable (qsort, keyShuffle, fyShuffle, knuffle) where
+module Sortable (qsort, keyShuffle, fisherYatesShuffle, knuthShuffle, Sortable) where
 import Control.Monad.Zip
 import System.Random
 import Listable
@@ -12,7 +12,7 @@ randos :: [Integer]
 randos = randomRs (0, 10^6) $ mkStdGen 32
 
 class (Ord s, Listable s) => Sortable s where
-  qsort, keyShuffle, fyShuffle, knuffle :: s -> s
+  qsort, keyShuffle, fisherYatesShuffle, knuthShuffle :: s -> s
 
   qsort ns | ns == unit = unit
            | otherwise = branch smaller ns +++ headL ns +++ branch larger ns
@@ -21,14 +21,14 @@ class (Ord s, Listable s) => Sortable s where
       smaller n = filterL (<= n)
       larger  n = filterL (>  n)
 
-  fyShuffle xs = f xs randos (lengthL xs) -- OG Fisher-Yates no swap.
+  fisherYatesShuffle xs = f xs randos (lengthL xs) -- OG Fisher-Yates no swap.
     where
       f x _ 0 = unit
       f xs (r:rs) l = let i = mod r l in
         xs!!!i `cons` f (g xs i) rs (l-1)
       g xs i = dropL (i+1) xs +++ takeL i xs
 
-  knuffle xs = f xs randos (lengthL xs) -- Fisher-Yates with swap, Durstenfeld
+  knuthShuffle xs = f xs randos (lengthL xs) -- Fisher-Yates with swap, Durstenfeld
     where
       f xs _ 0 = xs
       f xs (r:rs) l = f (swap l (mod r l) xs) rs (l-1)

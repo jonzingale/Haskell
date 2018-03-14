@@ -45,4 +45,3 @@ instance Eq a => Listable [a] where
   cons [n] ns = n : ns -- The types are funny here
   (+++) = (++)
   unit = []
-  
