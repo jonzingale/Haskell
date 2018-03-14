@@ -5,9 +5,19 @@
 module Abelian where
 import Text.Printf
 import System.Random
+import Data.Char
+
+testAbelianAction :: Char
+testAbelianAction = focus.compose finiteRandomWalk $ alphabet
 
 integers :: Zipper Integer
 integers = Z (map negate [1..]) 0 [1..]
+
+alphabet :: Zipper Char
+alphabet = Z sahpla 'a' (tail alphas)
+  where
+    alphas = [chr $ mod n 26 + 97  | n<- [0..]]
+    sahpla = [chr $ 122 - mod n 26 | n<- [0..]]
 
 data Zipper a = Z {left :: [a], focus :: a, right :: [a]} deriving (Eq, Ord)
 
@@ -15,7 +25,7 @@ instance Show a => Show (Zipper a) where
    show (Z a b c) = printf format (ff reverse a) (show b) (ff id c)
     where
       format = "[..%s { %s } %s..]\n"
-      ff f = unwords.(map show).f.(take 8)
+      ff f = unwords.(map show).f.(take 100)
 
 shiftLeft :: Zipper a -> Zipper a
 shiftLeft (Z (a:as) b cs) = Z as a (b:cs)
@@ -36,7 +46,9 @@ interface to Zipper, so that rotations and evaluations
 can be performed on pointers and then some minimal
 computations to return the actual value.
 --}
-randomWalk :: [Abelian]
+
+randomWalk, finiteRandomWalk :: [Abelian]
+finiteRandomWalk = take (2^15) randomWalk
 randomWalk = run.(randomRs (-10, 10)).mkStdGen $ 32
   where
     run (x:xs) | x >= 0 = P x : run xs
