@@ -1,10 +1,15 @@
+{-# OPTIONS_GHC -Wno-missing-methods #-} -- for Num AdditiveAbelian
+
 module Abelian where
 import System.Random
 import Text.Printf
 import Data.Char
 
-testAbelianAction :: Char
-testAbelianAction = focus.compose shortRandomWalk $ alphabet
+alphaAction :: AdditiveAbelian -> Char
+alphaAction abf = focus.compose abf $ alphabet 
+
+testAlphaAction :: Char
+testAlphaAction = alphaAction (shortRandomWalk + shortRandomWalk)
 
 integers :: Zipper Integer
 integers = Z (map negate [1..]) 0 [1..]
@@ -14,6 +19,10 @@ alphabet = Z sahpla 'a' (tail alphas)
   where
     alphas = [chr $ mod n 26 + 97  | n<- [0..]]
     sahpla = [chr $ 122 - mod n 26 | n<- [0..]]
+
+{-- 
+Zipper Code
+--}
 
 data Zipper a = Z {left :: [a], focus :: a, right :: [a]} deriving (Eq, Ord)
 
@@ -37,19 +46,10 @@ instance Applicative Zipper where
   (<*>) (Z fs g hs) (Z as b cs) = Z (fs <*> as) (g b) (hs <*> cs)
 
 {-- 
-My goal with Abelian is to write an algebraic
-interface to Zipper, so that rotations and evaluations
-can be performed on pointers and then some minimal
-computations to return the actual value.
+Abelian Code
 --}
 
-shortRandomWalk :: [Abelian]
-shortRandomWalk = take (2^15) $ run.(randomRs (-10, 10)).mkStdGen $ 32
-  where
-    run (x:xs) | x >= 0 = P x : run xs
-               | otherwise = N (abs x) : run xs
-
--- both types are intended to be positive Int
+-- All Int positive
 data Abelian = P Int | N Int
 
 instance Show Abelian where
@@ -71,11 +71,30 @@ instance Monoid Abelian where
   mempty = P 0
 
 class Action v where -- actions: Ab x G -> G
-  compose :: [Abelian] -> v a -> v a
+  compose :: AdditiveAbelian -> v a -> v a
   eval :: Abelian -> v a -> v a
 
 instance Action Zipper where
-  compose abs = eval (foldr mappend mempty abs)
+  compose (Add abs) = eval (foldr mappend mempty abs)
   eval (P n) = (!! n).iterate shiftRight
   eval (N n) = (!! n).iterate shiftLeft
 
+{--
+Additive Abelian Code
+--}
+
+shortRandomWalk :: AdditiveAbelian
+shortRandomWalk = Add $ take (2^15) $ run.(randomRs (-10, 10)).mkStdGen $ 32
+  where
+    run (x:xs) | x >= 0 = P x : run xs
+               | otherwise = N (abs x) : run xs
+
+newtype AdditiveAbelian = Add [Abelian]
+additive = Add [P 1, P 2, N 3]
+
+instance Monoid AdditiveAbelian where
+  mappend (Add abG) (Add abH) = Add [mappend g h | (g,h) <- zip abG abH]
+  mempty = Add [P 0]
+
+instance Num AdditiveAbelian where
+  (+) abG abH = abG `mappend` abH
