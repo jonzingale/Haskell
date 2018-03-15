@@ -21,3 +21,10 @@ qsort (x:xs) = qsort larger ++ [x] ++ qsort smaller
            where
              smaller = [s | s<-xs, s<=x]
              larger  = [l | l<-xs, l > x]
+
+havelLines :: [Int] -> String -- displays the havel hakimi process
+havelLines list = unwords.(map show).f $ list
+  where
+    f (a:[]) = [[a]]
+    f (a:as) = (a:as) : (f.g) (a:as)
+    g (a:as) = qsort $ (map (+ (-1)) (take a as)) ++ drop a as
