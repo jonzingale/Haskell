@@ -17,7 +17,7 @@ instance Ord Vertex where
 
 qsort :: Ord a => [a] -> [a]
 qsort [] = []
-qsort (x:xs) = qsort larger ++ [x] ++ qsort smaller
+qsort (x:xs) = qsort smaller ++ [x] ++ qsort larger
            where
              smaller = [s | s<-xs, s<=x]
              larger  = [l | l<-xs, l > x]
