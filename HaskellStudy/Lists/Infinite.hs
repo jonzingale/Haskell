@@ -57,12 +57,3 @@ instance Ord a => Sortable (InfList a) where -- shuffles are wrong, check cons.
   qsort (Z a b c) = let n = lengthL a in
                     let sort = qsort $ a++b++c in
       Z ((reverse.takeL n) sort) (sort!!!n) (dropL (n+1) sort)
-
-
-{--
-Todo:
-Listable
-Sortable
-Traversable
-Monad
---}

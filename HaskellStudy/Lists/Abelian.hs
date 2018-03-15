@@ -4,7 +4,7 @@ import Text.Printf
 import Data.Char
 
 testAbelianAction :: Char
-testAbelianAction = focus.compose finiteRandomWalk $ alphabet
+testAbelianAction = focus.compose shortRandomWalk $ alphabet
 
 integers :: Zipper Integer
 integers = Z (map negate [1..]) 0 [1..]
@@ -43,9 +43,8 @@ can be performed on pointers and then some minimal
 computations to return the actual value.
 --}
 
-randomWalk, finiteRandomWalk :: [Abelian]
-finiteRandomWalk = take (2^15) randomWalk
-randomWalk = run.(randomRs (-10, 10)).mkStdGen $ 32
+shortRandomWalk :: [Abelian]
+shortRandomWalk = take (2^15) $ run.(randomRs (-10, 10)).mkStdGen $ 32
   where
     run (x:xs) | x >= 0 = P x : run xs
                | otherwise = N (abs x) : run xs
@@ -72,11 +71,11 @@ instance Monoid Abelian where
   mempty = P 0
 
 class Action v where -- actions: Ab x G -> G
-  eval :: Abelian -> v -> v
-  compose :: [Abelian] -> v -> v
+  compose :: [Abelian] -> v a -> v a
+  eval :: Abelian -> v a -> v a
 
-instance Action (Zipper v) where
+instance Action Zipper where
+  compose abs = eval (foldr mappend mempty abs)
   eval (P n) = (!! n).iterate shiftRight
   eval (N n) = (!! n).iterate shiftLeft
-  compose abs = eval (foldr mappend mempty abs)
 
