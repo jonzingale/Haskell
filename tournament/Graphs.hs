@@ -3,6 +3,7 @@ import Helpers
 
 triangle = degreesToGraph [2,2,2]
 simplex n = degreesToGraph.take (n+1) $ repeat n 
+exampleGraph = degreesToGraph [5,4,3,4,1,1,1]
 
 degreesToGraph :: Degrees -> Graph
 degreesToGraph = vertsToGraph.degreesToVerts
@@ -23,11 +24,6 @@ instance Show Edge where
 instance Ord Vertex where
   (<=) (V ss n) (V tt m) = n <= m
   (>=) (V ss n) (V tt m) = n >= m
-
-havelhakimi :: [Int] -> Bool
-havelhakimi (a:[]) = a == 0
-havelhakimi (a:as) = havelhakimi.qsort $
-  map (+ (-1)) (take a as) ++ drop a as
 
 vertsToGraph :: [Vertex] -> Graph
 vertsToGraph verts = G $ hh [] verts

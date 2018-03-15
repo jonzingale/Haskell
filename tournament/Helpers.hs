@@ -1,4 +1,4 @@
-module Helpers (qsort) where
+module Helpers (qsort, havelhakimi, havelLines) where
 
 data Vertex = V { name::String, degree::Int} deriving Eq
 data Edge = E { source::Vertex, target::Vertex }
@@ -14,6 +14,11 @@ instance Ord Vertex where
   (>=) (V ss n) (V tt m) = n >= m
 
 -------------
+
+havelhakimi :: [Int] -> Bool
+havelhakimi (a:[]) = a == 0
+havelhakimi (a:as) = havelhakimi.qsort $
+  map (+ (-1)) (take a as) ++ drop a as
 
 qsort :: Ord a => [a] -> [a]
 qsort [] = []
