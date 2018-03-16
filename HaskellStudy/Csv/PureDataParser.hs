@@ -18,12 +18,12 @@ msgFormat = "%s %s %s val:%d\n"
 
 type EitherPureData = Either String (Vector [String])
 
-data PureDataObject = Canvas { nodeType :: String, objTyp :: String, coords1 :: (Int, Int), coords2 :: (Int, Int), datum :: [String] } |
-                      Connect { nodeType :: String, objTyp :: String, source :: Int, outletNum :: Int, target :: Int, inletNum :: Int } |
+data PureDataObject = Canvas    { nodeType :: String, objTyp :: String, coords1 :: (Int, Int), coords2 :: (Int, Int), datum :: [String] } |
+                      Connect   { nodeType :: String, objTyp :: String, source :: Int, outletNum :: Int, target :: Int, inletNum :: Int } |
                       FloatAtom { nodeType :: String, objTyp :: String, coords :: (Int, Int), lenN :: Int, datum :: [String] } |
-                      Restore { nodeType :: String, objTyp :: String, coords :: (Int, Int), name :: String } |
-                      Object { nodeType :: String, objTyp :: String, coords :: (Int, Int), name :: String } |
-                      MSG { nodeType :: String, objTyp :: String, coords :: (Int, Int), val :: Int } |
+                      Restore   { nodeType :: String, objTyp :: String, coords :: (Int, Int), name :: String } |
+                      Object    { nodeType :: String, objTyp :: String, coords :: (Int, Int), name :: String } |
+                      MSG       { nodeType :: String, objTyp :: String, coords :: (Int, Int), val :: Int } |
                       Empty
 
 instance Show PureDataObject where
