@@ -9,7 +9,10 @@ import GHC.Generics (Generic)
 import Data.List
 import Data.Csv
 
-type EitherGoogle = Either String (Vector GoogleRecord)
+type Brand = String
+type GroupName = String
+
+type EitherGoogle  = Either String (Vector GoogleRecord)
 type EitherWyndham = Either String (Vector WyndhamRecord)
 
 data GoogleRecord = BadGoogleRecord |
@@ -32,9 +35,6 @@ googleRecords = toList.(fromRight empty).parseCsv
 wyndhamRecords = toList.(fromRight empty).parseCsv
   where parseCsv csv = decode HasHeader csv :: EitherWyndham
 
--- hotelId -> site
-type Brand = String
-type GroupName = String
 {-- 
 This method matches each google record to each wyndham record by
 matching hotelId on the first to site on the second. Then it returns 
