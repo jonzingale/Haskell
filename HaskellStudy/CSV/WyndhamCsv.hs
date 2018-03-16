@@ -45,7 +45,7 @@ returnBrand (g:gs) ws = (groupName g, brands g ws) : returnBrand gs ws
   where
     brands grec = (map brand).filter (\w -> hotelId grec == site w)
 
-
+-- Todo: Figure out how to do this part.
 {--
 google <- BL.readFile "google.csv"
 wyndham <- BL.readFile "wyndham.csv"
