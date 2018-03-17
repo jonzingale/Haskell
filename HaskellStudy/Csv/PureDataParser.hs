@@ -1,27 +1,21 @@
 {-# LANGUAGE DeriveGeneric #-}
 
 module PureDataParser where
-import qualified Data.ByteString.Lazy as BL
-import Data.Vector (Vector, empty, toList)
-import Data.Either.Extra (fromRight)
+import Data.List.Split
 import Text.Printf
-import Data.List
-import Data.Csv
 import Data.Char
 
 connectFormat = "%s %s src:%d outlet:%d tar:%d inlet:%d\n"
-floatAtomFormat = "%s %s %s len:%d data:%s\n"
-canvasFormat = "%s %s %s %s data:%s\n"
+floatAtomFormat = "%s %s coords:%s len:%d data: %s\n"
+canvasFormat = "%s %s coord1:%s coords2:%s name: %s\n"
 restoreFormat = "%s %s %s name: %s\n"
-objFormat = "%s %s %s name: %s\n"
+objFormat = "%s %s %s data: %s\n"
 msgFormat = "%s %s %s val:%d\n"
 
-type EitherPureData = Either String (Vector [String])
-
 data PureDataObject =
-  Canvas    { nodeType :: String, objTyp :: String, coords1 :: (Int, Int), coords2 :: (Int, Int), datum :: [String] } |
   Connect   { nodeType :: String, objTyp :: String, source :: Int, outletNum :: Int, target :: Int, inletNum :: Int } |
-  FloatAtom { nodeType :: String, objTyp :: String, coords :: (Int, Int), lenN :: Int, datum :: [String] } |
+  Canvas    { nodeType :: String, objTyp :: String, coords1 :: (Int, Int), coords2 :: (Int, Int), name :: String } |
+  FloatAtom { nodeType :: String, objTyp :: String, coords :: (Int, Int), lenN :: Int, datum :: String } |
   Restore   { nodeType :: String, objTyp :: String, coords :: (Int, Int), name :: String } |
   Object    { nodeType :: String, objTyp :: String, coords :: (Int, Int), name :: String } |
   MSG       { nodeType :: String, objTyp :: String, coords :: (Int, Int), val :: Int } |
@@ -36,22 +30,25 @@ instance Show PureDataObject where
   show (MSG n o coords val) = printf msgFormat n o (show coords) val
   show Empty = "Empty\n"
 
-toDatum ::[String] -> PureDataObject
-toDatum (node:obj:x:y:dats) = case obj of
-  "canvas" -> Canvas node obj (read x, read y) (read(dats!!0), read(dats!!1)) (drop 2 dats)
-  "connect" -> Connect node obj (read x) (read y) (read(dats!!0)) (read.init $ dats!!1)
-  "floatatom" -> FloatAtom node obj (read x, read y) (read(dats!!0)) (tail dats)
-  "restore" -> Restore node obj (read x, read y) (init $ dats!!1)
-  "obj" -> Object node obj (read x, read y) (init.unwords $ dats)
-  "msg" -> MSG node obj (read x, read y) (read.init $ dats!!0)
+toDatum :: String -> PureDataObject
+toDatum row =
+  let (node:obj:x:y:dats) = words row in
+  let datum = unwords.drop 2 $ dats in
+
+  case obj of
+  "canvas" -> Canvas node obj (read x, read y) coords2 datum
+    where coords2 = (read $ dats!!0, read $ dats!!1)
+  "connect" -> Connect node obj (read x) (read y) d0 d1
+    where (d0, d1) = (read $ dats!!0, read $ dats!!1)
+  "floatatom" -> FloatAtom node obj (read x, read y) len datum
+    where len = read $ dats!!1
+  "restore" -> Restore node obj (read x, read y) (unwords dats)
+  "obj" -> Object node obj (read x, read y) (unwords dats)
+  "msg" -> MSG node obj (read x, read y) (read.head $ dats)
   _ -> Empty -- throws away unexpected data
 
-pureDataRecords = (map toDatum).toList.(fromRight empty).parseCsv
-  where
-    parseCsv csv = decodeWith delimiter NoHeader csv :: EitherPureData
-    delimiter = defaultDecodeOptions { decDelimiter = fromIntegral (ord ' ') }
-
 main = do  
-  pureData <- BL.readFile "examplePD.pd"
-  let pureRecords = pureDataRecords pureData
+  rawData <- readFile "examplePD.pd"
+  let pureData = (map (tail.init)).(splitOn "\n") $ rawData
+  let pureRecords = map toDatum pureData
   print pureRecords
