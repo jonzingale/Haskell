@@ -13,13 +13,13 @@ objFormat = "%s %s %s data: %s\n"
 msgFormat = "%s %s %s val:%d\n"
 
 data PureDataObject =
-  Connect   { nodeType :: String, objTyp :: String, source :: Int, outletNum :: Int, target :: Int, inletNum :: Int } |
-  Canvas    { nodeType :: String, objTyp :: String, coords1 :: (Int, Int), coords2 :: (Int, Int), name :: String } |
-  FloatAtom { nodeType :: String, objTyp :: String, coords :: (Int, Int), lenN :: Int, datum :: String } |
-  Restore   { nodeType :: String, objTyp :: String, coords :: (Int, Int), name :: String } |
-  Object    { nodeType :: String, objTyp :: String, coords :: (Int, Int), name :: String } |
-  MSG       { nodeType :: String, objTyp :: String, coords :: (Int, Int), val :: Int } |
-  Empty
+  Connect   { nodeType :: String, objType :: String, source :: Int, outletNum :: Int, target :: Int, inletNum :: Int } |
+  Canvas    { nodeType :: String, objType :: String, coords1 :: (Int, Int), coords2 :: (Int, Int), name :: String } |
+  FloatAtom { nodeType :: String, objType :: String, coords :: (Int, Int), lenN :: Int, datum :: String } |
+  Restore   { nodeType :: String, objType :: String, coords :: (Int, Int), name :: String } |
+  Object    { nodeType :: String, objType :: String, coords :: (Int, Int), name :: String } |
+  MSG       { nodeType :: String, objType :: String, coords :: (Int, Int), val :: Int } |
+  Empty deriving Eq
 
 instance Show PureDataObject where
   show (Canvas n o coords1 coords2 ds) = printf canvasFormat n o (show coords1) (show coords2) (show ds)
