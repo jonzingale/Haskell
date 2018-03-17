@@ -1,5 +1,6 @@
 module MatrixMetrics where
 import qualified Numeric.LinearAlgebra.HMatrix as H
+import Graphs
 -- can i import unqualified?
 
 {--
@@ -37,4 +38,11 @@ spectra matrix = collect.rounded_reals.eigenlist $ matrix
 -- builds a diagonal matrix based on the degrees of vertices.
 -- del :: DMatrix -> DMatrix
 -- del matrix = 
+
+-- H.rank, H.orth, H.outer, H.det
+
+adjacency :: Graph -> DMatrix
+adjacency graph = let n = length.vertices $ graph in
+  (H.><) n n
+
 
