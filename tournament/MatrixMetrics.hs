@@ -1,7 +1,6 @@
 module MatrixMetrics where
 import qualified Numeric.LinearAlgebra.HMatrix as H
 import Graphs
--- can i import unqualified?
 
 {--
 This is a module for computing matrix metrics 
@@ -41,8 +40,16 @@ spectra matrix = collect.rounded_reals.eigenlist $ matrix
 
 -- H.rank, H.orth, H.outer, H.det
 
-adjacency :: Graph -> DMatrix
-adjacency graph = let n = length.vertices $ graph in
-  (H.><) n n
+-- adjacency :: Graph -> DMatrix
+adjacency graph =
+  let num = length.vertices $ graph in
+  let sources (V n d) = map source $ filter (\e -> (name.target) e == n) (edges graph) in
+  let targets (V n d) = map target $ filter (\e -> (name.source) e == n) (edges graph) in
+  let values = [map name (sources vs ++ targets vs) | vs<- vertices graph] in
+  values
+  -- map (f num) values
+  -- where
+    -- f n ()
 
-
+  -- (H.><) n n 
+--LOOK UP FORMAL VERIFICATION / PROVABLY CORRECT.
