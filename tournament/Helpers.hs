@@ -1,4 +1,4 @@
-module Helpers (hhsort, havelhakimi, havelLines, havelAdjacency) where
+module Helpers (hhsort, havelhakimi, havelLines, hhAdjacency) where
 
 data Vertex = V { name::String, degree::Int} deriving Eq
 data Edge = E { source::Vertex, target::Vertex }
@@ -20,15 +20,17 @@ havelhakimi (a:[]) = a == 0
 havelhakimi (a:as) = havelhakimi.hhsort $
   map (+ (-1)) (take a as) ++ drop a as
 
-havelLines :: [Int] -> String -- displays the havel hakimi process
+-- displays the havel hakimi process
+havelLines :: [Int] -> String
 havelLines list = unwords.(map show).f $ list
   where
     f (a:[]) = [[a]]
     f (a:as) = (a:as) : (f.g) (a:as)
     g (a:as) = hhsort $ (map (+ (-1)) (take a as)) ++ drop a as
 
-havelAdjacency :: [Int] -> [Int]
-havelAdjacency list = f list (length list) 1
+-- produces a havel hakimi adjacency graph
+hhAdjacency :: [Int] -> [Int]
+hhAdjacency list = f list (length list) 1
   where
     zeros n = take n $ repeat 0
     ones  n = take n $ repeat 1
