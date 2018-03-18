@@ -1,5 +1,6 @@
 module MatrixMetrics where
 import qualified Numeric.LinearAlgebra.HMatrix as H
+import Helpers
 import Graphs
 
 {--
@@ -11,11 +12,6 @@ Todo: more sophisticated rounding: spectra cycle3
 
 type DMatrix = H.Matrix Double
 type HComplex = H.Complex Double
-
-t1 = [(8,7),(8,6),(8,5),(4,3),(4,2),(4,1),(7,6),(7,5),(3,2),(3,1),(6,5),(2,1)]
-
--- graphToMatrix :: [Int,Int] -> DMatrix
-
 
 tetra :: DMatrix
 tetra = (H.><) 4 4 [0,1,1,1,1,0,1,1,1,1,0,1,1,1,1,0]
@@ -34,22 +30,19 @@ spectra matrix = collect.rounded_reals.eigenlist $ matrix
     collect (a:as) = (a, length.filter (== a) $ (a:as)) :
                       (collect $ filter (/= a) as)
 
--- builds a diagonal matrix based on the degrees of vertices.
--- del :: DMatrix -> DMatrix
--- del matrix = 
-
 -- H.rank, H.orth, H.outer, H.det
+upperTri :: [Int] -> DMatrix
+upperTri degrees = 
+  let n = length degrees in 
+  let array = havelAdjacency degrees in
+  (H.><) n n (map fromIntegral array)
 
--- adjacency :: Graph -> DMatrix
-adjacency graph =
-  let num = length.vertices $ graph in
-  let sources (V n d) = map source $ filter (\e -> (name.target) e == n) (edges graph) in
-  let targets (V n d) = map target $ filter (\e -> (name.source) e == n) (edges graph) in
-  let values = [map name (sources vs ++ targets vs) | vs<- vertices graph] in
-  values
-  -- map (f num) values
-  -- where
-    -- f n ()
+symmetric :: [Int] -> DMatrix
+symmetric = \ds -> upperTri ds + H.tr (upperTri ds)
 
-  -- (H.><) n n 
+adjacency :: [Double] -> DMatrix
+adjacency array = let mat = (H.><) 3 3 array in
+  mat + H.tr mat
+
 --LOOK UP FORMAL VERIFICATION / PROVABLY CORRECT.
+--Verify H.rank with Alec Lights.
