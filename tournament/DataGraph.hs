@@ -8,9 +8,6 @@ graph, biGraph :: Maybe Graph
 graph = adjacencyG [5,4,4,3,2,2]
 biGraph = biAdjacencyG [5,4,4,3,2,2]
 
-graph2 = buildG (1, 6) [(1,2),(1,3),(1,4),(1,5),(1,6),(2,3),(2,5),(3,4),(3,6)]
-
--- should check for havelHakimi condition.
 biAdjacencyG :: [Int] -> Maybe Graph
 biAdjacencyG list | havelhakimi list =
   let (Just gg) = adjacencyG list in
@@ -19,8 +16,7 @@ biAdjacencyG list | havelhakimi list =
                   | otherwise = Nothing
 
 adjacencyG :: [Int] -> Maybe Graph
-adjacencyG list | havelhakimi list =
-  let len = length list in
+adjacencyG list | havelhakimi list = let len = length list in
   Just $ buildG (1, len) $ nameEm $ f list [] len 1 list
                 | otherwise = Nothing
   where
@@ -38,7 +34,12 @@ adjacencyG list | havelhakimi list =
     nameEm rows = [ (srcName, tarName)| (srcName, row) <- zip [1..] rows,
                                           (r, tarName) <- zip row [1..], r == 1]
 
--- hmm, these seem to be directed.
+-- hmm, naming (ie. Bounds) and direction matter. 
 -- e2 = buildG (0,2) [(0,1),(0,2),(1,2)]
 -- e1 = buildG (0,2) [(1,2),(1,0),(2,0)]
 -- isIsomorphic e1 e2
+
+graph2 = buildG (0, 5) [(0,1), (0,2), (0,3), (0,4), (0,5),
+                (1,2), (1,3), (1,4), (2,3), (2,5)]
+
+testIso = let (Just gg) = graph in isIsomorphic gg graph2 -- false by naming.
