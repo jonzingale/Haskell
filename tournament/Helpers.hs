@@ -18,7 +18,7 @@ instance Ord Vertex where
 havelhakimi :: [Int] -> Bool
 havelhakimi (a:[]) = a == 0
 havelhakimi (a:as) = havelhakimi.hhsort $
-  map (+ (-1)) (take a as) ++ drop a as
+  map (subtract 1) (take a as) ++ drop a as
 
 -- displays the havel hakimi process
 havelLines :: [Int] -> String
@@ -26,17 +26,18 @@ havelLines list = unwords.(map show).f $ list
   where
     f (a:[]) = [[a]]
     f (a:as) = (a:as) : (f.g) (a:as)
-    g (a:as) = hhsort $ (map (+ (-1)) (take a as)) ++ drop a as
+    g (a:as) = hhsort $ map (subtract 1) (take a as) ++ drop a as
 
--- produces a havel hakimi adjacency graph
-hhAdjacency :: [Int] -> [Int]
-hhAdjacency list = f list (length list) 1
+-- produce an adjacency graph if havelHakimi
+hhAdjacency :: [Int] -> Maybe [Int]
+hhAdjacency list | havelhakimi list = Just $ f list (length list) 1
+                 | otherwise =  Nothing
   where
     zeros n = take n $ repeat 0
     ones  n = take n $ repeat 1
     f (a:[]) n i = zeros i++ones a++zeros (n-a-1)
-    f (a:as) n i = (zeros i++ones a++zeros (n-a-1)) ++ f (g (a:as)) (n-1) (i+1)
-    g (a:as) = hhsort $ (map (+ (-1)) (take a as)) ++ drop a as
+    f (a:as) n i = zeros i++ones a++zeros (n-a-1) ++ f (g (a:as)) (n-1) (i+1)
+    g (a:as) = hhsort $ map (subtract 1) (take a as) ++ drop a as
 
 -- notice that it sorts large to small
 hhsort :: Ord a => [a] -> [a]

@@ -1,4 +1,4 @@
-module MatrixMetrics where
+module MatrixMetrics (spectra, upperTri, adjacency) where
 import qualified Numeric.LinearAlgebra.HMatrix as H
 import Helpers
 import Graphs
@@ -30,10 +30,11 @@ spectra matrix = collect.rounded_reals.eigenlist $ matrix
     collect (a:as) = (a, length.filter (== a) $ (a:as)) :
                       (collect $ filter (/= a) as)
 
+-- Just without a Nothing.
 upperTri :: [Int] -> DMatrix
 upperTri degrees = 
-  let n = length degrees in 
-  let array = hhAdjacency degrees in
+  let n = length degrees in
+  let (Just array) = hhAdjacency degrees in
   (H.><) n n (map fromIntegral array)
 
 adjacency :: [Int] -> DMatrix
