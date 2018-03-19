@@ -5,6 +5,7 @@ import Helpers hiding (hhAdjacency)
 graph = hhAdjacency [5,4,3,3,2,2]
 graph2 = buildG (1,6) [(1,2),(1,3),(1,4),(1,5),(1,6),(2,3),(2,5),(3,4),(3,6)]
 
+-- should check for havelHakimi condition.
 hhAdjacency :: [Int] -> Graph
 hhAdjacency list = let len = length list in
   buildG (1, len) $ f list len 1
