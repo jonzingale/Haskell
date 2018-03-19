@@ -22,22 +22,25 @@ havelhakimi (a:as) = havelhakimi.hhsort $
 
 -- displays the havel hakimi process
 havelLines :: [Int] -> String
-havelLines list = unwords.(map show).f $ list
+havelLines list = unwords $ f list [] 1
   where
-    f (a:[]) = [[a]]
-    f (a:as) = (a:as) : (f.g) (a:as)
-    g (a:as) = hhsort $ map (subtract 1) (take a as) ++ drop a as
+    f (a:[]) accum i = accum
+    f as accum i = f (hhsort.hh $ as) (accum ++ [buildRow as i]) (i+1)
+    hh (a:as) = map (subtract 1) (take a as) ++ drop a as
+    buildRow as i = show $ zeros i ++ hh as
 
--- produce an adjacency graph if havelHakimi
+-- produce an adjacency graph if havelHakimi.
 hhAdjacency :: [Int] -> Maybe [Int]
-hhAdjacency list | havelhakimi list = Just $ f list (length list) 1
-                 | otherwise =  Nothing
+hhAdjacency list | havelhakimi list = Just $ f list [] (length list) 1 list
+                 | otherwise = Nothing
   where
-    zeros n = take n $ repeat 0
-    ones  n = take n $ repeat 1
-    f (a:[]) n i = zeros i++ones a++zeros (n-a-1)
-    f (a:as) n i = zeros i++ones a++zeros (n-a-1) ++ f (g (a:as)) (n-1) (i+1)
-    g (a:as) = hhsort $ map (subtract 1) (take a as) ++ drop a as
+    keySort (a:as) = snd.unzip.hhsort.zip as
+    hh (a:as) = map (subtract 1) (take a as) ++ drop a as
+    buildR a ary n i ls = ary ++ zeros i ++ keySort ls (ones a ++ zeros (n-a-1))
+
+    f [a] accum n i ls = buildR a accum n i ls
+    f (a:as) accum n i ls = buildR a accum n i ls ++
+                            f (hhsort.hh $ a:as) accum (n-1) (i+1) (hh (a:as))
 
 -- notice that it sorts large to small
 hhsort :: Ord a => [a] -> [a]
@@ -46,3 +49,6 @@ hhsort (x:xs) = hhsort larger ++ [x] ++ hhsort smaller
            where
              smaller = [s | s<-xs, s<=x]
              larger  = [l | l<-xs, l > x]
+
+zeros n = take n $ repeat 0
+ones  n = take n $ repeat 1

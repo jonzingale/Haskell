@@ -1,23 +1,44 @@
 module DataGraph where
+import Data.Graph.Automorphism (isIsomorphic)
+import MatrixMetrics
 import Data.Graph
-import Helpers hiding (hhAdjacency)
+import Helpers
 
-graph = hhAdjacency [5,4,3,3,2,2]
-graph2 = buildG (1,6) [(1,2),(1,3),(1,4),(1,5),(1,6),(2,3),(2,5),(3,4),(3,6)]
+graph, biGraph :: Maybe Graph
+graph = adjacencyG [5,4,4,3,2,2]
+biGraph = biAdjacencyG [5,4,4,3,2,2]
+
+graph2 = buildG (1, 6) [(1,2),(1,3),(1,4),(1,5),(1,6),(2,3),(2,5),(3,4),(3,6)]
 
 -- should check for havelHakimi condition.
-hhAdjacency :: [Int] -> Graph
-hhAdjacency list = let len = length list in
-  buildG (1, len) $ f list len 1
+biAdjacencyG :: [Int] -> Maybe Graph
+biAdjacencyG list | havelhakimi list =
+  let (Just gg) = adjacencyG list in
+  let es g = foldr (++) [] $ map edges g in
+  Just $ buildG (1, 6) $ es [gg, transposeG gg]
+                  | otherwise = Nothing
+
+adjacencyG :: [Int] -> Maybe Graph
+adjacencyG list | havelhakimi list =
+  let len = length list in
+  Just $ buildG (1, len) $ nameEm $ f list [] len 1 list
+                | otherwise = Nothing
   where
-    buildRow a n i = w i $ foldr (++) [] [zeros i, ones a, zeros (n-a-1)]
+    keySort (l:ls) = snd.unzip.hhsort.zip ls
+    hh (a:as) = map (subtract 1) (take a as) ++ drop a as
     zeros n = take n $ repeat 0
     ones  n = take n $ repeat 1
 
-    f (a:[]) n i = buildRow a n i
-    f (a:as) n i = buildRow a n i ++ f (hh (a:as)) (n-1) (i+1)
-    hh (a:as) = hhsort $ map (subtract 1) (take a as) ++ drop a as
+    buildR a ary n i ls = ary ++ [zeros i ++ keySort ls (ones a ++ zeros (n-a-1))]
 
-    w name [] = []
-    w name (r:rs) | r == 1 = (name, length (r:rs)) : w name rs
-                  | otherwise = w name rs
+    f [a] accum n i ls = buildR a accum n i ls
+    f (a:as) accum n i ls = buildR a accum n i ls ++
+                            f (hhsort.hh $ a:as) accum (n-1) (i+1) (hh (a:as))
+
+    nameEm rows = [ (srcName, tarName)| (srcName, row) <- zip [1..] rows,
+                                          (r, tarName) <- zip row [1..], r == 1]
+
+-- hmm, these seem to be directed.
+-- e2 = buildG (0,2) [(0,1),(0,2),(1,2)]
+-- e1 = buildG (0,2) [(1,2),(1,0),(2,0)]
+-- isIsomorphic e1 e2
