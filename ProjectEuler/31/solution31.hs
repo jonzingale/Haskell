@@ -41,4 +41,7 @@ us31Correct = (!!101).foldr (*) 1 $ map (cycles 100) us
 I suspect the problem is off by one, 201st not 200th. For a dollar of
 US currency, the answer ought to be 292, but the 100th value is 293.
 The 101th value is 292, which ought to be the correct answer. so..hmm.
+
+see here:
+https://www.maa.org/frank-morgans-math-chat-293-ways-to-make-change-for-a-dollar
 --}
