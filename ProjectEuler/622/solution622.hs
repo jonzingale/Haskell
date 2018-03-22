@@ -1,4 +1,5 @@
 module Solution where
+import Data.List
 {--
 A riffle shuffle is executed as follows: a deck of cards is split into two
 equal halves, with the top half taken in the left hand and the bottom half 
@@ -76,3 +77,20 @@ euler622' = f 30
     f n | riffleId (2*n) == 60 = (2*n):f (n+1)
         | otherwise = f (n+1)
 
+-- Provables:
+sixties = f 62
+  where
+    f n | riffleId' n == 60 = n : f (n+2)
+        | otherwise = f (n+2)
+
+riffleId' n = f (riffleOnce [1..n]) [1..n] 1
+  where
+    half as = div (length as) 2
+    takeHalf as = [take (half as) as, drop (half as) as]
+    riffleOnce = concat . transpose . takeHalf
+    f j const k | j == const = k
+                | otherwise = f (riffleOnce j) const (k+1) 
+
+--length 56
+fromTestable = [62,144,176,184,226,288,306,326,370,386,404,428,430,496,526,534,550,672,716,756,794,862,916,976,1002,1086,1156,1210,1282,1288,1322,1396,1436,1526,1576,1600,1656,1846,1892,1926,1964,2014,2016,2136,2146,2266,2276,2380,2476,2502,2584,2666,2746,2822,2926,3004]
+fromSixties  = [62,144,176,184,226,288,306,326,370,386,404,428,430,496,526,534,550,672,716,756,794,862,916,976,1002,1086,1156,1210,1282,1288,1322,1396,1436,1526,1576,1600,1656,1846,1892,1926,1964,2014,2016,2136,2146,2266,2276,2380,2476,2502,2584,2666,2746,2822,2926,3004]
