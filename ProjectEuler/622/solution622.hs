@@ -41,8 +41,8 @@ testable = f 1000000000 258040816598 -- 10^8
 
 simpler = f 2 0
   where
-    f 1000000 acum = []
-    f n acum | dd n && cc n = n :f (n+2) (n+acum)
+    f 258 acum = acum
+    f n acum | dd n && cc n = f (n+2) (n+acum)
              | otherwise = f (n+2) acum
 
     cc = \n-> mod 16 (n-1) /= 1
