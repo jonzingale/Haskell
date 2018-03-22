@@ -1,6 +1,6 @@
 module BestHorse where
-import Math.NumberTheory.Primes.Factorisation
-import Data.Numbers.Primes
+import Math.NumberTheory.Primes.Factorisation -- factorise
+import Data.Numbers.Primes -- primeFactors
 import Text.Printf
 import Data.Set
 
@@ -14,17 +14,17 @@ bestHorse = f 10000000000 2602680992096 -- 10^9
     ff' n = and [mod i (n-1) /= 1 | i <- [1073741824, 1048576, 32768, 4096]] -- [30,20,15,12]
     gg' n = mod 1152921504606846976 (n-1) == 1 -- 2^60
 
-testable :: Integer
-testable = f 4 0 -- == 135411214 -- 10^8
+testable :: Bool
+testable = f 4 0  == 135411214 -- 10^8, 1.03 secs
   where
     f 1000000 acum = acum -- 10^9
     f n acum | gg' n && ff' n = f (n+2) (n+acum)
              | otherwise = f (n+2) acum
 
     ff' n = and [mod i (n-1) /= 1 | i <- [1073741824, 1048576, 32768, 4096]] -- [30,20,15,12]
-    gg' n = (== empty).difference (fromList.primeFactors $ n-1) $ factors
-    factors = fromList [3,5,7,11,13,31,41,61,151,331,1321]
-    -- gg' n = mod 1152921504606846975 (n-1) == 0 -- 2^60-1
+    -- gg' n = any (\d-> gcd (n-1) d == d) [3,5,7,11,13,31,41,61,151,331,1321]
+
+    gg' n = mod 1152921504606846975 (n-1) == 0 -- 2^60-1
 
 
 
@@ -41,5 +41,5 @@ primeFactors 1152921504606846975
 
 
 main = do
-  let format = "Test Match 135411214 == %i\nReal Deal: %i\n"
-  putStr $ printf format testable bestHorse
+  let format = "Test Match 135411214 => %s\nReal Deal: %i\n"
+  putStr $ printf format (show testable) bestHorse
