@@ -1,4 +1,6 @@
 module Primes where
+-- import Math.NumberTheory.Primes.Factorisation -- not used, but useful
+-- import Data.Numbers.Primes  -- not used, but useful
 import System.Random
 import Printables
 import SortsShuffles
