@@ -29,13 +29,5 @@ Finding from Ivan Niven's 'Diophantine Approximations' the theorem of Hurwitz,
 it is clear that any n/d to the left of 3/7 must satisfy 3d−7n=1. 
 Looking at the term before 3/7 in each Farey sequence, I noticed that 
 starting from the 11th Farey sequence each numerator increases by 3 and each 
-denominator by 7, every 7 sequences.  More generally, any Farey number n/d to 
-the left of a/b can be produced inductively by considering b sequences at (x,y) 
-and then incrementing (x+a, y+b).
-
-Of course looking at it now, It would be much simpler for any (n,d)
-to let j=10^6/d and consider j ∗ n − 1.
-
-The better solution then is:
-euler(n,d)=n * div (10^6) d − 1
+denominator by 7, every 7 sequences.
 --}
