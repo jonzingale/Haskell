@@ -34,5 +34,8 @@ the left of a/b can be produced inductively by considering b sequences at (x,y)
 and then incrementing (x+a, y+b).
 
 Of course looking at it now, It would be much simpler for any (n,d)
-to let j=10^6/d and consider j ∗ n − 1. 
+to let j=10^6/d and consider j ∗ n − 1.
+
+The better solution then is:
+euler(n,d)=n * div (10^6) d − 1
 --}
