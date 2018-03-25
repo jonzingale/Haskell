@@ -14,6 +14,12 @@ find the value of the denominator.
 --}
 
 module Solution where
+import qualified Data.Set as S
+
+euler33 = g.f $ [(n,d) | (n,d)<-farey 200, test (n,d)]
+  where
+    f = takeWhile (\(n,d) -> n<100 && d<100)
+    g = (\(ns,ds)-> div (product ds) (product ns)).unzip
 
 listify n = ff n
   where
@@ -25,21 +31,17 @@ numbify ls = ff.reverse $ ls
     ff [] = 0
     ff (n:ns) = n + ff (map (*10) ns)
 
-
--- filterDigit n = filter (== n)
-
--- ary = [(n,d)| n<-[1..10^2],d<-[1..10^2], f n / f d == fi n / fi d]
---   where
---     f = fi.numbify.listify
---     fi = fromInteger
-    -- fil = all (\)
-
--- test :: [[Integer]]
-test = zip (redCond 49) (redCond 98)
-
 farey n = [(a,b)| b<-[1..n], a<-[1..b-1]]
 
-redCond n = map numbify $ reductions <*> lss n
+test :: (Integer, Integer) -> Bool
+test (n,d) = or $ False : [True | (a,c) <- zipped n d, cond n d a c]
   where
-    reductions = (\k-> filter (/= k)) <$> [1..9]
-    lss n = [listify n]
+    fi = fromInteger
+    cond n d a c = fi n / fi d == a / c && fi n /= a
+    zipped n d = (S.toList).(S.fromList).zip (redMask n) $ redMask d
+
+redMask :: Integer -> [Double]
+redMask n = map numbify $ reductions <*> lss n
+  where
+    reductions = (\k-> filter (/= k)) <$> [1.0..9.0]
+    lss n = [map fromInteger $ listify n]
