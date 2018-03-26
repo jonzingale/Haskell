@@ -20,20 +20,28 @@ top to bottom is 23.
 That is, 3 + 7 + 4 + 9 = 23.
 --}
 
-data Tree = L Int | N Int Tree Tree | E deriving (Show, Ord, Eq)
+-- data Tree = L Int | N Int Tree Tree deriving (Show, Ord, Eq)
 
 euler18 = maxTree.buildTree $ pyramid
 
+csvParser file = 
+  let options = defaultDecodeOptions { decDelimiter = 32 } in
+  let parsedCsv = decodeWith options NoHeader file :: Either String (Vector [Int]) in
+  toList.fromRight empty $ parsedCsv
+
 main = do
   csv <- BL.readFile "triangle.csv"
-  let parsedCsv = decodeWith options NoHeader csv :: Either String (Vector [Int])
-  let triangle = toList.fromRight empty $ parsedCsv
-  let maxedTree = buildAndMaxTree triangle
-  -- let maxedTree = maxTree.buildTree $ triangle
+  let maxedTree = buildAndMaxTree.csvParser $ csv
   print maxedTree
 
-options = defaultDecodeOptions { decDelimiter = 32 }
+-- Still eats too much memory
+buildAndMaxTree tower = let ([aj]:paired) = map (zip [0..]) tower in
+  f aj paired
+  where
+    f (j,a) [] = [a]
+    f (j,a) (b:bs) = max (f ((0,a) + b!!j) bs) (f ((0,a) + b!!(j+1)) bs)
 
+---- work on tree traversal to as to throw away subtrees.
 buildTree tree = let ([aj]:paired) = map (zip [0..]) tree in
   f aj paired
   where
@@ -45,15 +53,30 @@ maxTree tree = maximum.f $ tree
     f (L a) = [a]
     f (N a left right) = f left ++ f right 
 
--- Still eats too much memory
-buildAndMaxTree tree = let ([aj]:paired) = map (zip [0..]) tree in
-  maximum $ f aj paired
-  where
-    f (j,a) [] = [a]
-    f (j,a) (b:bs) = (f ((0,a) + b!!j) bs) ++ (f ((0,a) + b!!(j+1)) bs)
-
 instance (Num a, Num b) => Num (a,b) where
   (+) (a,b) (c,d) = (a+c, b+d)
+
+-- zipper :: Zipper
+-- zipper = (buildTree pyramid, [])
+
+data Tree = Empty | L Int | N Int Tree Tree deriving (Show)
+-- data Crumb = LeftCrumb Int Tree | RightCrumb Int Tree deriving (Show)
+
+-- type BreadCrumbs = [Crumb]
+-- type Zipper = (Tree, BreadCrumbs)
+
+-- goLeft :: Zipper -> Zipper
+-- goLeft (N x l r, bs) = (l, LeftCrumb x r:bs)
+
+-- goRight :: Zipper -> Zipper
+-- goRight (N x l r, bs) = (r, RightCrumb x l:bs)
+
+-- goUp :: Zipper -> Zipper
+-- goUp (t, LeftCrumb x r:bs) = (N x t r, bs)
+-- goUp (t, RightCrumb x l:bs) = (N x l t, bs)
+-- goUp (t, []) = (t, [])
+
+
 
 pyramid :: [[Int]]
 pyramid = [[75],
@@ -75,3 +98,16 @@ pyramid = [[75],
 -- solution by mvz
 count [xs] = xs
 count (xs:xss) = let cs = count xss in zipWith (+) xs (zipWith max (init cs) (tail cs))
+
+-- Thinning Method
+thin tree = let minnie = minimum.(filter (/= 0)).concat $ tree in
+  map (map (subtr minnie)) tree
+  where
+    subtr n t | t == 0 = 0
+              | otherwise = div t 2
+
+thinning n = do
+  let bark = (!!n).iterate thin $ pyramid
+
+  (putStr.unlines.map show) bark
+  -- putStrLn.(map show) $ bark
