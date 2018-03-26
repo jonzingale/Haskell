@@ -1,13 +1,12 @@
 
 {-# OPTIONS_GHC -Wno-missing-methods #-}
 
-module Solution where
+-- module Solution where
 import qualified Data.ByteString.Lazy as BL
 import Data.Vector (Vector, empty, toList)
 import Data.Either.Extra (fromRight)
 import Data.List
 import Data.Csv
-
 {--
 By starting at the top of the triangle below and moving to
 adjacent numbers on the row below, the maximum total from
@@ -25,16 +24,15 @@ data Tree = L Int | N Int Tree Tree | E deriving (Show, Ord, Eq)
 
 euler18 = maxTree.buildTree $ pyramid
 
-euler67 = do
+main = do
   csv <- BL.readFile "triangle.csv"
   let parsedCsv = decodeWith options NoHeader csv :: Either String (Vector [Int])
   let triangle = toList.fromRight empty $ parsedCsv
-  let maxedTree = maxTree.buildTree $ triangle
+  let maxedTree = buildAndMaxTree triangle
+  -- let maxedTree = maxTree.buildTree $ triangle
   print maxedTree
 
-options = defaultDecodeOptions {
-      decDelimiter = fromIntegral (ord ' ')
-    }
+options = defaultDecodeOptions { decDelimiter = 32 }
 
 buildTree tree = let ([aj]:paired) = map (zip [0..]) tree in
   f aj paired
@@ -46,6 +44,13 @@ maxTree tree = maximum.f $ tree
   where
     f (L a) = [a]
     f (N a left right) = f left ++ f right 
+
+-- Still eats too much memory
+buildAndMaxTree tree = let ([aj]:paired) = map (zip [0..]) tree in
+  maximum $ f aj paired
+  where
+    f (j,a) [] = [a]
+    f (j,a) (b:bs) = (f ((0,a) + b!!j) bs) ++ (f ((0,a) + b!!(j+1)) bs)
 
 instance (Num a, Num b) => Num (a,b) where
   (+) (a,b) (c,d) = (a+c, b+d)
