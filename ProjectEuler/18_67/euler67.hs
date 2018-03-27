@@ -16,10 +16,6 @@ top to bottom is 23.
 8 5 9 3
 
 That is, 3 + 7 + 4 + 9 = 23.
-
-k(15) => 0.04 secs
-k(20) => 0.95 secs
-k(25) => 32.13 secs
 --}
 type EitherInt = Either String (Vector [Int])
 data Tree = Empty | L Int | N Int Tree Tree
@@ -29,16 +25,24 @@ instance (Num a, Num b) => Num (a,b) where
 
 main = do
   csv <- BL.readFile "triangle.csv"
-  let maxedTree = buildAndMaxTree.csvParser $ csv
+  let maxedTree = euler67.csvParser $ csv
   print maxedTree
 
-csvParser file = -- <--- regulated for further testing.
+csvParser file =
   let options = defaultDecodeOptions { decDelimiter = 32 } in
   let parsedCsv = decodeWith options NoHeader file :: EitherInt in
-  take 20 $ toList.fromRight empty $ parsedCsv
+  reverse $ toList.fromRight empty $ parsedCsv
 
-buildAndMaxTree tower = let ([aj]:paired) = map (zip [0..]) tower in
-  f aj paired
-  where
-    f (j,a) [] = [a]
-    f (j,a) (b:bs) = max (f ((0,a) + b!!j) bs) (f ((0,a) + b!!(j+1)) bs)
+euler67 [as] = head as
+euler67 (as:bs:css) =
+  let ff = as + bs in
+  let gg = tail $ as + (0:bs) in
+  euler67 ([max c1 c2 | (c1, c2)<- zip ff gg]:css)
+
+instance Num a => Num [a] where
+  fromInteger n = [fromInteger n]
+  (x:xs) + (y:ys) = (x + y) : (xs + ys)
+  xs + [] = 0
+  [] + ys = 0
+  (x:xs) * (y:ys) = (x*y) : ([x] * ys + xs * (y:ys))
+  _ * _ = []

@@ -20,8 +20,6 @@ top to bottom is 23.
 That is, 3 + 7 + 4 + 9 = 23.
 --}
 
--- data Tree = L Int | N Int Tree Tree deriving (Show, Ord, Eq)
-
 euler18 = maxTree.buildTree $ pyramid
 
 csvParser file = 
@@ -56,27 +54,7 @@ maxTree tree = maximum.f $ tree
 instance (Num a, Num b) => Num (a,b) where
   (+) (a,b) (c,d) = (a+c, b+d)
 
--- zipper :: Zipper
--- zipper = (buildTree pyramid, [])
-
 data Tree = Empty | L Int | N Int Tree Tree deriving (Show)
--- data Crumb = LeftCrumb Int Tree | RightCrumb Int Tree deriving (Show)
-
--- type BreadCrumbs = [Crumb]
--- type Zipper = (Tree, BreadCrumbs)
-
--- goLeft :: Zipper -> Zipper
--- goLeft (N x l r, bs) = (l, LeftCrumb x r:bs)
-
--- goRight :: Zipper -> Zipper
--- goRight (N x l r, bs) = (r, RightCrumb x l:bs)
-
--- goUp :: Zipper -> Zipper
--- goUp (t, LeftCrumb x r:bs) = (N x t r, bs)
--- goUp (t, RightCrumb x l:bs) = (N x l t, bs)
--- goUp (t, []) = (t, [])
-
-
 
 pyramid :: [[Int]]
 pyramid = [[75],
@@ -98,16 +76,3 @@ pyramid = [[75],
 -- solution by mvz
 count [xs] = xs
 count (xs:xss) = let cs = count xss in zipWith (+) xs (zipWith max (init cs) (tail cs))
-
--- Thinning Method
-thin tree = let minnie = minimum.(filter (/= 0)).concat $ tree in
-  map (map (subtr minnie)) tree
-  where
-    subtr n t | t == 0 = 0
-              | otherwise = div t 2
-
-thinning n = do
-  let bark = (!!n).iterate thin $ pyramid
-
-  (putStr.unlines.map show) bark
-  -- putStrLn.(map show) $ bark
