@@ -21,10 +21,10 @@ rule n ls | n == 0 = True
     blink n ls = case neighborhood n ls of
       [False,False,False] -> False
       [False,True,False] -> False
-      [False,True,True] -> True
       [True,True,True] -> False
       [True,False,True] -> False
 
+      [False,True,True] -> True
       [True,False,False] -> True
       [True,True,False] -> True
       [False,False,True] -> True
