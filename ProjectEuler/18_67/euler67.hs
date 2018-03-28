@@ -3,8 +3,15 @@
 import qualified Data.ByteString.Lazy as BL
 import Data.Vector (Vector, empty, toList)
 import Data.Either.Extra (fromRight)
-import Data.List
 import Data.Csv
+
+type EitherInt = Either String (Vector [Int])
+
+csvParser file =
+  let options = defaultDecodeOptions { decDelimiter = 32 } in
+  let parsedCsv = decodeWith options NoHeader file :: EitherInt in
+  toList.fromRight empty $ parsedCsv
+
 {--
 By starting at the top of the triangle below and moving to
 adjacent numbers on the row below, the maximum total from
@@ -17,21 +24,11 @@ top to bottom is 23.
 
 That is, 3 + 7 + 4 + 9 = 23.
 --}
-type EitherInt = Either String (Vector [Int])
-data Tree = Empty | L Int | N Int Tree Tree
-
-instance (Num a, Num b) => Num (a,b) where
-  (+) (a,b) (c,d) = (a+c, b+d)
 
 main = do
   csv <- BL.readFile "triangle.csv"
-  let maxedTree = euler67.csvParser $ csv
+  let maxedTree = euler67.reverse.csvParser $ csv
   print maxedTree
-
-csvParser file =
-  let options = defaultDecodeOptions { decDelimiter = 32 } in
-  let parsedCsv = decodeWith options NoHeader file :: EitherInt in
-  reverse $ toList.fromRight empty $ parsedCsv
 
 euler67 [as] = head as
 euler67 (as:bs:css) =
@@ -44,5 +41,3 @@ instance Num a => Num [a] where
   (x:xs) + (y:ys) = (x + y) : (xs + ys)
   xs + [] = 0
   [] + ys = 0
-  (x:xs) * (y:ys) = (x*y) : ([x] * ys + xs * (y:ys))
-  _ * _ = []
