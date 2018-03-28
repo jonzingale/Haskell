@@ -2,6 +2,12 @@ import Data.Numbers.Primes -- primeFactors
 import Data.Bits
 
 main = do print euler622
+{--
+compiled:
+real  0m0.052s
+user  0m0.036s
+sys   0m0.010s
+--}
 
 euler622 :: Integer -- 3010983666182123972
 euler622 = sum.remSort $ map ((+ 1).eval) goodBits
