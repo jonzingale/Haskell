@@ -1,3 +1,4 @@
+
 {-# OPTIONS_GHC -Wno-missing-methods #-}
 
 module Solution where
@@ -12,6 +13,9 @@ It is possible to make £2 in the following way:
 1×£1 + 1×50p + 2×20p + 1×5p + 1×2p + 3×1p
 How many different ways can £2 be made using any number of coins?
 --}
+
+euler31 = genSol uk 200
+usCur31 = genSol us 100
 
 instance Num a => Num [a] where
   fromInteger n = [fromInteger n]
@@ -28,14 +32,13 @@ us, uk :: [Int]
 us = [1,5,10,25,50,100]
 uk = [1,2,5,10,20,50,100,200]
 
-zeros :: Int -> [Int]
-zeros n = (++ [1]).take (n-1) $ repeat 0
+cycles bound n = [ f k n | k <- [0..bound]]
+  where
+    f j m | mod j m == 0 = 1
+          | otherwise = 0
 
-cycles bound n =  1 : (take bound $ cycle.zeros $ n)
-
-euler31 = (!!200).foldr (*) 1 $ map (cycles 200) uk
-us31 = (!!100).foldr (*) 1 $ map (cycles 100) us
-us31Correct = (!!101).foldr (*) 1 $ map (cycles 100) us
+genSol c n = (!!n).product $ map (cycles n) c
+us31Correct = (!!101).product $ map (cycles 100) us
 
 {-- 
 I suspect the problem is off by one, 201st not 200th. For a dollar of
