@@ -12,7 +12,8 @@ Actually, order by length is the way to go.
 * calcuate lengths
 * order by lengths
 --}
--- rewrite as Integers, ACCURACY!
+-- rewrite as Integers for accuracy, also no way to distinguish
+-- when two values are the same.
 xs (n,d) = zip [ norm.xcept n k $ d | k <- [1..40]] $ repeat "x"
   where
     fi = fromInteger
