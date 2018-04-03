@@ -34,23 +34,12 @@ main = do
   (putStr.unlines.map show) them 
 
 -----------
+{--
+Rythmic technique.
+Sarah points out that one only needs compute to
+the half-way point and then mirror.
+--}
 
-ex1419 = "xYxYxxYxYxYxxYxYxYxxYxYxYxxY"
-ex1419' = [((0,14),(1,5)),((1,9),(2,10)),
-           ((2,4),(4,1)),((2,18),(5,6))]
-
-ff (n,d) = f (n,d) (n*d) 2 2
-  where
-    f (x,y) k i j | mod x k < mod y k = 'x' : f (mod (i*x) k, y) k (i+1) j
-                  | otherwise = 'Y' : f (x, mod (j*y) k) k i (j+1)
-
-maxMin (n,d) =
-  let xs = [mod (14*k) (19*14) | k<-[1..10]] in
-  let ys = [mod (19*k) (14*19) | k<-[1..10]] in
-  let zs = zip xs ys in
-  zs
-
--- 3s and 5s
 rabbits (n,d) = '.' : f n d 1 1
   where
     f n d i j | n*i < d*j = 'x' : f n d (i+1) j
