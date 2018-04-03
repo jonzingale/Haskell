@@ -36,7 +36,8 @@ main = do
 -----------
 
 ex1419 = "xYxYxxYxYxYxxYxYxYxxYxYxYxxY"
-ex1419' = [((0,14),(1,5)),((1,9),(2,10)),((2,4),(4,1)),((2,18),(5,6))]
+ex1419' = [((0,14),(1,5)),((1,9),(2,10)),
+           ((2,4),(4,1)),((2,18),(5,6))]
 
 ff (n,d) = f (n,d) (n*d) 2 2
   where
@@ -48,7 +49,18 @@ maxMin (n,d) =
   let ys = [mod (19*k) (14*19) | k<-[1..10]] in
   let zs = zip xs ys in
   zs
-  -- foldr (++) "" $ map f zs
-  -- where
-    -- f (x,y) | x >= y = "x"
-            -- | otherwise = "Y" 
+
+-- 3s and 5s
+rabbits (n,d) = '.' : f n d 1 1
+  where
+    f n d i j | n*i < d*j = 'x' : f n d (i+1) j
+              | n*i > d*j = 'Y' : f n d i (j+1)
+              | otherwise = '.' : f n d (i+1) (j+1)
+
+
+
+
+
+
+
+
