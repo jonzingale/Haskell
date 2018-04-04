@@ -1,8 +1,6 @@
 module Attenuation where
 import System.Random
 import Data.Array
-
-
 {--
 TODO:
 Make a 1000 cubic-cell mesh and calculate the path sums through
@@ -34,7 +32,26 @@ rabbits (n,d) = f n d 0 0
               | n*i > d*j = 'r' : f n d i (j+1)
               | otherwise = '.' : f n d 1 1
 
--- find the ray length through a cell.
+-- Find the ray length through a cell.
+type Point = (Double, Double)
+type Slope = (Double, Double)
+type Angle = Double
+
+testRL  = rayLength  (5/14, 0) $ toAngleRad (14,19)
+testRL' = rayLength' (5/14, 0) (14,19)
 root2 = 1/cos (pi/4)
 
-rayLength (n,d) = atan (n,d) * 180 / pi
+toAngleDeg, toAngleRad :: Slope -> Angle
+toAngleDeg (n,d) = atan (n/d) * 180 / pi
+toAngleRad (n,d) = atan (n/d)
+
+rayLength :: Point -> Angle -> Double -- needs negative angle cases.
+rayLength (x, y) theta | abs theta <= (pi/4) = (1-x)/(cos theta)
+                       | otherwise = (1-x)/(sin theta)
+
+rayLength' :: Point -> Slope -> Double
+rayLength' (x, y) = rayLength (x,y).toAngleRad 
+
+
+
+
