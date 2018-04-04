@@ -42,8 +42,9 @@ testRL' = rayLength' (5/14, 0) (14,19)
 root2 = 1/cos (pi/4)
 
 toAngleDeg, toAngleRad :: Slope -> Angle
-toAngleDeg (n,d) = atan (n/d) * 180 / pi
-toAngleRad (n,d) = atan (n/d)
+toAngleDeg (n,d) = toAngleRad (n,d) * 180 / pi
+toAngleRad (n,d) | d==0 = 0
+                 | otherwise = atan (n/d)
 
 rayLength :: Point -> Angle -> Double -- needs negative angle cases.
 rayLength (x, y) theta | abs theta <= (pi/4) = (1-x)/(cos theta)
