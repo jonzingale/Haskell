@@ -1,4 +1,5 @@
 
+-- http://hackage.haskell.org/package/HTF-0.13.2.4/docs/Test-Framework-Tutorial.html
 {-# OPTIONS_GHC -F -pgmF htfpp #-}
 
 module AttenuationTest where
