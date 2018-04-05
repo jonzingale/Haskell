@@ -9,13 +9,28 @@ import RayTracer.Rhythm
 import Test.Framework
 
 --- Attenuation Tests.
+
 -- rayLength
-test_rayLengths_equality :: IO ()
-test_rayLengths_equality = do 
-  let (point, slope) = ((5/14, 0), (14,19))
-  let testRL  = rayLength  point (toAngleRad slope)
-  let testRL' = rayLength' point slope
-  assertEqual testRL testRL'
+test_ExpectedValues :: IO ()
+test_ExpectedValues = do
+    let smxsmθ = ((3/4, 0), pi/6)
+    let smxlgθ = ((1/3, 0), pi/3)
+    let smxOneθ = ((1/4, 0), pi/2)
+    let smalls = [smxlgθ, smxsmθ, smxOneθ]
+    let vals = map (uncurry rayLength) smalls
+    assertEqual vals vals
+
+test_diagonalSymmetry :: IO () -- rewrite as prop test
+test_diagonalSymmetry = do
+  let over45  = rayLength (0,0) (pi*3/8)
+  let under45 = rayLength (0,0) (pi*5/8)
+  assertEqual over45 under45
+
+test_offDiagonalSymmetry :: IO () -- rewrite as prop test
+test_offDiagonalSymmetry = do
+  let over45  = rayLength (2/3,0) (pi*3/8)
+  let under45 = rayLength (0,2/3) (pi*3/8)
+  assertEqual over45 under45
 
 -- toAngleDeg
 prop_radiansToDeg :: Slope -> Bool
