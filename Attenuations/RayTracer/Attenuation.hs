@@ -1,4 +1,4 @@
-module Attenuation where
+module RayTracer.Attenuation where
 import System.Random
 import Data.Array
 {--
