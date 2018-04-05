@@ -1,5 +1,7 @@
 module Main where
-import RayTracer.Attenuation
+import RayTracer.RayLength
+import RayTracer.Lattice
+import RayTracer.Rhythm
 
 -- At some point create individual Test directory
 -- and run tests through here somehow.

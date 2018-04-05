@@ -2,7 +2,9 @@
 {-# OPTIONS_GHC -F -pgmF htfpp #-}
 
 module AttenuationTest where
-import RayTracer.Attenuation
+import RayTracer.RayLength
+import RayTracer.Lattice
+import RayTracer.Rhythm
 import Test.Framework
 
 --- Attenuation Tests.
