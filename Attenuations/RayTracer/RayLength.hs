@@ -19,8 +19,8 @@ root2 = 1/cos (pi/4)
 
 toAngleDeg, toAngleRad :: Slope -> Angle
 toAngleDeg (n,d) = toAngleRad (n,d) * 180 / pi
-toAngleRad (n,d) | d==0 = 0
-                 | otherwise = atan (n/d)
+toAngleRad (n,0) = 0
+toAngleRad (n,d) = atan (n/d)
 
 rayLength :: Point -> Angle -> Double
 rayLength (x,0) theta | (abs theta) > pi/4 = abs (1/sin theta)
