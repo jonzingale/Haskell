@@ -1,3 +1,6 @@
+
+-- https://hackage.haskell.org/package/array-0.5.2.0/docs/Data-Array.html
+
 module RayTracer.Lattice where
 import RayTracer.Rhythm
 import System.Random
