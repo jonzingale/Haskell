@@ -1,4 +1,4 @@
-module RayTracer where
+module RayTracer.RayTracer where
 import System.Random
 import Data.List
 
