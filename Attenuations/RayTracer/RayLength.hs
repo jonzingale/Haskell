@@ -1,8 +1,15 @@
 module RayTracer.RayLength where
 import System.Random
 
--- Find the ray length through a cell.
-type Point = (Double, Double)
+{--
+TODO:
+Find the ray length through a cell.
+
+cases: (as I think of them)
+  * should any angle be valid?
+--}
+
+type Point = (Double, Double) -- valid between 0 and 1
 type Slope = (Double, Double)
 type Angle = Double
 
@@ -15,13 +22,11 @@ toAngleDeg (n,d) = toAngleRad (n,d) * 180 / pi
 toAngleRad (n,d) | d==0 = 0
                  | otherwise = atan (n/d)
 
-rayLength :: Point -> Angle -> Double -- needs negative angle cases.
-rayLength (x, y) theta | abs theta <= (pi/4) = (1-x)/(cos theta)
-                       | otherwise = (1-x)/(sin theta)
+rayLength :: Point -> Angle -> Double
+rayLength (x,0) theta | (abs theta) > pi/4 = abs (1/sin theta)
+                      | otherwise = abs ((1-x)/cos theta)
+rayLength (0,y) theta = rayLength (y,0) theta
 
 rayLength' :: Point -> Slope -> Double
 rayLength' (x, y) = rayLength (x,y).toAngleRad 
-
-
-
 
