@@ -48,17 +48,17 @@ prop_edBoundary = -- epsilon - delta boundary
 
 -- reflection tests
 prop_alphaIsReflectedEpsilon = do
-  let abCond t = pi/4 + pi*t/4
+  let abThresh t = pi/4 + pi*t/4
   x <- choose (0, 1)
-  theta <- choose (0, abCond x)
+  theta <- choose (0, abThresh x)
   let tolAlpha = tol.alpha (x,0) $ theta
   let tolEpsil = tol.epsilon (1-x,0) $ pi - theta
   return $ tolAlpha == tolEpsil
 
 prop_betaIsReflectedDelta = do
-  let abCond t = pi/4 + pi*t/4
+  let abThresh t = pi/4 + pi*t/4
   x <- choose (0, 1)
-  theta <- choose (abCond x, pi/2)
+  theta <- choose (abThresh x, pi/2)
   let tolBeta = tol.beta (x,0) $ theta
   let tolDelt = tol.delta (1-x,0) $ pi - theta
   return $ tolBeta == tolDelt
