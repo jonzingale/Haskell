@@ -45,9 +45,8 @@ Cases:
 type RayLength = Point -> Angle -> Double
 
 eta (x,0) pi = 1
-epsilon (x,0) theta = -x / cos theta
+epsilon (x,0) theta = negate x / cos theta
 delta (x,0) theta = 1 / sin theta
-
 gamma (x,0) theta | theta == (pi/2) = 1
                   | otherwise = 0
 beta  (x,0) theta = 1 / sin theta
