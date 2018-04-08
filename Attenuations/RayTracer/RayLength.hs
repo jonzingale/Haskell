@@ -41,21 +41,21 @@ Cases:
 --}
 type RayLength = Point -> Angle -> Double
 
-eta (x,0) theta | theta == pi || theta == 0 = 1
-                | otherwise = 0 -- hopefully never this case.
+delta (x,0) theta = 1 / sin theta
+beta  (x,0) theta = 1 / sin theta
 
 epsilon (x,0) theta | theta == 0 || theta == pi = 1
                     | otherwise = negate x / cos theta
 
-delta (x,0) theta = 1 / sin theta
+alpha (x,0) theta | theta == 0 || theta == pi = 1
+                  | otherwise = (1-x) / cos theta
+
+-- neither of these are necessary.
+eta (x,0) theta | theta == pi || theta == 0 = 1
+                | otherwise = 0
 
 gamma (x,0) theta | theta == (pi/2) = 1
                   | otherwise = 0
-
-beta  (x,0) theta = 1 / sin theta
-
-alpha (x,0) theta | theta == 0 || theta == pi = 1
-                  | otherwise = (1-x) / cos theta
 
 {--
 Conditions:
