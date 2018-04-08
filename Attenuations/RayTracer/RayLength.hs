@@ -33,9 +33,6 @@ rayLength (x,0) theta | (abs theta) > pi/4 = abs (1/sin theta)
                       | otherwise = abs ((1-x)/cos theta)
 rayLength (0,y) theta = rayLength (y,0) theta
 
--- rayLength :: Point -> Angle -> Double
--- rayLength (x,0) theta = case (abs theta) of
---   pi/2 -> 1
 {--
 Cases:
 
@@ -44,8 +41,8 @@ Cases:
 --}
 type RayLength = Point -> Angle -> Double
 
-eta (x,0) pi = 1
-eta (x,0) 0  = 1
+eta (x,0) theta | theta == pi || theta == 0 = 1
+                | otherwise = 0 -- hopefully never this case.
 
 epsilon (x,0) theta | theta == 0 || theta == pi = 1
                     | otherwise = negate x / cos theta
@@ -66,21 +63,29 @@ Conditions:
 --}
 
 -- ε-δ transition
-qTill = pi*3/4
-qPast = pi/4
-
 edCondition :: RayLength
-edCondition (x, 0) theta | (pi/2 + x*pi/4) > theta = delta (x, 0) theta
+edCondition (x, 0) theta | cond x theta = delta (x, 0) theta
                          | otherwise = epsilon (x, 0) theta
+  where
+    cond x t = (pi/2 + x*pi/4) > t
+
+-- α-β transition
+abCondition :: RayLength
+abCondition (x, 0) theta | cond x theta = beta (x, 0) theta
+                         | otherwise = alpha (x, 0) theta
+  where
+    cond x t = (pi/4 + x*pi/4) > t
 
 
+{--
+Cases:
 
+πμρκ
+|//_ι
+--}
 
+rot270 :: (Point, Angle) -> (Point, Angle) 
+rot270 ((x,y), theta) = ((y, 1-x), theta - pi/2)
 
-
-
-
-
-
-
-
+rot90 :: (Point, Angle) -> (Point, Angle)
+rot90 ((x,y), theta) = ((1-y, x), theta + pi/2)
