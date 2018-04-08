@@ -62,6 +62,11 @@ Conditions:
 
 --}
 
+xregion :: RayLength
+xregion cs th | th < pi / 2 = abCondition cs th
+              | th < pi = edCondition cs th
+              | otherwise = 999
+
 -- ε-δ transition
 edCondition :: RayLength
 edCondition (x, 0) theta | cond x theta = delta (x, 0) theta
@@ -71,8 +76,8 @@ edCondition (x, 0) theta | cond x theta = delta (x, 0) theta
 
 -- α-β transition
 abCondition :: RayLength
-abCondition (x, 0) theta | cond x theta = beta (x, 0) theta
-                         | otherwise = alpha (x, 0) theta
+abCondition (x, 0) theta | cond x theta = alpha (x, 0) theta
+                         | otherwise = beta (x, 0) theta
   where
     cond x t = (pi/4 + x*pi/4) > t
 
