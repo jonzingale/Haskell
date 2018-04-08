@@ -10,7 +10,10 @@ import RayTracer.Rhythm
 import Test.Framework
 {--
 TODO:
-
+* simplify x types
+* find general prop testing
+* rotation mapping x - y
+* simplify y types
 --}
 
 --- Attenuation Tests.
