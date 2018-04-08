@@ -34,9 +34,10 @@ prop_rotInv = do
   x <- choose (0,1)
   y <- choose (0,1)
   t <- choose (0,2*pi)
+  let coords = ((x,y), t)
   let mtol ((x,y), t) = ((tol x, tol y), tol t)
-  let rotTol = (mtol.rot90.rot270) ((x, y),t)
-  return $ rotTol == mtol ((x,y), t)
+  let rotTol = mtol.rot90.rot270
+  return $ rotTol coords == mtol coords
 
 {--
 x - Boundary Tests
