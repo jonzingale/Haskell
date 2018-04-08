@@ -33,7 +33,7 @@ eta' (x,0) 0  = 1
 tol :: Double -> Integer
 tol d = round $ d * 10^12
 
--- boundary tests
+-- x - boundary tests
 prop_nean = do -- don't need eta.
   x <- choose (0::Double, 1)
   let regions = [alpha, eta, epsilon]
@@ -58,7 +58,7 @@ prop_abBoundary = -- alpha - beta boundary
   let eqF x = (tol.sqrt) 2 == tol x in
   all eqF $ regions <*> [params]
 
--- reflection tests
+-- x - reflection tests
 prop_alphaIsReflectedEpsilon = do
   let abThresh t = pi/4 + pi*t/4
   x <- choose (0, 1)
