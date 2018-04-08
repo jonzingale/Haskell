@@ -5,6 +5,16 @@ module Tests.SymmetryTests where
 import RayTracer.RayLength
 import Test.Framework
 
+{--
+Truly generalized algebraic testing.
+
+import Text.Show.Functions
+
+prop_ComposeAssoc f g h x =
+  ((f . g) . h) x == (f . (g . h)) x
+  where types = [f, g, h] :: [Int->Int]
+--}
+
 --tolerance 12 decimal places
 --better would be an epsilon ball
 tol :: Double -> Integer
