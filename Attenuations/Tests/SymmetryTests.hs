@@ -25,6 +25,15 @@ prop_rot90 = do
   x <- choose (0, pi)
   return $ (tol.cos) (pi/2 - x) == (tol.sin) x
 
+prop_rot4Id x y t =
+  let coords = ((x, y),t) in
+  let rotFour = foldr (.) id [rot90 | x<-[1..4]] in
+  (mtol.divPi.rotFour) coords == mtol coords
+  where
+    divPi ((x, y),theta) = ((x, y), theta - (2*pi))
+    mtol ((x,y), t) = ((ttol x, ttol y), ttol t)
+    ttol d = round $ d * 10^9 -- not very good accuracy.
+
 prop_rotInv' x y t = let coords = ((x, y),t) in
   (mtol.rot90.rot270) coords == mtol coords
   where
