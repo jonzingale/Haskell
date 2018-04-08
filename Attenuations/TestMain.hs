@@ -8,29 +8,44 @@ import RayTracer.Lattice
 import RayTracer.Rhythm
 import Test.Framework
 
+{--
+TODO:
+Specify ranges of validity for prop tests.
+--}
+
 --- Attenuation Tests.
+{--
+ εδ γ βα
+η_\\|//_η
 
--- rayLength
-test_ExpectedValues :: IO ()
-test_ExpectedValues = do
-    let smxsmθ = ((3/4, 0), pi/6)
-    let smxlgθ = ((1/3, 0), pi/3)
-    let smxOneθ = ((1/4, 0), pi/2)
-    let smalls = [smxlgθ, smxsmθ, smxOneθ]
-    let vals = map (uncurry rayLength) smalls
-    assertEqual vals vals
+eta (x,0) pi = 1
+epsilon (x,0) theta = -x / cos theta
+delta (x,0) theta = 1 / cos theta
+gamma (x,0) (pi/2) = 1 
+beta  (x,0) theta = 1 / sin theta
+alpha (x,0) theta = (1-x) / cos theta
+eta' (x,0) 0  = 1
+--}
 
-test_diagonalSymmetry :: IO () -- rewrite as prop test
-test_diagonalSymmetry = do
-  let over45  = rayLength (0,0) (pi*3/8)
-  let under45 = rayLength (0,0) (pi*5/8)
-  assertEqual over45 under45
+--tolerance 12 decimal places
+tol d = round $ d * 10^12
 
-test_offDiagonalSymmetry :: IO () -- rewrite as prop test
-test_offDiagonalSymmetry = do
-  let over45  = rayLength (2/3,0) (pi*3/8)
-  let under45 = rayLength (0,2/3) (pi*3/8)
-  assertEqual over45 under45
+-- (x,0) region testing
+prop_bgd = do -- beta - gamma - delta == pi/2
+  x <- choose (0::Double,1)
+  return $ (==) [1,1,1] $ [beta, gamma, delta] <*> [(x,0)] <*> [pi/2]
+
+prop_ed = -- epsilon - delta == root2 at 3*pi/4 (1,0)
+  let eps = tol.epsilon (1,0) $ 3*pi/4 in
+  let del = tol.delta (1,0) $ 3*pi/4 in
+  tol root2 == eps && eps == del
+
+-- alpha is reflected epsilon
+prop_alphaIsReflectedEpsilon = do
+  let thetaCond t = pi/4 + pi*t/4
+  x <- choose (0::Double, 1)
+  theta <- choose (0::Double, thetaCond x)
+  return $ (tol.alpha (x,0) $ theta) == (tol.epsilon (1-x, 0) $ pi-theta)
 
 -- toAngleDeg
 prop_radiansToDeg :: Slope -> Bool
@@ -40,8 +55,7 @@ prop_radiansToDeg (n,d) = toAngleDeg (n,d) == toAngleRad (n,d) * 180 / pi
 test_rabbits :: IO ()
 test_rabbits = do
   let rhythm = take 15 $ rabbits (5,3)
-  let rhythmData = ".rLrrLr.rLrrLr."
-  assertEqual rhythm rhythmData
+  assertEqual rhythm ".rLrrLr.rLrrLr."
 
 
 

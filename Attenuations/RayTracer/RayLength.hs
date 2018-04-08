@@ -9,6 +9,9 @@ cases: (as I think of them)
   * should any angle be valid?
 --}
 
+points = [(1/4,0), (3/4,0)]
+angles = [3*pi/4, 3*pi/8]
+
 type Point = (Double, Double) -- valid between 0 and 1
 type Slope = (Double, Double)
 type Angle = Double
@@ -22,11 +25,56 @@ toAngleDeg (n,d) = toAngleRad (n,d) * 180 / pi
 toAngleRad (n,0) = 0
 toAngleRad (n,d) = atan (n/d)
 
+rayLength' :: Point -> Slope -> Double
+rayLength' (x, y) = rayLength (x,y).toAngleRad 
+
 rayLength :: Point -> Angle -> Double
 rayLength (x,0) theta | (abs theta) > pi/4 = abs (1/sin theta)
                       | otherwise = abs ((1-x)/cos theta)
 rayLength (0,y) theta = rayLength (y,0) theta
 
-rayLength' :: Point -> Slope -> Double
-rayLength' (x, y) = rayLength (x,y).toAngleRad 
+-- rayLength :: Point -> Angle -> Double
+-- rayLength (x,0) theta = case (abs theta) of
+--   pi/2 -> 1
+{--
+Cases:
+
+ εδ γ βα
+η_\\|//_η
+--}
+type RayLength = Point -> Angle -> Double
+
+eta (x,0) pi = 1
+epsilon (x,0) theta = -x / cos theta
+delta (x,0) theta = 1 / sin theta
+
+gamma (x,0) theta | theta == (pi/2) = 1
+                  | otherwise = 0
+beta  (x,0) theta = 1 / sin theta
+alpha (x,0) theta = (1-x) / cos theta
+eta' (x,0) 0  = 1
+
+{--
+Conditions:
+
+--}
+
+-- ε-δ transition
+qTill = pi*3/4
+qPast = pi/4
+
+edCondition :: RayLength
+edCondition (x, 0) theta | (pi/2 + x*pi/4) > theta = delta (x, 0) theta
+                         | otherwise = epsilon (x, 0) theta
+
+
+
+
+
+
+
+
+
+
+
 
