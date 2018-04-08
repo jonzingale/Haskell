@@ -63,9 +63,9 @@ Conditions:
 --}
 
 xregion :: RayLength
-xregion cs th | th < pi / 2 = abCondition cs th
-              | th < pi = edCondition cs th
-              | otherwise = 999
+xregion cs theta | theta <= pi / 2 = abCondition cs theta
+                 | theta <= pi = edCondition cs theta
+                 | otherwise = 999 -- a bad value
 
 -- ε-δ transition
 edCondition :: RayLength

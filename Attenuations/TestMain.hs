@@ -19,6 +19,7 @@ TODO:
 --- Attenuation Tests.
 
 --tolerance 12 decimal places
+--better would be an epsilon ball
 tol :: Double -> Integer
 tol d = round $ d * 10^12
 
