@@ -34,6 +34,12 @@ tol :: Double -> Integer
 tol d = round $ d * 10^12
 
 -- boundary tests
+prop_nean = do -- don't need eta.
+  x <- choose (0::Double, 1)
+  let regions = [alpha, eta, epsilon]
+  let flat = regions <*> [(x,0)] <*> [pi]
+  return $ [1,1,1] == flat
+
 prop_bgd = do -- don't need gamma.
   x <- choose (0::Double, 1)
   let regions = [beta, gamma, delta]
@@ -43,6 +49,12 @@ prop_bgd = do -- don't need gamma.
 prop_edBoundary = -- epsilon - delta boundary
   let params = (,) (1,0) (3*pi/4) in
   let regions = uncurry <$> [epsilon, delta] in
+  let eqF x = (tol.sqrt) 2 == tol x in
+  all eqF $ regions <*> [params]
+
+prop_abBoundary = -- alpha - beta boundary
+  let params = (,) (0,0) (pi/4) in
+  let regions = uncurry <$> [alpha, beta] in
   let eqF x = (tol.sqrt) 2 == tol x in
   all eqF $ regions <*> [params]
 
