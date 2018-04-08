@@ -22,7 +22,7 @@ TODO:
 tol :: Double -> Integer
 tol d = round $ d * 10^12
 
--- trig tests
+-- Rotation Tests
 prop_rot90 = do
   x <- choose (0, pi)
   return $ (tol.cos) (pi/2 - x) == (tol.sin) x
