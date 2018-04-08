@@ -6,11 +6,6 @@ import RayTracer.RayLength
 import RayTracer.Rhythm
 import Test.Framework
 
--- toAngleDeg
-prop_radiansToDeg :: Slope -> Bool
-prop_radiansToDeg (n,d) =
-  toAngleDeg (n,d) == toAngleRad (n,d) * 180 / pi
-
 --- Index Generator Tests.
 test_rabbits :: IO ()
 test_rabbits = do
