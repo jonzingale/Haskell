@@ -27,8 +27,11 @@ prop_rot90 = do
   x <- choose (0, pi)
   return $ (tol.cos) (pi/2 - x) == (tol.sin) x
 
--- prop_rotInv :: Double -> Angle -> Bool -- see AssocComp example
--- prop_rotInv y t = (rot90.rot270) ((0, y),t) == ((0,y),t)
+
+prop_rotInv' x y t = let coords = ((x, y),t) in
+  (mtol.rot90.rot270) coords == mtol coords
+  where
+    mtol ((x,y), t) = ((tol x, tol y), tol t)
 
 prop_rotInv = do
   x <- choose (0,1)
