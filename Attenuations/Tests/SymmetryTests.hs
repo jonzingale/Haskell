@@ -15,7 +15,6 @@ prop_rot90 = do
   x <- choose (0, pi)
   return $ (tol.cos) (pi/2 - x) == (tol.sin) x
 
-
 prop_rotInv' x y t = let coords = ((x, y),t) in
   (mtol.rot90.rot270) coords == mtol coords
   where
