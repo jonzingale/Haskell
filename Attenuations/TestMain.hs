@@ -9,3 +9,8 @@ import RayTracer.Lattice
 import RayTracer.Rhythm
 import Test.Framework
 
+import {-@ HTF_TESTS @-} Tests.IndexerTests
+import {-@ HTF_TESTS @-} Tests.SymmetryTests
+import {-@ HTF_TESTS @-} Tests.XRegionTests
+
+main = htfMain htf_importedTests
