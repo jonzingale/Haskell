@@ -14,3 +14,7 @@ import {-@ HTF_TESTS @-} Tests.SymmetryTests
 import {-@ HTF_TESTS @-} Tests.XRegionTests
 
 main = htfMain htf_importedTests
+
+symmetryTests = htfMain htf_Tests_SymmetryTests_thisModulesTests
+indexerTests = htfMain htf_Tests_IndexerTests_thisModulesTests
+xRegionTests = htfMain htf_Tests_XRegionTests_thisModulesTests

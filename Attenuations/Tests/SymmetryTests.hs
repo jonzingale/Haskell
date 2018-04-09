@@ -20,6 +20,13 @@ prop_ComposeAssoc f g h x =
 tol :: Double -> Integer
 tol d = round $ d * 10^12
 
+-- TODO: figure out replay args.
+-- replayArg = "Just (TFGenR 15067B55359906C0776B9C0A73ACEE7D9C124B4AE3DAC3AFCB451E04B1EF7BD1 0 31 5 0,28)"
+-- pt = ((0.0, 0.0), -63.8735667731305)
+-- prop_rot4IdReplay =
+--   withQCArgs (\a -> a { replay = read replayArg })
+--   prop_rot4Id
+
 -- Rotation Tests
 prop_rot90 = do
   x <- choose (0, pi)
