@@ -40,8 +40,8 @@ prop_rot4Id x y = do
     diffPi ((x, y),theta) = ((x, y), theta - tau)
     rotFour = foldr (.) id [rot90 | x<-[1..4]]
 
-prop_rotInv' x y t = let coords = ((x, y),t) in
-  (mtol.rot90.rot270) coords == mtol coords
+prop_rotInv' :: (Point, Angle) -> Bool
+prop_rotInv' cs = (mtol.rot90.rot270) cs == mtol cs
 
-prop_rotInv x y t = let coords = ((x, y),t) in
-  (mtol.rot270.rot90) coords == mtol coords
+prop_rotInv :: (Point, Angle) -> Bool
+prop_rotInv cs = (mtol.rot270.rot90) cs == mtol cs
