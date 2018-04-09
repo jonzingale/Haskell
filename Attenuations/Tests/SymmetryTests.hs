@@ -32,8 +32,7 @@ prop_rot4Id x y = do
   return $ (mtol.divPi.rotFour) coords == mtol coords
   where
     divPi ((x, y),theta) = ((x, y), theta - (2*pi))
-    mtol ((x,y), t) = ((ttol x, ttol y), ttol t)
-    ttol d = round $ d * 10^12
+    mtol ((x,y), t) = ((tol x, tol y), tol t)
 
 prop_rotInv' x y t = let coords = ((x, y),t) in
   (mtol.rot90.rot270) coords == mtol coords
