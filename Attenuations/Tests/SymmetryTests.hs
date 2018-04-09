@@ -33,7 +33,7 @@ prop_rot4Id x y = do
   where
     divPi ((x, y),theta) = ((x, y), theta - (2*pi))
     mtol ((x,y), t) = ((ttol x, ttol y), ttol t)
-    ttol d = round $ d * 10^12 -- not very good accuracy.
+    ttol d = round $ d * 10^12
 
 prop_rotInv' x y t = let coords = ((x, y),t) in
   (mtol.rot90.rot270) coords == mtol coords
