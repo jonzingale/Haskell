@@ -6,8 +6,9 @@ TODO:
 Find the ray length through a cell.
 --}
 
+type RayLength = Point -> Angle -> Double
 type Point = (Double, Double) -- valid between 0 and 1
-type Slope = (Double, Double)
+type Slope = (Double, Double) -- usually between 0 and π
 type Angle = Double
 
 toAngleDeg, toAngleRad :: Slope -> Angle
@@ -21,7 +22,6 @@ Cases:
  εδ γ βα
 η_\\|//_η
 --}
-type RayLength = Point -> Angle -> Double
 
 delta (x,0) theta = 1 / sin theta
 beta  (x,0) theta = 1 / sin theta
