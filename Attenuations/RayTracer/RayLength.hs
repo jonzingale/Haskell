@@ -41,7 +41,6 @@ gamma (x,0) theta | theta == (pi/2) = 1
 
 {--
 Conditions:
-
 --}
 
 xregion :: RayLength
@@ -66,6 +65,9 @@ abCondition (x, 0) theta | cond x theta = alpha (x, 0) theta
 
 {--
 Cases:
+A good first approximation can be made by determining
+which side the ray comes in from and then rotating to
+its corresponding x-orientation. x=0 -> 90, x=1 -> 270.
 
 πμρκ
 |//_ι
@@ -76,3 +78,12 @@ rot270 ((x,y), theta) = ((y, 1-x), theta - pi/2)
 
 rot90 :: (Point, Angle) -> (Point, Angle)
 rot90 ((x,y), theta) = ((1-y, x), theta + pi/2)
+
+{--
+Conditions:
+--}
+
+yregion :: RayLength
+yregion (0,y) theta = uncurry xregion $ rot90  ((0,y), theta)
+yregion (1,y) theta = uncurry xregion $ rot270 ((1,y), theta)
+yregion _ _ = 999
