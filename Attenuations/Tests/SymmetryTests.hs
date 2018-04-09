@@ -17,9 +17,13 @@ prop_ComposeAssoc f g h x =
 
 --tolerance 12 decimal places
 --better would be an epsilon ball
+type DoubleCoords =  ((Double, Double), Double)
+type IntegerCoords = ((Integer, Integer), Integer)
+
 tol :: Double -> Integer
 tol d = round $ d * 10^12
 
+mtol :: DoubleCoords -> IntegerCoords
 mtol ((x,y), t) = ((tol x, tol y), tol t)
 
 -- Rotation Tests
