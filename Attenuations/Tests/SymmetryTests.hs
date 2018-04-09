@@ -20,6 +20,8 @@ prop_ComposeAssoc f g h x =
 type DoubleCoords =  ((Double, Double), Double)
 type IntegerCoords = ((Integer, Integer), Integer)
 
+tau = 2 * pi
+
 tol :: Double -> Integer
 tol d = round $ d * 10^12
 
@@ -32,10 +34,10 @@ prop_rot90 = do
   return $ (tol.cos) (pi/2 - θ) == (tol.sin) θ
 
 prop_rot4Id x y = do
-  t <- choose (0, 2*pi)
-  return $ (mtol.divPi.rotFour) ((x, y),t) == mtol ((x, y),t)
+  t <- choose (0, tau)
+  return $ (mtol.diffPi.rotFour) ((x, y),t) == mtol ((x, y),t)
   where
-    divPi ((x, y),theta) = ((x, y), theta - (2*pi))
+    diffPi ((x, y),theta) = ((x, y), theta - tau)
     rotFour = foldr (.) id [rot90 | x<-[1..4]]
 
 prop_rotInv' x y t = let coords = ((x, y),t) in
