@@ -74,15 +74,10 @@ its corresponding x-orientation. x=0 -> 90, x=1 -> 270.
 μ ρκ
 |//_ι
 --}
-
--- iota (0,y) theta = (1-y) / sin theta
-iota (0,y) theta = 1 / sin theta
-
-rho (0,y) theta | theta == 0 = 1
+rho (0,y) theta | theta == pi/2 = 1 -- the mu case
                 | otherwise = (1-y) / sin theta
 
-mu (0,y) theta | theta == pi || theta == 0 = 1
-               | otherwise = 0
+kappa (0,y) theta = 1 / cos theta
 
 -- Rotations
 rot270 :: (Point, Angle) -> (Point, Angle) 
