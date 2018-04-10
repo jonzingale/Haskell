@@ -41,6 +41,8 @@ gamma (x,0) theta | theta == (pi/2) = 1
 
 {--
 Conditions:
+
+TODO: Revisit the types here, perhaps a switch is what is needed.
 --}
 
 xregion :: RayLength
@@ -69,10 +71,20 @@ A good first approximation can be made by determining
 which side the ray comes in from and then rotating to
 its corresponding x-orientation. x=0 -> 90, x=1 -> 270.
 
-πμρκ
+μ ρκ
 |//_ι
 --}
 
+-- iota (0,y) theta = (1-y) / sin theta
+iota (0,y) theta = 1 / sin theta
+
+rho (0,y) theta | theta == 0 = 1
+                | otherwise = (1-y) / sin theta
+
+mu (0,y) theta | theta == pi || theta == 0 = 1
+               | otherwise = 0
+
+-- Rotations
 rot270 :: (Point, Angle) -> (Point, Angle) 
 rot270 ((x,y), theta) = ((y, 1-x), theta - pi/2)
 
