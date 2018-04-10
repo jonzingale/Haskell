@@ -86,6 +86,10 @@ rot270 ((x,y), theta) = ((y, 1-x), theta - pi/2)
 rot90 :: (Point, Angle) -> (Point, Angle)
 rot90 ((x,y), theta) = ((1-y, x), theta + pi/2)
 
+-- Reflections
+reflectY :: (Point, Angle) -> (Point, Angle) 
+reflectY ((x,y), theta) = ((1-x, y), pi - theta)
+
 {--
 Conditions:
 --}

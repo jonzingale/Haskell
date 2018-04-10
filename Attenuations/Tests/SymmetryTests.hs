@@ -38,6 +38,9 @@ prop_rotInv' cs = (mtol.rot90.rot270) cs == mtol cs
 prop_rotInv :: (Point, Angle) -> Bool
 prop_rotInv cs = (mtol.rot270.rot90) cs == mtol cs
 
+prop_reflectInv :: (Point, Angle) -> Bool
+prop_reflectInv cs = (mtol.reflectY.reflectY) cs == mtol cs
+
 {--
  εδ γ βα   μ ρκ
 η_\\|//_η  |//_ι
