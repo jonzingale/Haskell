@@ -42,8 +42,6 @@ prop_rotInv cs = (mtol.rot270.rot90) cs == mtol cs
  εδ γ βα   μ ρκ
 η_\\|//_η  |//_ι
 --}
--- (theta, x) = (pi*7/8, 0.75) -- epsilon coords
--- rotEp = rot270 ((x,0),theta) -- == ((0.0,0.25),1.1780972450961724)
 
 prop_RotRhoIsEps :: Gen Bool
 prop_RotRhoIsEps = do
@@ -63,6 +61,6 @@ prop_RotKapIsDel = do
   let rka = uncurry kappa $ rot270 ((x,0), th)
   return $ atol del == atol rka
 
-
-
+-- (theta, x) = (pi*7/8, 0.75) -- epsilon coords
+-- rotEp = rot270 ((x,0),theta) -- == ((0.0,0.25),1.1780972450961724)
 
