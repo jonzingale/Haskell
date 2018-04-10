@@ -23,9 +23,9 @@ prop_rot90 = do
   θ <- choose (0, pi)
   return $ (tol.cos) (pi/2 - θ) == (tol.sin) θ
 
-prop_rot4Id x y = do
+prop_rot4Id cs = do
   t <- choose (0, tau)
-  return $ (mtol.diffPi.rotFour) ((x, y),t) == mtol ((x, y),t)
+  return $ (mtol.diffPi.rotFour) (cs, t) == mtol (cs, t)
   where
     diffPi ((x, y),theta) = ((x, y), theta - tau)
     rotFour = foldr (.) id [rot90 | x<-[1..4]]
