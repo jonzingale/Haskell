@@ -27,8 +27,3 @@ prop_Replay =
   prop_RotRhoIsEps
 
 replayTest = htfMain htf_AttenuationTest_thisModulesTests
-
-
-
-(theta, x) = (pi*7/8, 0.75) -- epsilon coords
-rotEp = rot270 ((x,0),theta) -- == ((0.0,0.25),1.1780972450961724)

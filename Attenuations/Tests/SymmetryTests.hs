@@ -18,6 +18,10 @@ tol d = round $ d * 10^11
 mtol :: DoubleCoords -> IntegerCoords
 mtol ((x,y), t) = ((tol x, tol y), tol t)
 
+-- Explicit Generators
+epsilonRegion x = (3*pi/4 + x*pi/4, pi) -- super-εδ-Condition
+deltaRegion x = (pi/2, pi/2 + x*pi/4) -- sub-εδ-Condition
+
 -- Rotation Tests
 prop_shift90 :: Gen Bool
 prop_shift90 = do
@@ -42,26 +46,26 @@ prop_reflectInv :: (Point, Angle) -> Bool
 prop_reflectInv cs = (mtol.reflectY.reflectY) cs == mtol cs
 
 {--
- εδ γ βα   μ ρκ
-η_\\|//_η  |//_ι
+ εδ γ βα   μ ρκ     κ'ρ'μ'
+η_\\|//_η  |//_ι  ι'_\\|
 --}
 
 prop_RotRhoIsEps :: Gen Bool
 prop_RotRhoIsEps = do
   let atol d = round $ d * 10^13 -- fairly stable!
   x  <- choose (0, 1::Double)
-  th <- choose (3*pi/4 + x*pi/4, pi) -- super-εδ-Condition
+  th <- choose.epsilonRegion $ x
   let eps = epsilon (x,0) th
-  let rrh = uncurry rho $ rot270 ((x,0), th)
+  let rrh = (uncurry rho).rot270 $ ((x,0), th)
   return $ atol eps == atol rrh
 
 prop_RotKapIsDel :: Gen Bool
 prop_RotKapIsDel = do
   let atol d = round $ d * 10^13
   x  <- choose (0, 1::Double)
-  th <- choose (pi/2, pi/2 + x*pi/4) -- sub-εδ-Condition
+  th <- choose.deltaRegion $ x
   let del = delta (x,0) th
-  let rka = uncurry kappa $ rot270 ((x,0), th)
+  let rka = (uncurry kappa).rot270 $ ((x,0), th)
   return $ atol del == atol rka
 
 -- (theta, x) = (pi*7/8, 0.75) -- epsilon coords

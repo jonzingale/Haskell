@@ -94,7 +94,7 @@ reflectY ((x,y), theta) = ((1-x, y), pi - theta)
 Conditions:
 --}
 
-yregion :: RayLength
+yregion :: RayLength -- transforms y propblem to be an x problem
 yregion (0,y) theta = (uncurry xregion).rot90  $ ((0,y), theta)
 yregion (1,y) theta = (uncurry xregion).rot270 $ ((1,y), theta)
 yregion _ _ = 999
