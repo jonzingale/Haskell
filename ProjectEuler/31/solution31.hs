@@ -25,9 +25,6 @@ instance Num a => Num [a] where
   (x:xs) * (y:ys) = (x*y) : ([x] * ys + xs * (y:ys))
   _ * _ = []
 
-choose :: Int -> Int -> Int
-choose n k = ([1,1]^n) !! k
-
 us, uk :: [Int]
 us = [1,5,10,25,50,100]
 uk = [1,2,5,10,20,50,100,200]
