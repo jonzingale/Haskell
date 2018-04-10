@@ -84,6 +84,6 @@ Conditions:
 --}
 
 yregion :: RayLength
-yregion (0,y) theta = uncurry xregion $ rot90  ((0,y), theta)
-yregion (1,y) theta = uncurry xregion $ rot270 ((1,y), theta)
+yregion (0,y) theta = (uncurry xregion).rot90  $ ((0,y), theta)
+yregion (1,y) theta = (uncurry xregion).rot270 $ ((1,y), theta)
 yregion _ _ = 999

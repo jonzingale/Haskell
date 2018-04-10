@@ -19,7 +19,7 @@ mtol :: DoubleCoords -> IntegerCoords
 mtol ((x,y), t) = ((tol x, tol y), tol t)
 
 -- Rotation Tests
-prop_rot90 = do
+prop_shift90 = do
   θ <- choose (0, pi)
   return $ (tol.cos) (pi/2 - θ) == (tol.sin) θ
 
