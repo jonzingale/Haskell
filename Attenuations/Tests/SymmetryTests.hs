@@ -45,7 +45,7 @@ prop_rotInv cs = (mtol.rot270.rot90) cs == mtol cs
 
 prop_RotRhoIsEps :: Gen Bool
 prop_RotRhoIsEps = do
-  let atol d = round $ d * 10^12
+  let atol d = round $ d * 10^13 -- fairly stable!
   x  <- choose (0, 1::Double)
   th <- choose (3*pi/4 + x*pi/4, pi) -- super-εδ-Condition
   let eps = epsilon (x,0) th
@@ -54,7 +54,7 @@ prop_RotRhoIsEps = do
 
 prop_RotKapIsDel :: Gen Bool
 prop_RotKapIsDel = do
-  let atol d = round $ d * 10^12
+  let atol d = round $ d * 10^13
   x  <- choose (0, 1::Double)
   th <- choose (pi/2, pi/2 + x*pi/4) -- sub-εδ-Condition
   let del = delta (x,0) th
