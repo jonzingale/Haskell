@@ -9,12 +9,12 @@ import Test.Framework
 -- Rotation Tests
 prop_shift90 :: Gen Bool
 prop_shift90 = do
-  θ <- choose (0, pi)
+  θ <- zeroToPi
   return $ (tol.cos) (pi/2 - θ) == (tol.sin) θ
 
 prop_rot4Id :: Point -> Gen Bool
 prop_rot4Id cs = do
-  t <- choose (0, tau)
+  t <- zeroToTau
   return $ (mtol.diffPi.rotFour) (cs, t) == mtol (cs, t)
   where
     diffPi ((x, y),theta) = ((x, y), theta - tau)

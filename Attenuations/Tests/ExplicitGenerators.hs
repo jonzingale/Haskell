@@ -6,6 +6,8 @@ tau = 2 * pi
 
 -- Explicit Generators
 interval = choose (0, 1::Double)
+zeroToPi = choose (0, pi::Double)
+zeroToTau =choose (0, tau::Double)
 
 epsilonRegion x = choose (3*pi/4 + x*pi/4, pi) -- super-εδ-Condition
 
