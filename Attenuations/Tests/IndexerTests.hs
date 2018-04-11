@@ -2,6 +2,7 @@
 {-# OPTIONS_GHC -F -pgmF htfpp #-}
 
 module Tests.IndexerTests where
+import Tests.ExplicitGenerators
 import RayTracer.RayLength
 import RayTracer.Rhythm
 import Test.Framework

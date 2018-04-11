@@ -2,6 +2,7 @@
 {-# OPTIONS_GHC -F -pgmF htfpp #-}
 
 module Tests.SymmetryTests where
+import Tests.ExplicitGenerators
 import RayTracer.RayLength
 import Test.Framework
 
@@ -17,10 +18,6 @@ tol d = round $ d * 10^11
 
 mtol :: DoubleCoords -> IntegerCoords
 mtol ((x,y), t) = ((tol x, tol y), tol t)
-
--- Explicit Generators
-epsilonRegion x = (3*pi/4 + x*pi/4, pi) -- super-εδ-Condition
-deltaRegion x = (pi/2, pi/2 + x*pi/4) -- sub-εδ-Condition
 
 -- Rotation Tests
 prop_shift90 :: Gen Bool
@@ -52,20 +49,20 @@ prop_reflectInv cs = (mtol.reflectY.reflectY) cs == mtol cs
 
 prop_RotRhoIsEps :: Gen Bool
 prop_RotRhoIsEps = do
-  let atol d = round $ d * 10^13 -- fairly stable!
-  x  <- choose (0, 1::Double)
-  th <- choose.epsilonRegion $ x
+  x  <- interval
+  th <- epsilonRegion x
   let eps = epsilon (x,0) th
   let rrh = (uncurry rho).rot270 $ ((x,0), th)
+  let atol d = round $ d * 10^13 -- fairly stable!
   return $ atol eps == atol rrh
 
 prop_RotKapIsDel :: Gen Bool
 prop_RotKapIsDel = do
-  let atol d = round $ d * 10^13
-  x  <- choose (0, 1::Double)
-  th <- choose.deltaRegion $ x
+  x  <- interval
+  th <- deltaRegion $ x
   let del = delta (x,0) th
   let rka = (uncurry kappa).rot270 $ ((x,0), th)
+  let atol d = round $ d * 10^13 -- fairly stable!
   return $ atol del == atol rka
 
 -- (theta, x) = (pi*7/8, 0.75) -- epsilon coords

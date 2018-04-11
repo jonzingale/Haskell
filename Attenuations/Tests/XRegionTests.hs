@@ -2,6 +2,7 @@
 {-# OPTIONS_GHC -F -pgmF htfpp #-}
 
 module Tests.XRegionTests where
+import Tests.ExplicitGenerators
 import RayTracer.RayLength
 import Test.Framework
 
@@ -17,13 +18,13 @@ tol d = round $ d * 10^12
 
 -- x - Boundary Tests
 prop_nean = do -- don't need eta.
-  x <- choose (0::Double, 1)
+  x <- interval
   let regions = [alpha, eta, epsilon]
   let flat = regions <*> [(x,0)] <*> [pi]
   return $ [1,1,1] == flat
 
 prop_bgd = do -- don't need gamma.
-  x <- choose (0::Double, 1)
+  x <- interval
   let regions = [beta, gamma, delta]
   let pi2s = regions <*> [(x,0)] <*> [pi/2]
   return $ [1,1,1] == pi2s
@@ -43,7 +44,7 @@ prop_abBoundary = -- alpha - beta boundary
 -- x - Reflection Tests
 prop_alphaIsReflectedEpsilon = do
   let abThresh t = (1+t) * pi/4
-  x <- choose (0, 1)
+  x <- interval
   theta <- choose (0, abThresh x)
   let tolAlpha = tol.alpha (x,0) $ theta
   let tolEpsil = tol.epsilon (1-x,0) $ pi - theta
@@ -51,7 +52,7 @@ prop_alphaIsReflectedEpsilon = do
 
 prop_betaIsReflectedDelta = do
   let abThresh t = (1+t) * pi/4
-  x <- choose (0, 1)
+  x <- interval
   theta <- choose (abThresh x, pi/2)
   let tolBeta = tol.beta (x,0) $ theta
   let tolDelt = tol.delta (1-x,0) $ pi - theta

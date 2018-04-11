@@ -18,12 +18,3 @@ main = htfMain htf_importedTests
 symmetryTests = htfMain htf_Tests_SymmetryTests_thisModulesTests
 indexerTests = htfMain htf_Tests_IndexerTests_thisModulesTests
 xRegionTests = htfMain htf_Tests_XRegionTests_thisModulesTests
-
-
-replayArg = "Just (TFGenR 62B8735EAF47B2F9B36E26801D8A7573F7F28A1DF3A296D236CCC934F7064674 0 1 1 0,0)"
-
-prop_Replay =
-  withQCArgs (\a -> a { replay = read replayArg })
-  prop_RotRhoIsEps
-
-replayTest = htfMain htf_AttenuationTest_thisModulesTests
