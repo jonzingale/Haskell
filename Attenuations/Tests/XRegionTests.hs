@@ -54,7 +54,9 @@ prop_betaIsReflectedDelta = do
   x <- interval
   theta <- choose (abThresh x, pi/2)
   let tolBeta = tol.beta (x,0) $ theta
-  let tolDelt = tol.delta (1-x,0) $ pi - theta
+  let reflect = tol.(uncurry delta).reflectY
+  let tolDelt = reflect ((x,0), theta)
+  -- let tolDelt = tol.delta (1-x,0) $ pi - theta
   return $ tolBeta == tolDelt
 
 prop_RotRhoIsEps :: Gen Bool
