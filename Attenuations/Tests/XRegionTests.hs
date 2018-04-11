@@ -44,7 +44,9 @@ prop_alphaIsReflectedEpsilon = do
   x <- interval
   theta <- choose (0, abThresh x)
   let tolAlpha = tol.alpha (x,0) $ theta
-  let tolEpsil = tol.epsilon (1-x,0) $ pi - theta
+  let reflect = tol.(uncurry epsilon).reflectY
+  let tolEpsil = reflect ((x,0), theta)
+  -- let tolEpsil = tol.epsilon (1-x,0) $ pi - theta
   return $ tolAlpha == tolEpsil
 
 prop_betaIsReflectedDelta = do
