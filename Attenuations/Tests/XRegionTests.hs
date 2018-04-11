@@ -45,9 +45,8 @@ prop_abBoundary = -- alpha - beta boundary
 -- x - Reflection Tests
 prop_alphaIsReflectedEpsilon :: Gen Bool
 prop_alphaIsReflectedEpsilon = do
-  let abThresh t = (1+t) * pi/4
   x <- interval
-  theta <- choose (0, abThresh x)
+  theta <- alphaRegion x
   let tolAlpha = tol.alpha (x,0) $ theta
   let reflect = tol.(uncurry epsilon).reflectY
   let tolEpsil = reflect ((x,0), theta)
@@ -56,9 +55,8 @@ prop_alphaIsReflectedEpsilon = do
 
 prop_betaIsReflectedDelta :: Gen Bool
 prop_betaIsReflectedDelta = do
-  let abThresh t = (1+t) * pi/4
   x <- interval
-  theta <- choose (abThresh x, pi/2)
+  theta <- betaRegion x
   let tolBeta = tol.beta (x,0) $ theta
   let reflect = tol.(uncurry delta).reflectY
   let tolDelt = reflect ((x,0), theta)

@@ -10,12 +10,13 @@ zeroToPi = choose (0, pi::Double)
 zeroToTau =choose (0, tau::Double)
 
 {--
-  δ
-ε_\|
+  δ β
+ε_\|/_α
 --}
 epsilonRegion x = choose (3*pi/4 + x*pi/4, pi) -- super-εδ-Condition
 deltaRegion x = choose (pi/2, pi/2 + x*pi/4) -- sub-εδ-Condition
-
+betaRegion  x = choose ((1+x) * pi/4, pi/2)
+alphaRegion x = choose (0, (1+x) * pi/4)
 
 -- Tolerances
 type DoubleCoords =  ((Double, Double), Double)
