@@ -50,7 +50,6 @@ prop_alphaIsReflectedEpsilon = do
   let tolAlpha = tol.alpha (x,0) $ theta
   let reflect = tol.(uncurry epsilon).reflectY
   let tolEpsil = reflect ((x,0), theta)
-  -- let tolEpsil = tol.epsilon (1-x,0) $ pi - theta
   return $ tolAlpha == tolEpsil
 
 prop_betaIsReflectedDelta :: Gen Bool
@@ -60,7 +59,6 @@ prop_betaIsReflectedDelta = do
   let tolBeta = tol.beta (x,0) $ theta
   let reflect = tol.(uncurry delta).reflectY
   let tolDelt = reflect ((x,0), theta)
-  -- let tolDelt = tol.delta (1-x,0) $ pi - theta
   return $ tolBeta == tolDelt
 
 prop_RotRhoIsEps :: Gen Bool
