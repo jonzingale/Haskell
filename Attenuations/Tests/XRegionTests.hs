@@ -14,6 +14,8 @@ import Test.Framework
 --}
 
 -- x - Boundary Tests
+prop_nean, prop_bgd :: Gen Bool
+
 prop_nean = do -- don't need eta.
   x <- interval
   let regions = [alpha, eta, epsilon]
@@ -25,6 +27,8 @@ prop_bgd = do -- don't need gamma.
   let regions = [beta, gamma, delta]
   let pi2s = regions <*> [(x,0)] <*> [pi/2]
   return $ [1,1,1] == pi2s
+
+prop_edBoundary, prop_abBoundary :: Bool
 
 prop_edBoundary = -- epsilon - delta boundary
   let params = (,) (1,0) (3*pi/4) in
@@ -39,6 +43,7 @@ prop_abBoundary = -- alpha - beta boundary
   all eqF $ regions <*> [params]
 
 -- x - Reflection Tests
+prop_alphaIsReflectedEpsilon :: Gen Bool
 prop_alphaIsReflectedEpsilon = do
   let abThresh t = (1+t) * pi/4
   x <- interval
@@ -49,6 +54,7 @@ prop_alphaIsReflectedEpsilon = do
   -- let tolEpsil = tol.epsilon (1-x,0) $ pi - theta
   return $ tolAlpha == tolEpsil
 
+prop_betaIsReflectedDelta :: Gen Bool
 prop_betaIsReflectedDelta = do
   let abThresh t = (1+t) * pi/4
   x <- interval
