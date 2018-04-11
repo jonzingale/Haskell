@@ -3,7 +3,7 @@
 -- http://www.pstcc.edu/departments/natural_behavioral_sciences/Web%20Physics/TRIGG/Chapter(4).htm
 {-# OPTIONS_GHC -F -pgmF htfpp #-}
 
-module AttenuationTest where
+module AttenuationTests where
 import RayTracer.RayLength
 import RayTracer.Lattice
 import RayTracer.Rhythm

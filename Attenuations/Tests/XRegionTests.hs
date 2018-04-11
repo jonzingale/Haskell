@@ -6,14 +6,11 @@ import Tests.ExplicitGenerators
 import RayTracer.RayLength
 import Test.Framework
 
---tolerance 12 decimal places
---better would be an epsilon ball
-tol :: Double -> Integer
-tol d = round $ d * 10^12
-
 {--
- εδ γ βα
-η_\\|//_η
+
+ εδ γ βα   μ ρκ     κ'ρ'μ'
+η_\\|//_η  |//_ι  ι'_\\|
+
 --}
 
 -- x - Boundary Tests
@@ -57,3 +54,22 @@ prop_betaIsReflectedDelta = do
   let tolBeta = tol.beta (x,0) $ theta
   let tolDelt = tol.delta (1-x,0) $ pi - theta
   return $ tolBeta == tolDelt
+
+prop_RotRhoIsEps :: Gen Bool
+prop_RotRhoIsEps = do
+  x  <- interval
+  th <- epsilonRegion x
+  let eps = epsilon (x,0) th
+  let rrh = (uncurry rho).rot270 $ ((x,0), th)
+  let atol d = round $ d * 10^13 -- fairly stable!
+  return $ atol eps == atol rrh
+
+prop_RotKapIsDel :: Gen Bool
+prop_RotKapIsDel = do
+  x  <- interval
+  th <- deltaRegion $ x
+  let del = delta (x,0) th
+  let rka = (uncurry kappa).rot270 $ ((x,0), th)
+  let atol d = round $ d * 10^13 -- fairly stable!
+  return $ atol del == atol rka
+

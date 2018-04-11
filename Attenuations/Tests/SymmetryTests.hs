@@ -6,19 +6,6 @@ import Tests.ExplicitGenerators
 import RayTracer.RayLength
 import Test.Framework
 
---tolerance 12 decimal places
---better would be an epsilon ball
-type DoubleCoords =  ((Double, Double), Double)
-type IntegerCoords = ((Integer, Integer), Integer)
-
-tau = 2 * pi
-
-tol :: Double -> Integer
-tol d = round $ d * 10^11
-
-mtol :: DoubleCoords -> IntegerCoords
-mtol ((x,y), t) = ((tol x, tol y), tol t)
-
 -- Rotation Tests
 prop_shift90 :: Gen Bool
 prop_shift90 = do
@@ -41,30 +28,4 @@ prop_rotInv cs = (mtol.rot270.rot90) cs == mtol cs
 
 prop_reflectInv :: (Point, Angle) -> Bool
 prop_reflectInv cs = (mtol.reflectY.reflectY) cs == mtol cs
-
-{--
- εδ γ βα   μ ρκ     κ'ρ'μ'
-η_\\|//_η  |//_ι  ι'_\\|
---}
-
-prop_RotRhoIsEps :: Gen Bool
-prop_RotRhoIsEps = do
-  x  <- interval
-  th <- epsilonRegion x
-  let eps = epsilon (x,0) th
-  let rrh = (uncurry rho).rot270 $ ((x,0), th)
-  let atol d = round $ d * 10^13 -- fairly stable!
-  return $ atol eps == atol rrh
-
-prop_RotKapIsDel :: Gen Bool
-prop_RotKapIsDel = do
-  x  <- interval
-  th <- deltaRegion $ x
-  let del = delta (x,0) th
-  let rka = (uncurry kappa).rot270 $ ((x,0), th)
-  let atol d = round $ d * 10^13 -- fairly stable!
-  return $ atol del == atol rka
-
--- (theta, x) = (pi*7/8, 0.75) -- epsilon coords
--- rotEp = rot270 ((x,0),theta) -- == ((0.0,0.25),1.1780972450961724)
 
