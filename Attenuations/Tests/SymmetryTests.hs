@@ -20,11 +20,9 @@ prop_rot4Id cs = do
     diffPi ((x, y),theta) = ((x, y), theta - tau)
     rotFour = foldr (.) id [rot90 | x<-[1..4]]
 
-prop_rotInv' :: (Point, Angle) -> Bool
+prop_rotInv', prop_rotInv :: (Point, Angle) -> Bool
 prop_rotInv' cs = (mtol.rot90.rot270) cs == mtol cs
-
-prop_rotInv :: (Point, Angle) -> Bool
-prop_rotInv cs = (mtol.rot270.rot90) cs == mtol cs
+prop_rotInv  cs = (mtol.rot270.rot90) cs == mtol cs
 
 prop_reflectInv :: (Point, Angle) -> Bool
 prop_reflectInv cs = (mtol.reflectY.reflectY) cs == mtol cs
