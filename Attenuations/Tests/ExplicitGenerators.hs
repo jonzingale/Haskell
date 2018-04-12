@@ -2,7 +2,6 @@ module Tests.ExplicitGenerators where
 import Test.Framework
 
 -- Constants
-eBall t a b = (< 1/10^t).abs $ a - b
 tau = 2 * pi
 
 -- Explicit Generators
@@ -28,6 +27,9 @@ type DoubleCoords =  ((Double, Double), Double)
 type IntegerCoords = ((Integer, Integer), Integer)
 
 --better would be an epsilon ball
+eBall :: Double -> Double -> Double -> Bool
+eBall t a b = (< 1/10**t).abs $ a - b
+
 tol :: Double -> Integer
 tol d = round $ d * 10^12
 
