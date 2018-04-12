@@ -10,7 +10,12 @@ import Test.Framework
 prop_shift90 :: Gen Bool
 prop_shift90 = do
   θ <- zeroToPi
-  return $ (tol.cos) (pi/2 - θ) == (tol.sin) θ
+  return $ (eBall 13) (cos (pi/2 - θ))  (sin θ)
+
+prop_shift270 :: Gen Bool
+prop_shift270 = do
+  θ <- zeroToPi
+  return $ (eBall 13) (cos (θ - pi/2))  (sin θ)
 
 prop_rot4Id :: Point -> Gen Bool
 prop_rot4Id cs = do
