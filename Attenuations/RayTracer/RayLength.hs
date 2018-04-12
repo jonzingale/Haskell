@@ -71,13 +71,22 @@ A good first approximation can be made by determining
 which side the ray comes in from and then rotating to
 its corresponding x-orientation. x=0 -> 90, x=1 -> 270.
 
-μ ρκ
-|//_ι
+ ρ
+|/_κ
 --}
-rho (0,y) theta | theta == pi/2 = 1 -- the mu case
+rho (0,y) theta | theta == pi/2 || theta == 0 = 1 -- the mu case
                 | otherwise = (1-y) / sin theta
 
 kappa (0,y) theta = 1 / cos theta
+
+{--
+  ρ'
+κ'_\|
+--}
+rho' (1,y) theta | theta == pi/2 || theta == pi = 1 -- the mu case
+                 | otherwise = (1-y) / sin theta
+
+kappa' (1,y) theta = 1 / cos theta
 
 -- Rotations
 rot270 :: (Point, Angle) -> (Point, Angle) 

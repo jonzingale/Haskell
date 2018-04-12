@@ -61,14 +61,14 @@ prop_betaIsReflectedDelta = do
   let tolDelt = reflect ((x,0), theta)
   return $ tolBeta == tolDelt
 
-prop_RotRhoIsEps :: Gen Bool
-prop_RotRhoIsEps = do
-  x  <- interval
-  th <- epsilonRegion x
-  let eps = epsilon (x,0) th
-  let rrh = (uncurry rho).rot270 $ ((x,0), th)
-  let atol d = round $ d * 10^13 -- fairly stable!
-  return $ atol eps == atol rrh
+-- prop_RotRhoIsEps :: Gen Bool
+-- prop_RotRhoIsEps = do
+--   x  <- interval
+--   th <- epsilonRegion x
+--   let eps = epsilon (x,0) th
+--   let rrh = (uncurry rho).rot270 $ ((x,0), th)
+--   let atol d = round $ d * 10^13 -- fairly stable!
+--   return $ atol eps == atol rrh
 
 prop_RotKapIsDel :: Gen Bool
 prop_RotKapIsDel = do
