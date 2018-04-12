@@ -86,7 +86,7 @@ kappa (0,y) theta = 1 / cos theta
 rho' (1,y) theta | theta == pi/2 || theta == pi = 1 -- the mu case
                  | otherwise = (1-y) / sin theta
 
-kappa' (1,y) theta = 1 / cos theta
+kappa' (1,y) theta = -1 / cos theta
 
 -- Rotations
 rot270 :: (Point, Angle) -> (Point, Angle) 

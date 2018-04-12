@@ -20,7 +20,7 @@ deltaRegion x = choose (pi/2, pi/2 + x*pi/4) -- sub-εδ-Condition
 betaRegion  x = choose ((1+x) * pi/4, pi/2) -- super-αβ-Condition
 alphaRegion x = choose (0, (1+x) * pi/4) -- sub-αβ-Condition
 
-rhoRegion x = choose (0, (1-x) * pi/4) -- super-ρκ-Condition
+rhoRegion x = choose (pi/4, (1+x) * pi/4) -- super-ρκ-Condition
 kappaRegion x = choose (0, (1-x) * pi/4) -- sub-ρκ-Condition
 
 -- Tolerances

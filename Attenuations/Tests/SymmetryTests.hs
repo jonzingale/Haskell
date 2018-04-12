@@ -29,9 +29,16 @@ prop_rotInv cs =
 prop_reflectInv :: (Point, Angle) -> Bool
 prop_reflectInv cs = (mtol.reflectY.reflectY) cs == mtol cs
 
-prop_rhoIsReflectedrho' :: Gen Bool
-prop_rhoIsReflectedrho' = do
+prop_RhoIsReflectedRho' :: Gen Bool
+prop_RhoIsReflectedRho' = do
   y <- interval
   t <- rhoRegion y
   let (csR, tR) = reflectY ((0,y), t)
-  return $ (eBall 8) (rho (0,y) t) (rho' csR tR) -- pretty weak tol
+  return $ (eBall 13) (rho (0,y) t) (rho' csR tR)
+
+prop_KappaIsReflectedKappa' :: Gen Bool
+prop_KappaIsReflectedKappa' = do
+  y <- interval
+  t <- kappaRegion y
+  let (csR, tR) = reflectY ((0,y), t)
+  return $ (eBall 13) (kappa (0,y) t) (kappa' csR tR)
