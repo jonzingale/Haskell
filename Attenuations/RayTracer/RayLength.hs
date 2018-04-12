@@ -74,7 +74,7 @@ its corresponding x-orientation. x=0 -> 90, x=1 -> 270.
  ρ
 |/_κ
 --}
-rho (0,y) theta | theta == pi/2 || theta == 0 = 1 -- the mu case
+rho (0,y) theta | theta == pi/2 || theta == 0 = 1 -- the mu/iota case
                 | otherwise = (1-y) / sin theta
 
 kappa (0,y) theta = 1 / cos theta
@@ -83,7 +83,7 @@ kappa (0,y) theta = 1 / cos theta
   ρ'
 κ'_\|
 --}
-rho' (1,y) theta | theta == pi/2 || theta == pi = 1 -- the mu case
+rho' (1,y) theta | theta == pi/2 || theta == pi = 1 -- the mu/iota case
                  | otherwise = (1-y) / sin theta
 
 kappa' (1,y) theta = -1 / cos theta
