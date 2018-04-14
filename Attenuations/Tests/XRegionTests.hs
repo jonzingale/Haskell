@@ -2,6 +2,7 @@
 {-# OPTIONS_GHC -F -pgmF htfpp #-}
 
 module Tests.XRegionTests where
+import RayTracer.RayLengthHelpers
 import Tests.ExplicitGenerators
 import RayTracer.RayLength
 import Test.Framework

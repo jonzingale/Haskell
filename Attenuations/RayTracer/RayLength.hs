@@ -1,5 +1,4 @@
 module RayTracer.RayLength where
-import System.Random
 
 {--
 TODO:
@@ -11,13 +10,13 @@ type Point = (Double, Double) -- valid between 0 and 1
 type Slope = (Double, Double) -- usually between 0 and π
 type Angle = Double
 
-toAngleDeg, toAngleRad :: Slope -> Angle
-toAngleDeg (n,d) = toAngleRad (n,d) * 180 / pi
-toAngleRad (n,0) = 0
-toAngleRad (n,d) = atan (n/d)
+rayLength :: RayLength
+rayLength (x,0) = xregion (x,0)
+rayLength (0,y) = pkCondition (0,y)
+rayLength (1,y) = kpCondition (1,y)
 
 {--
-Cases:
+X Cases:
 
  εδ γ βα
 η_\\|//_η
@@ -41,8 +40,6 @@ gamma (x,0) theta | theta == (pi/2) = 1
 
 {--
 Conditions:
-
-TODO: Revisit the types here, perhaps a switch is what is needed.
 --}
 
 xregion :: RayLength
@@ -66,7 +63,7 @@ abCondition (x, 0) theta | cond x theta = alpha (x, 0) theta
 
 
 {--
-Cases:
+Y Cases:
 A good first approximation can be made by determining
 which side the ray comes in from and then rotating to
 its corresponding x-orientation. x=0 -> 90, x=1 -> 270.
@@ -87,17 +84,6 @@ rho' (1,y) theta | theta == pi/2 || theta == pi = 1 -- the mu/iota case
                  | otherwise = (1-y) / sin theta
 
 kappa' (1,y) theta = -1 / cos theta
-
--- Rotations
-rot270 :: (Point, Angle) -> (Point, Angle) 
-rot270 ((x,y), theta) = ((y, 1-x), theta - pi/2)
-
-rot90 :: (Point, Angle) -> (Point, Angle)
-rot90 ((x,y), theta) = ((1-y, x), theta + pi/2)
-
--- Reflections
-reflectY :: (Point, Angle) -> (Point, Angle) 
-reflectY ((x,y), theta) = ((1-x, y), pi - theta)
 
 {--
 Conditions:
@@ -120,15 +106,3 @@ kpCondition (1, y) theta | cond y theta = rho' (1, y) theta
                          | otherwise = kappa' (1, y) theta
   where
     cond y t = ((3+y)*pi/4) > t -- valid between pi/2 and pi
-
-yregion' :: RayLength -- transforms y propblem to be an x problem
-yregion' (0,y) theta = (uncurry xregion).rot90  $ ((0,y), theta)
-yregion' (1,y) theta = (uncurry xregion).rot270 $ ((1,y), theta)
-yregion' _ _ = 999
-
-{--
-
- εδ γ βα   ρ         ρ'
-η_\\|//_η  |/_κ  κ'_\|
-
---}
