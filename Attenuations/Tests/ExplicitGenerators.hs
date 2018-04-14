@@ -8,6 +8,8 @@ tau = 2 * pi
 interval = choose (0, 1::Double)
 zeroToPi = choose (0, pi::Double)
 zeroToTau =choose (0, tau::Double)
+zeroToHalfPi = choose (0, pi/2::Double)
+halfPiToPi = choose (pi/2, pi::Double)
 
 {--
   δ β      ρ         ρ'
