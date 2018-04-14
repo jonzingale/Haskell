@@ -102,8 +102,28 @@ reflectY ((x,y), theta) = ((1-x, y), pi - theta)
 {--
 Conditions:
 --}
+yregion :: RayLength
+yregion (x,y) theta = case x of
+  0 -> pkCondition (x,y) theta
+  1 -> kpCondition (x,y) theta
 
-yregion :: RayLength -- transforms y propblem to be an x problem
-yregion (0,y) theta = (uncurry xregion).rot90  $ ((0,y), theta)
-yregion (1,y) theta = (uncurry xregion).rot270 $ ((1,y), theta)
-yregion _ _ = 999
+-- κ-ρ transition
+pkCondition :: RayLength
+pkCondition (0, y) theta | cond y theta = rho (0, y) theta
+                         | otherwise = kappa (0, y) theta
+  where
+    cond y t = ((1-y)*pi/4) > t -- valid between 0 and pi/2
+
+-- κ'-ρ' transition
+kpCondition :: RayLength
+kpCondition (1, y) theta | cond y theta = kappa' (0, y) theta
+                         | otherwise = rho' (0, y) theta
+  where
+    cond y t = ((1+y)*pi/4) > t -- valid between pi/2 and pi
+
+yregion' :: RayLength -- transforms y propblem to be an x problem
+yregion' (0,y) theta = (uncurry xregion).rot90  $ ((0,y), theta)
+yregion' (1,y) theta = (uncurry xregion).rot270 $ ((1,y), theta)
+yregion' _ _ = 999
+
+
