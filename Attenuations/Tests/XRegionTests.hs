@@ -45,7 +45,7 @@ prop_abBoundary = -- alpha - beta boundary
   let eqF x = (tol.sqrt) 2 == tol x in
   all eqF $ regions <*> [params]
 
--- x - Reflection Tests
+-- x-y Reflection Tests
 prop_alphaIsReflectedEpsilon :: Gen Bool
 prop_alphaIsReflectedEpsilon = do
   x <- interval
@@ -70,7 +70,7 @@ prop_RotRhoIsEps = do
   th <- epsilonRegion x
   let eps = epsilon (x,0) th
   let rrh = (uncurry rho).rot270 $ ((x,0), th)
-  let atol d = round $ d * 10^13 -- fairly stable!
+  let atol d = round $ d * 10^13
   return $ atol eps == atol rrh
 
 prop_RotKapIsDel :: Gen Bool
@@ -79,9 +79,10 @@ prop_RotKapIsDel = do
   th <- deltaRegion $ x
   let del = delta (x,0) th
   let rka = (uncurry kappa).rot270 $ ((x,0), th)
-  let atol d = round $ d * 10^13 -- fairly stable!
+  let atol d = round $ d * 10^13
   return $ atol del == atol rka
 
+-- y region tests
 prop_0yregionEq :: Gen Bool
 prop_0yregionEq = do
   y <- interval
