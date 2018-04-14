@@ -79,3 +79,14 @@ prop_RotKapIsDel = do
   let atol d = round $ d * 10^13 -- fairly stable!
   return $ atol del == atol rka
 
+prop_0yregionEq :: Gen Bool
+prop_0yregionEq = do
+  y <- interval
+  theta <- zeroToPi
+  return $ yregion (0,y) theta == yregion' (0,y) theta
+
+prop_1yregionEq :: Gen Bool
+prop_1yregionEq = do
+  y <- interval
+  theta <- zeroToPi
+  return $ yregion (1,y) theta == yregion' (1,y) theta
