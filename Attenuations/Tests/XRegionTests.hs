@@ -11,6 +11,9 @@ import Test.Framework
  εδ γ βα   μ ρκ     κ'ρ'μ'
 η_\\|//_η  |//_ι  ι'_\\|
 
+  δ β    ρ         ρ'
+ε_\|/_α  |/_κ  κ'_\|
+
 --}
 
 -- x - Boundary Tests
@@ -82,11 +85,15 @@ prop_RotKapIsDel = do
 prop_0yregionEq :: Gen Bool
 prop_0yregionEq = do
   y <- interval
-  theta <- zeroToPi
-  return $ yregion (0,y) theta == yregion' (0,y) theta
+  theta <- zeroToHalfPi
+  let ys = yregion (0,y) theta
+  let ys' = yregion' (0,y) theta
+  return $ (eBall 13) ys ys'
 
 prop_1yregionEq :: Gen Bool
 prop_1yregionEq = do
   y <- interval
-  theta <- zeroToPi
-  return $ yregion (1,y) theta == yregion' (1,y) theta
+  theta <- halfPiToPi
+  let ys = yregion (1,y) theta
+  let ys' = yregion' (1,y) theta
+  return $ (eBall 13) ys ys'
