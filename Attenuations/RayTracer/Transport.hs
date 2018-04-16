@@ -29,4 +29,15 @@ transport cs θ = f cs 0 0 θ 0
 lookUp :: [[Double]] -> (Double, Double) -> Double
 lookUp as (ii, jj) = let (i, j) = (floor ii, floor jj) in (as!!i)!!j
 
--- testCase : transport (12.3, 0) (pi/4)
+-- StraightFoward calculation
+xs x theta = [ x + (fromIntegral i) / tan theta | i <- [0..]]
+ys y theta = [ y + (fromIntegral j) * tan theta | j <- [0..]]
+
+walk _ [] _ = 0
+walk [] _ _ = 0
+walk (x:xs) (y:ys) theta | x < y =
+  rayLength (snd.properFraction $ x, 0) theta + walk xs (y:ys) theta
+                         | otherwise =
+  rayLength (0, snd.properFraction $ y) theta + walk (x:xs) ys theta
+
+testCase =  walk (take 100 $ xs (0.25) (pi/8)) (take 100 $ ys (0.25) (pi/8)) (pi/8)
