@@ -40,4 +40,7 @@ walk (x:xs) (y:ys) theta | x < y =
                          | otherwise =
   rayLength (0, snd.properFraction $ y) theta + walk (x:xs) ys theta
 
-testCase =  walk (take 100 $ xs (0.25) (pi/8)) (take 100 $ ys (0.25) (pi/8)) (pi/8)
+-- lattice n - 1
+testCase th =  walk (take 99 $ xs (0.25) th) (take 99 $ ys (0.25) th) th
+
+-- A real test will be that partials sum to the same as any total.
