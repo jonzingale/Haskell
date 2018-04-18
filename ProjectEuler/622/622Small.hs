@@ -5,10 +5,7 @@ import Data.Bits
 
 import Data.List
 
-main = do print var622
-
-var622 :: Integer
-var622 = sum.goodBits $ 60
+main = do print.sum.goodBits $ 60
 
 goodBits :: Integer -> [Integer]
 goodBits n = [ k + 1 | k <- listDivisors (2^n-1), divCond n k]
@@ -49,10 +46,10 @@ remSort (a:as) = (remSort.smaller) (a:as) ++ [a] ++ (remSort.larger) (a:as)
 
 
 -- Provables:
-sixties = f 2
+exactly8 = f 2
   where
-    f n | n > 2^15 = []
-        | riffleId n == 15 = n : f (n+2)
+    f n | n > 2^8 = []
+        | riffleId n == 8 = n : f (n+2)
         | otherwise = f (n+2)
 
 riffleId n = f (riffleOnce [1..n]) [1..n] 1
