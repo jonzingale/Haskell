@@ -10,9 +10,7 @@ main = do print.sum.goodBits $ 60
 goodBits :: Integer -> [Integer]
 goodBits n = [ k + 1 | k <- listDivisors (2^n-1), divCond n k]
   where
-    divCond n k = allTrue [ mod (2^t-1) k /= 0 | t <- midFacts n]
-    midFacts = tail.reverse.listDivisors
-    allTrue = foldr (&&) True
+    divCond n k = and [ mod (2^t-1) k /= 0 | t <- midDivisors n]
 
 
 -- goodBits :: [Integer]
