@@ -3,8 +3,8 @@ import Math.NumberTheory.Primes.Factorisation -- divisors
 import Data.Set (singleton, Set, mapMonotonic, unions, toList)
 
 -- just give proper divisors
-midDivisors :: Integer -> [Integer]
-midDivisors n = f.tail.toList.divisors $ n
+properDivisors :: Integer -> [Integer]
+properDivisors n = f.tail.toList.divisors $ n
   where
     f [x] = []
     f (x:xs) = x:f xs
