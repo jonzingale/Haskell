@@ -1,7 +1,7 @@
 
 {-# OPTIONS_GHC -Wno-missing-methods #-}
 
-module BestHorse where
+module Notes622 where
 import Data.Numbers.Primes -- primeFactors
 import Text.Printf
 import Data.Bits
