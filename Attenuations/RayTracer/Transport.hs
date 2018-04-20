@@ -3,6 +3,7 @@ import RayTracer.RayLength
 import Data.Array
 
 arraySize = 5
+array :: [[Double]]
 array = [[1..5], [6..11], [15..20], [21..26], [31..36]]
 
 {--
@@ -26,8 +27,8 @@ would greatly simplify the code.
 
 -- Eventually this will be either Array
 -- or Accelerate and likely not [[a]] but [a].
--- lookUp :: [[Double]] -> (Double, Double) -> Double
--- lookUp as (ii, jj) = let (i, j) = (floor ii, floor jj) in (as!!i)!!j
+lookUp :: [[Double]] -> (Double, Double) -> Double
+lookUp as (ii, jj) = let (i, j) = (floor ii, floor jj) in (as!!i)!!j
 
 -- StraightFoward calculation
 xks x theta s = [ x + k / tan theta | k <- [0..s]]
@@ -37,8 +38,13 @@ fractional :: Double -> Double
 fractional = snd.properFraction
 
 -- A real test will be that partials sum to the same as any total.
+-- like totalAttenuation without the array.
 lim = 31622 -- (10^9)**(1/3) ~1/5 second.
-theWalk theta = walk (xks 0 theta lim) (yks 0.25 theta lim) theta
+totalRayLength theta =
+  let xwalk = (xks 0 theta lim) in
+  let ywalk = (yks 0.25 theta lim) in
+  walk xwalk ywalk theta
+
   where
     walk _ [] _ = 0
     walk [] _ _ = 0
