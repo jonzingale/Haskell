@@ -4,6 +4,9 @@
 module RayTracer.Lattice where
 import RayTracer.Rhythm
 import System.Random
+
+import qualified Data.Array.Accelerate as A
+import qualified Data.ByteString.Lazy as L
 import Data.Array
 
 {--
@@ -18,10 +21,6 @@ cell is needed to compute the value at the given cell.
 10^9 cells eventually.
 --}
 
-type Coords = Array Integer Double
-data BigArray = VLA {pr1::Coords, pr2::Coords, pr3::Coords} deriving Show
-
 -- rArray takes seed values to produce random arrays.
-bigArray = VLA (rArray 21) (rArray 42) (rArray 23)
-  where
-    rArray = listArray (0,100).randomRs (0,10^3).mkStdGen
+bigArray = listArray bounds $ randomRs (0::Double, 10**3).mkStdGen $ 42
+  where bounds = (0, 10^6-1)
