@@ -39,6 +39,7 @@ bigArray = U.listArray bounds $ randomRs (0, 10**3::Double).mkStdGen $ 42
 
 saveArr = do
   appendFile "./test.txt" $ (show.(U.elems)) bigArray
+  -- L.writeFile "./test.txt" $ ((U.elems)) bigArray
 
 
 displayChars = do
@@ -46,5 +47,4 @@ displayChars = do
   return (L.take 200 content)
 
 -- import qualified Data.ByteString as B
--- import IO
 -- main = B.readFile "/usr/share/dict/words" >>= B.putStr . last . B.lines
