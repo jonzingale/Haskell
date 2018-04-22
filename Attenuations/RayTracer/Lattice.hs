@@ -29,15 +29,22 @@ cell is needed to compute the value at the given cell.
 
 bigArray :: U.UArray Int Double
 bigArray = U.listArray bounds $ randomRs (0, 10**3::Double).mkStdGen $ 42
-  where bounds = (0::Int, 10^8-1)
+  where bounds = (0::Int, 10^4-1)
 
-{--
-saveArr = do
-    outh <- openFile "./test.txt" WriteMode
-    hPrint outh bigArray
-    hClose outh
+-- saveArr = do
+    -- outh <- openFile "./test.txt" WriteMode
+    -- hPrint outh bigArray
+    -- hClose outh
 -- (435.28 secs, 1,273,407,019,768 bytes) 10^8s
---}
 
--- main :: IO ()
--- main = L.getContents >>= print . L.count '\n'
+saveArr = do
+  appendFile "./test.txt" $ (show.(U.elems)) bigArray
+
+
+displayChars = do
+  content <- L.readFile "./test.txt"
+  return (L.take 200 content)
+
+-- import qualified Data.ByteString as B
+-- import IO
+-- main = B.readFile "/usr/share/dict/words" >>= B.putStr . last . B.lines
