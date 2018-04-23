@@ -8,8 +8,11 @@ import System.IO
 -- import qualified Data.Array.Accelerate as A -- GPU
 -- import qualified Data.Array.Repa as R -- wrapper for fast
 import qualified Data.ByteString.Lazy as L
-import qualified Data.Array.Unboxed as U
+import qualified Data.Array.Unboxed as U -- strict fast Arrays
+import qualified Data.Array.IArray as I -- fast lookups on Unboxed (I.!)
 
+import qualified Data.Array as A -- mostly for comparison
+import Data.List
 {--
 TODO:
 Make a 1000 cubic-cell mesh and calculate the path sums through
@@ -29,22 +32,24 @@ cell is needed to compute the value at the given cell.
 
 bigArray :: U.UArray Int Double
 bigArray = U.listArray bounds $ randomRs (0, 10**3::Double).mkStdGen $ 42
-  where bounds = (0::Int, 10^4-1)
+  where bounds = (0::Int, 10^3-1)
+
+exBigA = (I.!) bigArray 34345
 
 -- saveArr = do
     -- outh <- openFile "./test.txt" WriteMode
     -- hPrint outh bigArray
     -- hClose outh
--- (435.28 secs, 1,273,407,019,768 bytes) 10^8s
+-- (435.28 secs, 1,273,407,019,768 bytes) 10^8
 
 saveArr = do
-  appendFile "./test.txt" $ (show.(U.elems)) bigArray
-  -- L.writeFile "./test.txt" $ ((U.elems)) bigArray
+  writeFile "./Tests/testArray.csv" $ unlines.map show $ U.elems bigArray
+  -- L.writeFile ".Tests/testArray.csv" $ ((U.elems)) bigArray
 
 
 displayChars = do
-  content <- L.readFile "./test.txt"
-  return (L.take 200 content)
+  content <- L.readFile "./Tests/testArray.csv"
+  return (content)
 
 -- import qualified Data.ByteString as B
 -- main = B.readFile "/usr/share/dict/words" >>= B.putStr . last . B.lines
