@@ -12,6 +12,8 @@ import qualified Data.ByteString.Lazy.Char8 as L
 import qualified Data.Array.Unboxed as U -- strict fast Arrays
 import qualified Data.Array.IArray as I -- fast lookups on Unboxed (I.!)
 
+--import qualified Data.ByteString.Lex.Lazy.Double as L as L
+import qualified RayTracer.ReadDouble as R
 import qualified Data.Array as A -- mostly for comparison
 import Data.List.Split
 
@@ -69,6 +71,10 @@ testRead = do
   content <- L.readFile "./Tests/testArray.csv"
   let ary = (map (read.(L.unpack)) $ L.words content)::[Double]
   return $ sum ary
+
+testRead2 = do
+  content <- L.readFile "./Tests/testArray.csv"
+  return $ map R.readDouble (L.words content)
 
 -- Check here for Parsing.
 -- https://wiki.haskell.org/Numeric_Haskell:_A_Vector_Tutorial#Parsing_Binary_Data
