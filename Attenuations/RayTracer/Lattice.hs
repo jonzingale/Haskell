@@ -70,11 +70,15 @@ testRead = do
   let ary = (map (read.(L.unpack)) $ L.words content)::[Double]
   return $ sum ary
 
--- readByteString :: L.ByteString -> Maybe Double
--- readByteString str =
-  -- case L.
+-- Check here for Parsing.
+-- https://wiki.haskell.org/Numeric_Haskell:_A_Vector_Tutorial#Parsing_Binary_Data
 
+-- import Data.ByteString.Internal as BS
+-- import qualified Data.Vector.Storable as V
 
+-- bytesToFloats :: BS.ByteString -> V.Vector Float
+-- bytesToFloats = V.unsafeCast . aux . BS.toForeignPtr
+--   where aux (fp,offset,len) = V.unsafeFromForeignPtr fp offset len
 
 
 
