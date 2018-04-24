@@ -13,3 +13,6 @@ unsafeReadDouble = inlinePerformIO . flip SB.useAsCString c_atof
 
 readDouble = unsafeReadDouble . SB.concat . LB.toChunks
 readInt = fst . fromJust . LB.readInt
+
+
+-- main = LB.getContents >>= (print . sum . map readDouble . LB.lines)
