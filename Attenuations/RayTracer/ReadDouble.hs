@@ -15,4 +15,4 @@ readDouble = unsafeReadDouble . SB.concat . LB.toChunks
 readInt = fst . fromJust . LB.readInt
 
 
--- main = LB.getContents >>= (print . sum . map readDouble . LB.lines)
+main = LB.getContents >>= (print . sum . map readDouble . LB.lines)
