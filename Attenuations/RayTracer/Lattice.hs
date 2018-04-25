@@ -16,6 +16,7 @@ import qualified Data.Array.IArray as I -- fast lookups on Unboxed (I.!)
 import qualified RayTracer.ReadDouble as R
 import qualified Data.Array as A -- mostly for comparison
 import Data.List.Split
+-- import qualified Data.Vector.Storable as V
 
 -- import Data.ByteString.Internal as BS
 -- import qualified Data.Vector.Storable as V
@@ -72,18 +73,18 @@ testRead = do
   let ary = (map (read.(L.unpack)) $ L.words content)::[Double]
   return $ sum ary
 
-testRead2 = do
-  content <- L.readFile "./Tests/testArray.csv"
-  return $ map R.readDouble (L.words content)
+testRead2 = do -- better would be Array not List
+  content <- L.readFile "./Tests/testBigSparseArray.csv"
+  let doubles = map R.readDouble (L.words content)
+  return $ doubles
 
 -- Check here for Parsing.
 -- https://wiki.haskell.org/Numeric_Haskell:_A_Vector_Tutorial#Parsing_Binary_Data
 
 -- import Data.ByteString.Internal as BS
--- import qualified Data.Vector.Storable as V
 
--- bytesToFloats :: BS.ByteString -> V.Vector Float
--- bytesToFloats = V.unsafeCast . aux . BS.toForeignPtr
+-- bytesToFloats :: L.ByteString -> V.Vector Float
+-- bytesToFloats = V.unsafeCast . aux . L.toForeignPtr
 --   where aux (fp,offset,len) = V.unsafeFromForeignPtr fp offset len
 
 
