@@ -36,7 +36,7 @@ $ time ./vector data
 main = do
     -- [f] <- getArgs
     -- s   <- L.readFile f
-    s <- L.readFile "./Tests/data.csv"
+    !s <- L.readFile "./Tests/data.csv"
     print . V.sum . parse $ s
  
 -- Fill a new vector from a file containing a list of numbers.
