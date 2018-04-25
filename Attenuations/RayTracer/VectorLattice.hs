@@ -1,6 +1,6 @@
 
 {-# LANGUAGE BangPatterns #-}
-module VectorLattice where
+-- module VectorLattice where
 import qualified Data.ByteString.Lazy.Char8 as L
 import qualified Data.Vector.Unboxed as V
 import System.Environment
@@ -11,6 +11,12 @@ https://wiki.haskell.org/Numeric_Haskell:_A_Vector_Tutorial#Parsing_Binary_Data
 
 optimize at compilation time:
 ghc -Odph --make vector.hs
+ghc -Odph --make VectorLattice.hs
+
+$ time ./vector data
+500000500000
+./vector data  0.08s user 0.01s system 98% cpu 0.088 total
+
 --}
 
 -- testRead2 = do -- better would be Array not List
