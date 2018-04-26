@@ -10,10 +10,10 @@ Vector parsing via:
 https://wiki.haskell.org/Numeric_Haskell:_A_Vector_Tutorial
 
 optimize at compilation time:
-ghc -Odph --make FileToVector.hs
-
+$ ghc -Odph --make FileToVector.hs
 $ time ./FileToVector
 --}
+
 -- The basic idea:
 main = do
     !s <- L.readFile "./Tests/data.csv"
