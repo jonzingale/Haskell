@@ -1,8 +1,10 @@
 
 {-# LANGUAGE BangPatterns #-}
 -- module VectorLattice where
-import qualified Data.ByteString.Lazy.Char8 as L
-import qualified Data.Vector.Unboxed as V
+import qualified Data.ByteString.Char8 as L
+-- import qualified Data.ByteString.Lazy.Char8 as L
+import qualified Data.ByteString.Lex.Fractional as L
+import qualified Data.Vector.Unboxed as U
 import System.Environment
 
 {--
@@ -19,29 +21,28 @@ $ time ./vector data
 
 --}
 
--- testRead2 = do -- better would be Array not List
---   content <- L.readFile "./Tests/testBigSparseArray.csv"
---   return $ V.fromList $ L.words $ content
-
-  -- let doubles = map R.readDouble (L.words content)
-  -- return $ doubles
-
--- testRead = do
--- content <- L.readFile "./Tests/testArray.csv"
--- let ary = (map (read.(L.unpack)) $ L.words content)::[Double]
--- return $ sum ary
-
--- "./Tests/testArray.csv"
-
 main = do
-    -- [f] <- getArgs
-    -- s   <- L.readFile f
-    !s <- L.readFile "./Tests/data.csv"
-    print . V.sum . parse $ s
- 
--- Fill a new vector from a file containing a list of numbers.
-parse = V.unfoldr step
+    !s <- L.readFile "./Tests/bigdata.csv"
+    print . U.sum . parse $ s
+
+parse :: L.ByteString -> U.Vector Double
+parse = U.unfoldr step
   where
-     step !s = case L.readInt s of
+     step !s = case L.readDecimal s of
         Nothing       -> Nothing
         Just (!k, !t) -> Just (k, L.tail t)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
