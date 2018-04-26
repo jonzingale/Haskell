@@ -16,19 +16,19 @@ $ time ./FileToVector
 
 -- The basic idea:
 main = do
-    !s <- L.readFile "./Tests/data.csv"
+    !s <- L.readFile "./Tests/data"
     print . U.sum . parse $ s
 
 parse :: L.ByteString -> U.Vector Double
 parse = U.unfoldr step
   where
-     step !s = case L.readDecimal s of
+     step !s = case L.readExponential s of
         Nothing       -> Nothing
         Just (!k, !t) -> Just (k, L.tail t)
 
 -- A run at a useful Parser
 anArray = do
-  !s <- L.readFile "./Tests/data.csv"
+  !s <- L.readFile "./Tests/data"
   return.parse $ s
 
 type Coords = (Int, Int)
