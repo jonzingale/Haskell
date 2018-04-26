@@ -31,11 +31,13 @@ anArray = do
   !s <- L.readFile "./Tests/data.csv"
   return.parse $ s
 
-uIndex (x, y) a = (U.!) a (x + y * 1000)
+type Coords = (Int, Int)
+qArray :: U.Unbox a => Coords -> U.Vector a -> a
+qArray (x, y) a = (U.!) a (x + y * 1000)
 
 testIndex = do
   ary <- anArray
-  return $ uIndex (20, 300) ary
+  return $ qArray (20, 300) ary
 
 
 
