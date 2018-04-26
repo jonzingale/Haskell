@@ -10,13 +10,9 @@ Vector parsing via:
 https://wiki.haskell.org/Numeric_Haskell:_A_Vector_Tutorial
 
 optimize at compilation time:
-ghc -Odph --make vector.hs
-ghc -Odph --make VectorLattice.hs
+ghc -Odph --make FileToVector.hs
 
-$ time ./vector data
-500000500000
-./vector data  0.08s user 0.01s system 98% cpu 0.088 total
-
+$ time ./FileToVector
 --}
 
 main = do
