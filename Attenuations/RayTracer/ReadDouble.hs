@@ -16,3 +16,5 @@ readInt = fst . fromJust . LB.readInt
 
 
 -- main = LB.getContents >>= (print . sum . map readDouble . LB.lines)
+
+--NOTE: MAY BE DEPRECATED. FileToVector.hs
