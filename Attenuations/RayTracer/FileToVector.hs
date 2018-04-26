@@ -14,7 +14,7 @@ ghc -Odph --make FileToVector.hs
 
 $ time ./FileToVector
 --}
-
+-- The basic idea:
 main = do
     !s <- L.readFile "./Tests/data.csv"
     print . U.sum . parse $ s
@@ -26,11 +26,16 @@ parse = U.unfoldr step
         Nothing       -> Nothing
         Just (!k, !t) -> Just (k, L.tail t)
 
+-- A run at a useful Parser
+anArray = do
+  !s <- L.readFile "./Tests/data.csv"
+  return.parse $ s
 
+uIndex (x, y) a = (U.!) a (x + y * 1000)
 
-
-
-
+testIndex = do
+  ary <- anArray
+  return $ uIndex (20, 300) ary
 
 
 
