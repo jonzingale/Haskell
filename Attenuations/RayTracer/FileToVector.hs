@@ -1,15 +1,13 @@
 
 {-# LANGUAGE BangPatterns #-}
--- module VectorLattice where
 import qualified Data.ByteString.Char8 as L
--- import qualified Data.ByteString.Lazy.Char8 as L
 import qualified Data.ByteString.Lex.Fractional as L
 import qualified Data.Vector.Unboxed as U
 import System.Environment
 
 {--
 Vector parsing via:
-https://wiki.haskell.org/Numeric_Haskell:_A_Vector_Tutorial#Parsing_Binary_Data
+https://wiki.haskell.org/Numeric_Haskell:_A_Vector_Tutorial
 
 optimize at compilation time:
 ghc -Odph --make vector.hs
@@ -22,7 +20,7 @@ $ time ./vector data
 --}
 
 main = do
-    !s <- L.readFile "./Tests/bigdata.csv"
+    !s <- L.readFile "./Tests/data.csv"
     print . U.sum . parse $ s
 
 parse :: L.ByteString -> U.Vector Double
