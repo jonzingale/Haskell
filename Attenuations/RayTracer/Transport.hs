@@ -1,4 +1,5 @@
 module RayTracer.Transport where
+import RayTracer.FileToVector
 import RayTracer.RayLength
 import Data.Array
 
