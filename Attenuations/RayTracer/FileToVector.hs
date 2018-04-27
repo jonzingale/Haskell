@@ -16,7 +16,7 @@ $ time ./FileToVector
 
 -- The basic idea:
 main = do
-    !s <- L.readFile "./Tests/data"
+    !s <- L.readFile "./Tests/data1M" -- 1_000_000
     print . U.sum . parse $ s
 
 parse :: L.ByteString -> U.Vector Double
@@ -28,7 +28,7 @@ parse = U.unfoldr step
 
 -- A run at a useful Parser
 anArray = do
-  !s <- L.readFile "./Tests/data"
+  !s <- L.readFile "./Tests/data1M"
   return.parse $ s
 
 type Coords = (Int, Int)
