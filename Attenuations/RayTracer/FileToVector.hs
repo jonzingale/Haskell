@@ -1,5 +1,6 @@
 
 {-# LANGUAGE BangPatterns #-}
+module RayTracer.FileToVector (qArray, anArray) where
 import qualified Data.ByteString.Char8 as L
 import qualified Data.ByteString.Lex.Fractional as L
 import qualified Data.Vector.Unboxed as U
