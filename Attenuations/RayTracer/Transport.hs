@@ -14,9 +14,8 @@ fractional :: Double -> Double
 fractional = snd.properFraction
 
 totalRayLength theta =
-  let lim = 1000 * sqrt(3/2) - 1  in
-  let ywalk = (yks 0.25 theta lim) in
-  let xwalk = (xks 0 theta lim) in
+  let ywalk = yks 0.25 theta 999 in
+  let xwalk = xks 0 theta 999 in
 
   walk xwalk ywalk theta
 
@@ -31,26 +30,24 @@ totalRayLength theta =
       False ->
         rayLength (0, fractional y) theta + walk (x:xs) ys theta
 
-totalAttenuation theta ary =
-  let xs x theta s = [ properFraction $ x + k / tan theta | k <- [0..s]] in
-  let ys y theta s = [ properFraction $ y + k * tan theta | k <- [0..s]] in
-  let xwalk = xs 0 theta 999 in
-  let ywalk = ys 0.25 theta 999 in
+totalAttenuation (x,y) theta ary =
+  let xcrossings = [ x + k / tan theta | k <- [0..999]] in
+  let ycrossings = [ y + k * tan theta | k <- [0..999]] in
 
-  walk xwalk ywalk theta ary
+  walk xcrossings ycrossings theta ary
 
   where
     walk _ [] _ _ = 0
     walk [] _ _ _ = 0
-    walk ((x,s):xs) ((y,t):ys) theta ary =
-      let val = qArray (x, y) ary in -- formerly (floor s, floor t)
+    walk (x:xs) (y:ys) theta ary =
+      let val = qArray (floor x, floor y) ary in
       case x < y of
-      True ->
-        val * rayLength (fractional s, 0) theta + walk xs ((y,t):ys) theta ary
-      False ->
-        val * rayLength (0, fractional t) theta + walk ((x,s):xs) ys theta ary
+      True -> -- bottom entry in frame
+        val * rayLength (fractional x, 0) theta + walk xs (y:ys) theta ary
+      False -> -- side entry in frame
+        val * rayLength (0, fractional y) theta + walk (x:xs) ys theta ary
 
 
 main = do
   myArray <- anArray
-  return $ totalAttenuation (pi/2) myArray --blows up, check xths and yths
+  return $ totalAttenuation (0,123.1) (pi/2) myArray
