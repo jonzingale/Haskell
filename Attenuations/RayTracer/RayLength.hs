@@ -1,8 +1,7 @@
 module RayTracer.RayLength where
 
 {--
-TODO:
-Find the ray length through a cell.
+Finds the ray length through a cell.
 --}
 
 type RayLength = Point -> Angle -> Double
