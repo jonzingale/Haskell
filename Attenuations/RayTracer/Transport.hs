@@ -13,20 +13,16 @@ A real test will be that partials sum to the same as any total.
 fractional :: Double -> Double
 fractional = snd.properFraction
 
--- StraightFoward calculation
-xks x theta s = [ x + k / tan theta | k <- [0..s]]
-yks y theta s = [ y + k * tan theta | k <- [0..s]]
-
--- longest length in cube as diagonal
--- in square (secs 0.01)
-lim = 1000 * sqrt(3/2) - 1 
-
 totalRayLength theta =
-  let xwalk = (xks 0 theta lim) in
+  let lim = 1000 * sqrt(3/2) - 1  in
   let ywalk = (yks 0.25 theta lim) in
+  let xwalk = (xks 0 theta lim) in
+
   walk xwalk ywalk theta
 
   where
+    xks x theta s = [ x + k / tan theta | k <- [0..s]]
+    yks y theta s = [ y + k * tan theta | k <- [0..s]]
     walk _ [] _ = 0
     walk [] _ _ = 0
     walk (x:xs) (y:ys) theta = case x < y of
@@ -58,5 +54,3 @@ totalAttenuation theta ary =
 main = do
   myArray <- anArray
   return $ totalAttenuation (pi/2) myArray
-
-
