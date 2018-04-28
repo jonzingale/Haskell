@@ -14,8 +14,9 @@ fractional :: Double -> Double
 fractional = snd.properFraction
 
 totalRayLength (x,y) theta size =
-  let xwalk = [ x + k / tan theta | k <- [0..size-1]] in
-  let ywalk = [ y + k * tan theta | k <- [0..size-1]] in
+  let xwalk = [ x + k / tan theta | k <- [1..size]] in
+  let ywalk = [ y + k * tan theta | k <- [1..size]] in
+
   walk xwalk ywalk theta
 
   where
@@ -29,8 +30,10 @@ totalRayLength (x,y) theta size =
 
 
 totalAttenuation (x,y) theta ary =
-  let xcrossings = [ x + k / tan theta | k <- [0..999]] in
-  let ycrossings = [ y + k * tan theta | k <- [0..999]] in
+  -- array lengths should really be dependent on path lengths. These
+  -- will be better written as a conditional on limit: x<1000 && y<1000.
+  let xcrossings = [ x + k / tan theta | k <- [1..1000]] in
+  let ycrossings = [ y + k * tan theta | k <- [1..1000]] in
   walk xcrossings ycrossings theta ary
 
   where
