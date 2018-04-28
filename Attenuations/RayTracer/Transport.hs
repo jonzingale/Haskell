@@ -13,15 +13,14 @@ A real test will be that partials sum to the same as any total.
 fractional :: Double -> Double
 fractional = snd.properFraction
 
-totalRayLength theta =
-  let ywalk = yks 0.25 theta 999 in
-  let xwalk = xks 0 theta 999 in
+totalRayLength (x,y) theta size =
+  let xwalk = [ x + k / tan theta | k <- [0..size-1]] in
+  let ywalk = [ y + k * tan theta | k <- [0..size-1]] in
 
   walk xwalk ywalk theta
 
   where
-    xks x theta s = [ x + k / tan theta | k <- [0..s]]
-    yks y theta s = [ y + k * tan theta | k <- [0..s]]
+
     walk _ [] _ = 0
     walk [] _ _ = 0
     walk (x:xs) (y:ys) theta = case x < y of
@@ -50,4 +49,4 @@ totalAttenuation (x,y) theta ary =
 
 main = do
   myArray <- anArray
-  return $ totalAttenuation (0,123.1) (pi/2) myArray
+  return $ totalAttenuation (0,0.1) (pi/2) myArray -- still pretty buggy +x
