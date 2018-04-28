@@ -16,11 +16,9 @@ fractional = snd.properFraction
 totalRayLength (x,y) theta size =
   let xwalk = [ x + k / tan theta | k <- [0..size-1]] in
   let ywalk = [ y + k * tan theta | k <- [0..size-1]] in
-
   walk xwalk ywalk theta
 
   where
-
     walk _ [] _ = 0
     walk [] _ _ = 0
     walk (x:xs) (y:ys) theta = case x < y of
@@ -29,10 +27,10 @@ totalRayLength (x,y) theta size =
       False ->
         rayLength (0, fractional y) theta + walk (x:xs) ys theta
 
+
 totalAttenuation (x,y) theta ary =
   let xcrossings = [ x + k / tan theta | k <- [0..999]] in
   let ycrossings = [ y + k * tan theta | k <- [0..999]] in
-
   walk xcrossings ycrossings theta ary
 
   where
