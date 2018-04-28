@@ -53,4 +53,4 @@ totalAttenuation theta ary =
 
 main = do
   myArray <- anArray
-  return $ totalAttenuation (pi/2) myArray
+  return $ totalAttenuation (pi/2) myArray --blows up, check xths and yths
