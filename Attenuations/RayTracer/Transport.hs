@@ -1,4 +1,4 @@
-module RayTracer.Transport where
+module RayTracer.Transport (totalRayLength, totalAttenuation) where
 import RayTracer.FileToVector
 import RayTracer.RayLength
 
@@ -34,8 +34,8 @@ totalRayLength theta =
 totalAttenuation theta ary =
   let xs x theta s = [ properFraction $ x + k / tan theta | k <- [0..s]] in
   let ys y theta s = [ properFraction $ y + k * tan theta | k <- [0..s]] in
-  let xwalk = (xs 0 theta 4) in
-  let ywalk = (ys 0.25 theta 4) in
+  let xwalk = xs 0 theta 999 in
+  let ywalk = ys 0.25 theta 999 in
 
   walk xwalk ywalk theta ary
 
@@ -43,7 +43,7 @@ totalAttenuation theta ary =
     walk _ [] _ _ = 0
     walk [] _ _ _ = 0
     walk ((x,s):xs) ((y,t):ys) theta ary =
-      let val = qArray (floor s, floor t) ary in
+      let val = qArray (x, y) ary in -- formerly (floor s, floor t)
       case x < y of
       True ->
         val * rayLength (fractional s, 0) theta + walk xs ((y,t):ys) theta ary
