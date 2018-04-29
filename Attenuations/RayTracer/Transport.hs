@@ -13,33 +13,38 @@ A real test will be that partials sum to the same as any total.
 NOTES:
  * totalAttenuation will always be initialized such that (x,0).
  * tan only really works here because I am considering θ <= pi/2. NEEDS GENERALIZED.
+ * There WILL be double counting if the points are on the diagonal.
 --}
 
-(x,y,theta,size) = (8/9, 0, pi/3,5.0)
-xs = [ x + k / tan theta | k <- [0..size-1.0]]
-ys = [ (k + 1 - fractional x) * tan theta | k <- [0..size-1.0]]
-testRayLength = totalRayLength (8/9) (pi/3) 1
+(x,y,theta) = (8/9, 0, pi/3)
+testRayLength = totalRayLength (8/9) (pi/3) -- 4.2222222222222205
 
 fractional :: Double -> Double
 fractional = snd.properFraction
 
-totalRayLength x theta size =
-  let xcrossings = [ x + k / tan theta | k <- [0..size-1]] in -- x @ yn
-  let ycrossings = [ (k + 1 - fractional x) * tan theta | k <- [0..size-1]] in -- y @ xn
-  rayLength (fractional x,0) theta + walk xcrossings ycrossings theta -- the sum because
+-- 𝜆> [rayLength (fractional x,0) (pi/3)|x<-xs]
+-- [0.22222222222222227,1.0675216838429702,1.1547005383792517,0.7581206070844659]
+-- 𝜆> [rayLength (0,fractional y) (pi/3)|y<-ys]
+-- [0.9324783161570293,8.71788545362814e-2,0.39657993129478536,0.7059810080532891]
+
+totalRayLength x theta =  
+  let yval = (1-fractional x) * tan theta in -- calculate 1 time.
+  let ycrossings = [ yval + k * tan theta | k <- [0..]] in -- y @ xn
+  let xcrossings = [ x + k / tan theta | k <- [0..]] in -- x @ yn
+  walk xcrossings ycrossings theta
 
   where
     walk _ [] _ = 0
     walk [] _ _ = 0
-    walk (x:xs) (y:ys) theta = case x < y of
-      True ->
-        rayLength (fractional x, 0) theta + walk xs (y:ys) theta
-      False ->
-        rayLength (0, fractional y) theta + walk (x:xs) ys theta
+    walk (x:xs) (y:ys) theta
+      | x > 3 || y > 4 = 0
+      | x < y = rayLength (fractional x, 0) theta + walk xs (y:ys) theta
+      | otherwise = rayLength (0, fractional y) theta + walk (x:xs) ys theta
+
 
 main = do
   myArray <- anArray
-  return $ totalRayLength (8/9) (pi/3) 100
+  return $ totalRayLength x theta
   -- return $ totalAttenuation (8/9) (pi/2) myArray -- still pretty buggy +x
 
 totalAttenuation = undefined
