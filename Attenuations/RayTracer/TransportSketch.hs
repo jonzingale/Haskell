@@ -27,8 +27,8 @@ xCys x theta = f x theta 0 arraySize
 {--
 The norm is not the right idea and so this will need to be rewritten.
 Really, YCxs :: [(y, raylen)] where raylen comes from equation for the line.
-0 = (tan θ)*t + x. Letting x vary and solving for t should give lengths.
-perhaps, y = (tan θ)*t + x, but I will wishful think not for now.
+0 = (tan θ) * t + x. Letting x vary and solving for t should give lengths.
+perhaps, y = (tan θ) * t + x, but I will wishful think not for now.
 
 Even better is realizing that the region detector already
 determines in which cell the next calculation will occur.
