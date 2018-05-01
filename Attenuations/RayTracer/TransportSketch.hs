@@ -7,8 +7,14 @@ arraySize = 4
 testRayLength = totalRayLength (8/9) (pi/3)
 
 yval = (1-fractional x) * tan theta
-ycrossings = takeWhile ((< arraySize).norm) [ (k, yval + k * tan theta) | k <- [0..]]
-xcrossings = takeWhile ((< arraySize).norm) [ (x + k / tan theta, k) | k <- [0..]]
+ycrossings = takeWhile ((< arraySize).norm) [ (yval + k * tan theta, k) | k <- [0..]]
+
+-- steps toward explict ray extensions. returns the pair
+-- (next x crossing, raylength thus far).
+xcrossings = normWhile [ (x + k / tan theta, len x theta k) | k <- [0..]]
+  where
+    normWhile = takeWhile ((< arraySize).norm) 
+    len x t k = k**2 * (1 + 1/(tan t)**2)
 
 norm :: (Double, Double) -> Double
 norm (x,y) = sqrt $ x*x + y*y
