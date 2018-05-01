@@ -6,15 +6,25 @@ arraySize = 4
 (x, theta, phi) = (8/9, pi/3, pi/2)
 testRayLength = totalRayLength (8/9) (pi/3)
 
-yval = (1-fractional x) * tan theta
-ycrossings = takeWhile ((< arraySize).snd) [ (yval + k * tan theta, k) | k <- [0..]]
+-- These are the y-coordinates when the ray passes integer valued xs.
+xcrossings = takeWhile ((< arraySize).fst) [ (k, yval + k * tan theta) | k <- [0..]]
+  where
+    yval = (1-fractional x) * tan theta
 
+{--
+1.1547005383792517 = 0.9324783161570293 + 0.22222222222
+-- ycrossings = [(0.8888888888888888,0.0),
+                 (1.4662391580785148,1.1547005383792517),
+                 (2.0435894272681407,2.3094010767585034),
+                 (2.620939696457767,3.464101615137755)]
 -- steps toward explict ray extensions. returns the pair
--- (next x crossing, raylength thus far).
-xcrossings = normWhile [ (x + k / tan theta, len x theta k) | k <- [0..]]
+-- (next x value at y crossing, raylength thus far).
+--}
+-- These are the x-coordinates when the ray passes integer valued ys.
+ycrossings = normWhile [ (x + k / tan theta, len x theta k) | k <- [0..]]
   where
     normWhile = takeWhile ((< arraySize).snd) 
-    len x t k = k**2 * (1 + 1/(tan t)**2)
+    len x t k = sqrt $ k**2 * (1 + 1/(tan t)**2)
 
 
 fractional :: Double -> Double
