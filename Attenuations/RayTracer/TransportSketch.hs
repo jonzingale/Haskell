@@ -2,13 +2,15 @@ module RayTracer.TransportSketch (totalRayLength) where
 import RayTracer.FileToVector
 import RayTracer.RayLength
 
-arraySize = 4
+arraySize = 6
 (x, theta, phi) = (8/9, pi/3, pi/2)
 testRayLength = totalRayLength (8/9) (pi/3)
 
 -- These are the y-coordinates when the ray passes integer valued xs.
-xcrossings = takeWhile ((< arraySize).fst) [ (k, yval + k * tan theta) | k <- [0..]]
+-- (raylength thus far, next y value at x crossing)
+xcrossings = takeWhile ((< arraySize).fst) [ (rayLen x theta k, yval + k * tan theta) | k <- [1..]]
   where
+    rayLen x t k = (1 - fractional x + k) * 1/ cos t
     yval = (1-fractional x) * tan theta
 
 {--
@@ -21,10 +23,10 @@ xcrossings = takeWhile ((< arraySize).fst) [ (k, yval + k * tan theta) | k <- [0
 -- (next x value at y crossing, raylength thus far).
 --}
 -- These are the x-coordinates when the ray passes integer valued ys.
-ycrossings = normWhile [ (x + k / tan theta, len x theta k) | k <- [0..]]
+ycrossings = normWhile [ (x + k / tan theta, rayLen x theta k) | k <- [0..]]
   where
-    normWhile = takeWhile ((< arraySize).snd) 
-    len x t k = sqrt $ k**2 * (1 + 1/(tan t)**2)
+    rayLen x t k = sqrt $ k**2 * (1 + 1/(tan t)**2)
+    normWhile = takeWhile ((< arraySize).snd)
 
 
 fractional :: Double -> Double
