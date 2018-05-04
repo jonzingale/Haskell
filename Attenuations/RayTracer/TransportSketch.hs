@@ -9,27 +9,28 @@ fractional = snd.properFraction
 arraySize = 10 -- <--- another error prone spot.
 
 -- length diffs
-tourists x th = take 4 $ zip (xcrossings x th) (ycrossings x th)
+tourists x th = take 4 $ zip (xcrossings x th arraySize)
+                             (ycrossings x th arraySize)
 
 -- exit point is arraySize dependent.
 exitCond x theta size =
   case (exitRegion x theta size) of
     LeftSide  -> (> 0)
-    Top       -> (< arraySize)
-    RightSide -> (< arraySize)
+    Top       -> (< size)
+    RightSide -> (< size)
 
 -- ys values at integer x.
-xcrossings x theta =
+xcrossings x theta size =
   let ypt k = x + k / tan theta in
   let rLen k = sqrt $ k**2 + (ypt k - x)**2 in
-  let takeWhileExit = takeWhile $ (exitCond x theta arraySize) . fst in
+  let takeWhileExit = takeWhile $ (exitCond x theta size) . fst in
   takeWhileExit [(ypt k, rLen k) | k <- [0..]]
 
 -- xs values at integer y.
-ycrossings x theta = -- SOMETHING WEIRD: ycrossings 8.1 (2*pi/5)
+ycrossings x theta size = -- SOMETHING WEIRD: ycrossings 8.1 (2*pi/5)
   let xpt k = (k-x) * tan theta in
   let rLen k = sqrt $ (k-x)**2 + (xpt k)**2 in
-  let takeWhileExit = takeWhile $ (exitCond x theta arraySize) . fst in
+  let takeWhileExit = takeWhile $ (exitCond x theta size) . fst in
   let dropWhileExit = dropWhile $ (< 0) . fst in
   takeWhileExit.dropWhileExit $ [ (xpt k, rLen k) | k <- [1..]]
 
