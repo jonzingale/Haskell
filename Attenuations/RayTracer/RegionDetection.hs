@@ -1,4 +1,5 @@
-module RayTracer.RegionDetection (exitRegion) where
+module RayTracer.RegionDetection
+  (exitRegion, Region (LeftSide, Top, RightSide)) where
 
 {--
 Finds the exit region of a given ray.
@@ -6,7 +7,7 @@ Finds the exit region of a given ray.
 * decide exit region.
 --}
 
-data Region = LeftSide | Top | RightSide | Bad deriving Show
+data Region = LeftSide | Top | RightSide | Bad deriving (Eq, Show)
 
 type RayLength = XPoint -> Angle -> Region
 type XPoint = Double -- valid between 0 and 1
