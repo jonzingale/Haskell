@@ -6,8 +6,8 @@ Finds the ray length through a cell.
 
 type RayLength = Point -> Angle -> Double
 type Point = (Double, Double) -- valid between 0 and 1
-type Slope = (Double, Double) -- usually between 0 and π
-type Angle = Double
+type XPoint = Double -- valid between 0 and 1
+type Angle = Double -- valid between 0 and pi
 
 rayLength :: RayLength
 rayLength (x,0) = xregion (x,0)
