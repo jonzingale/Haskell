@@ -8,10 +8,6 @@ fractional = snd.properFraction
 
 arraySize = 10 -- <--- another error prone spot.
 
--- length diffs
-tourists x th = take 4 $ zip (xcrossings x th arraySize)
-                             (ycrossings x th arraySize)
-
 -- exit point is arraySize dependent.
 exitCond x theta size =
   case (exitRegion x theta size) of
@@ -20,7 +16,7 @@ exitCond x theta size =
     RightSide -> (< size)
 
 -- ys values at integer x.
-xcrossings x theta size =
+xcrossings x theta size = -- FEELING PRETTY GOOD. WRITE TESTS
   let ypt k = x + k / tan theta in
   let rLen k = sqrt $ k**2 + (ypt k - x)**2 in
   let takeWhileExit = takeWhile $ (exitCond x theta size) . fst in
@@ -31,8 +27,17 @@ ycrossings x theta size = -- SOMETHING WEIRD: ycrossings 8.1 (2*pi/5)
   let xpt k = (k-x) * tan theta in
   let rLen k = sqrt $ (k-x)**2 + (xpt k)**2 in
   let takeWhileExit = takeWhile $ (exitCond x theta size) . fst in
-  let dropWhileExit = dropWhile $ (< 0) . fst in
-  takeWhileExit.dropWhileExit $ [ (xpt k, rLen k) | k <- [1..]]
+  takeWhileExit $ [ (xpt k, rLen k) | k <- [0..]]
+  -- let dropWhileExit = dropWhile $ (< 0) . fst in
+  -- takeWhileExit.dropWhileExit $ [ (xpt k, rLen k) | k <- [0..]]
+
+
+-- HELPERS
+tourists x th = take 4 $ zip (xcrossings x th arraySize)
+                             (ycrossings x th arraySize)
+
+paramLine :: XPoint -> Angle -> Double -> Double
+paramLine x θ = \t -> (t - x) * tan θ
 
 --- close to being pretty good.
 -- totalRayLength x theta =
