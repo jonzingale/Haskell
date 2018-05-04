@@ -1,8 +1,8 @@
-module RayTracer.RegionDetection where
+module RayTracer.RegionDetection (exitRegion) where
 
 {--
 Finds the exit region of a given ray.
-* rescale by arraySize.
+* down scale by arraySize.
 * decide exit region.
 --}
 
@@ -10,7 +10,10 @@ data Region = LeftSide | Top | RightSide | Bad deriving Show
 
 type RayLength = XPoint -> Angle -> Region
 type XPoint = Double -- valid between 0 and 1
-type Angle = Double -- valide between 0 and pi
+type Angle = Double -- valid between 0 and pi
+
+exitRegion :: Double -> Angle -> Double -> Region
+exitRegion x theta size = xregion (x / size) theta
 
 {--
 X Cases:
@@ -21,8 +24,8 @@ X Cases:
 
 xregion :: RayLength
 xregion x theta | theta <= pi / 2 = abCondition x theta
-                 | theta <= pi = edCondition x theta
-                 | otherwise = Bad
+                | theta <= pi = edCondition x theta
+                | otherwise = Bad
 
 -- ε-δ transition
 edCondition :: RayLength
@@ -37,4 +40,3 @@ abCondition x theta | cond x theta = RightSide
                     | otherwise = Top
   where
     cond x t = (pi/4 + x*pi/4) > t
-
