@@ -16,21 +16,18 @@ exitCond x theta size =
     RightSide -> (< size)
 
 -- ys values at integer x.
-xcrossings x theta size = -- FEELING PRETTY GOOD. WRITE TESTS
+xcrossings x theta size = -- LIKELY GOOD. WRITE TESTS
   let ypt k = x + k / tan theta in
   let rLen k = sqrt $ k**2 + (ypt k - x)**2 in
   let takeWhileExit = takeWhile $ (exitCond x theta size) . fst in
   takeWhileExit [(ypt k, rLen k) | k <- [0..]]
 
 -- xs values at integer y.
-ycrossings x theta size = -- SOMETHING WEIRD: ycrossings 8.1 (2*pi/5)
-  let xpt k = (k-x) * tan theta in
+ycrossings x theta size =
+  let xpt k = x + k / tan theta in
   let rLen k = sqrt $ (k-x)**2 + (xpt k)**2 in
   let takeWhileExit = takeWhile $ (exitCond x theta size) . fst in
   takeWhileExit $ [ (xpt k, rLen k) | k <- [0..]]
-  -- let dropWhileExit = dropWhile $ (< 0) . fst in
-  -- takeWhileExit.dropWhileExit $ [ (xpt k, rLen k) | k <- [0..]]
-
 
 -- HELPERS
 tourists x th = take 4 $ zip (xcrossings x th arraySize)
