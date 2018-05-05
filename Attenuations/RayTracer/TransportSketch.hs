@@ -15,21 +15,24 @@ exitCond x theta size =
     Top       -> (< size)
     RightSide -> (< size)
 
+css x t s = do -- 9.1 (2*pi/5) 10
+  putStr "y at x crossing:\n"
+  putStr.unlines.(map show) $ xcrossings x t s
+  putStr "\nx at y crossing:\n" 
+  putStr.unlines.(map show) $ ycrossings x t s
+
 -- ys values at integer x.
-xcrossings x theta size = -- LIKELY GOOD. WRITE TESTS
-  let ypt k = x + k / tan theta in
-  let rLen k = sqrt $ k**2 + (ypt k - x)**2 in
-  -- let takeWhileExit = takeWhile $ exitCond x theta size in
-  -- takeWhileExit [ rLen k | k <- [0..]]
+xcrossings x theta size =
+  let lowerK = fromIntegral.ceiling $ x in
+  let ypt k = (k - x) * tan theta in -- Not sure about this
+  let rLen k = sqrt $ (k-x)**2 + (ypt k)**2 in -- not sure about this
   let takeWhileExit = takeWhile $ (exitCond x theta size) . fst in
-  takeWhileExit [(ypt k, rLen k) | k <- [0..]]
+  takeWhileExit [(ypt k, rLen k) | k <- [lowerK..]]
 
 -- xs values at integer y.
 ycrossings x theta size =
-  let xpt k = x + k / tan theta in
-  let rLen k = sqrt $ (k-x)**2 + (xpt k)**2 in
-  -- let takeWhileExit = takeWhile $ exitCond x theta size in
-  -- takeWhileExit $ [ rLen k | k <- [0..]]
+  let xpt k = x + k / tan theta in -- this part is right.
+  let rLen k = sqrt $ k**2 + (xpt k - x)**2  in -- this part seems off.
   let takeWhileExit = takeWhile $ (exitCond x theta size) . fst in
   takeWhileExit $ [ (xpt k, rLen k) | k <- [0..]]
 
