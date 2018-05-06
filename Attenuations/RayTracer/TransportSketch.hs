@@ -20,8 +20,11 @@ xcrossings x theta size =
   let ypt k = (k - x) * tan theta in -- Not sure about this
   let rLen k = sqrt $ (k-x)**2 + (ypt k)**2 in -- not sure about this
   let takeWhileExit = takeWhile $ (exitCond x theta size) . fst in
-  takeWhileExit [(ypt k, rLen k) | k <- [initK theta x..]]
+  takeWhileExit [(ypt k, rLen k) | k <- [initK theta x..fineK x theta size]]
+  -- takeWhileExit [(ypt k, rLen k) | k <- [initK theta x..]]
+
   where
+    fineK x theta s = fromIntegral.ceiling $ x + s / (tan theta) -- other case too?
     initK theta | tan theta < 0 = fromIntegral.floor
                 | otherwise = fromIntegral.ceiling
 
@@ -35,9 +38,9 @@ ycrossings x theta size =
 
 -- HELPERS
 css x t s = do -- 9.1 (2*pi/5) 10
-  putStr "y at x crossing:\n(y val, ray length)\n"
+  putStr "ys at x crossings:\n(y val, ray length)\n"
   putStr.unlines.(map show) $ xcrossings x t s
-  putStr "\nx at y crossing:\n(x val, ray length)\n" 
+  putStr "\nxs at y crossings:\n(x val, ray length)\n" 
   putStr.unlines.(map show) $ ycrossings x t s
 
 paramLine :: XPoint -> Angle -> Double -> Double
