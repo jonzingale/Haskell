@@ -12,22 +12,18 @@ arraySize = 10
 exitCond x theta size =
   case (exitRegion x theta size) of
     LeftSide  -> (> 0)
-    Top       -> (< size)
-    RightSide -> (< size)
-
-css x t s = do -- 9.1 (2*pi/5) 10
-  putStr "y at x crossing:\n"
-  putStr.unlines.(map show) $ xcrossings x t s
-  putStr "\nx at y crossing:\n" 
-  putStr.unlines.(map show) $ ycrossings x t s
+    Top       -> (< size - 1)
+    RightSide -> (< size - 1)
 
 -- ys values at integer x.
 xcrossings x theta size =
-  let lowerK = fromIntegral.ceiling $ x in
   let ypt k = (k - x) * tan theta in -- Not sure about this
   let rLen k = sqrt $ (k-x)**2 + (ypt k)**2 in -- not sure about this
   let takeWhileExit = takeWhile $ (exitCond x theta size) . fst in
-  takeWhileExit [(ypt k, rLen k) | k <- [lowerK..]]
+  takeWhileExit [(ypt k, rLen k) | k <- [initK theta x..]]
+  where
+    initK theta | tan theta < 0 = fromIntegral.floor
+                | otherwise = fromIntegral.ceiling
 
 -- xs values at integer y.
 ycrossings x theta size =
@@ -38,8 +34,11 @@ ycrossings x theta size =
 
 
 -- HELPERS
-tourists x th = take 4 $ zip (xcrossings x th arraySize)
-                             (ycrossings x th arraySize)
+css x t s = do -- 9.1 (2*pi/5) 10
+  putStr "y at x crossing:\n(y val, ray length)\n"
+  putStr.unlines.(map show) $ xcrossings x t s
+  putStr "\nx at y crossing:\n(x val, ray length)\n" 
+  putStr.unlines.(map show) $ ycrossings x t s
 
 paramLine :: XPoint -> Angle -> Double -> Double
 paramLine x θ = \t -> (t - x) * tan θ
