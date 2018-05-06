@@ -15,7 +15,7 @@ exitCond x theta size =
     Top       -> (< size - 1)
     RightSide -> (< size - 1)
 
--- ranges for crossings.
+-- ranges for crossings. # Warning: ranges need orienting!
 xsNegSlope x = [0..(fromIntegral.floor) x]
 ysNegSlope x th = [0..(fromIntegral.floor)(-x * tan th)]
 
