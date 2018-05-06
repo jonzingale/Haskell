@@ -19,21 +19,21 @@ exitCond x theta size =
 xsNegSlope x = [0..(fromIntegral.floor) x]
 ysNegSlope x th = [0..(fromIntegral.floor)(-x * tan th)]
 
-xsPosSlope th x = [(fromIntegral.ceiling) x..(arraySize/tan th + x)]
-ysPosSlope x th = [0..(fromIntegral.floor) $ (arraySize - x) * tan th] -- floor?
+xsPosSlope th s x = [(fromIntegral.ceiling) x..(s/tan th + x)]
+ysPosSlope s x th = [0..(fromIntegral.floor) $ (s - x) * tan th] -- floor?
 
 -- ys values at integer x.
 xcrossings x theta size =
   let ypt k = (k - x) * tan theta in
   let rLen k = sqrt $ (k-x)**2 + (ypt k)**2 in
-  let range = if tan theta < 0 then xsNegSlope else xsPosSlope theta in
+  let range = if tan theta < 0 then xsNegSlope else xsPosSlope theta size in
   [(ypt k, rLen k) | k <- range x]
 
 -- xs values at integer y.
 ycrossings x theta size =
   let xpt k = x + k / tan theta in -- this part is right.
   let rLen k = sqrt $ k**2 + (xpt k - x)**2  in -- this part seems off.
-  let range = if tan theta < 0 then ysNegSlope else ysPosSlope in
+  let range = if tan theta < 0 then ysNegSlope else ysPosSlope size in
   [ (xpt k, rLen k) | k <- range x theta]
 
 
