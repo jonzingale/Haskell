@@ -6,7 +6,7 @@ import RayTracer.RayLength
 fractional :: Double -> Double
 fractional = snd.properFraction
 
-arraySize = 10
+arraySize = 10.0::Double
 
 -- exit point is arraySize dependent.
 exitCond x theta size =
@@ -15,25 +15,26 @@ exitCond x theta size =
     Top       -> (< size - 1)
     RightSide -> (< size - 1)
 
+-- ranges for crossings.
+xsNegSlope x = [0..(fromIntegral.floor) x]
+ysNegSlope x th = [0..(fromIntegral.floor)(-x * tan th)]
+
+xsPosSlope th x = [(fromIntegral.ceiling) x..(arraySize/tan th + x)]
+ysPosSlope x th = [0..(fromIntegral.floor) $ (arraySize - x) * tan th] -- floor?
+
 -- ys values at integer x.
 xcrossings x theta size =
-  let ypt k = (k - x) * tan theta in -- Not sure about this
-  let rLen k = sqrt $ (k-x)**2 + (ypt k)**2 in -- not sure about this
-  [(ypt k, rLen k) | k <- [initK theta x..fineK x theta size]]
-  -- let takeWhileExit = takeWhile $ (exitCond x theta size) . fst in
-  -- takeWhileExit [(ypt k, rLen k) | k <- [initK theta x..]]
-  where
-    fineK x theta s | tan theta < 0 = fromIntegral.floor $ x
-                    | otherwise = fromIntegral.floor $ x + (s / tan theta) 
-    initK x theta | tan theta < 0 = 0 -- <--
-                  | otherwise = fromIntegral.ceiling $ x
+  let ypt k = (k - x) * tan theta in
+  let rLen k = sqrt $ (k-x)**2 + (ypt k)**2 in
+  let range = if tan theta < 0 then xsNegSlope else xsPosSlope theta in
+  [(ypt k, rLen k) | k <- range x]
 
 -- xs values at integer y.
 ycrossings x theta size =
   let xpt k = x + k / tan theta in -- this part is right.
   let rLen k = sqrt $ k**2 + (xpt k - x)**2  in -- this part seems off.
-  let takeWhileExit = takeWhile $ (exitCond x theta size) . fst in
-  takeWhileExit $ [ (xpt k, rLen k) | k <- [0..]]
+  let range = if tan theta < 0 then ysNegSlope else ysPosSlope in
+  [ (xpt k, rLen k) | k <- range x theta]
 
 
 -- HELPERS
