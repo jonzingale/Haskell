@@ -44,17 +44,19 @@ paramLine :: XPoint -> Angle -> Double -> Double
 paramLine x θ = \t -> (t - x) * tan θ
 
 --- close to being pretty good.
-totalRayLength x theta =
-  let xcs = xcrossings x theta arraySize in
-  let ycs = ycrossings x theta arraySize in
-  f ((snd.unzip) xcs) ((snd.unzip) ycs) arraySize 0 -- this could be cleaner.
+totalRayLength x theta size =
+  let xcs = xcrossings x theta size in
+  let ycs = ycrossings x theta size in
+  -- f y@X x@Y size rayTot accum 
+  f ((snd.unzip) xcs) ((snd.unzip) ycs) size 0 0-- this could be cleaner.
   where
-    f _ [] _ accum = accum
-    f [] _ _ accum = accum
-    f (r1:xcs) (r2:ycs) s _
-      | r1 < r2 = f xcs (r2:ycs) s r1
-      | otherwise = f (r1:xcs) ycs s r2
+    aryVal = 1
+    f _ [] _ rayTot accum = accum
+    f [] _ _ rayTot accum = accum
+    f (r1:xcs) (r2:ycs) s rayTot accum
+      | r1 < r2 = f xcs (r2:ycs) s r1 ((r1-accum)*aryVal + accum)
+      | otherwise = f (r1:xcs) ycs s r2 ((r2-accum)*aryVal + accum)
 
 -- main = do
   -- myArray <- anArray
-  -- return $ totalRayLength x theta
+  -- return $ totalRayLength x theta arraySize
