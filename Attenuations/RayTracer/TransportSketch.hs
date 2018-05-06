@@ -19,14 +19,14 @@ exitCond x theta size =
 xcrossings x theta size =
   let ypt k = (k - x) * tan theta in -- Not sure about this
   let rLen k = sqrt $ (k-x)**2 + (ypt k)**2 in -- not sure about this
-  let takeWhileExit = takeWhile $ (exitCond x theta size) . fst in
-  takeWhileExit [(ypt k, rLen k) | k <- [initK theta x..fineK x theta size]]
+  [(ypt k, rLen k) | k <- [initK theta x..fineK x theta size]]
+  -- let takeWhileExit = takeWhile $ (exitCond x theta size) . fst in
   -- takeWhileExit [(ypt k, rLen k) | k <- [initK theta x..]]
-
   where
-    fineK x theta s = fromIntegral.ceiling $ x + s / (tan theta) -- other case too?
-    initK theta | tan theta < 0 = fromIntegral.floor
-                | otherwise = fromIntegral.ceiling
+    fineK x theta s | tan theta < 0 = fromIntegral.floor $ x
+                    | otherwise = fromIntegral.floor $ x + (s / tan theta) 
+    initK x theta | tan theta < 0 = 0 -- <--
+                  | otherwise = fromIntegral.ceiling $ x
 
 -- xs values at integer y.
 ycrossings x theta size =
