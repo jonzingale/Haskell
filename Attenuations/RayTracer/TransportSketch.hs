@@ -25,9 +25,11 @@ ysPosSlope s x th = [0..(fromIntegral.floor) $ (s - x) * tan th] -- floor?
 -- ys values at integer x.
 xcrossings x theta size =
   let ypt k = (k - x) * tan theta in
+  let yps k = -k * tan theta in
+  let ys = if tan theta < 0 then yps else ypt in
   let rLen k = sqrt $ (k-x)**2 + (ypt k)**2 in
   let range = if tan theta < 0 then xsNegSlope else xsPosSlope theta size in
-  [(ypt k, rLen k) | k <- range x]
+  [(ys k, rLen k) | k <- range x]
 
 -- xs values at integer y.
 ycrossings x theta size =
