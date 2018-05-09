@@ -46,17 +46,6 @@ ycrossings x theta size =
   [ (xpt k, rLen k) | k <- range x theta]
 
 -- can i create better stopping conditions?
-ycrossings' x theta size
-  | tan theta < 0 = ycs x theta size 0 (ysNegSlope x theta)
-  | otherwise = ycs x theta size 0 (ysPosSlope size x theta)
-  where
-    ycs x th s i [] = []
-    ycs x theta s i (k:ks)
-      -- | s == i || k * abs(tan theta) >= s = [] -- cutoff
-      | s == i = [] -- cutoff
-      | otherwise = x + k / tan theta : ycs x theta s (i+1) ks
-
--- can i create better stopping conditions?
 xcrossings' x theta size
   | tan theta < 0 = xcs x theta size 0 (xsNegSlope x)
   | otherwise = xcs x theta size 0 (xsPosSlope theta size x)
@@ -66,6 +55,16 @@ xcrossings' x theta size
       -- | s == i || k * abs(tan theta) >= s = [] -- cutoff
       | s == i = [] -- cutoff
       | otherwise = k * abs(tan theta) : xcs x theta s (i+1) ks
+
+ycrossings' x theta size
+  | tan theta < 0 = ycs x theta size 0 (ysNegSlope x theta)
+  | otherwise = ycs x theta size 0 (ysPosSlope size x theta)
+  where
+    ycs x th s i [] = []
+    ycs x theta s i (k:ks)
+      -- | s == i || k * abs(tan theta) >= s = [] -- cutoff
+      | s == i = [] -- cutoff
+      | otherwise = x + k / tan theta : ycs x theta s (i+1) ks
 
 --- close to being pretty good.
 totalRayLength x theta size =
