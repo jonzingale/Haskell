@@ -4,7 +4,7 @@ import RayTracer.RegionDetection
 import RayTracer.FileToVector
 import RayTracer.RayLength
 
-css x t s = do -- 9.1 (2*pi/5) 10
+css x t s = do
   putStr "ys at x crossings:\n(y val, ray length)\n"
   putStr.unlines.(map show) $ xcrossings x t s
   putStr "\nxs at y crossings:\n(x val, ray length)\n"
@@ -22,11 +22,12 @@ exitCond x theta size =
     Top       -> (< size - 1)
     RightSide -> (< size - 1)
 
--- ranges for crossings. # Warning: ranges need orienting
+--exiting the top is an issue: css 6 (3*pi/5) 9
+
+-- ranges for crossings.
 xsNegSlope x = [0..(fromIntegral.floor) x]
 ysNegSlope x th = [0..(fromIntegral.floor)(-x * tan th)]
 
--- xsPosSlope th s x = [(fromIntegral.ceiling) x..(s/tan th + x)]
 xsPosSlope th s x = [0.. s/tan th]
 ysPosSlope s x th = [0.. (fromIntegral.floor) $ (s - x) * tan th] -- floor?
 
@@ -36,6 +37,16 @@ xcrossings x theta size =
   let rLen k = sqrt $ (k-x)**2 + (ypt k)**2 in
   let range = if tan theta < 0 then xsNegSlope else xsPosSlope theta size in
   [(ypt k, rLen k) | k <- range x]
+
+-- can i create better stopping conditions?
+xcrossings' x theta size
+  | tan theta < 0 = xcs x theta size 0 (xsNegSlope x)
+  | otherwise = xcs x theta size 0 (xsPosSlope theta size x)
+  where
+    xcs x th s i [] = []
+    xcs x theta s i (k:ks)
+      | s == i || k * abs(tan theta) >= s = [] -- cutoff
+      | otherwise = k * abs(tan theta) : xcs x theta s (i+1) ks
 
 -- xs values at integer y.
 ycrossings x theta size =
@@ -55,9 +66,10 @@ totalRayLength x theta size =
     f _ [] _ rayTot accum = accum
     f [] _ _ rayTot accum = accum
     f (r1:xcs) (r2:ycs) s rayTot accum
+      | s <= r1 || s <= r2 = accum -- cut off
       | r1 < r2 = f xcs (r2:ycs) s r1 ((r1-accum)*aryVal + accum)
       | otherwise = f (r1:xcs) ycs s r2 ((r2-accum)*aryVal + accum)
 
--- main = do
-  -- myArray <- anArray
-  -- return $ totalRayLength x theta arraySize
+main = do
+  myArray <- anArray
+  return $ totalRayLength 6 (3*pi/6) arraySize
