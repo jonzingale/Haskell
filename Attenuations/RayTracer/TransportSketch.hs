@@ -1,7 +1,14 @@
 module RayTracer.TransportSketch where
+import RayTracer.TransportHelpers
 import RayTracer.RegionDetection
 import RayTracer.FileToVector
 import RayTracer.RayLength
+
+css x t s = do -- 9.1 (2*pi/5) 10
+  putStr "ys at x crossings:\n(y val, ray length)\n"
+  putStr.unlines.(map show) $ xcrossings x t s
+  putStr "\nxs at y crossings:\n(x val, ray length)\n"
+  putStr.unlines.(map show) $ ycrossings x t s
 
 fractional :: Double -> Double
 fractional = snd.properFraction
@@ -15,27 +22,20 @@ exitCond x theta size =
     Top       -> (< size - 1)
     RightSide -> (< size - 1)
 
-negEx = [-k * tan (4*pi/5)| k<-[0..(fromIntegral.floor) 6]]
--- posEx = [(k-6) * tan (pi/5)| k<-[(fromIntegral.ceiling) 6..(9/tan (pi/5) + 6)]]
--- posEx' = [k * tan (pi/5)| k<-[0..(9/tan (pi/5))]]
-
 -- ranges for crossings. # Warning: ranges need orienting
 xsNegSlope x = [0..(fromIntegral.floor) x]
 ysNegSlope x th = [0..(fromIntegral.floor)(-x * tan th)]
 
 -- xsPosSlope th s x = [(fromIntegral.ceiling) x..(s/tan th + x)]
-xsPosSlope th s x = [0..s / tan th]
-ysPosSlope s x th = [0..(fromIntegral.floor) $ (s - x) * tan th] -- floor?
+xsPosSlope th s x = [0.. s/tan th]
+ysPosSlope s x th = [0.. (fromIntegral.floor) $ (s - x) * tan th] -- floor?
 
 -- ys values at integer x.
 xcrossings x theta size =
-  -- let ypt k = (k - x) * tan theta in -- 
-  let ypt k = k * tan theta in -- 
-  let yps k = -k * tan theta in
-  let ys = if tan theta < 0 then yps else ypt in
+  let ypt k = k * abs(tan theta) in
   let rLen k = sqrt $ (k-x)**2 + (ypt k)**2 in
   let range = if tan theta < 0 then xsNegSlope else xsPosSlope theta size in
-  [(ys k, rLen k) | k <- range x]
+  [(ypt k, rLen k) | k <- range x]
 
 -- xs values at integer y.
 ycrossings x theta size =
@@ -43,17 +43,6 @@ ycrossings x theta size =
   let rLen k = sqrt $ k**2 + (xpt k - x)**2  in -- this part seems off.
   let range = if tan theta < 0 then ysNegSlope else ysPosSlope size in
   [ (xpt k, rLen k) | k <- range x theta]
-
-
--- HELPERS
-css x t s = do -- 9.1 (2*pi/5) 10
-  putStr "ys at x crossings:\n(y val, ray length)\n"
-  putStr.unlines.(map show) $ xcrossings x t s
-  putStr "\nxs at y crossings:\n(x val, ray length)\n" 
-  putStr.unlines.(map show) $ ycrossings x t s
-
-paramLine :: XPoint -> Angle -> Double -> Double
-paramLine x θ = \t -> (t - x) * tan θ
 
 --- close to being pretty good.
 totalRayLength x theta size =
