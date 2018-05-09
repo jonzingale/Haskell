@@ -38,6 +38,24 @@ xcrossings x theta size =
   let range = if tan theta < 0 then xsNegSlope else xsPosSlope theta size in
   [(ypt k, rLen k) | k <- range x]
 
+-- xs values at integer y.
+ycrossings x theta size =
+  let xpt k = x + k / tan theta in -- this part is right.
+  let rLen k = sqrt $ k**2 + (xpt k - x)**2  in -- this part seems off.
+  let range = if tan theta < 0 then ysNegSlope else ysPosSlope size in
+  [ (xpt k, rLen k) | k <- range x theta]
+
+-- can i create better stopping conditions?
+ycrossings' x theta size
+  | tan theta < 0 = ycs x theta size 0 (ysNegSlope x theta)
+  | otherwise = ycs x theta size 0 (ysPosSlope size x theta)
+  where
+    ycs x th s i [] = []
+    ycs x theta s i (k:ks)
+      -- | s == i || k * abs(tan theta) >= s = [] -- cutoff
+      | s == i = [] -- cutoff
+      | otherwise = x + k / tan theta : ycs x theta s (i+1) ks
+
 -- can i create better stopping conditions?
 xcrossings' x theta size
   | tan theta < 0 = xcs x theta size 0 (xsNegSlope x)
@@ -45,15 +63,9 @@ xcrossings' x theta size
   where
     xcs x th s i [] = []
     xcs x theta s i (k:ks)
-      | s == i || k * abs(tan theta) >= s = [] -- cutoff
+      -- | s == i || k * abs(tan theta) >= s = [] -- cutoff
+      | s == i = [] -- cutoff
       | otherwise = k * abs(tan theta) : xcs x theta s (i+1) ks
-
--- xs values at integer y.
-ycrossings x theta size =
-  let xpt k = x + k / tan theta in -- this part is right.
-  let rLen k = sqrt $ k**2 + (xpt k - x)**2  in -- this part seems off.
-  let range = if tan theta < 0 then ysNegSlope else ysPosSlope size in
-  [ (xpt k, rLen k) | k <- range x theta]
 
 --- close to being pretty good.
 totalRayLength x theta size =
