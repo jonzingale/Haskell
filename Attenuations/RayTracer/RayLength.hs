@@ -34,7 +34,7 @@ alpha (x,0) theta | theta == 0 || theta == pi = 1
 eta (x,0) theta | theta == pi || theta == 0 = 1
                 | otherwise = 0
 
-gamma (x,0) theta | theta == (pi/2) = 1
+gamma (x,0) theta | theta == pi/2 = 1
                   | otherwise = 0
 
 {--
