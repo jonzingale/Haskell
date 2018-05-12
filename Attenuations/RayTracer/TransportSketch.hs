@@ -25,11 +25,16 @@ exitCond x theta size =
 --exiting the top is an issue: css 6 (3*pi/5) 9
 
 -- ranges for crossings.
-xsNegSlope x = [0..(fromIntegral.floor) x]
-ysNegSlope x th = [0..(fromIntegral.floor)(-x * tan th)]
+cc = fromIntegral.ceiling
+ff = fromIntegral.floor
+exitPoint x th s = (s, (s - x) * tan th)
+exitRayLength x th s = (s - x) / cos th
+
+xsNegSlope x = [0..ff x]
+ysNegSlope x th = [0..ff(-x * tan th)]
 
 xsPosSlope th s x = [0.. s/tan th]
-ysPosSlope s x th = [0.. (fromIntegral.floor) $ (s - x) * tan th] -- floor?
+ysPosSlope s x th = [0.. ff $ (s - x) * tan th] -- floor?
 
 -- ys values at integer x.
 xcrossings x theta size =
@@ -46,6 +51,7 @@ ycrossings x theta size =
   [ (xpt k, rLen k) | k <- range x theta]
 
 -- can i create better stopping conditions?
+-- (cc x - x)*tan th
 xcrossings' x theta size
   | tan theta < 0 = xcs x theta size 0 (xsNegSlope x)
   | otherwise = xcs x theta size 0 (xsPosSlope theta size x)
@@ -54,7 +60,9 @@ xcrossings' x theta size
     xcs x theta s i (k:ks)
       -- | s == i || k * abs(tan theta) >= s = [] -- cutoff
       | s == i = [] -- cutoff
-      | otherwise = k * abs(tan theta) : xcs x theta s (i+1) ks
+      | otherwise =
+        (k * abs(tan theta), sqrt $ (k-x)**2 + (k * abs(tan theta))**2)
+          : xcs x theta s (i+1) ks
 
 ycrossings' x theta size
   | tan theta < 0 = ycs x theta size 0 (ysNegSlope x theta)
@@ -64,7 +72,8 @@ ycrossings' x theta size
     ycs x theta s i (k:ks)
       -- | s == i || k * abs(tan theta) >= s = [] -- cutoff
       | s == i = [] -- cutoff
-      | otherwise = x + k / tan theta : ycs x theta s (i+1) ks
+      | otherwise = (x + k / tan theta, sqrt $ k**2 + ((x + k / tan theta) - x)**2  )
+      : ycs x theta s (i+1) ks
 
 --- close to being pretty good.
 totalRayLength x theta size =
