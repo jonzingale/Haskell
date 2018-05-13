@@ -1,90 +1,93 @@
-module RayTracer.Transport (totalRayLength, totalAttenuation) where
+module RayTracer.AnotherTransportSketch where
+-- import RayTracer.TransportHelpers
+-- import RayTracer.RegionDetection
 import RayTracer.FileToVector
-import RayTracer.RayLength
+-- import RayTracer.RayLength
 
+import Data.Array
+import System.Random
+
+type Coords = (XCoord, YCoord)
+type SegmentLength = Double
+type Angle = Double
+type XCoord = Double
+type YCoord = Double
+type Direction = String
+
+testArray = listArray (1,49) randos
+  where
+    randos = take 49 $ randomRs (0,1::Double) $ mkStdGen 42 
+
+toPxl :: (Int, Int) -> Int
+toPxl (x,y) = x + y * 7
+
+-- returns the ordered segment lengths, needs array hookups
+towardArrays :: XCoord -> Angle -> [((Int, Int),SegmentLength)]
+towardArrays x theta =
+  let xcs = xcrossings x theta in
+  let ycs = ycrossings x theta in
+  let nudge = if theta > pi/2 then fromIntegral.ceiling else fromIntegral.floor in
+
+  f xcs ycs (x, 0) (nudge x, -1) -- floor for negative slope case only
+  
+  where -- xcs ycs (p,q) (i,j)
+    f ((xh,yh): xcs) ((xv,yv): ycs) pt (i, j)
+      | yh < yv = ((i,j), segment pt (xh,yh)) : f xcs ((xv,yv): ycs) (xh,yh) (i+1, j)
+      | otherwise = ((i,j), segment pt (xv,yv)) : f ((xh,yh): xcs) ycs (xv,yv) (i, j+1)
+
+css x t = do
+  putStr "xs at y crossings:\n(x val, y)\n"
+  putStr.unlines.(take 7).(map show) $ ycrossings x t
+  putStr "\nys at x crossings:\n(x, y val, pn+1 - pn)\n"
+  putStr.unlines.(take 7).(map show) $ xcrossings x t
+
+anOrdList x t = do
+  putStr "(X,Y) EntryDirection SegmentLength\n"
+  let (_:ijSeg) = take 6 $ towardArrays x t
+  let eval = [ seg * (testArray!(toPxl ij)) | (ij, seg) <- ijSeg]
+  putStr.unlines.(map show) $ eval
 {--
-rayLength needs to change. How can I be sure that I am
-passing legitimate values (x,0) or (y,0). Further,
-calculating tan θ once is all that is necessary and
-would greatly simplify the code.
+Given that the slope is positive and both dispensers
+(xcrossings, ycrossings) are increasing, each can be
+taken in turn.
 
-A real test will be that partials sum to the same as any total.
-
-NOTES:
- * totalAttenuation will always be initialized such that (x,0).
- * tan only really works here because I am considering θ <= pi/2. NEEDS GENERALIZED.
- * There WILL be double counting if the points are on the diagonal.
---}
-arraySize = 4
-testRayLength = totalRayLength (8/9) (pi/3)
-
-(x, theta, phi) = (8/9, pi/3, pi/2)
-yval = (1-fractional x) * tan theta
-ycrossings = takeWhile ((< arraySize).norm) [ (k, yval + k * tan theta) | k <- [0..]]
-xcrossings = takeWhile ((< arraySize).norm) [ (x + k / tan theta, k) | k <- [0..]]
-
-norm :: (Double, Double) -> Double
-norm (x,y) = sqrt $ x*x + y*y
-
-walkD _ [] _ = []
-walkD [] _ _ = []
-walkD (x:xs) (y:ys) theta
-  | theta == pi/2 || theta == 0 = [] -- to cover asymptotics
-  | x > arraySize || y > arraySize = []
-  | x < y = x : walkD xs (y:ys) theta
-  | otherwise = y : walkD (x:xs) ys theta
-  -- | x < y = rayLength (fractional x, 0) theta : walkD xs (y:ys) theta
-  -- | otherwise = rayLength (0, fractional y) theta : walkD (x:xs) ys theta
-
--- (x,y,theta) = (8/9, 0, pi/3) -- 4.2222222222222205
--- (x,y,theta) = (0, 0, 1*pi/8) -- 6.308644059797899
--- (x,y,theta) = (0, 0, 3*pi/8) -- 6.308644059797899
-
-
-fractional :: Double -> Double
-fractional = snd.properFraction
-
-totalRayLength x theta =
-  let yval = (1 - fractional x) * tan theta in -- calculate 1 time.
-  let ycrossings = [ yval + k * tan theta | k <- [0..]] in -- y @ xn
-  let xcrossings = [ x + k / tan theta | k <- [0..]] in -- x @ yn
-  walk xcrossings ycrossings theta
-
-  where
-    -- normWhile = takeWhile ((< arraySize).norm)
-    walk _ [] _ = 0
-    walk [] _ _ = 0
-    walk (x:xs) (y:ys) theta
-      | theta == pi/2 || theta == 0 = arraySize -- to cover asymptotics
-      | x > arraySize-1 || y > arraySize = 0
-      | x < y = rayLength (fractional x, 0) theta + walk xs (y:ys) theta
-      | otherwise = rayLength (0, fractional y) theta + walk (x:xs) ys theta
-
-
-main = do
-  myArray <- anArray
-  return $ totalRayLength x theta
-  -- return $ totalAttenuation (8/9) (pi/2) myArray -- still pretty buggy +x
-
-totalAttenuation = undefined
-{-- NEEDS HELP AFTER FIXING totalRayLength
--- totalAttenuation will always be initialized such that (x,0).
-totalAttenuation x theta ary =
-  -- array lengths should really be dependent on path lengths. These
-  -- will be better written as a conditional on limit: x<1000 && y<1000.
-  let xcrossings = [ x + k / tan theta | k <- [0..999]] in
-  let ycrossings = [ y + k * tan theta | k <- [0..999]] in
-  rayLength (fractional x,0) theta + walk xcrossings ycrossings theta ary
-
-  where
-    walk _ [] _ _ = 0
-    walk [] _ _ _ = 0
-    walk (x:xs) (y:ys) theta ary =
-      let val = qArray (floor x, floor y) ary in
-      case x < y of
-      True -> -- bottom entry in frame
-        val * rayLength (fractional x, 0) theta + walk xs (y:ys) theta ary
-      False -> -- side entry in frame
-        val * rayLength (0, fractional y) theta + walk (x:xs) ys theta ary
+Following y-values rather than the x-values ought to
+simply the counting rules. y-values are always increasing
+from 0.
 --}
 
+-- take 10 $ anOrderedList 2.3 (pi/5)
+anOrderedList :: XCoord -> Angle -> [(XCoord, YCoord, Direction, SegmentLength)]
+anOrderedList x theta =
+  let xcs = xcrossings x theta in
+  let ycs = ycrossings x theta in
+  f xcs ycs (x, 0)
+  where
+    f ((xh,yh): xcs) ((xv,yv): ycs) pt
+      | yh < yv = (xh,yh,"Side",segment pt (xh,yh)) : f xcs ((xv,yv): ycs) (xh,yh)
+      | otherwise = (xv,yv,"Top",segment pt (xv,yv)) : f ((xh,yh): xcs) ycs (xv,yv)
+
+
+
+-- xcrossings are dependent on either θ < π/2 or θ > π/2.
+-- These y values should always go positive. There likely
+-- hides a symmetry about pi/2.
+xcrossings :: XCoord -> Angle -> [(XCoord, YCoord)]
+xcrossings x theta
+  | theta > pi/2 = [(cc x - k - 1, -(k + frac x)*tan theta) | k<-[0..]] -- verify
+  | theta < pi/2 = [(ff x + k + 1, (1 - frac x + k)*tan theta) | k<-[0..]]
+  | otherwise = []
+  where frac = snd.properFraction
+
+-- ycrossings are dependent on either θ < π/2 or θ > π/2.
+-- These x values may go negative. All three cases the same!
+ycrossings :: XCoord -> Angle -> [(XCoord, YCoord)]
+ycrossings x theta = [ (x + k / tan theta, k) | k <- [0..]]
+
+-- segment (2.3, 0) (3, 0.508)
+segment :: Coords -> Coords -> Double
+segment (x1, y1) (x2, y2) = sqrt $ (x2-x1)**2 + (y2-y1)**2
+
+cc, ff :: Double -> Double
+cc = fromIntegral.ceiling
+ff = fromIntegral.floor
