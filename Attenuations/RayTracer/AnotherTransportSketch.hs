@@ -21,15 +21,18 @@ toPxl :: (Int, Int) -> Int
 toPxl (x,y) = x + y * 7
 
 -- returns the ordered segment lengths, needs array hookups
-sum49 :: XCoord -> Angle -> [SegmentLength]
-sum49 x theta =
+towardArrays :: XCoord -> Angle -> [((Int, Int),SegmentLength)]
+towardArrays x theta =
   let xcs = xcrossings x theta in
   let ycs = ycrossings x theta in
-  f xcs ycs (x, 0)
-  where
-    f ((xh,yh): xcs) ((xv,yv): ycs) pt
-      | yh < yv = (segment pt (xh,yh)) : f xcs ((xv,yv): ycs) (xh,yh)
-      | otherwise = (segment pt (xv,yv)) : f ((xh,yh): xcs) ycs (xv,yv)
+  let nudge = if theta > pi/2 then fromIntegral.ceiling else fromIntegral.floor in
+
+  f xcs ycs (x, 0) (nudge x, -1) -- floor for negative slope case only
+  
+  where -- xcs ycs (p,q) (i,j)
+    f ((xh,yh): xcs) ((xv,yv): ycs) pt (i, j)
+      | yh < yv = ((i,j), segment pt (xh,yh)) : f xcs ((xv,yv): ycs) (xh,yh) (i+1, j)
+      | otherwise = ((i,j), segment pt (xv,yv)) : f ((xh,yh): xcs) ycs (xv,yv) (i, j+1)
 
 css x t = do
   putStr "xs at y crossings:\n(x val, y)\n"
@@ -39,7 +42,9 @@ css x t = do
 
 anOrdList x t = do
   putStr "(X,Y) EntryDirection SegmentLength\n"
-  putStr.unlines.(take 6).(map show) $ anOrderedList x t
+  let (_:ijSeg) = take 6 $ towardArrays x t
+  let eval = [ seg * (testArray!(toPxl ij)) | (ij, seg) <- ijSeg]
+  putStr.unlines.(map show) $ eval
 {--
 Given that the slope is positive and both dispensers
 (xcrossings, ycrossings) are increasing, each can be
