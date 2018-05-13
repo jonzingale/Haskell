@@ -46,12 +46,3 @@ qAry49 (x, y) a = (U.!) a (x + y * 7)
 testIndex = do
   ary <- anArray
   return $ qArray (20, 300) ary
-
-
-
-
-
-
-
-
-

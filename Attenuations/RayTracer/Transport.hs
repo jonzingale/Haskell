@@ -42,7 +42,6 @@ xcrossings x theta
 ycrossings :: XCoord -> Angle -> [(XCoord, YCoord)]
 ycrossings x theta = [ (x + k / tan theta, k) | k <- [0..]]
 
--- segment (2.3, 0) (3, 0.508)
 segment :: Coords -> Coords -> SegmentLength
 segment (x1, y1) (x2, y2) = sqrt $ (x2-x1)**2 + (y2-y1)**2
 
