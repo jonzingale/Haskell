@@ -1,6 +1,6 @@
 
 {-# LANGUAGE BangPatterns #-}
-module RayTracer.FileToVector (qArray, anArray) where
+module RayTracer.FileToVector (qArray, qAry49, anArray, fortyNineDoubles) where
 import qualified Data.ByteString.Lex.Fractional as L
 import qualified Data.ByteString.Char8 as L
 import qualified Data.Vector.Unboxed as U
@@ -32,9 +32,16 @@ anArray = do
   !s <- L.readFile "./Tests/data1M"
   return.parse $ s
 
+fortyNineDoubles = do
+  !s <- L.readFile "./Tests/data49Doubles"
+  return.parse $ s
+
 type Coords = (Int, Int)
 qArray :: U.Unbox a => Coords -> U.Vector a -> a
 qArray (x, y) a = (U.!) a (x + y * 1000)
+
+qAry49 :: U.Unbox a => Coords -> U.Vector a -> a
+qAry49 (x, y) a = (U.!) a (x + y * 7)
 
 testIndex = do
   ary <- anArray
