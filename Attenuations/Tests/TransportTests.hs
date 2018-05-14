@@ -14,6 +14,19 @@ test_ArrayIsSevenBySeven = do
   ones <- allOnes
   assertEqual (vLength ones) 49
 
+test_ArrayIsAllOnes = do
+  ones <- allOnes
+  assertEqual (vSum ones) 49
+
+test_OnesTransport = do
+  ary <- allOnes
+  let (x, t) = (0, pi/4)
+  let (_:ijSeg) = transport x t -- because the head is not necessary.
+  let eval = sum [ seg * (qAry49 ij ary) | (ij, seg) <- takeWhile stopCond ijSeg]
+  assertEqual eval (7 * sqrt 2)
+  where
+    stopCond ((x,y), s) = x<7 && y<7
+
 -- prop_rot4Id :: Point -> Gen Bool
 -- prop_rot4Id cs = do
 --   t <- zeroToTau
