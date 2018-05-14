@@ -1,6 +1,6 @@
 
 {-# LANGUAGE BangPatterns #-}
-module RayTracer.FileToVector (qArray, qAry49, anArray, fortyNineDoubles) where
+module RayTracer.FileToVector (qArray, qAry49, fileToAry, anArray, fortyNineDoubles) where
 import qualified Data.ByteString.Lex.Fractional as L
 import qualified Data.ByteString.Char8 as L
 import qualified Data.Vector.Unboxed as U
@@ -28,6 +28,10 @@ parse = U.unfoldr step
         Just (!k, !t) -> Just (k, L.tail t)
 
 -- A run at a useful Parser
+fileToAry file = do
+  !s <- L.readFile file
+  return.parse $ s
+
 anArray = do
   !s <- L.readFile "./Tests/data1M"
   return.parse $ s
