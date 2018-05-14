@@ -2,13 +2,17 @@
 {-# OPTIONS_GHC -F -pgmF htfpp #-}
 {-# LANGUAGE BangPatterns #-}
 
-module Tests.SymmetryTests where
+module Tests.TransportTests where
 import Tests.ExplicitGenerators
-import RayTracer.FileToVector
+import RayTracer.FileToVector -- fileToAry, qAry49, vLength
 import RayTracer.Transport
 import Test.Framework
 
 allOnes = fileToAry "./Tests/dataTestAllOnes"
+
+test_ArrayIsSevenBySeven = do
+  ones <- allOnes
+  assertEqual (vLength ones) 49
 
 -- prop_rot4Id :: Point -> Gen Bool
 -- prop_rot4Id cs = do
