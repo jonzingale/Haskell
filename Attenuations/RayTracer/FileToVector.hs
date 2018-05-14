@@ -1,6 +1,8 @@
 
 {-# LANGUAGE BangPatterns #-}
-module RayTracer.FileToVector (qArray, qAry49, fileToAry, anArray, fortyNineDoubles, vLength) where
+module RayTracer.FileToVector (qArray, qAry49, fileToAry, anArray,
+                               fortyNineDoubles, vLength, vSum
+                               ) where
 import qualified Data.ByteString.Lex.Fractional as L
 import qualified Data.ByteString.Char8 as L
 import qualified Data.Vector.Unboxed as U
@@ -43,6 +45,10 @@ fortyNineDoubles = do
 type Coords = (Int, Int)
 vLength :: U.Unbox a => U.Vector a -> Int
 vLength = U.length
+
+vSum :: (Num b, U.Unbox b) => U.Vector b -> b
+vSum = U.foldr (+) 0
+
 
 qArray :: U.Unbox a => Coords -> U.Vector a -> a
 qArray (x, y) a = (U.!) a (x + y * 1000)
