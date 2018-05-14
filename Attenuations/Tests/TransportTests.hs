@@ -22,7 +22,7 @@ test_OnesTransport = do
   ary <- allOnes
   let (x, t) = (0, pi/4)
   let (_:ijSeg) = transport x t -- because the head is not necessary.
-  let eval = sum [ seg * (qAry49 ij ary) | (ij, seg) <- takeWhile stopCond ijSeg]
+  let eval = sum [ seg * (qArray 7 ij ary) | (ij, seg) <- takeWhile stopCond ijSeg]
   assertEqual eval (7 * sqrt 2)
   where
     stopCond ((x,y), s) = x<7 && y<7
