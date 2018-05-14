@@ -4,11 +4,12 @@
 
 module Tests.TransportTests where
 import Tests.ExplicitGenerators
-import RayTracer.FileToVector -- fileToAry, qAry49, vLength
+import RayTracer.FileToVector -- fileToAry, qArray, vLength, vSum
 import RayTracer.Transport
 import Test.Framework
 
 allOnes = fileToAry "./Tests/dataTestAllOnes"
+fortyNineDoubles = fileToAry "./Tests/data49Doubles"
 
 test_ArrayIsSevenBySeven = do
   ones <- allOnes
