@@ -43,19 +43,20 @@ fortyNineDoubles = do
   return.parse $ s
 
 type Coords = (Int, Int)
+type Dimension = Int -- a single dimension of lattice
+
 vLength :: U.Unbox a => U.Vector a -> Int
 vLength = U.length
 
 vSum :: (Num b, U.Unbox b) => U.Vector b -> b
 vSum = U.foldr (+) 0
 
-
-qArray :: U.Unbox a => Coords -> U.Vector a -> a
-qArray (x, y) a = (U.!) a (x + y * 1000)
+qArray :: U.Unbox a => Dimension -> Coords -> U.Vector a -> a
+qArray size (x, y) a = (U.!) a (x + y * size)
 
 qAry49 :: U.Unbox a => Coords -> U.Vector a -> a
 qAry49 (x, y) a = (U.!) a (x + y * 7)
 
 testIndex = do
   ary <- anArray
-  return $ qArray (20, 300) ary
+  return $ qArray 1000 (20, 300) ary
