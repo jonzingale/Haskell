@@ -9,9 +9,9 @@ type Angle  = Double
 
 -- testTrace 2.3 (pi/5)
 testTrace x t = do
-  ary <- fortyNineDoubles
+  ary <- fileToAry "./Tests/data49Doubles"
   let (_:ijSeg) = transport x t -- because the head is not necessary.
-  let eval = [ seg * (qAry49 ij ary) | (ij, seg) <- takeWhile stopCond ijSeg]
+  let eval = [ seg * (qArray 7 ij ary) | (ij, seg) <- takeWhile stopCond ijSeg]
   putStr "evaluated total:\n\n"
   putStr.unlines.(map show) $ eval
   where
