@@ -1,4 +1,4 @@
-module RayTracer.AnotherTransportSketch where
+module RayTracer.Transport where
 import RayTracer.FileToVector
 
 type Coords = (XCoord, YCoord)
@@ -10,7 +10,7 @@ type Angle  = Double
 -- testTrace 2.3 (pi/5)
 testTrace x t = do
   ary <- fortyNineDoubles
-  let (_:ijSeg) = towardArrays x t
+  let (_:ijSeg) = transport x t -- because the head is not necessary.
   let eval = [ seg * (qAry49 ij ary) | (ij, seg) <- takeWhile stopCond ijSeg]
   putStr "evaluated total:\n\n"
   putStr.unlines.(map show) $ eval
@@ -26,6 +26,18 @@ Following y-values rather than the x-values ought to
 simply the counting rules. y-values are always increasing
 from 0.
 --}
+transport :: XCoord -> Angle -> [((Int, Int), SegmentLength)]
+transport x theta =
+  let xcs = xcrossings x theta in
+  let ycs = ycrossings x theta in
+  let nudge = if theta > pi/2 then fromIntegral.ceiling else fromIntegral.floor in
+
+  f xcs ycs (x, 0) (nudge x, -1) -- floor for negative slope case only
+  
+  where -- xcs ycs (p,q) (i,j)
+    f ((xh,yh): xcs) ((xv,yv): ycs) pt (i, j)
+      | yh < yv = ((i,j), segment pt (xh,yh)) : f xcs ((xv,yv): ycs) (xh,yh) (i+1, j)
+      | otherwise = ((i,j), segment pt (xv,yv)) : f ((xh,yh): xcs) ycs (xv,yv) (i, j+1)
 
 -- xcrossings are dependent on either θ < π/2 or θ > π/2.
 -- These y values should always go positive. There likely
