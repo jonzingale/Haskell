@@ -7,8 +7,8 @@ type XCoord = Double
 type YCoord = Double
 type Angle  = Double
 
--- testTrace 2.3 (pi/5)
-testTrace x t = do
+-- displayTrace 2.3 (pi/5)
+displayTrace x t = do
   ary <- fileToAry "./Tests/data49Doubles"
   let (_:ijSeg) = transport x t -- because the head is not necessary.
   let eval = [ seg * (qArray 7 ij ary) | (ij, seg) <- takeWhile stopCond ijSeg]
