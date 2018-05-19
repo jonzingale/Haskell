@@ -28,6 +28,18 @@ test_allOnesDiagonal = do
   where
     stopCond ((x,y), s) = x<7 && y<7
 
+prop_allOnesScalesArray = do
+  let ary = take 49 $ repeat 1 -- to avoid mixing monads, IO and Gen
+  θ <- zeroToHalfPi -- extend this how?
+  x <- interval
+  let (_:ijSeg) = transport x θ -- because the head is not necessary.
+  let cellEval = (* 7).snd.(!! 1) $ transport (x/7) θ -- (*7).(rl).(/7) == rl
+  let latticeEval = sum [ seg * (query ij ary) | (ij, seg) <- takeWhile stopCond ijSeg]
+  return $ (eBall 13) cellEval latticeEval
+  where
+    stopCond ((x,y), s) = x<7 && y<7
+    query (i,j) ary = (!!) ary (i + j * 7)
+
 -- prop_allOnesScales :: Gen Bool
 test_allOnesScales = do
   -- θ <- zeroToPi
