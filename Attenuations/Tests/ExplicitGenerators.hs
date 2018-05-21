@@ -11,6 +11,15 @@ zeroToTau =choose (0, tau::Double)
 zeroToHalfPi = choose (0, pi/2::Double)
 halfPiToPi = choose (pi/2, pi::Double)
 
+-- Combined Generators
+data TestCoords = C Double Double deriving (Show, Eq)
+
+instance Arbitrary TestCoords where
+  arbitrary = do
+    x <- interval
+    t <- zeroToHalfPi
+    return $ C x t
+
 {--
   δ β      ρ         ρ'
 ε_\|/_α   |/_κ    κ'_\|
