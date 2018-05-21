@@ -10,6 +10,9 @@ import RayTracer.Transport
 import Test.QuickCheck.Monadic
 import Test.Framework
 
+allOnes = fileToAry "./Tests/dataTestAllOnes" -- 7x7
+fortyNineDoubles = fileToAry "./Tests/data49Doubles" -- 7x7
+
 prop_allOnesScalesArray :: TestCoords -> Property
 prop_allOnesScalesArray (C x θ) = monadicIO $ do
   ary <- run allOnes
@@ -19,10 +22,6 @@ prop_allOnesScalesArray (C x θ) = monadicIO $ do
   assert $ (eBall 13) cellEval latticeEval
   where
     stopCond ((x,y), s) = x<7 && y<7
-
-
-allOnes = fileToAry "./Tests/dataTestAllOnes" -- 7x7
-fortyNineDoubles = fileToAry "./Tests/data49Doubles" -- 7x7
 
 test_ArrayIsSevenBySeven = do
   ones <- allOnes
