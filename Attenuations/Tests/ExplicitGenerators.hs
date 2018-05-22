@@ -7,18 +7,27 @@ tau = 2 * pi
 -- Explicit Generators
 interval = choose (0, 1::Double)
 zeroToPi = choose (0, pi::Double)
-zeroToTau =choose (0, tau::Double)
-zeroToHalfPi = choose (0, pi/2::Double)
+zeroToTau = choose (0, tau::Double)
 halfPiToPi = choose (pi/2, pi::Double)
+zeroToHalfPi = choose (0, pi/2::Double)
 
 -- Combined Generators
-data TestCoords = C Double Double deriving (Show, Eq)
+data TestHalfPI = HalfPI Double Double deriving (Show, Eq)
 
-instance Arbitrary TestCoords where
+instance Arbitrary TestHalfPI where
   arbitrary = do
     x <- interval
     t <- zeroToHalfPi
-    return $ C x t
+    return $ HalfPI x t
+
+data TestFullPI = FullPI Double Double deriving (Show, Eq)
+
+instance Arbitrary TestFullPI where
+  arbitrary = do
+    x <- interval
+    t <- zeroToPi
+    return $ FullPI x t
+
 
 {--
   δ β      ρ         ρ'
