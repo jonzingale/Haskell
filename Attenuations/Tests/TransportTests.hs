@@ -13,12 +13,39 @@ import Test.Framework
 allOnes = fileToAry "./Tests/dataTestAllOnes" -- 7x7
 fortyNineDoubles = fileToAry "./Tests/data49Doubles" -- 7x7
 
-prop_allOnesScalesArray :: TestCoords -> Property
-prop_allOnesScalesArray (C x θ) = monadicIO $ do
+-- FullPI Tests
+prop_allPosiNegativeWhatever :: TestFullPI -> Property
+prop_allPosiNegativeWhatever (FullPI x θ) = monadicIO $ do
   ary <- run allOnes
-  let (_:ijSeg) = transport x θ -- because the head is not necessary.
-  let cellEval = (* 7).snd.(!! 1) $ transport (x/7) θ -- (*7).(rl).(/7) == rl
-  let latticeEval = sum [ seg * (qArray 7 ij ary) | (ij, seg) <- takeWhile stopCond ijSeg]
+  let ijSeg = tail $ transport x θ -- because the head is not necessary.
+  let pqSeg = tail $ uncurry transport $ mirrorCoords (x, θ)
+
+  assert $ (eBall 13) (integrate ijSeg ary) (integrate pqSeg ary)
+  where
+    stopCond ((x,y), s) = x<7 && y<7
+    integrate l a = sum [ seg * qArray 7 ij a |
+        (ij, seg) <- takeWhile stopCond l]
+
+prop_mirrorCoords :: Gen Bool
+prop_mirrorCoords = do
+  x <- choose (0, 7::Double)
+  t <- zeroToPi
+  let (y, s) = mirrorCoords.mirrorCoords $ (x, t)
+  return $ (eBall 13) x y && (eBall 13) s t
+
+mirrorCoords :: (XCoord, Angle) -> (XCoord, Angle)
+mirrorCoords (x, θ) = (7-x, pi-θ)
+
+
+--HalfPI Tests
+prop_allOnesScalesArray :: TestHalfPI -> Property
+prop_allOnesScalesArray (HalfPI x θ) = monadicIO $ do
+  ary <- run allOnes  -- (*7).(rl).(/7) == rl
+  let ijSeg = tail $ transport (x*7) θ  -- because the head is not necessary.
+  let cellEval = (* 7).snd.(!! 1) $ transport x θ
+  let latticeEval = sum [ seg * qArray 7 ij ary |
+        (ij, seg) <- takeWhile stopCond ijSeg]
+
   assert $ (eBall 13) cellEval latticeEval
   where
     stopCond ((x,y), s) = x<7 && y<7
@@ -34,8 +61,8 @@ test_ArrayIsAllOnes = do
 test_allOnesDiagonal = do
   ary <- allOnes
   let (x, t) = (0, pi/4)
-  let (_:ijSeg) = transport x t -- because the head is not necessary.
-  let eval = sum [ seg * (qArray 7 ij ary) | (ij, seg) <- takeWhile stopCond ijSeg]
+  let ijSeg = tail $ transport x t -- because the head is not necessary.
+  let eval = sum [ seg * qArray 7 ij ary | (ij, seg) <- takeWhile stopCond ijSeg]
   assertEqual eval (7 * sqrt 2)
   where
     stopCond ((x,y), s) = x<7 && y<7
