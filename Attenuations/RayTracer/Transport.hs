@@ -31,22 +31,22 @@ transport x theta =
   let xcs = xcrossings x theta in
   let ycs = ycrossings x theta in
   let nudge = if theta > pi/2 then fromIntegral.ceiling else fromIntegral.floor in
-
-  f xcs ycs (x, 0) (nudge x, -1) -- floor for negative slope case only
+  let sign = if theta > pi/2 then -1 else 1 in
+  f xcs ycs (x, 0) (nudge x, -1) sign -- floor for negative slope case only
   
   where -- xcs ycs (p,q) (i,j)
-    f ((xh,yh): xcs) ((xv,yv): ycs) pt (i, j)
-      | yh < yv = ((i,j), segment pt (xh,yh)) : f xcs ((xv,yv): ycs) (xh,yh) (i+1, j)
-      | otherwise = ((i,j), segment pt (xv,yv)) : f ((xh,yh): xcs) ycs (xv,yv) (i, j+1)
+    f ((xh,yh): xcs) ((xv,yv): ycs) pt (i, j) sign
+      | yh < yv = ((i,j), segment pt (xh,yh)) : f xcs ((xv,yv): ycs) (xh,yh) (i+sign, j) sign
+      | otherwise = ((i,j), segment pt (xv,yv)) : f ((xh,yh): xcs) ycs (xv,yv) (i, j+1) sign
 
 -- xcrossings are dependent on either θ < π/2 or θ > π/2.
 -- These y values should always go positive. There likely
 -- hides a symmetry about pi/2.
 xcrossings :: XCoord -> Angle -> [(XCoord, YCoord)]
 xcrossings x theta
-  | theta > pi/2 = [(cc x - k - 1, -(k + frac x)*tan theta) | k<-[0..]] -- verify
+  | theta > pi/2 = [(ff x - k, -(frac x + k)*tan theta) | k<-[0..]]
   | theta < pi/2 = [(ff x + k + 1, (1 - frac x + k)*tan theta) | k<-[0..]]
-  | otherwise = []
+  | otherwise = [] -- Is this right?
   where frac = snd.properFraction
 
 -- ycrossings are dependent on either θ < π/2 or θ > π/2.
