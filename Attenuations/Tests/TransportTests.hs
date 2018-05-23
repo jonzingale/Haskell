@@ -13,6 +13,15 @@ import Test.Framework
 allOnes = fileToAry "./Tests/dataTestAllOnes" -- 7x7
 fortyNineDoubles = fileToAry "./Tests/data49Doubles" -- 7x7
 
+{--
+stopCond ((x,y), s) = x<7 && y<7 && x>0
+integrate l a = sum [ seg * qArray 7 ij a |(ij, seg) <- takeWhile stopCond l]
+ary <- allOnes
+take 10 (transport 3.5 (3*pi/4))
+integrate (tail $ transport 3.5 (3*pi/4)) ary
+integrate (tail $ transport 3.5 (pi/4)) ary
+--} 
+
 -- FullPI Tests
 prop_allPosiNegativeWhatever :: TestFullPI -> Property
 prop_allPosiNegativeWhatever (FullPI x θ) = monadicIO $ do
@@ -22,19 +31,20 @@ prop_allPosiNegativeWhatever (FullPI x θ) = monadicIO $ do
 
   assert $ (eBall 13) (integrate ijSeg ary) (integrate pqSeg ary)
   where
-    stopCond ((x,y), s) = x<7 && y<7
+    stopCond ((x,y), s) = x<7 && y<7 && x>0
     integrate l a = sum [ seg * qArray 7 ij a |
         (ij, seg) <- takeWhile stopCond l]
 
-prop_mirrorCoords :: Gen Bool
-prop_mirrorCoords = do
+
+mirrorCoords :: (XCoord, Angle) -> (XCoord, Angle)
+mirrorCoords (x, θ) = (7-x, pi-θ)
+
+prop_mirrorCoordsSelfInverse :: Gen Bool
+prop_mirrorCoordsSelfInverse = do
   x <- choose (0, 7::Double)
   t <- zeroToPi
   let (y, s) = mirrorCoords.mirrorCoords $ (x, t)
   return $ (eBall 13) x y && (eBall 13) s t
-
-mirrorCoords :: (XCoord, Angle) -> (XCoord, Angle)
-mirrorCoords (x, θ) = (7-x, pi-θ)
 
 
 --HalfPI Tests
