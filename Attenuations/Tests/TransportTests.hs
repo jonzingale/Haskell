@@ -25,7 +25,7 @@ integrate (tail $ transport 3.5 (pi/4)) ary
 -- FullPI Tests
 prop_gradientArraySymmetry :: TestFullPI -> Property
 prop_gradientArraySymmetry (FullPI x θ) = monadicIO $ do
-  ary <- run allOnes
+  ary <- run gradientDoubles
   let ijSeg = tail $ transport x θ -- because the head is not necessary.
   let pqSeg = tail $ uncurry transport $ mirrorCoords (x, θ)
 
