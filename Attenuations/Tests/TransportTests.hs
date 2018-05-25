@@ -12,7 +12,7 @@ import Test.Framework
 
 allOnes = fileToAry "./Tests/dataTestAllOnes" -- 7x7
 fortyNineDoubles = fileToAry "./Tests/data49Doubles" -- 7x7
-
+gradientDoubles = fileToAry "./Tests/gradArray" -- 7x7
 {--
 stopCond ((x,y), s) = x<7 && y<7 && x>0
 integrate l a = sum [ seg * qArray 7 ij a |(ij, seg) <- takeWhile stopCond l]
@@ -23,6 +23,18 @@ integrate (tail $ transport 3.5 (pi/4)) ary
 --} 
 
 -- FullPI Tests
+prop_gradientArraySymmetry :: TestFullPI -> Property
+prop_gradientArraySymmetry (FullPI x θ) = monadicIO $ do
+  ary <- run allOnes
+  let ijSeg = tail $ transport x θ -- because the head is not necessary.
+  let pqSeg = tail $ uncurry transport $ mirrorCoords (x, θ)
+
+  assert $ (eBall 13) (integrate ijSeg ary) (integrate pqSeg ary)
+  where
+    stopCond ((x,y), s) = x<7 && y<7 && x>0
+    integrate l a = sum [ seg * qArray 7 ij a |
+        (ij, seg) <- takeWhile stopCond l]
+
 prop_allPosiNegativeWhatever :: TestFullPI -> Property
 prop_allPosiNegativeWhatever (FullPI x θ) = monadicIO $ do
   ary <- run allOnes
