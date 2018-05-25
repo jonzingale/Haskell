@@ -7,12 +7,22 @@ import Tests.ExplicitGenerators
 import RayTracer.FileToVector -- fileToAry, qArray, vLength, vSum
 import RayTracer.Transport
 
+import qualified Data.Vector.Unboxed as U
 import Test.QuickCheck.Monadic
 import Test.Framework
 
 allOnes = fileToAry "./Tests/dataTestAllOnes" -- 7x7
 fortyNineDoubles = fileToAry "./Tests/data49Doubles" -- 7x7
 gradientDoubles = fileToAry "./Tests/dataGradArray" -- 7x7
+
+-- Test Arbitrary Lattice
+prop_QueryArbitraryLattice :: U.Vector Double -> Property
+prop_QueryArbitraryLattice ary = monadicIO $ do
+  -- x <- choose (0::Int, 6)
+  -- y <- choose (0::Int, 6)
+  -- assert $ qArray 7 (x,y) ary >= 0
+  assert $ (abs.qArray 7 (0,0)) ary >= 0
+
 
 -- FullPI Tests
 prop_gradientArraySymmetry :: TestFullPI -> Property
