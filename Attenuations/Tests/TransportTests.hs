@@ -27,8 +27,8 @@ prop_gradientArraySymmetry (FullPI x θ) = monadicIO $ do
     integrate l a = sum [ seg * qArray 7 ij a |
         (ij, seg) <- takeWhile stopCond l]
 
-prop_allPosiNegativeWhatever :: TestFullPI -> Property
-prop_allPosiNegativeWhatever (FullPI x θ) = monadicIO $ do
+prop_allOnesSymmetry :: TestFullPI -> Property
+prop_allOnesSymmetry (FullPI x θ) = monadicIO $ do
   ary <- run allOnes
   let ijSeg = tail $ transport x θ -- because the head is not necessary.
   let pqSeg = tail $ uncurry transport $ mirrorCoords (x, θ)
