@@ -1,4 +1,6 @@
 module Tests.ExplicitGenerators where
+-- import Data.Array.Unboxed -- strict fast Arrays
+import qualified Data.Vector.Unboxed as U  -- strict fast Arrays
 import Test.Framework
 
 -- Constants
@@ -12,6 +14,11 @@ halfPiToPi = choose (pi/2, pi::Double)
 zeroToHalfPi = choose (0, pi/2::Double)
 
 -- Combined Generators
+instance (U.Unbox a, Arbitrary a) => Arbitrary (U.Vector a) where
+  arbitrary = do
+    ls <- arbitrary
+    return $ U.generate 49 ls
+
 data TestFullPI = FullPI Double Double deriving (Show, Eq)
 
 instance Arbitrary TestFullPI where
