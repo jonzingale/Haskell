@@ -50,20 +50,6 @@ prop_mirrorCoordsSelfInverse = do
   let (y, s) = mirrorCoords.mirrorCoords $ (x, t)
   return $ (eBall 13) x y && (eBall 13) s t
 
-
---HalfPI Tests
-prop_allOnesScalesArray :: TestHalfPI -> Property
-prop_allOnesScalesArray (HalfPI x θ) = monadicIO $ do
-  ary <- run allOnes  -- (*7).(rl).(/7) == rl
-  let ijSeg = tail $ transport (x*7) θ  -- because the head is not necessary.
-  let cellEval = (* 7).snd.(!! 1) $ transport x θ
-  let latticeEval = sum [ seg * qArray 7 ij ary |
-        (ij, seg) <- takeWhile stopCond ijSeg]
-
-  assert $ (eBall 13) cellEval latticeEval
-  where
-    stopCond ((x,y), s) = x<7 && y<7
-
 test_ArrayIsSevenBySeven = do
   ones <- allOnes
   assertEqual (vLength ones) 49

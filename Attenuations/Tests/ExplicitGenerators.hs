@@ -12,14 +12,6 @@ halfPiToPi = choose (pi/2, pi::Double)
 zeroToHalfPi = choose (0, pi/2::Double)
 
 -- Combined Generators
-data TestHalfPI = HalfPI Double Double deriving (Show, Eq)
-
-instance Arbitrary TestHalfPI where
-  arbitrary = do
-    x <- interval
-    t <- zeroToHalfPi
-    return $ HalfPI x t
-
 data TestFullPI = FullPI Double Double deriving (Show, Eq)
 
 instance Arbitrary TestFullPI where
