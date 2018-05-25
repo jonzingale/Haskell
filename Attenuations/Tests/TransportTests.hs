@@ -13,14 +13,6 @@ import Test.Framework
 allOnes = fileToAry "./Tests/dataTestAllOnes" -- 7x7
 fortyNineDoubles = fileToAry "./Tests/data49Doubles" -- 7x7
 gradientDoubles = fileToAry "./Tests/dataGradArray" -- 7x7
-{--
-stopCond ((x,y), s) = x<7 && y<7 && x>0
-integrate l a = sum [ seg * qArray 7 ij a |(ij, seg) <- takeWhile stopCond l]
-ary <- allOnes
-take 10 (transport 3.5 (3*pi/4))
-integrate (tail $ transport 3.5 (3*pi/4)) ary
-integrate (tail $ transport 3.5 (pi/4)) ary
---} 
 
 -- FullPI Tests
 prop_gradientArraySymmetry :: TestFullPI -> Property
