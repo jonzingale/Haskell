@@ -2,18 +2,21 @@ import Data.Array.Unboxed -- strict fast Arrays
 import System.Random -- randomRs
 import Data.List -- sort
 
+type ULattice = UArray Int Double
+
 randos = randomRs (0, 1::Double).mkStdGen $ 42
 
--- saveArr "gradArray" gradArray
-saveArr :: String -> UArray Int Double -> IO()
-saveArr file ary = writeFile ("./Tests/" ++ file) $
-          unlines.map show $ elems ary
+-- saveArr "GradArray" gradArray => "./Tests/dataGradArray"
+saveArr :: String -> ULattice -> IO()
+saveArr file ary =
+  writeFile ("./Tests/data" ++ file) $ aryToStr ary
+  where aryToStr = unlines.(map show).elems
 
-bigArray :: UArray Int Double
+bigArray :: ULattice
 bigArray = listArray bounds randos
   where bounds = (0::Int, 10^6-1)
 
-gradArray :: UArray Int Double
+gradArray :: ULattice
 gradArray =
   let grades = sort.take 7 $ randos in
   let bounds = (1::Int, 49) in
