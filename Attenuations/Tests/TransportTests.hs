@@ -12,7 +12,6 @@ import Test.QuickCheck.Monadic
 import Test.Framework
 
 allOnes = fileToAry "./Tests/dataTestAllOnes" -- 7x7
-fortyNineDoubles = fileToAry "./Tests/data49Doubles" -- 7x7
 gradientDoubles = fileToAry "./Tests/dataGradArray" -- 7x7
 stratifiedDoubles = fileToAry "./Tests/dataStratifiedArray" -- 7x7
 
