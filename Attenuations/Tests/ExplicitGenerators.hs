@@ -1,5 +1,4 @@
 module Tests.ExplicitGenerators where
--- import Data.Array.Unboxed -- strict fast Arrays
 import qualified Data.Vector.Unboxed as U  -- strict fast Arrays
 import Test.Framework
 
@@ -12,21 +11,26 @@ zeroToPi = choose (0, pi::Double)
 zeroToTau = choose (0, tau::Double)
 halfPiToPi = choose (pi/2, pi::Double)
 zeroToHalfPi = choose (0, pi/2::Double)
+squareInt = (^ 2) `fmap` (arbitrary :: Gen Int) `suchThat` (> 0)
 
--- Combined Generators
-instance (U.Unbox a, Arbitrary a) => Arbitrary (U.Vector a) where
-  arbitrary = do
-    ls <- arbitrary
-    return $ U.generate 49 ls
+-- prop_Index_v3 :: (NonEmptyList Integer) -> NonNegative Int -> Property
+-- prop_Index_v3 (NonEmpty xs) (NonNegative n) =
+  -- n < length xs ==> xs !! n == head (drop n xs)
 
-data TestFullPI = FullPI Double Double deriving (Show, Eq)
+-- Compound Generators
+data TestRay = Ray Double Double deriving (Show, Eq)
 
-instance Arbitrary TestFullPI where
+instance Arbitrary TestRay where
   arbitrary = do
     x <- interval
     t <- zeroToPi
-    return $ FullPI x t
+    return $ Ray x t
 
+instance (U.Unbox a, Arbitrary a) => Arbitrary (U.Vector a) where
+  arbitrary = do
+    ls <- arbitrary
+    z <- squareInt
+    return $ U.generate z ls
 
 {--
   δ β      ρ         ρ'

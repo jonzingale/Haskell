@@ -24,3 +24,12 @@ gradArray =
   listArray bounds ary
   where
     sevenOfEm = (take 7).repeat
+
+stratifiedArray :: ULattice
+stratifiedArray =
+  let grades = take 7 $ randos in
+  let bounds = (1::Int, 49) in
+  let ary = foldr (++) [] $ map sevenOfEm grades in
+  listArray bounds ary
+  where
+    sevenOfEm = (take 7).repeat

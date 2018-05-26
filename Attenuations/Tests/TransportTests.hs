@@ -14,19 +14,19 @@ import Test.Framework
 allOnes = fileToAry "./Tests/dataTestAllOnes" -- 7x7
 fortyNineDoubles = fileToAry "./Tests/data49Doubles" -- 7x7
 gradientDoubles = fileToAry "./Tests/dataGradArray" -- 7x7
+stratifiedDoubles = fileToAry "./Tests/dataStratifiedArray" -- 7x7
 
--- Test Arbitrary Lattice
-prop_QueryArbitraryLattice :: U.Vector Double -> Property
-prop_QueryArbitraryLattice ary = monadicIO $ do
-  -- x <- choose (0::Int, 6)
-  -- y <- choose (0::Int, 6)
-  -- assert $ qArray 7 (x,y) ary >= 0
-  assert $ (abs.qArray 7 (0,0)) ary >= 0
+-- Arbitrary Lattice Tests
+prop_QueryArbitraryLattice :: U.Vector Double -> Gen Bool
+prop_QueryArbitraryLattice ary = do
+  let rootSize = floor.sqrt.fromIntegral $ U.length ary
+  x <- choose (0::Int, rootSize-1)
+  y <- choose (0::Int, rootSize-1)
+  return $ (abs.qArray rootSize (x, y)) ary >= 0
 
-
--- FullPI Tests
-prop_gradientArraySymmetry :: TestFullPI -> Property
-prop_gradientArraySymmetry (FullPI x θ) = monadicIO $ do
+-- Ray Tests
+prop_gradientArraySymmetry :: TestRay -> Property
+prop_gradientArraySymmetry (Ray x θ) = monadicIO $ do
   ary <- run gradientDoubles
   let ijSeg = tail $ transport x θ -- because the head is not necessary.
   let pqSeg = tail $ uncurry transport $ mirrorCoords (x, θ)
@@ -37,8 +37,20 @@ prop_gradientArraySymmetry (FullPI x θ) = monadicIO $ do
     integrate l a = sum [ seg * qArray 7 ij a |
         (ij, seg) <- takeWhile stopCond l]
 
-prop_allOnesSymmetry :: TestFullPI -> Property
-prop_allOnesSymmetry (FullPI x θ) = monadicIO $ do
+prop_stratifiedArraySymmetry :: TestRay -> Property
+prop_stratifiedArraySymmetry (Ray x θ) = monadicIO $ do
+  ary <- run stratifiedDoubles
+  let ijSeg = tail $ transport x θ -- because the head is not necessary.
+  let pqSeg = tail $ uncurry transport $ mirrorCoords (x, θ)
+
+  assert $ (eBall 13) (integrate ijSeg ary) (integrate pqSeg ary)
+  where
+    stopCond ((x,y), s) = x<7 && y<7 && x>0
+    integrate l a = sum [ seg * qArray 7 ij a |
+        (ij, seg) <- takeWhile stopCond l]
+
+prop_allOnesSymmetry :: TestRay -> Property
+prop_allOnesSymmetry (Ray x θ) = monadicIO $ do
   ary <- run allOnes
   let ijSeg = tail $ transport x θ -- because the head is not necessary.
   let pqSeg = tail $ uncurry transport $ mirrorCoords (x, θ)
