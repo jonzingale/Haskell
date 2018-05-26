@@ -27,16 +27,13 @@ simply the counting rules. y-values are always increasing
 from 0.
 --}
 transport :: XCoord -> Angle -> [((Int, Int), SegmentLength)]
-transport x theta
-  | theta > pi/2 =
-    let (xcs, ycs) = (xcrossings x theta, ycrossings x theta) in
-    f xcs ycs(x, 0) (cc x, -1) (negate 1)
-  | otherwise =
-    let (xcs, ycs) = (xcrossings x theta, ycrossings x theta) in
-    f xcs ycs (x, 0) (ff x, -1) 1
-  where -- xcs ycs (p,q) (i,j)
-    cc = fromIntegral.ceiling
-    ff = fromIntegral.floor
+transport x θ
+  | θ > pi/2 = f (xcs x θ) (ycs x θ) (x, 0) (cc x, -1) (negate 1)
+  | otherwise = f (xcs x θ) (ycs x θ) (x, 0) (ff x, -1) 1
+  where
+    (xcs, ycs) = (xcrossings, ycrossings)
+    (cc, ff) = (fromIntegral.ceiling, fromIntegral.floor)
+    -- xcs ycs (p,q) (i,j) sig
     f ((xh,yh): xcs) ((xv,yv): ycs) pt (i, j) sign
       | yh < yv = ((i,j), segment pt (xh,yh)) : f xcs ((xv,yv): ycs) (xh,yh) (i+sign, j) sign
       | otherwise = ((i,j), segment pt (xv,yv)) : f ((xh,yh): xcs) ycs (xv,yv) (i, j+1) sign
