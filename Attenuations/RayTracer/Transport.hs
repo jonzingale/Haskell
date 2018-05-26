@@ -27,14 +27,16 @@ simply the counting rules. y-values are always increasing
 from 0.
 --}
 transport :: XCoord -> Angle -> [((Int, Int), SegmentLength)]
-transport x theta =
-  let xcs = xcrossings x theta in
-  let ycs = ycrossings x theta in
-  let nudge = if theta > pi/2 then fromIntegral.ceiling else fromIntegral.floor in
-  let sign = if theta > pi/2 then -1 else 1 in
-  f xcs ycs (x, 0) (nudge x, -1) sign -- floor for negative slope case only
-  
+transport x theta
+  | theta > pi/2 =
+    let (xcs, ycs) = (xcrossings x theta, ycrossings x theta) in
+    f xcs ycs(x, 0) (cc x, -1) (negate 1)
+  | otherwise =
+    let (xcs, ycs) = (xcrossings x theta, ycrossings x theta) in
+    f xcs ycs (x, 0) (ff x, -1) 1
   where -- xcs ycs (p,q) (i,j)
+    cc = fromIntegral.ceiling
+    ff = fromIntegral.floor
     f ((xh,yh): xcs) ((xv,yv): ycs) pt (i, j) sign
       | yh < yv = ((i,j), segment pt (xh,yh)) : f xcs ((xv,yv): ycs) (xh,yh) (i+sign, j) sign
       | otherwise = ((i,j), segment pt (xv,yv)) : f ((xh,yh): xcs) ycs (xv,yv) (i, j+1) sign
