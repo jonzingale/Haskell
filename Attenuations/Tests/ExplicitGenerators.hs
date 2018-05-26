@@ -45,7 +45,6 @@ kappaRegion x = choose (0, (1-x) * pi/4) -- sub-ρκ-Condition
 type DoubleCoords =  ((Double, Double), Double)
 type IntegerCoords = ((Integer, Integer), Integer)
 
---better would be an epsilon ball
 eBall :: Double -> Double -> Double -> Bool
 eBall t a b = (< 1/10**t).abs $ a - b
 
