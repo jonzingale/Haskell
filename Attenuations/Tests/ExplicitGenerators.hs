@@ -13,10 +13,6 @@ halfPiToPi = choose (pi/2, pi::Double)
 zeroToHalfPi = choose (0, pi/2::Double)
 squareInt = (^ 2) `fmap` (arbitrary :: Gen Int) `suchThat` (> 0)
 
--- prop_Index_v3 :: (NonEmptyList Integer) -> NonNegative Int -> Property
--- prop_Index_v3 (NonEmpty xs) (NonNegative n) =
-  -- n < length xs ==> xs !! n == head (drop n xs)
-
 -- Compound Generators
 data TestRay = Ray Double Double deriving (Show, Eq)
 
