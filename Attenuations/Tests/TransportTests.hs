@@ -5,7 +5,7 @@
 module Tests.TransportTests where
 import Tests.ExplicitGenerators
 import RayTracer.FileToVector -- fileToAry, qArray, vLength, vSum
-import RayTracer.Transport
+import RayTracer.Transport3D
 
 import qualified Data.Vector.Unboxed as U
 import Test.QuickCheck.Monadic
