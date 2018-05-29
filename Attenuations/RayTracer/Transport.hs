@@ -42,10 +42,9 @@ transport x θ
 -- These y values should always go positive. There likely
 -- hides a symmetry about pi/2.
 xcrossings :: XCoord -> Angle -> [(XCoord, YCoord)]
-xcrossings x theta
-  | theta > pi/2 = [(ff x - k, -(frac x + k)*tan theta) | k<-[0..]]
-  | theta < pi/2 = [(ff x + k + 1, (1 - frac x + k)*tan theta) | k<-[0..]]
-  | otherwise = [] -- Is this right?
+xcrossings x θ
+  | θ > pi/2 = [(ff x - k, -(frac x + k)*tan θ) | k<-[0..]]
+  | otherwise = [(ff x + k + 1, (1 - frac x + k)*tan θ) | k<-[0..]]
   where frac = snd.properFraction
 
 -- ycrossings are dependent on either θ < π/2 or θ > π/2.
