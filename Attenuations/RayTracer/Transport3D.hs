@@ -2,6 +2,9 @@ module RayTracer.Transport3D where
 import RayTracer.FileToVector
 
 type Coords = (XCoord, YCoord)
+type Coords3D = (XCoord, YCoord, ZCoord)
+type EntryCoords = (XCoord, ZCoord)
+type EntryAngles = (Angle, Angle)
 type SegmentLength = Double
 type XCoord = Double
 type YCoord = Double
@@ -40,7 +43,7 @@ transport x θ
       | otherwise = ((i,j), segment pt (xv,yv)) : f ((xh,yh): xcs) ycs (xv,yv) (i, j+1) sign
 
 -- zcrossings ought behave like xcrossings.
-zcrossings :: XCoord -> ZCoord -> Angle -> Angle -> [(XCoord, YCoord)]
+zcrossings :: XCoord -> ZCoord -> Angle -> Angle -> [Coords]
 zcrossings x z θ ψ
   | θ > pi/2 = [(ff x - k, -(frac x + k)*tan θ) | k<-[0..]]
   | otherwise = [(ff x + k + 1, (1 - frac x + k)*tan θ) | k<-[0..]]
@@ -50,15 +53,23 @@ zcrossings x z θ ψ
 -- xcrossings are dependent on either θ < π/2 or θ > π/2.
 -- These y values should always go positive. There likely
 -- hides a symmetry about pi/2.
-xcrossings :: XCoord -> Angle -> [(XCoord, YCoord)]
+xcrossings :: XCoord -> Angle -> [Coords]
 xcrossings x θ
   | θ > pi/2 = [(ff x - k, -(frac x + k)*tan θ) | k<-[0..]]
   | otherwise = [(ff x + k + 1, (1 - frac x + k)*tan θ) | k<-[0..]]
   where frac = snd.properFraction
 
+-- A start on incorporating the z and φ components.
+ycrossings' :: EntryCoords -> EntryAngles -> [Coords3D]
+ycrossings' (x, z) (θ, φ) = [ (x + k / tan θ, k, zc z φ k) | k <- [0..]]
+  where
+    frac = snd.properFraction
+    zc z φ k | φ > pi/2 = -(frac z + k)*tan φ
+             | otherwise = (1 - frac z + k)*tan φ
+
 -- ycrossings are dependent on either θ < π/2 or θ > π/2.
 -- These x values may go negative. All three cases the same!
-ycrossings :: XCoord -> Angle -> [(XCoord, YCoord)]
+ycrossings :: XCoord -> Angle -> [Coords]
 ycrossings x theta = [ (x + k / tan theta, k) | k <- [0..]]
 
 segment :: Coords -> Coords -> SegmentLength
