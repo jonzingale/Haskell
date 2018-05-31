@@ -21,6 +21,18 @@ displayTrace x t = do
   where
     stopCond ((x,y), s) = x<=7 && y<=7
 
+prettyYcrossings3D (x, s) (θ, φ) =
+  let ycs = take 7 $ ycrossings' (x, s) (θ, φ) in
+  putStr.unlines.(map show) $ ycs
+
+-- A start on incorporating the z and φ components.
+ycrossings' :: EntryCoords -> EntryAngles -> [Coords3D]
+ycrossings' (x, s) (θ, φ) = [ (x + k / tan θ, k, zc s φ k) | k <- [0..]]
+  where
+    frac = snd.properFraction
+    zc s φ k | φ < pi/2 = s - k / tan φ -- a first guess
+             | otherwise = 0 -- not sure here
+
 {--
 Given that the slope is positive and both dispensers
 (xcrossings, ycrossings) are increasing, each can be
@@ -58,14 +70,6 @@ xcrossings x θ
   | θ > pi/2 = [(ff x - k, -(frac x + k)*tan θ) | k<-[0..]]
   | otherwise = [(ff x + k + 1, (1 - frac x + k)*tan θ) | k<-[0..]]
   where frac = snd.properFraction
-
--- A start on incorporating the z and φ components.
-ycrossings' :: EntryCoords -> EntryAngles -> [Coords3D]
-ycrossings' (x, z) (θ, φ) = [ (x + k / tan θ, k, zc z φ k) | k <- [0..]]
-  where
-    frac = snd.properFraction
-    zc z φ k | φ > pi/2 = -(frac z + k)*tan φ
-             | otherwise = (1 - frac z + k)*tan φ
 
 -- ycrossings are dependent on either θ < π/2 or θ > π/2.
 -- These x values may go negative. All three cases the same!
