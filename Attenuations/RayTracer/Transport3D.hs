@@ -34,8 +34,8 @@ ycrossings' :: EntryCoords -> EntryAngles -> [Coords3D]
 ycrossings' (x, z) (θ, φ) = [ (x + k / tan θ, k, zc z φ θ k) | k <- [0..]]
   where
     frac = snd.properFraction
-    zc z φ θ k | φ <= pi/2 = z - (k / tan φ) - (k / tan θ) -- a bad guess 
-               | otherwise = 0 -- not sure here
+    zc z φ θ k | φ <= pi/2 = z + k / (tan φ * sin θ)
+               | otherwise = z + k / (tan φ * sin θ) -- not sure here
 
 {--
 Given that the slope is positive and both dispensers
