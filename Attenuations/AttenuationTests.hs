@@ -6,7 +6,7 @@
 module AttenuationTests where
 import Tests.ExplicitGenerators
 -- import RayTracer.RayLength
-import RayTracer.Transport
+import RayTracer.Transport3D
 -- import RayTracer.Lattice
 -- import RayTracer.Rhythm
 import Test.Framework
