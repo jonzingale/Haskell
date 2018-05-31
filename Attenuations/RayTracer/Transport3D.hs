@@ -25,13 +25,17 @@ prettyYcrossings3D (x, s) (θ, φ) =
   let ycs = take 7 $ ycrossings' (x, s) (θ, φ) in
   putStr.unlines.(map show) $ ycs
 
--- A start on incorporating the z and φ components.
+{--
+A start on incorporating the z and φ components.
+The guess below cannot be correct. The z component
+is a function of both φ and θ (a projective cone).
+--}
 ycrossings' :: EntryCoords -> EntryAngles -> [Coords3D]
-ycrossings' (x, s) (θ, φ) = [ (x + k / tan θ, k, zc s φ k) | k <- [0..]]
+ycrossings' (x, z) (θ, φ) = [ (x + k / tan θ, k, zc z φ θ k) | k <- [0..]]
   where
     frac = snd.properFraction
-    zc s φ k | φ < pi/2 = s - k / tan φ -- a first guess
-             | otherwise = 0 -- not sure here
+    zc z φ θ k | φ <= pi/2 = z - (k / tan φ) - (k / tan θ) -- a bad guess 
+               | otherwise = 0 -- not sure here
 
 {--
 Given that the slope is positive and both dispensers
