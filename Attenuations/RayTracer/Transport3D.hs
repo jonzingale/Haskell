@@ -37,6 +37,23 @@ ycrossings' (x, z) (θ, φ) = [ (x + k / tan θ, k, zc z φ θ k) | k <- [0..]]
     zc z φ θ k | φ <= pi/2 = z + k / (tan φ * sin θ)
                | otherwise = z + k / (tan φ * sin θ) -- not sure here
 
+xcrossings' :: EntryCoords -> EntryAngles -> [Coords3D]
+xcrossings' (x, z) (θ, φ)
+  | θ > pi/2 = [(ff x - k, -(frac x + k)*tan θ, zc z φ θ k) | k<-[0..]]
+  | otherwise = [(ff x + k + 1, (1 - frac x + k)*tan θ, zc z φ θ k) | k<-[0..]]
+  where
+    frac = snd.properFraction
+    zc z φ θ k | φ <= pi/2 = z + k / (tan φ * cos θ)
+               | otherwise = z + k / (tan φ * cos θ) -- not sure here
+
+zcrossings' :: EntryCoords -> EntryAngles -> [Coords3D]
+zcrossings' (x, z) (θ, φ)
+  | θ > pi/2 = [(k * cos θ * tan φ, k * sin θ * tan φ, ff z - k) | k<-[0..]]
+  | otherwise = [(k * cos θ * tan φ, k * sin θ * tan φ, ff z + k + 1) | k<-[0..]] -- not sure here
+  where
+    frac = snd.properFraction
+
+
 {--
 Given that the slope is positive and both dispensers
 (xcrossings, ycrossings) are increasing, each can be
