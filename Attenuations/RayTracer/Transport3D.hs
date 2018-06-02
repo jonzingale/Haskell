@@ -33,7 +33,6 @@ is a function of both φ and θ (a projective cone).
 ycrossings' :: EntryCoords -> EntryAngles -> [Coords3D]
 ycrossings' (x, z) (θ, φ) = [ (x + k / tan θ, k, zc z φ θ k) | k <- [0..]]
   where
-    frac = snd.properFraction
     zc z φ θ k | φ <= pi/2 = z + k / (tan φ * sin θ)
                | otherwise = z + k / (tan φ * sin θ) -- not sure here
 
@@ -42,7 +41,6 @@ xcrossings' (x, z) (θ, φ)
   | θ > pi/2 = [(ff x - k, -(frac x + k)*tan θ, zc z φ θ k) | k<-[0..]]
   | otherwise = [(ff x + k + 1, (1 - frac x + k)*tan θ, zc z φ θ k) | k<-[0..]]
   where
-    frac = snd.properFraction
     zc z φ θ k | φ <= pi/2 = z + k / (tan φ * cos θ)
                | otherwise = z + k / (tan φ * cos θ) -- not sure here
 
@@ -50,9 +48,6 @@ zcrossings' :: EntryCoords -> EntryAngles -> [Coords3D]
 zcrossings' (x, z) (θ, φ)
   | θ > pi/2 = [(k * cos θ * tan φ, k * sin θ * tan φ, ff z - k) | k<-[0..]]
   | otherwise = [(k * cos θ * tan φ, k * sin θ * tan φ, ff z + k + 1) | k<-[0..]] -- not sure here
-  where
-    frac = snd.properFraction
-
 
 {--
 Given that the slope is positive and both dispensers
@@ -75,14 +70,6 @@ transport x θ
       | yh < yv = ((i,j), segment pt (xh,yh)) : f xcs ((xv,yv): ycs) (xh,yh) (i+sign, j) sign
       | otherwise = ((i,j), segment pt (xv,yv)) : f ((xh,yh): xcs) ycs (xv,yv) (i, j+1) sign
 
--- zcrossings ought behave like xcrossings.
-zcrossings :: XCoord -> ZCoord -> Angle -> Angle -> [Coords]
-zcrossings x z θ ψ
-  | θ > pi/2 = [(ff x - k, -(frac x + k)*tan θ) | k<-[0..]]
-  | otherwise = [(ff x + k + 1, (1 - frac x + k)*tan θ) | k<-[0..]]
-  where frac = snd.properFraction
-
-
 -- xcrossings are dependent on either θ < π/2 or θ > π/2.
 -- These y values should always go positive. There likely
 -- hides a symmetry about pi/2.
@@ -90,7 +77,6 @@ xcrossings :: XCoord -> Angle -> [Coords]
 xcrossings x θ
   | θ > pi/2 = [(ff x - k, -(frac x + k)*tan θ) | k<-[0..]]
   | otherwise = [(ff x + k + 1, (1 - frac x + k)*tan θ) | k<-[0..]]
-  where frac = snd.properFraction
 
 -- ycrossings are dependent on either θ < π/2 or θ > π/2.
 -- These x values may go negative. All three cases the same!
@@ -103,3 +89,4 @@ segment (x1, y1) (x2, y2) = sqrt $ (x2-x1)**2 + (y2-y1)**2
 cc, ff :: Double -> Double
 cc = fromIntegral.ceiling
 ff = fromIntegral.floor
+frac = snd.properFraction
