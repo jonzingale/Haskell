@@ -44,6 +44,7 @@ xcrossings' (x, z) (θ, φ)
     zc z φ θ k | φ <= pi/2 = z + k / (tan φ * cos θ)
                | otherwise = z + k / (tan φ * cos θ) -- not sure here
 
+-- verify how x- and y- components may need initial values.
 zcrossings' :: EntryCoords -> EntryAngles -> [Coords3D]
 zcrossings' (x, z) (θ, φ)
   | θ > pi/2 = [(k * cos θ * tan φ, k * sin θ * tan φ, ff z - k) | k<-[0..]]
