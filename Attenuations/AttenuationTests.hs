@@ -11,14 +11,16 @@ import RayTracer.Transport3D
 -- import RayTracer.Rhythm
 import Test.Framework
 
-import {-@ HTF_TESTS @-} Tests.TransportTests
+import {-@ HTF_TESTS @-} Tests.TransportTests3D
+-- import {-@ HTF_TESTS @-} Tests.TransportTests
 -- import {-@ HTF_TESTS @-} Tests.IndexerTests
 -- import {-@ HTF_TESTS @-} Tests.SymmetryTests
 -- import {-@ HTF_TESTS @-} Tests.XRegionTests
 
 main = htfMain htf_importedTests
 
-transportTests = htfMain htf_Tests_TransportTests_thisModulesTests
+transportTests = htfMain htf_Tests_TransportTests3D_thisModulesTests
+-- transportTests = htfMain htf_Tests_TransportTests_thisModulesTests
 -- symmetryTests = htfMain htf_Tests_SymmetryTests_thisModulesTests
 -- indexerTests = htfMain htf_Tests_IndexerTests_thisModulesTests
 -- xRegionTests = htfMain htf_Tests_XRegionTests_thisModulesTests
