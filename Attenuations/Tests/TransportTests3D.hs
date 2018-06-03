@@ -15,6 +15,8 @@ allOnes = fileToAry "./Tests/dataTestAllOnes" -- 7x7
 gradientDoubles = fileToAry "./Tests/dataGradArray" -- 7x7
 stratifiedDoubles = fileToAry "./Tests/dataStratifiedArray" -- 7x7
 
+{--
+
 -- Arbitrary Lattice Tests
 prop_QueryArbitraryLattice :: U.Vector Double -> Gen Bool
 prop_QueryArbitraryLattice ary = do
@@ -88,3 +90,4 @@ test_allOnesDiagonal = do
   where
     stopCond ((x,y), s) = x<7 && y<7
 
+--}
