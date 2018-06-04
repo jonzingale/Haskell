@@ -50,7 +50,7 @@ zcrossings' (x, z) (θ, φ)
   | otherwise = [(k * cos θ * tan φ, k * sin θ * tan φ, ff z + k + 1) | k<-[0..]] -- not sure here
 
 -- this is going to need very very much work.
--- transport :: EntryCoords -> EntryAngles -> [((Int, Int, Int), SegmentLength)]
+transport:: EntryCoords-> EntryAngles -> [(Coords, SegmentLength)]
 transport (x, z) (θ, φ)
   | θ > pi/2 = f (xcs (x, z) (θ, φ))
                  (ycs (x, z) (θ, φ))
