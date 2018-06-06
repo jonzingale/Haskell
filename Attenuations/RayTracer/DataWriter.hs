@@ -16,6 +16,7 @@ bigArray :: ULattice
 bigArray = listArray bounds randos
   where bounds = (0::Int, 10^6-1)
 
+-- 2D Files
 gradArray :: ULattice
 gradArray =
   let grades = sort.take 7 $ randos in
@@ -29,6 +30,28 @@ stratifiedArray :: ULattice
 stratifiedArray =
   let grades = take 7 $ randos in
   let bounds = (1::Int, 49) in
+  let ary = foldr (++) [] $ map sevenOfEm grades in
+  listArray bounds ary
+  where
+    sevenOfEm = (take 7).repeat
+
+-- 3D Files
+allOnes3D :: ULattice
+allOnes3D = listArray (1::Int, 343) $ (take 343).repeat $ 1.0
+
+gradArray3D :: ULattice
+gradArray3D =
+  let grades = sort.take 7 $ randos in
+  let bounds = (1::Int, 343) in
+  let ary = foldr (++) [] $ map sevenOfEm grades in
+  listArray bounds ary
+  where
+    sevenOfEm = (take 7).repeat
+
+stratifiedArray3D :: ULattice
+stratifiedArray3D =
+  let grades = take 7 $ randos in
+  let bounds = (1::Int, 343) in
   let ary = foldr (++) [] $ map sevenOfEm grades in
   listArray bounds ary
   where
