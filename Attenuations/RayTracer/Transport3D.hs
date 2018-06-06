@@ -50,35 +50,41 @@ zcrossings' (x, z) (θ, φ)
   | otherwise = [(k * cos θ * tan φ, k * sin θ * tan φ, ff z + k + 1) | k<-[0..]] -- not sure here
 
 -- this is going to need very very much work.
-transport:: EntryCoords-> EntryAngles -> [(Coords, SegmentLength)]
+type IntCoords = (Int, Int, Int)
+transport:: EntryCoords-> EntryAngles -> [(IntCoords, SegmentLength)]
 transport (x, z) (θ, φ)
   | θ > pi/2 = f (xcs (x, z) (θ, φ))
                  (ycs (x, z) (θ, φ))
                  (zcs (x, z) (θ, φ))
                  (x, 0, z) -- pt
-                 (cc x, -1, cc z) -- i j k
+                 (ceiling x, -1, ceiling z) -- i j k
                  (negate 1) -- sig
   | otherwise = f (xcs (x, z) (θ, φ))
                   (ycs (x, z) (θ, φ))
                   (zcs (x, z) (θ, φ))
                   (x, 0, z)
-                  (ff x, -1, ff z)
+                  (floor x, -1, floor z)
                   1
   where
     (xcs, ycs, zcs) = (xcrossings', ycrossings', zcrossings')
 
     -- xcs ycs zcs (p,q,r) (i,j,k) sig
     f ((xh,yh,zh): xcs) ((xv,yv,zv): ycs) ((xd,yd,zd): zcs) pt (i, j, k) sign
-      | yh < yv && yh < yd =
+      | yh == minimum [yh, yv, yd] = -- x case
         ((i,j,k), segment pt (xh,yh,zh)) :
           f xcs ((xv,yv,zv): ycs) ((xd,yd,zd): zcs) (xh,yh,zh) (i+sign, j, k) sign
-      | otherwise =
+
+      | yv == minimum [yh, yv, yd] = -- y case
         ((i,j,k), segment pt (xv,yv,zv)) :
           f ((xh,yh,zh): xcs) ycs ((xd,yd,zd): zcs) (xv,yv,zv) (i, j+1, k) sign
 
+      | yd == minimum [yh, yv, yd]  = -- z case
+        ((i,j,k), segment pt (xv,yv,zv)) :
+          f ((xh,yh,zh): xcs) ((xv,yv,zv): ycs) zcs (xv,yv,zv) (i, j, k+sign) sign
 
 segment :: Coords -> Coords -> SegmentLength
-segment (x1, y1, _) (x2, y2, _) = sqrt $ (x2-x1)**2 + (y2-y1)**2
+segment (x1, y1, z1) (x2, y2, z2) =
+  sqrt $ (x2-x1)**2 + (y2-y1)**2 + (z2-z1)**2
 
 cc, ff :: Double -> Double
 cc = fromIntegral.ceiling
