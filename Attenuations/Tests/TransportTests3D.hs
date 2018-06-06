@@ -11,9 +11,9 @@ import qualified Data.Vector.Unboxed as U
 import Test.QuickCheck.Monadic
 import Test.Framework
 
-allOnes = fileToAry "./Tests/dataTestAllOnes" -- 7x7
-gradientDoubles = fileToAry "./Tests/dataGradArray" -- 7x7
-stratifiedDoubles = fileToAry "./Tests/dataStratifiedArray" -- 7x7
+-- 3D data files: 7x7x7
+allOnes = fileToAry "./Tests/dataallOnes3D"
+gradientDoubles = fileToAry "./Tests/datagradArray3D"
 
 {--
 
@@ -73,21 +73,24 @@ prop_mirrorCoordsSelfInverse = do
   let (y, s) = mirrorCoords.mirrorCoords $ (x, t)
   return $ (eBall 13) x y && (eBall 13) s t
 
-test_ArrayIsSevenBySeven = do
+--}
+
+test_ArrayIsSevenCubed = do
   ones <- allOnes
-  assertEqual (vLength ones) 49
+  assertEqual (vLength ones) 343
 
 test_ArrayIsAllOnes = do
   ones <- allOnes
-  assertEqual (vSum ones) 49
+  assertEqual (vSum ones) 343
 
 test_allOnesDiagonal = do
   ary <- allOnes
-  let (x, t) = (0, pi/4)
-  let ijSeg = tail $ transport x t -- because the head is not necessary.
-  let eval = sum [ seg * qArray 7 ij ary | (ij, seg) <- takeWhile stopCond ijSeg]
-  assertEqual eval (7 * sqrt 2)
+  let pts = (0, 0)
+  let angles = (pi/4, pi/4)
+  let ijkSeg = tail $ transport pts angles -- because the head is not necessary.
+  let eval = sum [ seg * qArray 7 ijk ary | (ijk, seg) <- takeWhile stopCond ijkSeg]
+  assertEqual (eval - correction) (7 * sqrt 3)
   where
-    stopCond ((x,y), s) = x<7 && y<7
+    correction = 0.0
+    stopCond ((x,y,z), s) = x<7 && y<7 && z<7
 
---}
