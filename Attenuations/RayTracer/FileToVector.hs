@@ -40,9 +40,8 @@ fileToAry file = do
 qArray2D :: U.Unbox a => Dimension -> Coords2D -> U.Vector a -> a
 qArray2D size (x, y) a = (U.!) a (x + y * size)
 
--- How should this work?
 qArray :: U.Unbox a => Dimension -> Coords -> U.Vector a -> a
-qArray size (x, y, z) a = (U.!) a (x + y * size)
+qArray size (x, y, z) a = (U.!) a (x + y * size * size + z * size)
 
 vLength :: U.Unbox a => U.Vector a -> Int
 vLength = U.length
