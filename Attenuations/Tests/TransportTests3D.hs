@@ -75,6 +75,43 @@ prop_mirrorCoordsSelfInverse = do
 
 --}
 
+{-- 
+  φ determines projection:
+  φ == 0 or φ == pi => pure z component
+  φ == π/2 => pure x-y components
+--}
+
+prop_pureZComponent = do
+  s <- choose (3, 100::Double)
+  φ <- oneof [return 0, return pi]
+  θ <- zeroToPi
+  x <- interval
+  z <- interval
+  let ijkSeg = transport (x*s, z*s) (θ, φ)
+  return $ all (pureZcond x s) $ take 30 ijkSeg
+  where    
+    pureZcond x s ((i,j,k), _, _) =
+      and [ i == floor (x * s), j == 0]
+
+prop_pureXYComponents = do
+  s <- choose (3, 100::Double)
+  let φ = pi/2
+  θ <- zeroToPi
+  x <- interval
+  z <- interval
+  let ijkSeg = transport (x*s, z*s) (θ, φ)
+  return $ all (pureZcond (z * s)) $ take 30 ijkSeg
+  where    
+    pureZcond z ((i,j,k), _, _) = k == floor z
+
+
+
+{--
+  fixing φ == π/2
+  θ == 0 or θ == π => pure x component
+  θ == π/2 ==> pure y component
+--}
+
 test_ArrayIsSevenCubed = do
   ones <- allOnes
   assertEqual (vLength ones) 343
@@ -83,14 +120,14 @@ test_ArrayIsAllOnes = do
   ones <- allOnes
   assertEqual (vSum ones) 343
 
-test_allOnesDiagonal = do
-  ary <- allOnes
-  let pts = (0, 0)
-  let angles = (pi/4, pi/4)
-  let ijkSeg = tail $ transport pts angles -- because the head is not necessary.
-  let eval = sum [ seg * qArray 7 ijk ary | (ijk, seg) <- takeWhile stopCond ijkSeg]
-  assertEqual (eval - correction) (7 * sqrt 3)
-  where
-    correction = 0.0
-    stopCond ((x,y,z), s) = x<7 && y<7 && z<7
+-- test_allOnesDiagonal = do
+--   ary <- allOnes
+--   let pts = (0, 0)
+--   let angles = (pi/4, pi/4)
+--   let ijkSeg = transport pts angles
+--   let eval = sum [ seg * qArray 7 ijk ary | (ijk, seg) <- takeWhile stopCond ijkSeg]
+--   assertEqual (eval - correction) (7 * sqrt 3)
+--   where
+--     correction = 0.0
+--     stopCond ((x,y,z), s) = x<7 && y<7 && z<7
 
