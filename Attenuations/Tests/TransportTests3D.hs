@@ -100,47 +100,55 @@ prop_pureXYComponents (CS (x, z)) (Angle θ) = do
       k == floor zz
 
 {--
-  fixing φ == π/2
-  θ == 0 or θ == π => pure x component
-  θ == π/2 ==> pure y component
+  fixing φ == 0 or φ == pi
+  x - y plane is left invariant.
 --}
 
---TODO: settle on an orientation for Z.
+-- Note: Z is oriented such that φ == 0 is descending
+-- reversing requires changing all 3 crossings.
 -- ascending zs
-prop_zero_φ_PureZComponent (CS (x, z)) = do
+prop_pi_φ_PureZComponent (CS (x, z)) = do
   s <- choose (3, 100::Double)
   θ <- zeroToPi
-  let ijkSeg = take 10 $ transport (x*s, z*s) (θ, 0)
-  return $ all (pureZCond (x*s, z*s)) ijkSeg
+  let ijkSeg = take 10 $ transport (x*s, z*s) (θ, pi)
+  return $ all (pureZCond (x*s)) ijkSeg
   where    
-    pureZCond (xx, zz) ((i,j,k), _, _) =
-      j == 0 && k == floor zz
+    pureZCond xx ((i,j,k), _, _) =
+      i == floor xx && j == 0
 
 prop_ascending_PureZComponent = do
   x <- interval
   z <- interval
-  let ijkSeg = take 10 $ transport (x, z) (0, pi/2)
+  θ <- zeroToPi
+  let ijkSeg = take 10 $ transport (x, z) (θ, pi)
   return $ map zComponent ijkSeg == [0..9]
   where    
     zComponent ((i,j,k), _, _) = k
 
 -- descending zs
-prop_pi_φ_PureZComponent (CS (x, z)) = do
+prop_zero_φ_PureZComponent (CS (x, z)) = do
   s <- choose (3, 100::Double)
   θ <- zeroToPi
-  let ijkSeg = take 10 $ transport (x*s, z*s) (θ, pi)
-  return $ all (pureZCond (z*s)) ijkSeg
+  let ijkSeg = take 10 $ transport (x*s, z*s) (θ, 0)
+  return $ all (pureZCond (x*s)) ijkSeg
   where    
-    pureZCond zz ((i,j,k), _, _) =
-      j == 0 && k == floor zz
+    pureZCond xx ((i,j,k), _, _) =
+      i == floor xx && j == 0
 
 prop_descending_PureZComponent = do
   x <- interval
   z <- interval
-  let ijkSeg = take 10 $ transport (x, z) (pi, pi/2)
+  θ <- zeroToPi
+  let ijkSeg = take 10 $ transport (x, z) (θ, 0)
   return $ map zComponent ijkSeg == map negate [0..9]
   where    
     zComponent ((i,j,k), _, _) = k
+
+{--
+  fixing φ == π/2
+  θ == 0 or θ == π => pure x component
+  θ == π/2 ==> pure y component
+--}
 
 -- ascending xs
 prop_zero_θ_PureXComponent (CS (x, z)) = do
