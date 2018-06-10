@@ -12,7 +12,7 @@ type Angle  = Double
 
 -- displayTrace (0,0) (pi/4, pi/4)
 displayTrace cs as = do
-  let (_:ijkSeg) = transport cs as -- drop head
+  let ijkSeg = transport cs as
   let eval = take 10 [ (ijk, str) | (ijk, seg, str) <- takeWhile stopCond ijkSeg]
   -- ary <- fileToAry "./Tests/dataallOnes3D"
   -- let eval = [ seg * (qArray 7 ijk ary) | (ijk, seg) <- takeWhile stopCond ijkSeg]
@@ -21,6 +21,25 @@ displayTrace cs as = do
   where
     stopCond ((x,y,z), s, str) = x<=7 && y<=7 && z <=7
 
+cheapTrans (x, z) (t,p) = do
+  let ijkSeg = take 5 $ transport (x, z) (t,p)
+  putStr "evaluated total:\n\n"
+  putStr.unlines.(map show) $ ijkSeg
+
+cheapZs (x, z) (t,p) = do
+  let ijkSeg = take 5 $ zcrossings (x, z) (t,p)
+  putStr "evaluated total:\n\n"
+  putStr.unlines.(map show) $ ijkSeg
+
+cheapXs (x, z) (t,p) = do
+  let ijkSeg = take 5 $ xcrossings (x, z) (t,p)
+  putStr "evaluated total:\n\n"
+  putStr.unlines.(map show) $ ijkSeg
+
+cheapYs (x, z) (t,p) = do
+  let ijkSeg = take 5 $ ycrossings (x, z) (t,p)
+  putStr "evaluated total:\n\n"
+  putStr.unlines.(map show) $ ijkSeg
 
 {--
 A start on incorporating the z and φ components.
@@ -37,17 +56,22 @@ xcrossings (x, z) (θ, φ)
                | otherwise = z + k / (tan φ * cos θ) -- not sure here
 
 ycrossings :: EntryCoords -> EntryAngles -> [Coords]
-ycrossings (x, z) (θ, φ) = [ (x + k / tan θ, k, zc z θ φ k) | k <- [0..]]
+ycrossings (x, z) (θ, φ) = [ (x + k / tan θ, k, zc z θ φ k) | k <- [1..]]
   where
     zc z θ φ k | φ == 0 || φ == pi = z -- probably should get theta case too.
-               | φ < pi/2 = z + k / (tan φ * sin θ)
+               | φ < pi/2  = z + k / (tan φ * sin θ)
                | otherwise = z - k / (tan φ * sin θ) -- not sure here
 
 -- verify how x- and y- components may need initial values.
 zcrossings :: EntryCoords -> EntryAngles -> [Coords]
 zcrossings (x, z) (θ, φ)
-  | θ > pi/2 = [(k * cos θ * tan φ, k * sin θ * tan φ, ff z - k) | k<-[0..]]
-  | otherwise = [(k * cos θ * tan φ, k * sin θ * tan φ, ff z + k + 1) | k<-[0..]] -- not sure here
+  | θ > pi/2 = [(x + k * cos θ * tan φ,
+                 k * sin θ * tan φ,
+                 cc z - k) | k <- [1..]]
+
+  | otherwise = [(x + k * cos θ * tan φ,
+                  k * sin θ * tan φ,
+                  ff z + k + 1) | k <- [1..]] -- not sure here
 
 {--
 This is going to need very very much work.
@@ -62,21 +86,21 @@ transport (x, z) (θ, φ)
                  (ycs (x, z) (θ, φ))
                  (zcs (x, z) (θ, φ))
                  (x, 0, z) -- pt
-                 (floor x, 0, floor z + 1) -- i j k, z offset by φ?
+                 (floor x, 0, floor z) -- i j k, z offset by φ?
                  (negate 1, 1) -- sig
   | θ > pi/2 && φ <= pi/2 =
                  f (xcs (x, z) (θ, φ))
                  (ycs (x, z) (θ, φ))
                  (zcs (x, z) (θ, φ))
                  (x, 0, z) -- pt
-                 (floor x, 0, floor z + 1) -- i j k, z offset by φ?
+                 (floor x, 0, floor z) -- i j k, z offset by φ?
                  (negate 1, negate 1) -- sig
   | θ <= pi/2 && φ <= pi/2 =
                  f (xcs (x, z) (θ, φ))
                  (ycs (x, z) (θ, φ))
                  (zcs (x, z) (θ, φ))
                  (x, 0, z)
-                 (floor x, 0, floor z + 1)
+                 (floor x, 0, floor z)
                  (1, negate 1)
   | θ <= pi/2 && φ > pi/2 =
                  f (xcs (x, z) (θ, φ))
@@ -93,27 +117,21 @@ transport (x, z) (θ, φ)
     f ((xh,yh,zh): xcs) ((xv,yv,zv): ycs) ((xd,yd,zd): zcs) pt (i, j, k) (sθ, sφ)
       | yh == minimum [yh, yv, yd] = -- x case
         ((i,j,k), segment pt (xh,yh,zh), "X") :
-          f xcs
-            ((xv,yv,zv): ycs)
-            ((xd,yd,zd): zcs)
-            (xh,yh,zh) -- pt
-            (i+sθ, j, k)
-            (sθ, sφ)
+          f xcs ((xv,yv,zv): ycs) ((xd,yd,zd): zcs)
+          (xh,yh,zh) -- pt
+          (i+sθ, j, k)
+          (sθ, sφ)
 
       | yd == minimum [yh, yv, yd]  = -- z case
-        ((i,j,k), segment pt (xv,yv,zv), "Z") :
-          f ((xh,yh,zh): xcs)
-          ((xv,yv,zv): ycs)
-          zcs
+        ((i,j,k), segment pt (xd,yd,zd), "Z") :
+          f ((xh,yh,zh): xcs) ((xv,yv,zv): ycs) zcs
           (xd,yd,zd) -- pt
           (i, j, k+sφ)
           (sθ, sφ)
 
       | yv == minimum [yh, yv, yd] = -- y case
         ((i,j,k), segment pt (xv,yv,zv), "Y") :
-          f ((xh,yh,zh): xcs)
-            ycs
-            ((xd,yd,zd): zcs)
+          f ((xh,yh,zh): xcs) ycs ((xd,yd,zd): zcs)
             (xv,yv,zv) -- pt
             (i, j+1, k)
             (sθ, sφ)
