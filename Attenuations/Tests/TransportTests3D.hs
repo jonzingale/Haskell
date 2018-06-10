@@ -105,6 +105,43 @@ prop_pureXYComponents (CS (x, z)) (Angle θ) = do
   θ == π/2 ==> pure y component
 --}
 
+--TODO: settle on an orientation for Z.
+-- ascending zs
+prop_zero_φ_PureZComponent (CS (x, z)) = do
+  s <- choose (3, 100::Double)
+  θ <- zeroToPi
+  let ijkSeg = take 10 $ transport (x*s, z*s) (θ, 0)
+  return $ all (pureZCond (x*s, z*s)) ijkSeg
+  where    
+    pureZCond (xx, zz) ((i,j,k), _, _) =
+      j == 0 && k == floor zz
+
+prop_ascending_PureZComponent = do
+  x <- interval
+  z <- interval
+  let ijkSeg = take 10 $ transport (x, z) (0, pi/2)
+  return $ map zComponent ijkSeg == [0..9]
+  where    
+    zComponent ((i,j,k), _, _) = k
+
+-- descending zs
+prop_pi_φ_PureZComponent (CS (x, z)) = do
+  s <- choose (3, 100::Double)
+  θ <- zeroToPi
+  let ijkSeg = take 10 $ transport (x*s, z*s) (θ, pi)
+  return $ all (pureZCond (z*s)) ijkSeg
+  where    
+    pureZCond zz ((i,j,k), _, _) =
+      j == 0 && k == floor zz
+
+prop_descending_PureZComponent = do
+  x <- interval
+  z <- interval
+  let ijkSeg = take 10 $ transport (x, z) (pi, pi/2)
+  return $ map zComponent ijkSeg == map negate [0..9]
+  where    
+    zComponent ((i,j,k), _, _) = k
+
 -- ascending xs
 prop_zero_θ_PureXComponent (CS (x, z)) = do
   s <- choose (3, 100::Double)
@@ -123,7 +160,7 @@ prop_ascending_PureXComponent = do
     xComponent ((i,j,k), _, _) = i
 
 -- descending xs
-prop_zero_π_PureXComponent (CS (x, z)) = do
+prop_pi_θ_PureXComponent (CS (x, z)) = do
   s <- choose (3, 100::Double)
   let ijkSeg = take 10 $ transport (x*s, z*s) (pi, pi/2)
   return $ all (pureXCond (z*s)) ijkSeg
