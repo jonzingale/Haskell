@@ -109,14 +109,14 @@ prop_zero_θ_PureXComponent (CS (x, z)) = do
   let ijkSeg = take 10 $ transport (x*s, z*s) (0, pi/2)
   return $ all (pureZcond (z*s)) ijkSeg
   where    
-    pureZcond zz ((i,j,k), _, _) = j== 0 && k == floor zz
+    pureZcond zz ((i,j,k), _, _) = j == 0 && k == floor zz
 
--- prop_zero_π_PureXComponent (CS (x, z)) = do
---   s <- choose (3, 100::Double)
---   let (_:ijkSeg) = take 10 $ transport (x*s, z) (0, pi/2) --drop head
---   return $ all (pureZcond (z)) ijkSeg
---   where    
---     pureZcond zz ((i,j,k), _, _) = j== 0 && k == floor zz
+prop_zero_π_PureXComponent (CS (x, z)) = do
+  s <- choose (3, 100::Double)
+  let ijkSeg = take 10 $ transport (x*s, z*s) (pi, pi/2)
+  return $ all (pureZcond (z*s)) ijkSeg
+  where    
+    pureZcond zz ((i,j,k), _, _) = j== 0 && k == floor zz
 
 -- prop_pureYComponent (CS (x, z)) = do
 --   s <- choose (3, 100::Double)
