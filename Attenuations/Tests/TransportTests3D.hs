@@ -116,9 +116,7 @@ prop_pi_φ_PureZComponent (CS (x, z)) = do
     pureZCond xx ((i,j,k), _, _) =
       i == floor xx && j == 0
 
-prop_ascending_PureZComponent = do
-  x <- interval
-  z <- interval
+prop_ascending_PureZComponent (CS (x, z)) = do
   θ <- zeroToPi
   let ijkSeg = take 10 $ transport (x, z) (θ, pi)
   return $ map zComponent ijkSeg == [0..9]
@@ -135,9 +133,7 @@ prop_zero_φ_PureZComponent (CS (x, z)) = do
     pureZCond xx ((i,j,k), _, _) =
       i == floor xx && j == 0
 
-prop_descending_PureZComponent = do
-  x <- interval
-  z <- interval
+prop_descending_PureZComponent (CS (x, z)) = do
   θ <- zeroToPi
   let ijkSeg = take 10 $ transport (x, z) (θ, 0)
   return $ map zComponent ijkSeg == map negate [0..9]
