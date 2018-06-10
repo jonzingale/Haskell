@@ -105,28 +105,47 @@ prop_pureXYComponents (CS (x, z)) (Angle θ) = do
   θ == π/2 ==> pure y component
 --}
 
+-- ascending xs
 prop_zero_θ_PureXComponent (CS (x, z)) = do
   s <- choose (3, 100::Double)
   let ijkSeg = take 10 $ transport (x*s, z*s) (0, pi/2)
-  return $ all (pureZcond (z*s)) ijkSeg
+  return $ all (pureXCond (x*s, z*s)) ijkSeg
   where    
-    pureZcond zz ((i,j,k), _, _) =
+    pureXCond (xx, zz) ((i,j,k), _, _) =
       j == 0 && k == floor zz
 
+prop_ascending_PureXComponent = do
+  x <- interval
+  z <- interval
+  let ijkSeg = take 10 $ transport (x, z) (0, pi/2)
+  return $ map xComponent ijkSeg == [0..9]
+  where    
+    xComponent ((i,j,k), _, _) = i
+
+-- descending xs
 prop_zero_π_PureXComponent (CS (x, z)) = do
   s <- choose (3, 100::Double)
   let ijkSeg = take 10 $ transport (x*s, z*s) (pi, pi/2)
-  return $ all (pureZcond (z*s)) ijkSeg
+  return $ all (pureXCond (z*s)) ijkSeg
   where    
-    pureZcond zz ((i,j,k), _, _) =
+    pureXCond zz ((i,j,k), _, _) =
       j == 0 && k == floor zz
 
+prop_descending_PureXComponent = do
+  x <- interval
+  z <- interval
+  let ijkSeg = take 10 $ transport (x, z) (pi, pi/2)
+  return $ map xComponent ijkSeg == map negate [0..9]
+  where    
+    xComponent ((i,j,k), _, _) = i
+
+-- y component
 prop_pureYComponent (CS (x, z)) = do
   s <- choose (3, 100::Double)
   let ijkSeg = take 30 $ transport (x*s, z*s) (pi/2, pi/2)
-  return $ all (pureZcond (x*s, z*s)) ijkSeg
+  return $ all (pureYCond (x*s, z*s)) ijkSeg
   where    
-    pureZcond (xx, zz) ((i,j,k), _, _) =
+    pureYCond (xx, zz) ((i,j,k), _, _) =
       i == floor xx && k == floor zz
 
 -- Todo: verify segments are correct.
