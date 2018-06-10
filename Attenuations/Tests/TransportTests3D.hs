@@ -91,12 +91,12 @@ prop_pureZComponent (CS (x, z)) (Angle θ) = do
     pureZcond x s ((i,j,k), _, _) =
       and [ i == floor (x * s), j == 0]
 
-prop_pureXYComponents (CS (x, z)) (Angle θ) = do
-  s <- choose (3, 100::Double)
-  let (_:ijkSeg) = take 30 $ transport (x*s, z*s) (θ, pi/2) --drop head
-  return $ all (pureZcond (z*s)) ijkSeg
-  where    
-    pureZcond zz ((i,j,k), _, _) = k == floor zz
+-- prop_pureXYComponents (CS (x, z)) (Angle θ) = do
+--   s <- choose (3, 100::Double)
+--   let (_:ijkSeg) = take 30 $ transport (x*s, z*s) (θ, pi/2) --drop head
+--   return $ all (pureZcond (z*s)) ijkSeg
+--   where    
+--     pureZcond zz ((i,j,k), _, _) = k == floor zz
 
 {--
   fixing φ == π/2
@@ -104,12 +104,19 @@ prop_pureXYComponents (CS (x, z)) (Angle θ) = do
   θ == π/2 ==> pure y component
 --}
 
-prop_pureXComponent (CS (x, z)) = do
+prop_zero_θ_PureXComponent (CS (x, z)) = do
   s <- choose (3, 100::Double)
-  let (_:ijkSeg) = take 10 $ transport (x*s, z) (0, pi/2) --drop head
-  return $ all (pureZcond (z)) ijkSeg
+  let ijkSeg = take 10 $ transport (x*s, z*s) (0, pi/2)
+  return $ all (pureZcond (z*s)) ijkSeg
   where    
     pureZcond zz ((i,j,k), _, _) = j== 0 && k == floor zz
+
+-- prop_zero_π_PureXComponent (CS (x, z)) = do
+--   s <- choose (3, 100::Double)
+--   let (_:ijkSeg) = take 10 $ transport (x*s, z) (0, pi/2) --drop head
+--   return $ all (pureZcond (z)) ijkSeg
+--   where    
+--     pureZcond zz ((i,j,k), _, _) = j== 0 && k == floor zz
 
 -- prop_pureYComponent (CS (x, z)) = do
 --   s <- choose (3, 100::Double)
