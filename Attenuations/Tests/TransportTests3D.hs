@@ -81,36 +81,42 @@ prop_mirrorCoordsSelfInverse = do
   φ == π/2 => pure x-y components
 --}
 
-prop_pureZComponent = do
-  s <- choose (3, 100::Double)
+prop_pureZComponent (CS (x, z)) (Angle θ) = do
   φ <- oneof [return 0, return pi]
-  θ <- zeroToPi
-  x <- interval
-  z <- interval
-  let ijkSeg = transport (x*s, z*s) (θ, φ)
-  return $ all (pureZcond x s) $ take 30 ijkSeg
+  s <- choose (3, 100::Double)
+
+  let ijkSeg = take 30 $ transport (x*s, z*s) (θ, φ)
+  return $ all (pureZcond x s) ijkSeg
   where    
     pureZcond x s ((i,j,k), _, _) =
       and [ i == floor (x * s), j == 0]
 
-prop_pureXYComponents = do
+prop_pureXYComponents (CS (x, z)) (Angle θ) = do
   s <- choose (3, 100::Double)
-  let φ = pi/2
-  θ <- zeroToPi
-  x <- interval
-  z <- interval
-  let ijkSeg = transport (x*s, z*s) (θ, φ)
-  return $ all (pureZcond (z * s)) $ take 30 ijkSeg
+  let (_:ijkSeg) = take 30 $ transport (x*s, z*s) (θ, pi/2) --drop head
+  return $ all (pureZcond (z*s)) ijkSeg
   where    
-    pureZcond z ((i,j,k), _, _) = k == floor z
-
-
+    pureZcond zz ((i,j,k), _, _) = k == floor zz
 
 {--
   fixing φ == π/2
   θ == 0 or θ == π => pure x component
   θ == π/2 ==> pure y component
 --}
+
+prop_pureXComponent (CS (x, z)) = do
+  s <- choose (3, 100::Double)
+  let (_:ijkSeg) = take 10 $ transport (x*s, z) (0, pi/2) --drop head
+  return $ all (pureZcond (z)) ijkSeg
+  where    
+    pureZcond zz ((i,j,k), _, _) = j== 0 && k == floor zz
+
+-- prop_pureYComponent (CS (x, z)) = do
+--   s <- choose (3, 100::Double)
+--   let (_:ijkSeg) = take 30 $ transport (x*s, z) (pi/2, pi/2) --drop head
+--   return $ all (pureZcond (x, z)) ijkSeg
+--   where    
+--     pureZcond (xx, zz) ((i,j,k), _, _) = i == floor xx && k == floor zz
 
 test_ArrayIsSevenCubed = do
   ones <- allOnes

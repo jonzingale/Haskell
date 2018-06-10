@@ -12,9 +12,9 @@ type Angle  = Double
 
 -- displayTrace (0,0) (pi/4, pi/4)
 displayTrace cs as = do
-  ary <- fileToAry "./Tests/dataallOnes3D"
-  let (_:ijkSeg) = transport cs as -- because the head is not necessary.
-  let eval = take 30 [ (ijk, str) | (ijk, seg, str) <- takeWhile stopCond ijkSeg] -- just coords
+  let (_:ijkSeg) = transport cs as -- drop head
+  let eval = take 10 [ (ijk, str) | (ijk, seg, str) <- takeWhile stopCond ijkSeg]
+  -- ary <- fileToAry "./Tests/dataallOnes3D"
   -- let eval = [ seg * (qArray 7 ijk ary) | (ijk, seg) <- takeWhile stopCond ijkSeg]
   putStr "evaluated total:\n\n"
   putStr.unlines.(map show) $ eval
@@ -39,8 +39,8 @@ xcrossings (x, z) (θ, φ)
 ycrossings :: EntryCoords -> EntryAngles -> [Coords]
 ycrossings (x, z) (θ, φ) = [ (x + k / tan θ, k, zc z θ φ k) | k <- [0..]]
   where
-    zc z θ φ k | φ  == 0 || φ == pi = z -- probably should get theta case too.
-               | φ <= pi/2 = z + k / (tan φ * sin θ)
+    zc z θ φ k | φ == 0 || φ == pi = z -- probably should get theta case too.
+               | φ < pi/2 = z + k / (tan φ * sin θ)
                | otherwise = z - k / (tan φ * sin θ) -- not sure here
 
 -- verify how x- and y- components may need initial values.
@@ -57,32 +57,48 @@ This is going to need very very much work.
 type IntCoords = (Int, Int, Int)
 -- transport:: EntryCoords-> EntryAngles -> [(IntCoords, SegmentLength)]
 transport (x, z) (θ, φ)
-  | θ > pi/2 = f (xcs (x, z) (θ, φ))
+  | θ > pi/2 && φ > pi/2 =
+                 f (xcs (x, z) (θ, φ))
                  (ycs (x, z) (θ, φ))
                  (zcs (x, z) (θ, φ))
                  (x, 0, z) -- pt
-                 (floor x, 0, ceiling z) -- i j k, z offset by φ?
-                 (negate 1) -- sig
-
-  | otherwise = f (xcs (x, z) (θ, φ))
-                  (ycs (x, z) (θ, φ))
-                  (zcs (x, z) (θ, φ))
-                  (x, 0, z)
-                  (floor x, 0, floor z)
-                  1
+                 (floor x, 0, floor z + 1) -- i j k, z offset by φ?
+                 (negate 1, 1) -- sig
+  | θ > pi/2 && φ <= pi/2 =
+                 f (xcs (x, z) (θ, φ))
+                 (ycs (x, z) (θ, φ))
+                 (zcs (x, z) (θ, φ))
+                 (x, 0, z) -- pt
+                 (floor x, 0, floor z + 1) -- i j k, z offset by φ?
+                 (negate 1, negate 1) -- sig
+  | θ <= pi/2 && φ <= pi/2 =
+                 f (xcs (x, z) (θ, φ))
+                 (ycs (x, z) (θ, φ))
+                 (zcs (x, z) (θ, φ))
+                 (x, 0, z)
+                 (floor x, 0, floor z + 1)
+                 (1, negate 1)
+  | θ <= pi/2 && φ > pi/2 =
+                 f (xcs (x, z) (θ, φ))
+                 (ycs (x, z) (θ, φ))
+                 (zcs (x, z) (θ, φ))
+                 (x, 0, z)
+                 (floor x, 0, floor z)
+                 (1, 1)
   where
     (xcs, ycs, zcs) = (xcrossings, ycrossings, zcrossings)
 
+    -- order of the following methods matters.
     -- xcs ycs zcs (p,q,r) (i,j,k) sig
-    f ((xh,yh,zh): xcs) ((xv,yv,zv): ycs) ((xd,yd,zd): zcs) pt (i, j, k) sign
+    f ((xh,yh,zh): xcs) ((xv,yv,zv): ycs) ((xd,yd,zd): zcs) pt (i, j, k) (sθ, sφ)
       | yh == minimum [yh, yv, yd] = -- x case
         ((i,j,k), segment pt (xh,yh,zh), "X") :
           f xcs
             ((xv,yv,zv): ycs)
             ((xd,yd,zd): zcs)
             (xh,yh,zh) -- pt
-            (i+sign, j, k)
-            sign
+            (i+sθ, j, k)
+            (sθ, sφ)
 
       | yd == minimum [yh, yv, yd]  = -- z case
         ((i,j,k), segment pt (xv,yv,zv), "Z") :
@@ -90,8 +106,8 @@ transport (x, z) (θ, φ)
           ((xv,yv,zv): ycs)
           zcs
           (xd,yd,zd) -- pt
-          (i, j, k+sign)
-          sign
+          (i, j, k+sφ)
+          (sθ, sφ)
 
       | yv == minimum [yh, yv, yd] = -- y case
         ((i,j,k), segment pt (xv,yv,zv), "Y") :
@@ -100,7 +116,7 @@ transport (x, z) (θ, φ)
             ((xd,yd,zd): zcs)
             (xv,yv,zv) -- pt
             (i, j+1, k)
-            sign
+            (sθ, sφ)
 
 segment :: Coords -> Coords -> SegmentLength
 segment (x1, y1, z1) (x2, y2, z2) =

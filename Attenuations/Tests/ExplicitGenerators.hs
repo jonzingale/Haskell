@@ -14,13 +14,28 @@ zeroToHalfPi = choose (0, pi/2::Double)
 squareInt = (^ 2) `fmap` (arbitrary :: Gen Int) `suchThat` (> 0)
 
 -- Compound Generators
-data TestRay = Ray Double Double deriving (Show, Eq)
+data TestRay = Ray (Double, Double) (Double, Double) deriving (Show, Eq)
+data TestCoords = CS (Double, Double) deriving (Show, Eq)
+data TestAngle = Angle Double deriving (Show, Eq)
+
+instance Arbitrary TestAngle where
+  arbitrary = do
+    theta <- zeroToPi
+    return (Angle theta)
+
+instance Arbitrary TestCoords where
+  arbitrary = do
+    x <- interval
+    z <- interval
+    return $ CS (x, z)
 
 instance Arbitrary TestRay where
   arbitrary = do
     x <- interval
+    z <- interval
     t <- zeroToPi
-    return $ Ray x t
+    p <- zeroToPi
+    return $ Ray (x, z) (t, p)
 
 instance (U.Unbox a, Arbitrary a) => Arbitrary (U.Vector a) where
   arbitrary = do
