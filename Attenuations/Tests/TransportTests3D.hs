@@ -9,6 +9,7 @@ import RayTracer.FileToVector -- fileToAry, qArray, vLength, vSum
 import RayTracer.Transport3D
 
 import qualified Data.Vector.Unboxed as U
+import Test.QuickCheck.Monadic
 import Test.Framework
 
 -- 3D data files: 7x7x7
@@ -221,13 +222,14 @@ test_allOnesYs = do -- TODO: be sure to test at not (0,0)
   where
     stopCond ((x,y,z), s) = x<7 && y<7 && z<7
 
-test_allOnesZs = do -- TODO: be sure to test at not (0,0)
-  ary <- allOnes
+prop_allOnesZs :: TestAngle -> Property
+prop_allOnesZs (Angle θ) = monadicIO $ do -- TODO: be sure to test at not (0,0)
+  ary <- run allOnes
   let pts = (0, 0)
-  let angles = (pi/2, pi)
+  let angles = (θ, pi)
   let ijkSeg = transport pts angles
   let eval = sum [ seg * qArray 7 ijk ary | (ijk, seg) <- takeWhile stopCond ijkSeg]
-  assertEqual eval 7
+  assert $ eval == 7
   where
     stopCond ((x,y,z), s) = x<7 && y<7 && z<7
 
