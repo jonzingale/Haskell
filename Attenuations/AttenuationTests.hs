@@ -7,6 +7,7 @@ module AttenuationTests where
 import Tests.ExplicitGenerators
 import RayTracer.HelpersTransport3D
 import RayTracer.Transport3D
+import RayTracer.FileToVector
 import Test.Framework
 
 import {-@ HTF_TESTS @-} Tests.TransportTests3D
