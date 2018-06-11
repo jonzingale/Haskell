@@ -34,7 +34,7 @@ ycrossings (x, z) (θ, φ) = [ (x + k / tan θ, k, zc z θ φ k) | k <- [1..]]
 -- verify how x- and y- components may need initial values.
 zcrossings :: EntryCoords -> EntryAngles -> [Coords]
 zcrossings (x, z) (θ, φ)
-  | θ > pi/2 = [(x + k * cos θ * tan φ,
+  | φ > pi/2 = [(x + k * cos θ * tan φ,
                  k * sin θ * tan φ,
                  cc z - k) | k <- [1..]]
 
@@ -75,7 +75,7 @@ transport (x, z) (θ, φ)
                  f (xcs (x, z) (θ, φ))
                  (ycs (x, z) (θ, φ))
                  (zcs (x, z) (θ, φ))
-                 (x, 0, z)
+                 (x, 0, z) -- pt
                  (floor x, 0, floor z)
                  (1, 1)
   where

@@ -3,12 +3,12 @@
 {-# LANGUAGE BangPatterns #-}
 
 module Tests.TransportTests3D where
+import RayTracer.HelpersTransport3D
 import Tests.ExplicitGenerators
 import RayTracer.FileToVector -- fileToAry, qArray, vLength, vSum
 import RayTracer.Transport3D
 
 import qualified Data.Vector.Unboxed as U
-import Test.QuickCheck.Monadic
 import Test.Framework
 
 -- 3D data files: 7x7x7
@@ -201,14 +201,45 @@ test_ArrayIsAllOnes = do
 -- Todo: verify segments are correct.
 -- cheapTrans (4.4, 3.3) (pi, pi/2)
 
-test_allOnesDiagonal = do
+test_allOnesXs = do -- TODO: be sure to test at not (0,0)
   ary <- allOnes
   let pts = (0, 0)
-  let angles = (pi/4, pi/4)
+  let angles = (0, pi/2)
   let ijkSeg = transport pts angles
   let eval = sum [ seg * qArray 7 ijk ary | (ijk, seg) <- takeWhile stopCond ijkSeg]
-  assertEqual (eval - correction) (7 * sqrt 3)
+  assertEqual eval 7
   where
-    correction = 0.0
     stopCond ((x,y,z), s) = x<7 && y<7 && z<7
+
+test_allOnesYs = do -- TODO: be sure to test at not (0,0)
+  ary <- allOnes
+  let pts = (0, 0)
+  let angles = (pi/2, pi/2)
+  let ijkSeg = transport pts angles
+  let eval = sum [ seg * qArray 7 ijk ary | (ijk, seg) <- takeWhile stopCond ijkSeg]
+  assertEqual eval 7
+  where
+    stopCond ((x,y,z), s) = x<7 && y<7 && z<7
+
+test_allOnesZs = do -- TODO: be sure to test at not (0,0)
+  ary <- allOnes
+  let pts = (0, 0)
+  let angles = (pi/2, pi)
+  let ijkSeg = transport pts angles
+  let eval = sum [ seg * qArray 7 ijk ary | (ijk, seg) <- takeWhile stopCond ijkSeg]
+  assertEqual eval 7
+  where
+    stopCond ((x,y,z), s) = x<7 && y<7 && z<7
+
+
+-- test_allOnesDiagonal = do
+--   ary <- allOnes
+--   let pts = (0, 0)
+--   let angles = (pi/4, pi/4)
+--   let ijkSeg = transport pts angles
+--   let eval = sum [ seg * qArray 7 ijk ary | (ijk, seg) <- takeWhile stopCond ijkSeg]
+--   assertEqual (eval - correction) (7 * sqrt 3)
+--   where
+--     correction = 0.0
+--     stopCond ((x,y,z), s) = x<7 && y<7 && z<7
 
