@@ -16,6 +16,14 @@ import Test.Framework
 allOnes = fileToAry "./Tests/dataallOnes3D"
 gradientDoubles = fileToAry "./Tests/datagradArray3D"
 
+-- General Array Tests.
+test_ArrayIsSevenCubed = do
+  ones <- allOnes
+  assertEqual (vLength ones) 343
+
+test_ArrayIsAllOnes = do
+  ones <- allOnes
+  assertEqual (vSum ones) 343
 
 -- Arbitrary Lattice Tests
 prop_QueryArbitraryLattice :: U.Vector Double -> Gen Bool
@@ -174,18 +182,7 @@ prop_pureYComponent (Coords (x, z)) = do
     pureYCond (xx, zz) ((i,j,k), _) =
       i == floor xx && k == floor zz
 
--- General Array Tests.
-test_ArrayIsSevenCubed = do
-  ones <- allOnes
-  assertEqual (vLength ones) 343
-
-test_ArrayIsAllOnes = do
-  ones <- allOnes
-  assertEqual (vSum ones) 343
-
 -- Segment Verification
--- cheapTrans (4.4, 3.3) (pi, pi/2)
-
 prop_allOnesXs :: TestCoords -> Property
 prop_allOnesXs (Coords (x, z)) = monadicIO $ do
   ary <- run allOnes
@@ -213,6 +210,24 @@ prop_allOnesZs (Angle θ) = monadicIO $ do
   where
     stopCond ((x,y,z), s) = x<7 && y<7 && z<7
 
+prop_allOnesXYDiagonal :: Property
+prop_allOnesXYDiagonal = monadicIO $ do
+  ary <- run allOnes
+  let ijkSeg = transport (0, 0) (pi/4, pi/2)
+  let eval = sum [ seg * qArray 7 ijk ary | (ijk, seg) <- takeWhile stopCond ijkSeg]
+  assert $ (eBall 13) eval (7 * sqrt 2)
+  where
+    stopCond ((x,y,z), s) = x<7 && y<7 && z<7
+
+-- cheapTrans (0,0) (pi/4, 3*pi/4)
+prop_allOnesXYZDiagonal :: Property
+prop_allOnesXYZDiagonal = monadicIO $ do
+  ary <- run allOnes
+  let ijkSeg = transport (0, 0) (pi/4, 3*pi/4)
+  let eval = sum [ seg * qArray 7 ijk ary | (ijk, seg) <- takeWhile stopCond ijkSeg]
+  assert $ (eBall 13) eval (7 * sqrt 3)
+  where
+    stopCond ((x,y,z), s) = x<7 && y<7 && z<7
 
 -- test_allOnesDiagonal = do
 --   ary <- allOnes
