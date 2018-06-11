@@ -88,7 +88,7 @@ prop_pureZComponent (CS (x, z)) (Angle θ) = do
   let ijkSeg = take 30 $ transport (x*s, z*s) (θ, φ)
   return $ all (pureZcond x s) ijkSeg
   where    
-    pureZcond x s ((i,j,k), _, _) =
+    pureZcond x s ((i,j,k), _) =
       and [ i == floor (x * s), j == 0]
 
 prop_pureXYComponents (CS (x, z)) (Angle θ) = do
@@ -96,7 +96,7 @@ prop_pureXYComponents (CS (x, z)) (Angle θ) = do
   let ijkSeg = take 30 $ transport (x*s, z*s) (θ, pi/2)
   return $ all (pureZcond (z*s)) ijkSeg
   where    
-    pureZcond zz ((i,j,k), _, _) =
+    pureZcond zz ((i,j,k), _) =
       k == floor zz
 
 {--
@@ -113,7 +113,7 @@ prop_pi_φ_PureZComponent (CS (x, z)) = do
   let ijkSeg = take 10 $ transport (x*s, z*s) (θ, pi)
   return $ all (pureZCond (x*s)) ijkSeg
   where    
-    pureZCond xx ((i,j,k), _, _) =
+    pureZCond xx ((i,j,k), _) =
       i == floor xx && j == 0
 
 prop_ascending_PureZComponent (CS (x, z)) = do
@@ -121,7 +121,7 @@ prop_ascending_PureZComponent (CS (x, z)) = do
   let ijkSeg = take 10 $ transport (x, z) (θ, pi)
   return $ map zComponent ijkSeg == [0..9]
   where    
-    zComponent ((i,j,k), _, _) = k
+    zComponent ((i,j,k), _) = k
 
 -- descending zs
 prop_zero_φ_PureZComponent (CS (x, z)) = do
@@ -130,7 +130,7 @@ prop_zero_φ_PureZComponent (CS (x, z)) = do
   let ijkSeg = take 10 $ transport (x*s, z*s) (θ, 0)
   return $ all (pureZCond (x*s)) ijkSeg
   where    
-    pureZCond xx ((i,j,k), _, _) =
+    pureZCond xx ((i,j,k), _) =
       i == floor xx && j == 0
 
 prop_descending_PureZComponent (CS (x, z)) = do
@@ -138,7 +138,7 @@ prop_descending_PureZComponent (CS (x, z)) = do
   let ijkSeg = take 10 $ transport (x, z) (θ, 0)
   return $ map zComponent ijkSeg == map negate [0..9]
   where    
-    zComponent ((i,j,k), _, _) = k
+    zComponent ((i,j,k), _) = k
 
 {--
   fixing φ == π/2
@@ -152,7 +152,7 @@ prop_zero_θ_PureXComponent (CS (x, z)) = do
   let ijkSeg = take 10 $ transport (x*s, z*s) (0, pi/2)
   return $ all (pureXCond (x*s, z*s)) ijkSeg
   where    
-    pureXCond (xx, zz) ((i,j,k), _, _) =
+    pureXCond (xx, zz) ((i,j,k), _) =
       j == 0 && k == floor zz
 
 prop_ascending_PureXComponent = do
@@ -161,7 +161,7 @@ prop_ascending_PureXComponent = do
   let ijkSeg = take 10 $ transport (x, z) (0, pi/2)
   return $ map xComponent ijkSeg == [0..9]
   where    
-    xComponent ((i,j,k), _, _) = i
+    xComponent ((i,j,k), _) = i
 
 -- descending xs
 prop_pi_θ_PureXComponent (CS (x, z)) = do
@@ -169,7 +169,7 @@ prop_pi_θ_PureXComponent (CS (x, z)) = do
   let ijkSeg = take 10 $ transport (x*s, z*s) (pi, pi/2)
   return $ all (pureXCond (z*s)) ijkSeg
   where    
-    pureXCond zz ((i,j,k), _, _) =
+    pureXCond zz ((i,j,k), _) =
       j == 0 && k == floor zz
 
 prop_descending_PureXComponent = do
@@ -178,7 +178,7 @@ prop_descending_PureXComponent = do
   let ijkSeg = take 10 $ transport (x, z) (pi, pi/2)
   return $ map xComponent ijkSeg == map negate [0..9]
   where    
-    xComponent ((i,j,k), _, _) = i
+    xComponent ((i,j,k), _) = i
 
 -- y component
 prop_pureYComponent (CS (x, z)) = do
@@ -186,13 +186,10 @@ prop_pureYComponent (CS (x, z)) = do
   let ijkSeg = take 30 $ transport (x*s, z*s) (pi/2, pi/2)
   return $ all (pureYCond (x*s, z*s)) ijkSeg
   where    
-    pureYCond (xx, zz) ((i,j,k), _, _) =
+    pureYCond (xx, zz) ((i,j,k), _) =
       i == floor xx && k == floor zz
 
--- Todo: verify segments are correct.
--- cheapTrans (4.4, 3.3) (pi, pi/2)
-
-
+-- General Array Tests.
 test_ArrayIsSevenCubed = do
   ones <- allOnes
   assertEqual (vLength ones) 343
@@ -201,14 +198,17 @@ test_ArrayIsAllOnes = do
   ones <- allOnes
   assertEqual (vSum ones) 343
 
--- test_allOnesDiagonal = do
---   ary <- allOnes
---   let pts = (0, 0)
---   let angles = (pi/4, pi/4)
---   let ijkSeg = transport pts angles
---   let eval = sum [ seg * qArray 7 ijk ary | (ijk, seg) <- takeWhile stopCond ijkSeg]
---   assertEqual (eval - correction) (7 * sqrt 3)
---   where
---     correction = 0.0
---     stopCond ((x,y,z), s) = x<7 && y<7 && z<7
+-- Todo: verify segments are correct.
+-- cheapTrans (4.4, 3.3) (pi, pi/2)
+
+test_allOnesDiagonal = do
+  ary <- allOnes
+  let pts = (0, 0)
+  let angles = (pi/4, pi/4)
+  let ijkSeg = transport pts angles
+  let eval = sum [ seg * qArray 7 ijk ary | (ijk, seg) <- takeWhile stopCond ijkSeg]
+  assertEqual (eval - correction) (7 * sqrt 3)
+  where
+    correction = 0.0
+    stopCond ((x,y,z), s) = x<7 && y<7 && z<7
 
