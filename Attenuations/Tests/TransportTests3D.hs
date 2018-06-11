@@ -84,7 +84,7 @@ prop_mirrorCoordsSelfInverse = do
   φ == π/2 => pure x-y components
 --}
 
-prop_pureZComponent (CS (x, z)) (Angle θ) = do
+prop_pureZComponent (Coords (x, z)) (Angle θ) = do
   φ <- oneof [return 0, return pi]
   s <- choose (3, 100::Double)
 
@@ -94,7 +94,7 @@ prop_pureZComponent (CS (x, z)) (Angle θ) = do
     pureZcond x s ((i,j,k), _) =
       and [ i == floor (x * s), j == 0]
 
-prop_pureXYComponents (CS (x, z)) (Angle θ) = do
+prop_pureXYComponents (Coords (x, z)) (Angle θ) = do
   s <- choose (3, 100::Double)
   let ijkSeg = take 30 $ transport (x*s, z*s) (θ, pi/2)
   return $ all (pureZcond (z*s)) ijkSeg
@@ -110,7 +110,7 @@ prop_pureXYComponents (CS (x, z)) (Angle θ) = do
 -- Note: Z is oriented such that φ == 0 is descending
 -- reversing requires changing all 3 crossings.
 
-prop_PureZComponent (CS (x, z)) = do
+prop_PureZComponent (Coords (x, z)) = do
   s <- choose (3, 100::Double)
   φ <- oneof [return 0, return pi]
   θ <- zeroToPi
@@ -120,14 +120,14 @@ prop_PureZComponent (CS (x, z)) = do
     pureZCond xx ((i,j,k), _) =
       i == floor xx && j == 0
 
-prop_ascending_PureZComponent (CS (x, z)) = do
+prop_ascending_PureZComponent (Coords (x, z)) = do
   θ <- zeroToPi
   let ijkSeg = take 10 $ transport (x, z) (θ, pi)
   return $ map zComponent ijkSeg == [0..9]
   where    
     zComponent ((i,j,k), _) = k
 
-prop_descending_PureZComponent (CS (x, z)) = do
+prop_descending_PureZComponent (Coords (x, z)) = do
   θ <- zeroToPi
   let ijkSeg = take 10 $ transport (x, z) (θ, 0)
   return $ map zComponent ijkSeg == map negate [0..9]
@@ -140,7 +140,7 @@ prop_descending_PureZComponent (CS (x, z)) = do
   θ == π/2 ==> pure y component
 --}
 
-prop_PureXComponent (CS (x, z)) = do
+prop_PureXComponent (Coords (x, z)) = do
   s <- choose (3, 100::Double)
   θ <- oneof [return 0, return pi]
   let ijkSeg = take 10 $ transport (x*s, z*s) (θ, pi/2)
@@ -166,7 +166,7 @@ prop_descending_PureXComponent = do
     xComponent ((i,j,k), _) = i
 
 -- y component
-prop_pureYComponent (CS (x, z)) = do
+prop_pureYComponent (Coords (x, z)) = do
   s <- choose (3, 100::Double)
   let ijkSeg = take 30 $ transport (x*s, z*s) (pi/2, pi/2)
   return $ all (pureYCond (x*s, z*s)) ijkSeg
@@ -186,32 +186,28 @@ test_ArrayIsAllOnes = do
 -- Todo: verify segments are correct.
 -- cheapTrans (4.4, 3.3) (pi, pi/2)
 
-test_allOnesXs = do -- TODO: be sure to test at not (0,0)
-  ary <- allOnes
-  let pts = (0, 0)
-  let angles = (0, pi/2)
-  let ijkSeg = transport pts angles
+prop_allOnesXs :: TestCoords -> Property
+prop_allOnesXs (Coords (x, z)) = monadicIO $ do
+  ary <- run allOnes
+  let ijkSeg = transport (x, z) (0, pi/2)
   let eval = sum [ seg * qArray 7 ijk ary | (ijk, seg) <- takeWhile stopCond ijkSeg]
-  assertEqual eval 7
+  assert $ (eBall 13) eval (7 - x)
   where
     stopCond ((x,y,z), s) = x<7 && y<7 && z<7
 
-test_allOnesYs = do -- TODO: be sure to test at not (0,0)
-  ary <- allOnes
-  let pts = (0, 0)
-  let angles = (pi/2, pi/2)
-  let ijkSeg = transport pts angles
+prop_allOnesYs :: TestCoords -> Property
+prop_allOnesYs (Coords (x, z)) = monadicIO $ do
+  ary <- run allOnes
+  let ijkSeg = transport (x, z) (pi/2, pi/2)
   let eval = sum [ seg * qArray 7 ijk ary | (ijk, seg) <- takeWhile stopCond ijkSeg]
-  assertEqual eval 7
+  assert $ eval == 7
   where
     stopCond ((x,y,z), s) = x<7 && y<7 && z<7
 
 prop_allOnesZs :: TestAngle -> Property
-prop_allOnesZs (Angle θ) = monadicIO $ do -- TODO: be sure to test at not (0,0)
+prop_allOnesZs (Angle θ) = monadicIO $ do
   ary <- run allOnes
-  let pts = (0, 0)
-  let angles = (θ, pi)
-  let ijkSeg = transport pts angles
+  let ijkSeg = transport (0, 0) (θ, pi)
   let eval = sum [ seg * qArray 7 ijk ary | (ijk, seg) <- takeWhile stopCond ijkSeg]
   assert $ eval == 7
   where

@@ -17,7 +17,7 @@ cubeInt = (^ 3) `fmap` (arbitrary :: Gen Int) `suchThat` (> 0)
 
 -- Compound Generators
 data TestRay = Ray (Double, Double) (Double, Double) deriving (Show, Eq)
-data TestCoords = CS (Double, Double) deriving (Show, Eq)
+data TestCoords = Coords (Double, Double) deriving (Show, Eq)
 data TestAngle = Angle Double deriving (Show, Eq)
 
 instance Arbitrary TestAngle where
@@ -29,7 +29,7 @@ instance Arbitrary TestCoords where
   arbitrary = do
     x <- interval
     z <- interval
-    return $ CS (x, z)
+    return $ Coords (x, z)
 
 instance Arbitrary TestRay where
   arbitrary = do
