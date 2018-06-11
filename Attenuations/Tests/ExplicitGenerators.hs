@@ -12,6 +12,8 @@ zeroToTau = choose (0, tau::Double)
 halfPiToPi = choose (pi/2, pi::Double)
 zeroToHalfPi = choose (0, pi/2::Double)
 squareInt = (^ 2) `fmap` (arbitrary :: Gen Int) `suchThat` (> 0)
+cubeInt = (^ 3) `fmap` (arbitrary :: Gen Int) `suchThat` (> 0)
+
 
 -- Compound Generators
 data TestRay = Ray (Double, Double) (Double, Double) deriving (Show, Eq)
@@ -40,7 +42,7 @@ instance Arbitrary TestRay where
 instance (U.Unbox a, Arbitrary a) => Arbitrary (U.Vector a) where
   arbitrary = do
     ls <- arbitrary
-    z <- squareInt
+    z <- resize 5 cubeInt -- limited for testing.
     return $ U.generate z ls
 
 {--

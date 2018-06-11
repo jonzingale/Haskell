@@ -16,15 +16,17 @@ import Test.Framework
 allOnes = fileToAry "./Tests/dataallOnes3D"
 gradientDoubles = fileToAry "./Tests/datagradArray3D"
 
-{--
 
 -- Arbitrary Lattice Tests
 prop_QueryArbitraryLattice :: U.Vector Double -> Gen Bool
 prop_QueryArbitraryLattice ary = do
-  let rootSize = floor.sqrt.fromIntegral $ U.length ary
+  let rootSize = floor.(** (1/3)).fromIntegral $ U.length ary
   x <- choose (0::Int, rootSize-1)
   y <- choose (0::Int, rootSize-1)
-  return $ (abs.qArray rootSize (x, y)) ary >= 0
+  z <- choose (0::Int, rootSize-1)
+  return $ (abs.qArray rootSize (x, y, z)) ary >= 0
+
+{--
 
 -- Ray Tests
 prop_gradientArraySymmetry :: TestRay -> Property
@@ -107,11 +109,12 @@ prop_pureXYComponents (CS (x, z)) (Angle θ) = do
 
 -- Note: Z is oriented such that φ == 0 is descending
 -- reversing requires changing all 3 crossings.
--- ascending zs
-prop_pi_φ_PureZComponent (CS (x, z)) = do
+
+prop_PureZComponent (CS (x, z)) = do
   s <- choose (3, 100::Double)
+  φ <- oneof [return 0, return pi]
   θ <- zeroToPi
-  let ijkSeg = take 10 $ transport (x*s, z*s) (θ, pi)
+  let ijkSeg = take 10 $ transport (x*s, z*s) (θ, φ)
   return $ all (pureZCond (x*s)) ijkSeg
   where    
     pureZCond xx ((i,j,k), _) =
@@ -123,16 +126,6 @@ prop_ascending_PureZComponent (CS (x, z)) = do
   return $ map zComponent ijkSeg == [0..9]
   where    
     zComponent ((i,j,k), _) = k
-
--- descending zs
-prop_zero_φ_PureZComponent (CS (x, z)) = do
-  s <- choose (3, 100::Double)
-  θ <- zeroToPi
-  let ijkSeg = take 10 $ transport (x*s, z*s) (θ, 0)
-  return $ all (pureZCond (x*s)) ijkSeg
-  where    
-    pureZCond xx ((i,j,k), _) =
-      i == floor xx && j == 0
 
 prop_descending_PureZComponent (CS (x, z)) = do
   θ <- zeroToPi
@@ -147,10 +140,10 @@ prop_descending_PureZComponent (CS (x, z)) = do
   θ == π/2 ==> pure y component
 --}
 
--- ascending xs
-prop_zero_θ_PureXComponent (CS (x, z)) = do
+prop_PureXComponent (CS (x, z)) = do
   s <- choose (3, 100::Double)
-  let ijkSeg = take 10 $ transport (x*s, z*s) (0, pi/2)
+  θ <- oneof [return 0, return pi]
+  let ijkSeg = take 10 $ transport (x*s, z*s) (θ, pi/2)
   return $ all (pureXCond (x*s, z*s)) ijkSeg
   where    
     pureXCond (xx, zz) ((i,j,k), _) =
@@ -163,15 +156,6 @@ prop_ascending_PureXComponent = do
   return $ map xComponent ijkSeg == [0..9]
   where    
     xComponent ((i,j,k), _) = i
-
--- descending xs
-prop_pi_θ_PureXComponent (CS (x, z)) = do
-  s <- choose (3, 100::Double)
-  let ijkSeg = take 10 $ transport (x*s, z*s) (pi, pi/2)
-  return $ all (pureXCond (z*s)) ijkSeg
-  where    
-    pureXCond zz ((i,j,k), _) =
-      j == 0 && k == floor zz
 
 prop_descending_PureXComponent = do
   x <- interval
