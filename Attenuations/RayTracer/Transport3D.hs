@@ -1,5 +1,5 @@
 module RayTracer.Transport3D where
-import RayTracer.FileToVector
+import RayTracer.HelpersTransport3D
 
 type Coords = (XCoord, YCoord, ZCoord)
 type EntryCoords = (XCoord, ZCoord)
@@ -9,37 +9,6 @@ type XCoord = Double
 type YCoord = Double
 type ZCoord = Double
 type Angle  = Double
-
--- displayTrace (0,0) (pi/4, pi/4)
-displayTrace cs as = do
-  let ijkSeg = transport cs as
-  let eval = take 10 [ (ijk, str) | (ijk, seg, str) <- takeWhile stopCond ijkSeg]
-  -- ary <- fileToAry "./Tests/dataallOnes3D"
-  -- let eval = [ seg * (qArray 7 ijk ary) | (ijk, seg) <- takeWhile stopCond ijkSeg]
-  putStr "evaluated total:\n\n"
-  putStr.unlines.(map show) $ eval
-  where
-    stopCond ((x,y,z), s, str) = x<=7 && y<=7 && z <=7
-
-cheapTrans (x, z) (t,p) = do
-  let ijkSeg = take 5 $ transport (x, z) (t,p)
-  putStr "evaluated total:\n\n"
-  putStr.unlines.(map show) $ ijkSeg
-
-cheapZs (x, z) (t,p) = do
-  let ijkSeg = take 5 $ zcrossings (x, z) (t,p)
-  putStr "evaluated total:\n\n"
-  putStr.unlines.(map show) $ ijkSeg
-
-cheapXs (x, z) (t,p) = do
-  let ijkSeg = take 5 $ xcrossings (x, z) (t,p)
-  putStr "evaluated total:\n\n"
-  putStr.unlines.(map show) $ ijkSeg
-
-cheapYs (x, z) (t,p) = do
-  let ijkSeg = take 5 $ ycrossings (x, z) (t,p)
-  putStr "evaluated total:\n\n"
-  putStr.unlines.(map show) $ ijkSeg
 
 {--
 A start on incorporating the z and φ components.
@@ -79,7 +48,7 @@ This is going to need very very much work.
 
 --}
 type IntCoords = (Int, Int, Int)
--- transport:: EntryCoords-> EntryAngles -> [(IntCoords, SegmentLength)]
+transport:: EntryCoords-> EntryAngles -> [(IntCoords, SegmentLength)]
 transport (x, z) (θ, φ)
   | θ > pi/2 && φ > pi/2 =
                  f (xcs (x, z) (θ, φ))
@@ -116,21 +85,21 @@ transport (x, z) (θ, φ)
     -- xcs ycs zcs (p,q,r) (i,j,k) sig
     f ((xh,yh,zh): xcs) ((xv,yv,zv): ycs) ((xd,yd,zd): zcs) pt (i, j, k) (sθ, sφ)
       | yh == minimum [yh, yv, yd] = -- x case
-        ((i,j,k), segment pt (xh,yh,zh), "X") :
+        ((i,j,k), segment pt (xh,yh,zh)) :
           f xcs ((xv,yv,zv): ycs) ((xd,yd,zd): zcs)
           (xh,yh,zh) -- pt
           (i+sθ, j, k)
           (sθ, sφ)
 
       | yd == minimum [yh, yv, yd]  = -- z case
-        ((i,j,k), segment pt (xd,yd,zd), "Z") :
+        ((i,j,k), segment pt (xd,yd,zd)) :
           f ((xh,yh,zh): xcs) ((xv,yv,zv): ycs) zcs
           (xd,yd,zd) -- pt
           (i, j, k+sφ)
           (sθ, sφ)
 
       | yv == minimum [yh, yv, yd] = -- y case
-        ((i,j,k), segment pt (xv,yv,zv), "Y") :
+        ((i,j,k), segment pt (xv,yv,zv)) :
           f ((xh,yh,zh): xcs) ycs ((xd,yd,zd): zcs)
             (xv,yv,zv) -- pt
             (i, j+1, k)
