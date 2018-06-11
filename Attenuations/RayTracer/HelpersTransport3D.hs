@@ -22,23 +22,23 @@ displayTrace cs as = do
   where
     stopCond ((x,y,z), s, str) = x<=7 && y<=7 && z <=7
 
-cheapTrans (x, z) (t,p) = do
-  let ijkSeg = take 5 $ transportStr (x, z) (t,p)
+cheapTrans (x, z) (t, p) = do
+  let ijkSeg = take 5 $ transportStr (x, z) (t, p)
   putStr "evaluated total:\n\n"
   putStr.unlines.(map show) $ ijkSeg
 
-cheapZs (x, z) (t,p) = do
-  let ijkSeg = take 5 $ zcrossings (x, z) (t,p)
+cheapZs (x, z) (t, p) = do
+  let ijkSeg = take 5 $ zcrossings (x, z) (t, p)
   putStr "evaluated total:\n\n"
   putStr.unlines.(map show) $ ijkSeg
 
-cheapXs (x, z) (t,p) = do
-  let ijkSeg = take 5 $ xcrossings (x, z) (t,p)
+cheapXs (x, z) (t, p) = do
+  let ijkSeg = take 5 $ xcrossings (x, z) (t, p)
   putStr "evaluated total:\n\n"
   putStr.unlines.(map show) $ ijkSeg
 
-cheapYs (x, z) (t,p) = do
-  let ijkSeg = take 5 $ ycrossings (x, z) (t,p)
+cheapYs (x, z) (t, p) = do
+  let ijkSeg = take 5 $ ycrossings (x, z) (t, p)
   putStr "evaluated total:\n\n"
   putStr.unlines.(map show) $ ijkSeg
 
@@ -68,11 +68,11 @@ zcrossings :: EntryCoords -> EntryAngles -> [Coords]
 zcrossings (x, z) (θ, φ)
   | θ > pi/2 = [(x + k * cos θ * tan φ,
                  k * sin θ * tan φ,
-                 cc z - k) | k <- [1..]]
+                 cc z - k) | k <- [0..]]
 
   | otherwise = [(x + k * cos θ * tan φ,
                   k * sin θ * tan φ,
-                  ff z + k + 1) | k <- [1..]] -- not sure here
+                  ff z + k + 1) | k <- [0..]] -- not sure here
 
 {--
 This is going to need very very much work.
