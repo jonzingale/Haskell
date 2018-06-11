@@ -183,7 +183,7 @@ test_ArrayIsAllOnes = do
   ones <- allOnes
   assertEqual (vSum ones) 343
 
--- Todo: verify segments are correct.
+-- Segment Verification
 -- cheapTrans (4.4, 3.3) (pi, pi/2)
 
 prop_allOnesXs :: TestCoords -> Property
