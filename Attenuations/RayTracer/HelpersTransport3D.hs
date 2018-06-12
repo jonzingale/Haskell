@@ -40,7 +40,6 @@ cheapYs (x, z) (t, p) = do
 {--
 This is going to need very very much work.
 θ, φ cases individually.
-
 --}
 
 transportStr :: EntryCoords-> EntryAngles -> [(IntCoords, SegmentLength, String)]
