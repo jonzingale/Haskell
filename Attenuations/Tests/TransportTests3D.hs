@@ -210,10 +210,10 @@ prop_allOnesZs (Angle θ) = monadicIO $ do
   where
     stopCond ((x,y,z), s) = x<7 && y<7 && z<7
 
-prop_allOnesXYDiagonal :: Property
-prop_allOnesXYDiagonal = monadicIO $ do
+prop_allOnesXYDiagonal :: TestCoords -> Property
+prop_allOnesXYDiagonal (Coords (x, z)) = monadicIO $ do
   ary <- run allOnes
-  let ijkSeg = transport (0, 0) (pi/4, pi/2)
+  let ijkSeg = transport (0, z) (pi/4, pi/2)
   let eval = sum [ seg * qArray 7 ijk ary | (ijk, seg) <- takeWhile stopCond ijkSeg]
   assert $ (eBall 13) eval (7 * sqrt 2)
   where
@@ -225,7 +225,7 @@ prop_allOnesXYZDiagonal = monadicIO $ do
   ary <- run allOnes
   let ijkSeg = transport (0, 0) (pi/4, 3*pi/4)
   let eval = sum [ seg * qArray 7 ijk ary | (ijk, seg) <- takeWhile stopCond ijkSeg]
-  assert $ (eBall 13) eval (7 * sqrt 3)
+  assert $ (eBall 10) eval (7 * sqrt 3)
   where
     stopCond ((x,y,z), s) = x<7 && y<7 && z<7
 
