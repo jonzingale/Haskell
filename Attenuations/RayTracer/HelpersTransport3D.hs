@@ -50,28 +50,28 @@ transportStr (x, z) (θ, φ)
                  (zcs (x, z) (θ, φ))
                  (x, 0, z) -- pt
                  (floor x, 0, floor z) -- i j k, z offset by φ?
-                 (negate 1, 1) -- sig
+                 (negate 1, negate 1) -- sig
   | θ > pi/2 && φ <= pi/2 =
                  f (xcs (x, z) (θ, φ))
                  (ycs (x, z) (θ, φ))
                  (zcs (x, z) (θ, φ))
                  (x, 0, z) -- pt
                  (floor x, 0, floor z) -- i j k, z offset by φ?
-                 (negate 1, negate 1) -- sig
+                 (negate 1, 1) -- sig
   | θ <= pi/2 && φ <= pi/2 =
                  f (xcs (x, z) (θ, φ))
                  (ycs (x, z) (θ, φ))
                  (zcs (x, z) (θ, φ))
                  (x, 0, z)
                  (floor x, 0, floor z)
-                 (1, negate 1)
+                 (1, 1)
   | θ <= pi/2 && φ > pi/2 =
                  f (xcs (x, z) (θ, φ))
                  (ycs (x, z) (θ, φ))
                  (zcs (x, z) (θ, φ))
-                 (x, 0, z)
+                 (x, 0, z) -- pt
                  (floor x, 0, floor z)
-                 (1, 1)
+                 (1, negate 1)
   where
     (xcs, ycs, zcs) = (xcrossings, ycrossings, zcrossings)
 

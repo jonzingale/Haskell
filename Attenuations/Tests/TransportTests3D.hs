@@ -115,9 +115,6 @@ prop_pureXYComponents (Coords (x, z)) (Angle θ) = do
   x - y plane is left invariant.
 --}
 
--- Note: Z is oriented such that φ == 0 is descending
--- reversing requires changing all 3 crossings.
-
 prop_PureZComponent (Coords (x, z)) = do
   s <- choose (3, 100::Double)
   φ <- oneof [return 0, return pi]
@@ -130,14 +127,14 @@ prop_PureZComponent (Coords (x, z)) = do
 
 prop_ascending_PureZComponent (Coords (x, z)) = do
   θ <- zeroToPi
-  let ijkSeg = take 10 $ transport (x, z) (θ, pi)
+  let ijkSeg = take 10 $ transport (x, z) (θ, 0)
   return $ map zComponent ijkSeg == [0..9]
   where    
     zComponent ((i,j,k), _) = k
 
 prop_descending_PureZComponent (Coords (x, z)) = do
   θ <- zeroToPi
-  let ijkSeg = take 10 $ transport (x, z) (θ, 0)
+  let ijkSeg = take 10 $ transport (x, z) (θ, pi)
   return $ map zComponent ijkSeg == map negate [0..9]
   where    
     zComponent ((i,j,k), _) = k
@@ -204,7 +201,7 @@ prop_allOnesYs (Coords (x, z)) = monadicIO $ do
 prop_allOnesZs :: TestAngle -> Property
 prop_allOnesZs (Angle θ) = monadicIO $ do
   ary <- run allOnes
-  let ijkSeg = transport (0, 0) (θ, pi)
+  let ijkSeg = transport (0, 0) (θ, 0)
   let eval = sum [ seg * qArray 7 ijk ary | (ijk, seg) <- takeWhile stopCond ijkSeg]
   assert $ eval == 7
   where
@@ -219,24 +216,14 @@ prop_allOnesXYDiagonal (Coords (x, z)) = monadicIO $ do
   where
     stopCond ((x,y,z), s) = x<7 && y<7 && z<7
 
--- cheapTrans (0,0) (pi/4, 3*pi/4)
+-- cheapTrans (0,0) (pi/4, pi/4)
 prop_allOnesXYZDiagonal :: Property
 prop_allOnesXYZDiagonal = monadicIO $ do
   ary <- run allOnes
-  let ijkSeg = transport (0, 0) (pi/4, 3*pi/4)
+  let ijkSeg = transport (0, 0) (pi/4, pi/4)
   let eval = sum [ seg * qArray 7 ijk ary | (ijk, seg) <- takeWhile stopCond ijkSeg]
   assert $ (eBall 10) eval (7 * sqrt 3)
   where
     stopCond ((x,y,z), s) = x<7 && y<7 && z<7
 
--- test_allOnesDiagonal = do
---   ary <- allOnes
---   let pts = (0, 0)
---   let angles = (pi/4, pi/4)
---   let ijkSeg = transport pts angles
---   let eval = sum [ seg * qArray 7 ijk ary | (ijk, seg) <- takeWhile stopCond ijkSeg]
---   assertEqual (eval - correction) (7 * sqrt 3)
---   where
---     correction = 0.0
---     stopCond ((x,y,z), s) = x<7 && y<7 && z<7
 
