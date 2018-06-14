@@ -30,18 +30,20 @@ ycrossings (x, z) (θ, φ) = [ (x + k / tan θ, k, zc z θ φ k) | k <- [1..]]
                | otherwise = z - k / (tan φ * sin θ) -- not sure here
 
 -- verify how x- and y- components may need initial values.
+-- should be all 1s at cheapZs (0,0) (pi/4, pi/4)
 zcrossings :: EntryCoords -> EntryAngles -> [Coords]
 zcrossings (x, z) (θ, φ)
-  | φ > pi/2 = [(x + k * cos θ * tan φ,
-                 k * sin θ * tan φ,
-                 cc z - k) | k <- [1..]]
+  | φ > pi/2 = [(x + k * cos θ * tan φ  / root2Over2,
+                 k * sin θ * tan φ  / root2Over2,
+                 cc z - k) | k <- [1..]]  -- not sure here
 
-  | otherwise = [(x + k * cos θ * tan φ,
-                  k * sin θ * tan φ,
-                  ff z + k + 1) | k <- [1..]] -- not sure here
+  | otherwise = [(x + k * cos θ * tan φ  / root2Over2,
+                  k * sin θ * tan φ  / root2Over2,
+                  ff z + k) | k <- [1..]] -- not sure here
 
 
 cc, ff :: Double -> Double
 cc = fromIntegral.ceiling
 ff = fromIntegral.floor
 frac = snd.properFraction
+root2Over2 = sqrt 2 / 2
