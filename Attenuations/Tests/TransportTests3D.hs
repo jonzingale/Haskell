@@ -111,35 +111,6 @@ prop_pureXYComponents (Coords (x, z)) (Angle θ) = do
       k == floor zz
 
 {--
-  fixing φ == 0 or φ == pi
-  x - y plane is left invariant.
---}
-
-prop_PureZComponent (Coords (x, z)) = do
-  s <- choose (3, 100::Double)
-  φ <- oneof [return 0, return pi]
-  θ <- zeroToPi
-  let ijkSeg = take 10 $ transport (x*s, z*s) (θ, φ)
-  return $ all (pureZCond (x*s)) ijkSeg
-  where    
-    pureZCond xx ((i,j,k), _) =
-      i == floor xx && j == 0
-
-prop_ascending_PureZComponent (Coords (x, z)) = do
-  θ <- zeroToPi
-  let ijkSeg = take 10 $ transport (x, z) (θ, 0)
-  return $ map zComponent ijkSeg == [0..9]
-  where    
-    zComponent ((i,j,k), _) = k
-
-prop_descending_PureZComponent (Coords (x, z)) = do
-  θ <- zeroToPi
-  let ijkSeg = take 10 $ transport (x, z) (θ, pi)
-  return $ map zComponent ijkSeg == map negate [0..9]
-  where    
-    zComponent ((i,j,k), _) = k
-
-{--
   fixing φ == π/2
   θ == 0 or θ == π => pure x component
   θ == π/2 ==> pure y component
@@ -178,6 +149,36 @@ prop_pureYComponent (Coords (x, z)) = do
   where    
     pureYCond (xx, zz) ((i,j,k), _) =
       i == floor xx && k == floor zz
+
+{--
+  fixing φ == 0 or φ == pi
+  x - y plane is left invariant.
+--}
+
+prop_PureZComponent (Coords (x, z)) = do
+  s <- choose (3, 100::Double)
+  φ <- oneof [return 0, return pi]
+  θ <- zeroToPi
+  let ijkSeg = take 10 $ transport (x*s, z*s) (θ, φ)
+  return $ all (pureZCond (x*s)) ijkSeg
+  where    
+    pureZCond xx ((i,j,k), _) =
+      i == floor xx && j == 0
+
+prop_ascending_PureZComponent (Coords (x, z)) = do
+  θ <- zeroToPi
+  let ijkSeg = take 10 $ transport (x, z) (θ, 0)
+  return $ map zComponent ijkSeg == [0..9]
+  where    
+    zComponent ((i,j,k), _) = k
+
+prop_descending_PureZComponent (Coords (x, z)) = do
+  θ <- zeroToPi
+  let ijkSeg = take 10 $ transport (x, z) (θ, pi)
+  return $ map zComponent ijkSeg == map negate [0..9]
+  where    
+    zComponent ((i,j,k), _) = k
+
 
 -- Segment Verification
 prop_allOnesXs :: TestCoords -> Property
