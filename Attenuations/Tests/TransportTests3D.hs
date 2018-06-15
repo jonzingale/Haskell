@@ -227,4 +227,16 @@ prop_allOnesXYZDiagonal = monadicIO $ do
   where
     stopCond ((x,y,z), s) = x<7 && y<7 && z<7
 
+-- the goal here is to pass through (1/2, 1, 1) or something.
+-- should hold not just for integer differences.
+prop_allOnesXTranslations :: TestCoords -> Property
+prop_allOnesXTranslations (Coords (x, z)) = monadicIO $ do
+  ary <- run allOnes
+  let ijkSeg1 = transport (x, 0) (atan 2, pi/2)
+  let ijkSeg2 = transport (x + 2, 0) (atan 2, pi/2)
+  assert $ (eBall 10) (evalRay ijkSeg1 ary) (evalRay ijkSeg2 ary)
+  where
+    stopCond ((x,y,z), s) = x<7 && y<7 && z<7
+    evalRay trans ary = sum [ seg * qArray 7 ijk ary |
+      (ijk, seg) <- takeWhile stopCond trans]
 
