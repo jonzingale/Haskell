@@ -243,6 +243,17 @@ prop_allOnesXTranslations (Coords (x, z)) = monadicIO $ do
     evalRay trans ary = sum [ seg * qArray 7 ijk ary |
       (ijk, seg) <- takeWhile stopCond trans]
 
+prop_allOnesHalfPiXTranslations :: TestCoords -> Property
+prop_allOnesHalfPiXTranslations (Coords (x, z)) = monadicIO $ do
+  ary <- run allOnes
+  let ijkSeg1 = transport (x*7, 0) (pi/2, pi/2)
+  let ijkSeg2 = transport (z*7, 0) (pi/2, pi/2)
+  assert $ (eBall 13) (evalRay ijkSeg1 ary) (evalRay ijkSeg2 ary)
+  where
+    stopCond ((x,y,z), s) = x<7 && y<7 && z<7
+    evalRay trans ary = sum [ seg * qArray 7 ijk ary |
+      (ijk, seg) <- takeWhile stopCond trans]
+
 prop_allOnesZTranslations :: TestCoords -> Property
 prop_allOnesZTranslations (Coords (x, z)) = monadicIO $ do
   ary <- run allOnes
