@@ -16,7 +16,7 @@ is a function of both φ and θ (a projective cone).
 xcrossings :: EntryCoords -> EntryAngles -> [Coords]
 xcrossings (x, z) (θ, φ)
   | θ > pi/2 = [(ff x - k, -(frac x + k)*tan θ, zc z θ φ k) | k<-[1..]]
-  | otherwise = [(ff x + k, (frac x + k)*tan θ, zc z θ φ k) | k<-[1..]]
+  | otherwise = [(ff x + k, (k - frac x)*tan θ, zc z θ φ k) | k<-[1..]]
   where
     zc z θ φ k | φ == 0 || φ == pi = z -- probably should get theta case too.
                | φ <= pi/2 = z + k / (tan φ * cos θ * sqrt 2)

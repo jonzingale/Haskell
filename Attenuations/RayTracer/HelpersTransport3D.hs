@@ -1,4 +1,4 @@
-module RayTracer.HelpersTransport3D (cheapTrans, cheapXs, cheapYs, cheapZs,
+module RayTracer.HelpersTransport3D (cheapTrans, cheapSums, cheapXs, cheapYs, cheapZs,
                                      transportStr, displayTrace) where
 import RayTracer.Crossings
 
@@ -10,8 +10,6 @@ type SegmentLength = Double
 displayTrace cs as = do
   let ijkSeg = transportStr cs as
   let eval = take 10 [ (ijk, str) | (ijk, seg, str) <- takeWhile stopCond ijkSeg]
-  -- ary <- fileToAry "./Tests/dataallOnes3D"
-  -- let eval = [ seg * (qArray 7 ijk ary) | (ijk, seg) <- takeWhile stopCond ijkSeg]
   putStr "evaluated total:\n\n"
   putStr.unlines.(map show) $ eval
   where
@@ -37,6 +35,16 @@ cheapYs (x, z) (t, p) = do
   putStr "evaluated total:\n\n"
   putStr.unlines.(map show) $ ijkSeg
 
+cheapSums (x,z) (t,p) = do
+  let ijkSeg = transportStr (x,z) (t,p)
+  let eval = [ seg | (ijk, seg, str) <- takeWhile stopCond ijkSeg]
+  putStr "evaluated totals:\n"
+  putStr.unlines.(map show) $ eval
+  putStr "\nevaluated total:\n"
+  putStr.show $ sum eval
+  putStr "\n"
+  where
+    stopCond ((x,y,z), s, str) = x<=7 && y<=7 && z <=7
 {--
 This is going to need very very much work.
 θ, φ cases individually.

@@ -223,18 +223,18 @@ prop_allOnesXYZDiagonal = monadicIO $ do
   ary <- run allOnes
   let ijkSeg = transport (0, 0) (pi/4, pi/4)
   let eval = sum [ seg * qArray 7 ijk ary | (ijk, seg) <- takeWhile stopCond ijkSeg]
-  assert $ (eBall 10) eval (7 * sqrt 3)
+  assert $ (eBall 13) eval (7 * sqrt 3)
   where
     stopCond ((x,y,z), s) = x<7 && y<7 && z<7
 
--- the goal here is to pass through (1/2, 1, 1) or something.
--- should hold not just for integer differences.
+-- Perturbations along x do not effect raylength
+-- for rays exiting the rear of the lattice.
 prop_allOnesXTranslations :: TestCoords -> Property
 prop_allOnesXTranslations (Coords (x, z)) = monadicIO $ do
   ary <- run allOnes
   let ijkSeg1 = transport (x, 0) (atan 2, pi/2)
-  let ijkSeg2 = transport (x + 2, 0) (atan 2, pi/2)
-  assert $ (eBall 10) (evalRay ijkSeg1 ary) (evalRay ijkSeg2 ary)
+  let ijkSeg2 = transport (z, 0) (atan 2, pi/2)
+  assert $ (eBall 13) (evalRay ijkSeg1 ary) (evalRay ijkSeg2 ary)
   where
     stopCond ((x,y,z), s) = x<7 && y<7 && z<7
     evalRay trans ary = sum [ seg * qArray 7 ijk ary |
