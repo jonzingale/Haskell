@@ -227,6 +227,9 @@ prop_allOnesXYZDiagonal = monadicIO $ do
   where
     stopCond ((x,y,z), s) = x<7 && y<7 && z<7
 
+{--
+Translation Tests:
+--}
 -- Perturbations along x do not effect raylength
 -- for rays exiting the rear of the lattice.
 prop_allOnesXTranslations :: TestCoords -> Property
