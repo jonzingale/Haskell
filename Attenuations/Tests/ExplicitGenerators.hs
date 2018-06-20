@@ -13,7 +13,7 @@ halfPiToPi = choose (pi/2, pi::Double)
 zeroToHalfPi = choose (0, pi/2::Double)
 squareInt = (^ 2) `fmap` (arbitrary :: Gen Int) `suchThat` (> 0)
 cubeInt = (^ 3) `fmap` (arbitrary :: Gen Int) `suchThat` (> 0)
-
+exitAngle x = choose((1+x)*pi/4, pi/2 + x*pi/4)
 
 -- Compound Generators
 data TestRay = Ray (Double, Double) (Double, Double) deriving (Show, Eq)

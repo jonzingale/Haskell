@@ -1,50 +1,57 @@
 module RayTracer.HelpersTransport3D (cheapTrans, cheapSums, cheapXs, cheapYs, cheapZs,
-                                     transportStr, displayTrace) where
+                                     transportStr) where
 import RayTracer.Crossings
 
 type IntCoords = (Int, Int, Int)
 type SegmentLength = Double
 
+cheapTrans (x, z) (t, p) = do
+  let ijkSeg = transportStr (x, z) (t, p)
+  let eval = [ (seg, str) | (ijk, seg, str) <- takeWhile stopCond ijkSeg]
 
--- displayTrace (0,0) (pi/4, pi/4)
-displayTrace cs as = do
-  let ijkSeg = transportStr cs as
-  let eval = take 10 [ (ijk, str) | (ijk, seg, str) <- takeWhile stopCond ijkSeg]
   putStr "evaluated total:\n\n"
   putStr.unlines.(map show) $ eval
   where
-    stopCond ((x,y,z), s, str) = x<=7 && y<=7 && z <=7
-
-cheapTrans (x, z) (t, p) = do
-  let ijkSeg = take 10 $ transportStr (x, z) (t, p)
-  putStr "evaluated total:\n\n"
-  putStr.unlines.(map show) $ ijkSeg
+    stopCond ((x,y,z), s, str) = x<=4 && y<=4 && z <=4
 
 cheapZs (x, z) (t, p) = do
-  let ijkSeg = take 10 $ zcrossings (x, z) (t, p)
+  let ijkSeg = takeWhile stopCond $ zcrossings (x, z) (t, p)
+
   putStr "evaluated total:\n\n"
   putStr.unlines.(map show) $ ijkSeg
+  where
+    stopCond (x,y,z) = x<=7 && y<=7 && z <=7
 
 cheapXs (x, z) (t, p) = do
-  let ijkSeg = take 10 $ xcrossings (x, z) (t, p)
+  let ijkSeg = takeWhile stopCond $ xcrossings (x, z) (t, p)
+
   putStr "evaluated total:\n\n"
   putStr.unlines.(map show) $ ijkSeg
+  where
+    stopCond (x,y,z) = x<=7 && y<=7 && z <=7    
 
 cheapYs (x, z) (t, p) = do
-  let ijkSeg = take 10 $ ycrossings (x, z) (t, p)
+  let ijkSeg = takeWhile stopCond $ ycrossings (x, z) (t, p)
+
   putStr "evaluated total:\n\n"
   putStr.unlines.(map show) $ ijkSeg
+  where
+    stopCond (x,y,z) = x<=7 && y<=7 && z <=7
 
 cheapSums (x,z) (t,p) = do
+  let n = 3
   let ijkSeg = transportStr (x,z) (t,p)
-  let eval = [ seg | (ijk, seg, str) <- takeWhile stopCond ijkSeg]
-  putStr "evaluated totals:\n"
+  let eval = [ (seg, (ijk, str)) |
+                (ijk, seg, str) <- takeWhile ((stopCond.floor) n) ijkSeg]
+
+  putStr "totals:\n"
   putStr.unlines.(map show) $ eval
-  putStr "\nevaluated total:\n"
-  putStr.show $ sum eval
+  putStr "\ntotals: "
+  -- putStr.show $ sum eval
+  putStr.show $ sum.map fst $ eval
   putStr "\n"
   where
-    stopCond ((x,y,z), s, str) = x<=7 && y<=7 && z <=7
+    stopCond n ((x,y,z), s, str) = x<=n && y<=n && z <=n
 {--
 This is going to need very very much work.
 θ, φ cases individually.

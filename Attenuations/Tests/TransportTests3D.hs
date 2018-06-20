@@ -217,13 +217,20 @@ prop_allOnesXYDiagonal (Coords (x, z)) = monadicIO $ do
   where
     stopCond ((x,y,z), s) = x<7 && y<7 && z<7
 
--- cheapTrans (0,0) (pi/4, pi/4)
 prop_allOnesXYZDiagonal :: Property
 prop_allOnesXYZDiagonal = monadicIO $ do
   ary <- run allOnes
-  let ijkSeg = transport (0, 0) (pi/4, pi/4)
+  let ijkSeg = transport (0, 0) (pi/4, atan(sqrt 2))
   let eval = sum [ seg * qArray 7 ijk ary | (ijk, seg) <- takeWhile stopCond ijkSeg]
   assert $ (eBall 13) eval (7 * sqrt 3)
+  where
+    stopCond ((x,y,z), s) = x<7 && y<7 && z<7
+
+prop_XYZDiagonal :: TestCoords -> Bool
+prop_XYZDiagonal = do
+  let ijkSeg = transport (0, 0) (pi/4, atan(sqrt 2))
+  let eval = sum [ seg | (_, seg) <- takeWhile stopCond ijkSeg]
+  return $ (eBall 13) eval (7 * sqrt 3)
   where
     stopCond ((x,y,z), s) = x<7 && y<7 && z<7
 
@@ -243,24 +250,42 @@ prop_allOnesXTranslations (Coords (x, z)) = monadicIO $ do
     evalRay trans ary = sum [ seg * qArray 7 ijk ary |
       (ijk, seg) <- takeWhile stopCond trans]
 
+-- better tests for angles and such?
 prop_allOnesHalfPiXTranslations :: TestCoords -> Property
 prop_allOnesHalfPiXTranslations (Coords (x, z)) = monadicIO $ do
   ary <- run allOnes
-  let ijkSeg1 = transport (x*7, 0) (pi/2, pi/2)
-  let ijkSeg2 = transport (z*7, 0) (pi/2, pi/2)
+  let ijkSeg1 = transport (x*7/2, 0) (atan 2, pi/2)
+  let ijkSeg2 = transport (z*7/2, 0) (atan 2, pi/2)
   assert $ (eBall 13) (evalRay ijkSeg1 ary) (evalRay ijkSeg2 ary)
   where
     stopCond ((x,y,z), s) = x<7 && y<7 && z<7
     evalRay trans ary = sum [ seg * qArray 7 ijk ary |
       (ijk, seg) <- takeWhile stopCond trans]
 
-prop_allOnesZTranslations :: TestCoords -> Property
-prop_allOnesZTranslations (Coords (x, z)) = monadicIO $ do
-  ary <- run allOnes
-  let ijkSeg1 = transport (0, x) (atan 2, pi/2)
-  let ijkSeg2 = transport (0, z) (atan 2, pi/2)
-  assert $ (eBall 13) (evalRay ijkSeg1 ary) (evalRay ijkSeg2 ary)
-  where
-    stopCond ((x,y,z), s) = x<7 && y<7 && z<7
-    evalRay trans ary = sum [ seg * qArray 7 ijk ary |
-      (ijk, seg) <- takeWhile stopCond trans]
+-- better tests for angles and such?
+-- prop_allOnesZTranslations :: TestCoords -> Gen Bool
+-- prop_allOnesZTranslations (Coords (x, z)) = do
+--   θ <- choose((1+x)*pi/4, pi/2)
+--   let φ = pi/2.1
+
+--   -- φ <- choose((1+x)*pi/4, pi/2)
+--   let ijkSeg1 = transport (0, x) (θ, φ)
+--   let ijkSeg2 = transport (0, z) (θ, φ)
+--   return $ (eBall 13) (evalRay ijkSeg1) (evalRay ijkSeg2)
+--   where
+--     stopCond ((x,y,z), s) = x<7 && y<7 && z<7
+--     evalRay trans = sum [ seg | (ijk, seg) <- takeWhile stopCond trans]
+
+-- prop_allOnesSmallExitAngleZTranslations :: TestCoords -> Gen Bool
+-- prop_allOnesSmallExitAngleZTranslations (Coords (x, z)) = do
+--   θ <- choose((1+x)*pi/4, 0)
+--   φ <- choose((1+z)*pi/4, 0)
+--   let ijkSeg1 = transport (x, x) (θ, φ) -- should be able to perturb here.
+--   let ijkSeg2 = transport (x, z) (θ, φ) -- ~pi/2.2 ok
+--   return $ (eBall 13) (evalRay ijkSeg1) (evalRay ijkSeg2)
+--   where
+--     evalRay ts = sum [ seg | ((i,j,k), seg) <- takeWhile stopCond ts]
+--     stopCond ((x,y,z), _) = x<5 && y<5 && z<5
+
+upper x = (pi/2) + (pi/4)*x
+lower x = (1+x)*pi/4

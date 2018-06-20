@@ -13,33 +13,33 @@ A start on incorporating the z and φ components.
 The guess below cannot be correct. The z component
 is a function of both φ and θ (a projective cone).
 --}
+
+-- correct for cheapXs (0,0) (pi/3, pi/4)
 xcrossings :: EntryCoords -> EntryAngles -> [Coords]
 xcrossings (x, z) (θ, φ)
-  | θ > pi/2 = [(ff x - k, -(frac x + k)*tan θ, zc z θ φ k) | k<-[1..]]
-  | otherwise = [(ff x + k, (k - frac x)*tan θ, zc z θ φ k) | k<-[1..]]
+  | θ > pi/2 = [(ff x - k, -(frac x + k) * tan θ, zc z θ φ k) | k<-[1..]]
+  | otherwise = [(ff x + k, (k - frac x) * tan θ, zc z θ φ k) | k<-[1..]]
   where
-    zc z θ φ k | φ == 0 || φ == pi = z -- probably should get theta case too.
-               | φ <= pi/2 = z + k / (tan φ * cos θ * sqrt 2)
-               | otherwise = z + k / (tan φ * cos θ * sqrt 2) -- not sure here
+    zc z θ φ k | φ <= pi/2 = z + k / (tan φ * cos θ)
+               | otherwise = z + k / (tan φ * cos θ)
 
 ycrossings :: EntryCoords -> EntryAngles -> [Coords]
 ycrossings (x, z) (θ, φ) = [ (x + k / tan θ, k, zc z θ φ k) | k <- [1..]]
   where
-    zc z θ φ k | φ == 0 || φ == pi = z -- probably should get theta case too.
-               | φ < pi/2  = z + k / (tan φ * sin θ * sqrt 2)
-               | otherwise = z + k / (tan φ * sin θ * sqrt 2) -- not sure here
+    zc z θ φ k | φ < pi/2  = z + k / (tan φ * sin θ)
+               | otherwise = z + k / (tan φ * sin θ)
 
 -- verify how x- and y- components may need initial values.
 -- should be all 1s at cheapZs (0,0) (pi/4, pi/4)
 zcrossings :: EntryCoords -> EntryAngles -> [Coords]
 zcrossings (x, z) (θ, φ)
-  | φ <= pi/2 = [(x + k * cos θ * tan φ / root2Over2,
-                 k * sin θ * tan φ / root2Over2,
-                 cc z + k) | k <- [1..]]  -- not sure here
+  | φ <= pi/2 = [(x + k * cos θ * tan φ, -- <- CHECK HERE.
+                 k * sin θ * tan φ, -- <- CHECK HERE.
+                 ff z + k) | k <- [1..]]
 
-  | otherwise = [(x + k * cos θ * tan φ / root2Over2,
-                  k * sin θ * tan φ / root2Over2,
-                  ff z - k) | k <- [1..]] -- not sure here
+  | otherwise = [(x + k * cos θ * tan φ,
+                  k * sin θ * tan φ,
+                  ff z - k) | k <- [1..]]
 
 
 cc, ff :: Double -> Double
