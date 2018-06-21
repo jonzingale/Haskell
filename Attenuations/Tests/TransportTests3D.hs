@@ -257,28 +257,57 @@ Translation Tests:
 -- for rays exiting the rear of the lattice.
 
 -- cheapSums (0,0.0) (atan 2, atan (sqrt 5))
-prop_XTranslations :: TestCoords -> Gen Bool
-prop_XTranslations (Coords (x, z)) = do
-  θ <- choose((1+x)*pi/4, pi/2)
-  φ <- choose(θ, pi/2)
-  let ijkSeg1 = transport (x, 0) (θ, φ)
-  let ijkSeg2 = transport (z, 0) (θ, φ)
-  return $ (eBall 13) (evalRay ijkSeg1) (evalRay ijkSeg2)
+prop_Smallθ_XTranslations :: TestCoords -> Gen Bool
+prop_Smallθ_XTranslations (Coords (x, z)) = do
+  x'<- choose (x, 1)
+  θ <- choose ((1+x')*pi/4, pi/2)
+  φ <- choose (0, θ) -- what range here?
+  let seg1 = transport (3.5*x , 0) (θ, φ)
+  let seg2 = transport (3.5*x', 0) (θ, φ)
+  return $ (eBall 13) (evalRay seg1) (evalRay seg2)
   where
     stopCond ((x,y,z), s) = x<7 && y<7 && z<7
     evalRay trans = sum [ seg | (ijk, seg) <- takeWhile stopCond trans]
 
+prop_Largeθ_XTranslations :: TestCoords -> Gen Bool
+prop_Largeθ_XTranslations (Coords (x, z)) = do
+  x'<- choose (x, 1)
+  θ <- choose (pi/2, pi/2 + x*pi/4)
+  φ <- choose (θ, pi/2) -- what range here?
+  let seg1 = transport (3.5*x , 0) (θ, φ)
+  let seg2 = transport (3.5*x', 0) (θ, φ)
+  return $ (eBall 13) (evalRay seg1) (evalRay seg2)
+  where
+    stopCond ((x,y,z), s) = abs x < 7 && abs y < 7 && abs z < 7
+    evalRay trans = sum [ seg | (ijk, seg) <- takeWhile stopCond trans]
+
+
 -- better tests for angles and such?
-prop_ZTranslations :: TestCoords -> Gen Bool
-prop_ZTranslations (Coords (x, z)) = do
-  θ <- choose((1+x)*pi/4, pi/2)
-  φ <- choose(θ, pi/2)
-  let ijkSeg1 = transport (0, x) (θ, φ)
-  let ijkSeg2 = transport (0, z) (θ, φ)
-  return $ (eBall 13) (evalRay ijkSeg1) (evalRay ijkSeg2)
+prop_Smallφ_ZTranslations :: TestCoords -> Gen Bool
+prop_Smallφ_ZTranslations (Coords (x, z)) = do
+  z'<- choose (z, 1)
+  φ <- choose ((1+z')*pi/4, pi/2)
+  θ <- choose (φ, pi/2) -- what range here?
+  let seg1 = transport (0, 3.5*z ) (θ, φ)
+  let seg2 = transport (0, 3.5*z') (θ, φ)
+  return $ (eBall 13) (evalRay seg1) (evalRay seg2)
   where
     stopCond ((x,y,z), s) = x<7 && y<7 && z<7
     evalRay trans = sum [ seg | (ijk, seg) <- takeWhile stopCond trans]
+
+prop_Largeφ_ZTranslations :: TestCoords -> Gen Bool
+prop_Largeφ_ZTranslations (Coords (x, z)) = do
+  z'<- choose (z, 1)
+  φ <- choose (pi/2, pi/2 + z*pi/4)
+  θ <- choose (φ, pi/2) -- what range here?
+  let seg1 = transport (3.5*z , 0) (θ, φ)
+  let seg2 = transport (3.5*z', 0) (θ, φ)
+  return $ (eBall 13) (evalRay seg1) (evalRay seg2)
+  where
+    stopCond ((x,y,z), s) = abs x < 7 && abs y < 7 && abs z < 7
+    evalRay trans = sum [ seg | (ijk, seg) <- takeWhile stopCond trans]
+
+
 
 -- better tests for angles and such?
 prop_allOnesHalfPiXTranslations :: TestCoords -> Property
