@@ -281,7 +281,6 @@ prop_Largeθ_XTranslations (Coords (x, z)) = do
     stopCond ((x,y,z), s) = abs x < 7 && abs y < 7 && abs z < 7
     evalRay trans = sum [ seg | (ijk, seg) <- takeWhile stopCond trans]
 
-
 -- better tests for angles and such?
 prop_Smallφ_ZTranslations :: TestCoords -> Gen Bool
 prop_Smallφ_ZTranslations (Coords (x, z)) = do
