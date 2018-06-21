@@ -257,16 +257,28 @@ Translation Tests:
 -- for rays exiting the rear of the lattice.
 
 -- cheapSums (0,0.0) (atan 2, atan (sqrt 5))
-prop_allOnesXTranslations :: TestCoords -> Property
-prop_allOnesXTranslations (Coords (x, z)) = monadicIO $ do
-  ary <- run allOnes
-  let ijkSeg1 = transport (x, 0) (atan 2, pi/2)
-  let ijkSeg2 = transport (z, 0) (atan 2, pi/2)
-  assert $ (eBall 13) (evalRay ijkSeg1 ary) (evalRay ijkSeg2 ary)
+prop_XTranslations :: TestCoords -> Gen Bool
+prop_XTranslations (Coords (x, z)) = do
+  θ <- choose((1+x)*pi/4, pi/2)
+  φ <- choose(θ, pi/2)
+  let ijkSeg1 = transport (x, 0) (θ, φ)
+  let ijkSeg2 = transport (z, 0) (θ, φ)
+  return $ (eBall 13) (evalRay ijkSeg1) (evalRay ijkSeg2)
   where
     stopCond ((x,y,z), s) = x<7 && y<7 && z<7
-    evalRay trans ary = sum [ seg * qArray 7 ijk ary |
-      (ijk, seg) <- takeWhile stopCond trans]
+    evalRay trans = sum [ seg | (ijk, seg) <- takeWhile stopCond trans]
+
+-- better tests for angles and such?
+prop_ZTranslations :: TestCoords -> Gen Bool
+prop_ZTranslations (Coords (x, z)) = do
+  θ <- choose((1+x)*pi/4, pi/2)
+  φ <- choose(θ, pi/2)
+  let ijkSeg1 = transport (0, x) (θ, φ)
+  let ijkSeg2 = transport (0, z) (θ, φ)
+  return $ (eBall 13) (evalRay ijkSeg1) (evalRay ijkSeg2)
+  where
+    stopCond ((x,y,z), s) = x<7 && y<7 && z<7
+    evalRay trans = sum [ seg | (ijk, seg) <- takeWhile stopCond trans]
 
 -- better tests for angles and such?
 prop_allOnesHalfPiXTranslations :: TestCoords -> Property
@@ -279,20 +291,3 @@ prop_allOnesHalfPiXTranslations (Coords (x, z)) = monadicIO $ do
     stopCond ((x,y,z), s) = x<7 && y<7 && z<7
     evalRay trans ary = sum [ seg * qArray 7 ijk ary |
       (ijk, seg) <- takeWhile stopCond trans]
-
--- better tests for angles and such?
-prop_allOnesZTranslations :: TestCoords -> Gen Bool
-prop_allOnesZTranslations (Coords (x, z)) = do
-  θ <- choose((1+x)*pi/4, pi/2)
-  φ <- choose(θ, pi/2)
-  -- θ <- choose((1+x)*pi/4, pi/2 + x*pi/4)
-  -- φ <- choose(θ, pi/2)
-  let ijkSeg1 = transport (0, x) (θ, φ)
-  let ijkSeg2 = transport (0, z) (θ, φ)
-  return $ (eBall 13) (evalRay ijkSeg1) (evalRay ijkSeg2)
-  where
-    stopCond ((x,y,z), s) = x<7 && y<7 && z<7
-    evalRay trans = sum [ seg | (ijk, seg) <- takeWhile stopCond trans]
-
-upper x = (pi/2) + (pi/4)*x
-lower x = (1+x)*pi/4
