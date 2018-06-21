@@ -288,8 +288,8 @@ prop_Smallφ_ZTranslations (Coords (x, z)) = do
   z'<- choose (z, 1)
   φ <- choose ((1+z')*pi/4, pi/2)
   θ <- choose (φ, pi/2) -- what range here?
-  let seg1 = transport (0, 3.5*z ) (θ, φ)
-  let seg2 = transport (0, 3.5*z') (θ, φ)
+  let seg1 = transport (0, 7*z ) (θ, φ)
+  let seg2 = transport (0, 7*z') (θ, φ)
   return $ (eBall 13) (evalRay seg1) (evalRay seg2)
   where
     stopCond ((x,y,z), s) = x<7 && y<7 && z<7
@@ -300,8 +300,8 @@ prop_Largeφ_ZTranslations (Coords (x, z)) = do
   z'<- choose (z, 1)
   φ <- choose (pi/2, pi/2 + z*pi/4)
   θ <- choose (φ, pi/2) -- what range here?
-  let seg1 = transport (3.5*z , 0) (θ, φ)
-  let seg2 = transport (3.5*z', 0) (θ, φ)
+  let seg1 = transport (7*z , 0) (θ, φ)
+  let seg2 = transport (7*z', 0) (θ, φ)
   return $ (eBall 13) (evalRay seg1) (evalRay seg2)
   where
     stopCond ((x,y,z), s) = abs x < 7 && abs y < 7 && abs z < 7
