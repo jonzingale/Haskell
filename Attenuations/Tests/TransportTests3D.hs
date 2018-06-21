@@ -110,6 +110,22 @@ prop_pureXYComponents (Coords (x, z)) (Angle θ) = do
     pureZcond zz ((i,j,k), _) =
       k == floor zz
 
+prop_pureXZComponents (Coords (x, z)) (Angle θ) = do
+  s <- choose (3, 100::Double)
+  let ijkSeg = take 30 $ transport (x*s, z*s) (0, θ)
+  return $ all pureZcond ijkSeg
+  where    
+    pureZcond ((i,j,k), _) =
+      j == 0
+
+prop_pureYZComponents (Coords (x, z)) (Angle θ) = do
+  s <- choose (3, 100::Double)
+  let ijkSeg = take 30 $ transport (x*s, z*s) (pi/2, θ)
+  return $ all (pureZcond (x*s)) ijkSeg
+  where    
+    pureZcond xx ((i,j,k), _) =
+      i == floor xx
+
 {--
   fixing φ == π/2
   θ == 0 or θ == π => pure x component
@@ -239,6 +255,8 @@ Translation Tests:
 --}
 -- Perturbations along x do not effect raylength
 -- for rays exiting the rear of the lattice.
+
+-- cheapSums (0,0.0) (atan 2, atan (sqrt 5))
 prop_allOnesXTranslations :: TestCoords -> Property
 prop_allOnesXTranslations (Coords (x, z)) = monadicIO $ do
   ary <- run allOnes
@@ -263,29 +281,18 @@ prop_allOnesHalfPiXTranslations (Coords (x, z)) = monadicIO $ do
       (ijk, seg) <- takeWhile stopCond trans]
 
 -- better tests for angles and such?
--- prop_allOnesZTranslations :: TestCoords -> Gen Bool
--- prop_allOnesZTranslations (Coords (x, z)) = do
---   θ <- choose((1+x)*pi/4, pi/2)
---   let φ = pi/2.1
-
---   -- φ <- choose((1+x)*pi/4, pi/2)
---   let ijkSeg1 = transport (0, x) (θ, φ)
---   let ijkSeg2 = transport (0, z) (θ, φ)
---   return $ (eBall 13) (evalRay ijkSeg1) (evalRay ijkSeg2)
---   where
---     stopCond ((x,y,z), s) = x<7 && y<7 && z<7
---     evalRay trans = sum [ seg | (ijk, seg) <- takeWhile stopCond trans]
-
--- prop_allOnesSmallExitAngleZTranslations :: TestCoords -> Gen Bool
--- prop_allOnesSmallExitAngleZTranslations (Coords (x, z)) = do
---   θ <- choose((1+x)*pi/4, 0)
---   φ <- choose((1+z)*pi/4, 0)
---   let ijkSeg1 = transport (x, x) (θ, φ) -- should be able to perturb here.
---   let ijkSeg2 = transport (x, z) (θ, φ) -- ~pi/2.2 ok
---   return $ (eBall 13) (evalRay ijkSeg1) (evalRay ijkSeg2)
---   where
---     evalRay ts = sum [ seg | ((i,j,k), seg) <- takeWhile stopCond ts]
---     stopCond ((x,y,z), _) = x<5 && y<5 && z<5
+prop_allOnesZTranslations :: TestCoords -> Gen Bool
+prop_allOnesZTranslations (Coords (x, z)) = do
+  θ <- choose((1+x)*pi/4, pi/2)
+  φ <- choose(θ, pi/2)
+  -- θ <- choose((1+x)*pi/4, pi/2 + x*pi/4)
+  -- φ <- choose(θ, pi/2)
+  let ijkSeg1 = transport (0, x) (θ, φ)
+  let ijkSeg2 = transport (0, z) (θ, φ)
+  return $ (eBall 13) (evalRay ijkSeg1) (evalRay ijkSeg2)
+  where
+    stopCond ((x,y,z), s) = x<7 && y<7 && z<7
+    evalRay trans = sum [ seg | (ijk, seg) <- takeWhile stopCond trans]
 
 upper x = (pi/2) + (pi/4)*x
 lower x = (1+x)*pi/4

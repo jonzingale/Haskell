@@ -30,11 +30,11 @@ ycrossings (x, z) (θ, φ) = [ (x + k / tan θ, k, zc z θ φ k) | k <- [1..]]
                | otherwise = z + k / (tan φ * sin θ)
 
 -- verify how x- and y- components may need initial values.
--- should be all 1s at cheapZs (0,0) (pi/4, pi/4)
+-- CONSIDER: cheapZs (0,0.9) (atan 2, atan (sqrt 5))
 zcrossings :: EntryCoords -> EntryAngles -> [Coords]
 zcrossings (x, z) (θ, φ)
-  | φ <= pi/2 = [(x + k * cos θ * tan φ, -- <- CHECK HERE.
-                 k * sin θ * tan φ, -- <- CHECK HERE.
+  | φ <= pi/2 = [(x + (k-frac z) * cos θ * tan φ, -- <- CHECK HERE.
+                 (k-frac z) * sin θ * tan φ, -- <- CHECK HERE.
                  ff z + k) | k <- [1..]]
 
   | otherwise = [(x + k * cos θ * tan φ,
