@@ -19,6 +19,20 @@ exitAngle x = choose((1+x)*pi/4, pi/2 + x*pi/4)
 data TestRay = Ray (Double, Double) (Double, Double) deriving (Show, Eq)
 data TestCoords = Coords (Double, Double) deriving (Show, Eq)
 data TestAngle = Angle Double deriving (Show, Eq)
+data TestExit = Vars (Double, Double) (Double, Double) deriving (Show, Eq)
+
+instance Arbitrary TestExit where
+  arbitrary = do
+    x <- interval
+    z <- choose(0, 0.65) -- 0.65 good upto 1M tests.
+    θ <- choose((1+x)*pi/4, pi/2)
+    -- let z = 0
+    -- if θ is pi/4 => atan (sqrt 2) < φ < pi/2
+    -- if θ is pi/2 => pi/4 < φ < pi/2
+    let t θ = 2 - 4*θ/pi
+    let var θ = (t θ)*atan(sqrt 2) + (1-(t θ))*pi/4
+    φ <- choose((var θ)*(1+z), pi/2)
+    return $ Vars (x, z) (θ, φ)
 
 instance Arbitrary TestAngle where
   arbitrary = do

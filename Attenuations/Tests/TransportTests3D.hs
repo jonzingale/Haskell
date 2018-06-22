@@ -306,7 +306,19 @@ prop_Largeφ_ZTranslations (Coords (x, z)) = do
     stopCond ((x,y,z), s) = abs x < 7 && abs y < 7 && abs z < 7
     evalRay trans = sum [ seg | (ijk, seg) <- takeWhile stopCond trans]
 
+prop_exits_y_side :: TestExit -> Gen Bool
+prop_exits_y_side (Vars (x, z) (θ, φ)) = do
+  let seg = transport (x, z) (θ, φ)
 
+  return $ lastY seg == 6
+  where
+    stopCond ((x,y,z), s) = abs x < 7 && abs y < 7 && abs z < 7
+    lastY trans = last [ j | ((i,j,k), s) <- takeWhile stopCond trans]
+
+-- testYs (0.2754253935112436,0.8388873136908843) (1.0284384107089382,1.651464355058737)
+testYs cs as = [(i,j,k) | ((i,j,k), s) <- takeWhile stopCond $ transport cs as]
+  where
+    stopCond ((x,y,z), s) = abs x < 7 && abs y < 7 && abs z < 7
 
 -- better tests for angles and such?
 prop_allOnesHalfPiXTranslations :: TestCoords -> Property
