@@ -1,18 +1,9 @@
-module RayTracer.HelpersTransport3D (cheapTrans, cheapSums, cheapXs, cheapYs, cheapZs,
+module RayTracer.HelpersTransport3D (cheapSums, cheapXs, cheapYs, cheapZs,
                                      transportStr) where
 import RayTracer.Crossings
 
 type IntCoords = (Int, Int, Int)
 type SegmentLength = Double
-
-cheapTrans (x, z) (t, p) = do
-  let ijkSeg = transportStr (x, z) (t, p)
-  let eval = [ (seg, str) | (ijk, seg, str) <- takeWhile stopCond ijkSeg]
-
-  putStr "evaluated total:\n\n"
-  putStr.unlines.(map show) $ eval
-  where
-    stopCond ((x,y,z), s, str) = x<=4 && y<=4 && z <=4
 
 cheapZs (x, z) (t, p) = do
   let ijkSeg = takeWhile stopCond $ zcrossings (x, z) (t, p)
@@ -20,7 +11,7 @@ cheapZs (x, z) (t, p) = do
   putStr "evaluated total:\n\n"
   putStr.unlines.(map show) $ ijkSeg
   where
-    stopCond (x,y,z) = x<=7 && y<=7 && z <=7
+    stopCond (x,y,z) = x< 7 && y< 7 && z < 7
 
 cheapXs (x, z) (t, p) = do
   let ijkSeg = takeWhile stopCond $ xcrossings (x, z) (t, p)
@@ -28,7 +19,7 @@ cheapXs (x, z) (t, p) = do
   putStr "evaluated total:\n\n"
   putStr.unlines.(map show) $ ijkSeg
   where
-    stopCond (x,y,z) = x<=7 && y<=7 && z <=7    
+    stopCond (x,y,z) = x< 7 && y< 7 && z < 7    
 
 cheapYs (x, z) (t, p) = do
   let ijkSeg = takeWhile stopCond $ ycrossings (x, z) (t, p)
@@ -36,12 +27,12 @@ cheapYs (x, z) (t, p) = do
   putStr "evaluated total:\n\n"
   putStr.unlines.(map show) $ ijkSeg
   where
-    stopCond (x,y,z) = x<=7 && y<=7 && z <=7
+    stopCond (x,y,z) = x< 7 && y< 7 && z < 7
 
 cheapSums (x,z) (t,p) = do
-  let n = 3
+  let n = 7
   let ijkSeg = transportStr (x,z) (t,p)
-  let eval = [ (seg, (ijk, str)) |
+  let eval = take 20 $ [ (seg, (ijk, str)) |
                 (ijk, seg, str) <- takeWhile ((stopCond.floor) n) ijkSeg]
 
   putStr "totals:\n"
@@ -51,7 +42,9 @@ cheapSums (x,z) (t,p) = do
   putStr.show $ sum.map fst $ eval
   putStr "\n"
   where
-    stopCond n ((x,y,z), s, str) = x<=n && y<=n && z <=n
+    stopCond n ((x,y,z), s, str) =
+      -- 0 < x && 0 < z &&
+      x < n && y < n && z < n
 {--
 This is going to need very very much work.
 θ, φ cases individually.

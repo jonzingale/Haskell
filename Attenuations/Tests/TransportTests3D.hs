@@ -242,13 +242,44 @@ prop_allOnesXYZDiagonal = monadicIO $ do
   where
     stopCond ((x,y,z), s) = x<7 && y<7 && z<7
 
-prop_XYZDiagonal :: TestCoords -> Bool
-prop_XYZDiagonal = do
-  let ijkSeg = transport (0, 0) (pi/4, atan(sqrt 2))
-  let eval = sum [ seg | (_, seg) <- takeWhile stopCond ijkSeg]
-  return $ (eBall 13) eval (7 * sqrt 3)
+test_XYZDiagonal =
+  let ijkSeg = transport (0, 0) (pi/4, atan(sqrt 2)) in
+  let eval = sum [ seg | (_, seg) <- takeWhile stopCond ijkSeg] in
+  assertBool $ (eBall 13) eval (7 * sqrt 3)
   where
     stopCond ((x,y,z), s) = x<7 && y<7 && z<7
+
+test_XYZDiagonal2 =
+  let ijkSeg = transport (7, 0) (3*pi/4, atan(sqrt 2)) in
+  let eval = sum [ seg | (_, seg) <- takeWhile stopCond ijkSeg] in
+  assertBool $ (eBall 13) eval (7 * sqrt 3)
+  where
+    stopCond ((x,y,z), s) = y<7 && z<7
+
+test_XYZDiagonal3 =
+  let ijkSeg = transport (0, 7) (pi/4, pi - atan(sqrt 2)) in
+  let eval = sum [ seg | (_, seg) <- takeWhile stopCond ijkSeg] in
+  assertBool $ (eBall 13) eval (7 * sqrt 3)
+  where
+    stopCond ((x,y,z), s) = y<7 && x<7 && z > 0
+
+test_XYZDiagonal4 =
+  let ijkSeg = transport (7, 7) (3*pi/4, pi - atan(sqrt 2)) in
+  let eval = sum [ seg | (_, seg) <- takeWhile stopCond ijkSeg] in
+  assertBool $ (eBall 13) eval (7 * sqrt 3)
+  where
+    stopCond ((x,y,z), s) = z > 0 --- y<7 && x<7 &&
+
+{--
+Calculates above segments correctly, does NOT calculate
+the array lookups correctly.
+--}
+
+-- testYs (0.2754253935112436,0.8388873136908843) (1.0284384107089382,1.651464355058737)
+testYs cs as = [(i,j,k) | ((i,j,k), s) <- takeWhile stopCond $ transport cs as]
+  where
+    stopCond ((x,y,z), s) = abs x < 7 && abs y < 7 && abs z < 7
+
 
 {--
 Translation Tests:
@@ -314,11 +345,6 @@ prop_exits_y_side (Vars (x, z) (θ, φ)) = do
   where
     stopCond ((x,y,z), s) = abs x < 7 && abs y < 7 && abs z < 7
     lastY trans = last [ j | ((i,j,k), s) <- takeWhile stopCond trans]
-
--- testYs (0.2754253935112436,0.8388873136908843) (1.0284384107089382,1.651464355058737)
-testYs cs as = [(i,j,k) | ((i,j,k), s) <- takeWhile stopCond $ transport cs as]
-  where
-    stopCond ((x,y,z), s) = abs x < 7 && abs y < 7 && abs z < 7
 
 -- better tests for angles and such?
 prop_allOnesHalfPiXTranslations :: TestCoords -> Property
