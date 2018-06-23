@@ -26,7 +26,6 @@ instance Arbitrary TestExit where
     x <- interval
     z <- choose(0, 0.65) -- 0.65 good upto 1M tests.
     θ <- choose((1+x)*pi/4, pi/2)
-    -- let z = 0
     -- if θ is pi/4 => atan (sqrt 2) < φ < pi/2
     -- if θ is pi/2 => pi/4 < φ < pi/2
     let t θ = 2 - 4*θ/pi
