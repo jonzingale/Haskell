@@ -307,7 +307,7 @@ prop_Largeθ_XTranslations (Coords (x, z)) = do
   φ <- choose (θ, pi/2) -- what range here?
   let seg1 = transport (3.5*x , 0) (θ, φ)
   let seg2 = transport (3.5*x', 0) (θ, φ)
-  return $ (eBall 13) (evalRay seg1) (evalRay seg2)
+  return $ (eBall 12) (evalRay seg1) (evalRay seg2)
   where
     stopCond ((x,y,z), s) = abs x < 7 && abs y < 7 && abs z < 7
     evalRay trans = sum [ seg | (ijk, seg) <- takeWhile stopCond trans]
