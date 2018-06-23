@@ -44,4 +44,3 @@ cc, ff :: Double -> Double
 cc = fromIntegral.ceiling
 ff = fromIntegral.floor
 frac = snd.properFraction
-root2Over2 = sqrt 2 / 2
