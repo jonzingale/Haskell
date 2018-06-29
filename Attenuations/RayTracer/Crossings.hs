@@ -14,9 +14,13 @@ The guess below cannot be correct. The z component
 is a function of both φ and θ (a projective cone).
 --}
 
+infinity = 10^10
+infList = repeat (infinity, infinity, infinity)
+
 -- correct for cheapXs (0,0) (pi/3, pi/4)
 xcrossings :: EntryCoords -> EntryAngles -> [Coords]
 xcrossings (x, z) (θ, φ)
+  | φ == 0 || φ == pi || θ == pi/2 = infList
   | θ > pi/2 = [(cc x - k, -(frac x + k) * tan θ, zc z θ φ (-k) x) | k<-[1..]]
   | otherwise = [(ff x + k, (k - frac x) * tan θ, zc z θ φ k x) | k<-[1..]]
   where
@@ -24,7 +28,9 @@ xcrossings (x, z) (θ, φ)
                  | otherwise = z + (frac x + k) / (tan φ * cos θ)
 
 ycrossings :: EntryCoords -> EntryAngles -> [Coords]
-ycrossings (x, z) (θ, φ) = [ (x + k / tan θ, k, zc z θ φ k) | k <- [1..]]
+ycrossings (x, z) (θ, φ)
+  | φ == 0 || φ == pi || θ == 0 = infList
+  | otherwise = [ (x + k / tan θ, k, zc z θ φ k) | k <- [1..]]
   where
     zc z θ φ k | φ < pi/2  = z + k / (tan φ * sin θ)
                | otherwise = z - k / (tan φ * sin θ)

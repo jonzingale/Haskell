@@ -7,6 +7,7 @@ import RayTracer.HelpersTransport3D
 import Tests.ExplicitGenerators
 import RayTracer.FileToVector -- fileToAry, qArray, vLength, vSum
 import RayTracer.Transport3D
+import RayTracer.Crossings
 
 import qualified Data.Vector.Unboxed as U
 import Test.QuickCheck.Monadic
@@ -34,20 +35,38 @@ prop_QueryArbitraryLattice ary = do
   z <- choose (0::Int, rootSize-1)
   return $ (abs.qArray rootSize (x, y, z)) ary >= 0
 
-{--
 
 -- Ray Tests
-prop_gradientArraySymmetry :: TestRay -> Property
-prop_gradientArraySymmetry (Ray x θ) = monadicIO $ do
-  ary <- run gradientDoubles
-  let ijSeg = tail $ transport x θ -- because the head is not necessary.
-  let pqSeg = tail $ uncurry transport $ mirrorCoords (x, θ)
+mirrorCoords :: (XCoord, Angle) -> (XCoord, Angle)
+mirrorCoords (x, θ) = (7-x, pi-θ)
 
-  assert $ (eBall 13) (integrate ijSeg ary) (integrate pqSeg ary)
+prop_gradientArrayXSymmetry :: TestRay -> Property
+prop_gradientArrayXSymmetry (Ray (x, z) (θ, φ)) = monadicIO $ do
+  ary <- run gradientDoubles
+  let ijkSeg = transport (x, z) (θ, pi/2)
+  let (x', θ') = mirrorCoords (x, θ)
+  let pqSeg = transport (mirrorCoords (x', z)) (θ', pi/2)
+
+  assert $ (eBall 13) (integrate ijkSeg ary) (integrate pqSeg ary)
   where
-    stopCond ((x,y), s) = x<7 && y<7 && x>0
-    integrate l a = sum [ seg * qArray 7 ij a |
-        (ij, seg) <- takeWhile stopCond l]
+    stopCond ((x,y,z), s) = x<7 && y<7 && z<7 && x>0 && y>0 && z>0
+    integrate l a = sum [ seg * qArray 7 ijk a |
+        (ijk, seg) <- takeWhile stopCond l]
+
+prop_gradientArrayZSymmetry :: TestRay -> Property
+prop_gradientArrayZSymmetry (Ray (x, z) (θ, φ)) = monadicIO $ do
+  ary <- run gradientDoubles
+  let ijkSeg = transport (x, z) (pi/4, φ)
+  let (z', φ') = mirrorCoords (z, φ)
+  let pqSeg = transport (mirrorCoords (x, z')) (pi/4, φ')
+
+  assert $ (eBall 13) (integrate ijkSeg ary) (integrate pqSeg ary)
+  where
+    stopCond ((x,y,z), s) = x<7 && y<7 && z<7 && x>0 && y>0 && z>0
+    integrate l a = sum [ seg * qArray 7 ijk a |
+        (ijk, seg) <- takeWhile stopCond l]
+
+{--
 
 prop_stratifiedArraySymmetry :: TestRay -> Property
 prop_stratifiedArraySymmetry (Ray x θ) = monadicIO $ do
@@ -72,10 +91,6 @@ prop_allOnesSymmetry (Ray x θ) = monadicIO $ do
     stopCond ((x,y), s) = x<7 && y<7 && x>0
     integrate l a = sum [ seg * qArray 7 ij a |
         (ij, seg) <- takeWhile stopCond l]
-
-
-mirrorCoords :: (XCoord, Angle) -> (XCoord, Angle)
-mirrorCoords (x, θ) = (7-x, pi-θ)
 
 prop_mirrorCoordsSelfInverse :: Gen Bool
 prop_mirrorCoordsSelfInverse = do
