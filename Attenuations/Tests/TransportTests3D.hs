@@ -84,8 +84,8 @@ prop_stratifiedArrayZSymmetry :: TestRay -> Property
 prop_stratifiedArrayZSymmetry (Ray (x, z) (θ, φ)) = monadicIO $ do
   ary <- run stratifiedDoubles
   let ijkSeg = transport (x, z) (θ, pi/2)
-  let (x', θ') = mirrorCoords (x, θ)
-  let pqSeg = transport (mirrorCoords (x', z)) (θ', pi/2)
+  let (z', φ') = mirrorCoords (z, φ)
+  let pqSeg = transport (mirrorCoords (x, z')) (pi/4, φ')
 
   assert $ (eBall 13) (integrate ijkSeg ary) (integrate pqSeg ary)
   where
