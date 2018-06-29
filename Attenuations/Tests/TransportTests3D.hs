@@ -16,6 +16,7 @@ import Test.Framework
 -- 3D data files: 7x7x7
 allOnes = fileToAry "./Tests/dataallOnes3D"
 gradientDoubles = fileToAry "./Tests/datagradArray3D"
+stratifiedDoubles = fileToAry "./Tests/dataStratifiedArray3D"
 
 -- General Array Tests.
 test_ArrayIsSevenCubed = do
@@ -66,40 +67,59 @@ prop_gradientArrayZSymmetry (Ray (x, z) (θ, φ)) = monadicIO $ do
     integrate l a = sum [ seg * qArray 7 ijk a |
         (ijk, seg) <- takeWhile stopCond l]
 
-{--
-
-prop_stratifiedArraySymmetry :: TestRay -> Property
-prop_stratifiedArraySymmetry (Ray x θ) = monadicIO $ do
+prop_stratifiedArrayXSymmetry :: TestRay -> Property
+prop_stratifiedArrayXSymmetry (Ray (x, z) (θ, φ)) = monadicIO $ do
   ary <- run stratifiedDoubles
-  let ijSeg = tail $ transport x θ -- because the head is not necessary.
-  let pqSeg = tail $ uncurry transport $ mirrorCoords (x, θ)
+  let ijkSeg = transport (x, z) (θ, pi/2)
+  let (x', θ') = mirrorCoords (x, θ)
+  let pqSeg = transport (mirrorCoords (x', z)) (θ', pi/2)
 
-  assert $ (eBall 13) (integrate ijSeg ary) (integrate pqSeg ary)
+  assert $ (eBall 13) (integrate ijkSeg ary) (integrate pqSeg ary)
   where
-    stopCond ((x,y), s) = x<7 && y<7 && x>0
+    stopCond ((x,y,z), s) = x<7 && y<7 && x>0
     integrate l a = sum [ seg * qArray 7 ij a |
         (ij, seg) <- takeWhile stopCond l]
 
-prop_allOnesSymmetry :: TestRay -> Property
-prop_allOnesSymmetry (Ray x θ) = monadicIO $ do
+prop_stratifiedArrayZSymmetry :: TestRay -> Property
+prop_stratifiedArrayZSymmetry (Ray (x, z) (θ, φ)) = monadicIO $ do
+  ary <- run stratifiedDoubles
+  let ijkSeg = transport (x, z) (θ, pi/2)
+  let (x', θ') = mirrorCoords (x, θ)
+  let pqSeg = transport (mirrorCoords (x', z)) (θ', pi/2)
+
+  assert $ (eBall 13) (integrate ijkSeg ary) (integrate pqSeg ary)
+  where
+    stopCond ((x,y,z), s) = x<7 && y<7 && z>0
+    integrate l a = sum [ seg * qArray 7 ij a |
+        (ij, seg) <- takeWhile stopCond l]
+
+prop_allOnesXSymmetry :: TestRay -> Property
+prop_allOnesXSymmetry (Ray (x, z) (θ, φ)) = monadicIO $ do
   ary <- run allOnes
-  let ijSeg = tail $ transport x θ -- because the head is not necessary.
-  let pqSeg = tail $ uncurry transport $ mirrorCoords (x, θ)
+  let ijkSeg = transport (x, z) (θ, pi/2)
+  let (x', θ') = mirrorCoords (x, θ)
+  let pqSeg = transport (mirrorCoords (x', z)) (θ', pi/2)
 
-  assert $ (eBall 13) (integrate ijSeg ary) (integrate pqSeg ary)
+  assert $ (eBall 13) (integrate ijkSeg ary) (integrate pqSeg ary)
   where
-    stopCond ((x,y), s) = x<7 && y<7 && x>0
+    stopCond ((x,y,z), s) = x<7 && y<7 && x>0
     integrate l a = sum [ seg * qArray 7 ij a |
         (ij, seg) <- takeWhile stopCond l]
 
-prop_mirrorCoordsSelfInverse :: Gen Bool
-prop_mirrorCoordsSelfInverse = do
-  x <- choose (0, 7::Double)
-  t <- zeroToPi
-  let (y, s) = mirrorCoords.mirrorCoords $ (x, t)
-  return $ (eBall 13) x y && (eBall 13) s t
+-- HANGS AND NEVER RETURNS WHY?
+prop_allOnesZSymmetry :: TestRay -> Property
+prop_allOnesZSymmetry (Ray (x, z) (θ, φ)) = monadicIO $ do
+  ary <- run allOnes
+  let ijkSeg = transport (x, z) (pi/4, φ)
+  let (z', φ') = mirrorCoords (z, φ)
+  let pqSeg = transport (mirrorCoords (x, z')) (pi/4, φ')
 
---}
+  assert $ (eBall 13) (integrate ijkSeg ary) (integrate pqSeg ary)
+  where
+    stopCond ((x,y,z), s) = x<7 && y<7 && z>0
+    integrate l a = sum [ seg * qArray 7 ij a |
+        (ij, seg) <- takeWhile stopCond l]
+
 
 {-- 
   φ determines projection:
