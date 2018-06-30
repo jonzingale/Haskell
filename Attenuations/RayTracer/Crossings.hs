@@ -8,12 +8,6 @@ type YCoord = Double
 type ZCoord = Double
 type Angle  = Double
 
-{--
-A start on incorporating the z and φ components.
-The guess below cannot be correct. The z component
-is a function of both φ and θ (a projective cone).
---}
-
 infinity = 10^10
 infList = repeat (infinity, infinity, infinity)
 
