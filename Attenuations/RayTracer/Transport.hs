@@ -3,6 +3,7 @@ import RayTracer.HelperMethods
 import RayTracer.Crossings
 
 type SegmentLength = Double
+type IntCoords = (Int, Int, Int)
 
 segment :: Coords -> Coords -> SegmentLength
 segment (x1, y1, z1) (x2, y2, z2) =
@@ -12,7 +13,7 @@ segment (x1, y1, z1) (x2, y2, z2) =
 This is going to need very very much work.
 θ, φ cases individually.
 --}
-type IntCoords = (Int, Int, Int)
+
 transport:: EntryCoords-> EntryAngles -> [(IntCoords, SegmentLength)]
 transport (x, z) (θ, φ)
   | θ > pi/2 && φ > pi/2 =
