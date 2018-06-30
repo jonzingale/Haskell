@@ -36,7 +36,6 @@ prop_QueryArbitraryLattice ary = do
   z <- choose (0::Int, rootSize-1)
   return $ (abs.qArray rootSize (x, y, z)) ary >= 0
 
-
 -- Ray Tests
 mirrorCoords :: (XCoord, Angle) -> (XCoord, Angle)
 mirrorCoords (x, θ) = (7-x, pi-θ)
@@ -106,7 +105,6 @@ prop_allOnesXSymmetry (Ray (x, z) (θ, φ)) = monadicIO $ do
     integrate l a = sum [ seg * qArray 7 ij a |
         (ij, seg) <- takeWhile stopCond l]
 
--- HANGS AND NEVER RETURNS WHY?
 prop_allOnesZSymmetry :: TestRay -> Property
 prop_allOnesZSymmetry (Ray (x, z) (θ, φ)) = monadicIO $ do
   ary <- run allOnes
@@ -119,7 +117,6 @@ prop_allOnesZSymmetry (Ray (x, z) (θ, φ)) = monadicIO $ do
     stopCond ((x,y,z), s) = x<7 && y<7 && z>0
     integrate l a = sum [ seg * qArray 7 ij a |
         (ij, seg) <- takeWhile stopCond l]
-
 
 {-- 
   φ determines projection:
@@ -304,17 +301,6 @@ test_XYZDiagonal4 =
   assertBool $ (eBall 13) eval (7 * sqrt 3)
   where
     stopCond ((x,y,z), s) = z > 0 --- y<7 && x<7 &&
-
-{--
-Calculates above segments correctly, does NOT calculate
-the array lookups correctly.
---}
-
--- testYs (0.2754253935112436,0.8388873136908843) (1.0284384107089382,1.651464355058737)
-testYs cs as = [(i,j,k) | ((i,j,k), s) <- takeWhile stopCond $ transport cs as]
-  where
-    stopCond ((x,y,z), s) = abs x < 7 && abs y < 7 && abs z < 7
-
 
 {--
 Translation Tests:
