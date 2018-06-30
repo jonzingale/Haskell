@@ -4,6 +4,9 @@
 {-# OPTIONS_GHC -F -pgmF htfpp #-}
 
 module AttenuationTests where
+import RayTracer.HelperMethods
+import RayTracer.Crossings
+import RayTracer.Transport
 import Test.Framework
 
 import {-@ HTF_TESTS @-} Tests.PureComponentsTests
