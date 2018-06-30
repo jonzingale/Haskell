@@ -322,12 +322,11 @@ Translation Tests:
 -- Perturbations along x do not effect raylength
 -- for rays exiting the rear of the lattice.
 
--- cheapSums (0,0.0) (atan 2, atan (sqrt 5))
 prop_Smallθ_XTranslations :: TestCoords -> Gen Bool
 prop_Smallθ_XTranslations (Coords (x, z)) = do
   x'<- choose (x, 1)
   θ <- choose ((1+x')*pi/4, pi/2)
-  φ <- choose (0, θ)
+  φ <- choose (0, pi/2)
   let seg1 = transport (3.5*x , 0) (θ, φ)
   let seg2 = transport (3.5*x', 0) (θ, φ)
   return $ (eBall 13) (evalRay seg1) (evalRay seg2)
