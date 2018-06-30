@@ -10,6 +10,7 @@ import RayTracer.Transport
 import Test.Framework
 
 import {-@ HTF_TESTS @-} Tests.PureComponentsTests
+import {-@ HTF_TESTS @-} Tests.SpecificRayTests
 import {-@ HTF_TESTS @-} Tests.LatticeTests
 import {-@ HTF_TESTS @-} Tests.SymmetryTests
 import {-@ HTF_TESTS @-} Tests.DiagonalTests
@@ -20,3 +21,4 @@ pureComponentsTests = htfMain htf_Tests_PureComponentsTests_thisModulesTests
 latticeTests = htfMain htf_Tests_LatticeTests_thisModulesTests
 symmetryTests = htfMain htf_Tests_SymmetryTests_thisModulesTests
 diagonalTests = htfMain htf_Tests_DiagonalTests_thisModulesTests
+specificRayTests = htfMain htf_Tests_SpecificRayTests_thisModulesTests
