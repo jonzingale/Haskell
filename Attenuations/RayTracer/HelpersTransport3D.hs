@@ -5,10 +5,6 @@ import RayTracer.Crossings
 type IntCoords = (Int, Int, Int)
 type SegmentLength = Double
 
-testYs cs as = [(i,j,k) | ((i,j,k), s) <- takeWhile stopCond $ transport cs as]
-  where
-    stopCond ((x,y,z), s) = abs x < 7 && abs y < 7 && abs z < 7
-
 cheapZs (x, z) (t, p) = do
   let ijkSeg = takeWhile stopCond $ zcrossings (x, z) (t, p)
 

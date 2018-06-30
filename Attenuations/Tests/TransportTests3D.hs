@@ -3,7 +3,6 @@
 {-# LANGUAGE BangPatterns #-}
 
 module Tests.TransportTests3D where
-import RayTracer.HelpersTransport3D
 import Tests.ExplicitGenerators
 import RayTracer.FileToVector -- fileToAry, qArray, vLength, vSum
 import RayTracer.Transport3D
@@ -323,8 +322,8 @@ prop_Smallθ_XTranslations (Coords (x, z)) = do
 prop_Smallφ_ZTranslations :: TestCoords -> Gen Bool
 prop_Smallφ_ZTranslations (Coords (x, z)) = do
   z'<- choose (z, 1)
+  θ <- choose (0, pi/2)
   φ <- choose ((1+z')*pi/4, pi/2)
-  θ <- choose (0, 5*pi/8) -- what range here?
   let seg1 = transport (0, 3.5*z ) (θ, φ)
   let seg2 = transport (0, 3.5*z') (θ, φ)
   return $ (eBall 13) (evalRay seg1) (evalRay seg2)
@@ -359,10 +358,9 @@ prop_Largeφ_ZTranslations (Coords (x, z)) = do
 prop_exits_y_side :: TestExit -> Gen Bool
 prop_exits_y_side (Vars (x, z) (θ, φ)) = do
   let seg = transport (x, z) (θ, φ)
-
-  return $ lastY seg == 6
+  return $ lastY seg == 7
   where
-    stopCond ((x,y,z), s) = abs x < 7 && abs y < 7 && abs z < 7
+    stopCond ((x,y,z), s) = abs x <= 7 && abs y <= 7 && abs z <= 7
     lastY trans = last [ j | ((i,j,k), s) <- takeWhile stopCond trans]
 
 -- better tests for angles and such?

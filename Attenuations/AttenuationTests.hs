@@ -4,11 +4,6 @@
 {-# OPTIONS_GHC -F -pgmF htfpp #-}
 
 module AttenuationTests where
-import Tests.ExplicitGenerators
-import RayTracer.HelpersTransport3D
-import RayTracer.Transport3D
-import RayTracer.Crossings
-import RayTracer.FileToVector
 import Test.Framework
 
 import {-@ HTF_TESTS @-} Tests.TransportTests3D
