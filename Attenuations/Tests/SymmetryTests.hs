@@ -13,7 +13,7 @@ import Test.Framework
 
 -- 3D data files: 7x7x7
 allOnes = fileToAry "./Tests/dataAllOnes3D"
-gradientDoubles = fileToAry "./Tests/datagradArray3D"
+gradientDoubles = fileToAry "./Tests/dataGradArray3D"
 stratifiedDoubles = fileToAry "./Tests/dataStratifiedArray3D"
 
 {--
