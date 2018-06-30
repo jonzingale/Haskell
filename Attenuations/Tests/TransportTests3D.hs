@@ -327,7 +327,7 @@ prop_Smallθ_XTranslations :: TestCoords -> Gen Bool
 prop_Smallθ_XTranslations (Coords (x, z)) = do
   x'<- choose (x, 1)
   θ <- choose ((1+x')*pi/4, pi/2)
-  φ <- choose (0, θ) -- what range here?
+  φ <- choose (0, θ)
   let seg1 = transport (3.5*x , 0) (θ, φ)
   let seg2 = transport (3.5*x', 0) (θ, φ)
   return $ (eBall 13) (evalRay seg1) (evalRay seg2)
@@ -339,9 +339,9 @@ prop_Smallφ_ZTranslations :: TestCoords -> Gen Bool
 prop_Smallφ_ZTranslations (Coords (x, z)) = do
   z'<- choose (z, 1)
   φ <- choose ((1+z')*pi/4, pi/2)
-  θ <- choose (φ, 5*pi/8) -- what range here?
-  let seg1 = transport (0, 7*z ) (θ, φ)
-  let seg2 = transport (0, 7*z') (θ, φ)
+  θ <- choose (0, 5*pi/8) -- what range here?
+  let seg1 = transport (0, 3.5*z ) (θ, φ)
+  let seg2 = transport (0, 3.5*z') (θ, φ)
   return $ (eBall 13) (evalRay seg1) (evalRay seg2)
   where
     stopCond ((x,y,z), s) = x<7 && y<7 && z<7
