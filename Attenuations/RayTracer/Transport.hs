@@ -4,6 +4,10 @@ import RayTracer.Crossings
 
 type SegmentLength = Double
 
+segment :: Coords -> Coords -> SegmentLength
+segment (x1, y1, z1) (x2, y2, z2) =
+  sqrt $ (x2-x1)**2 + (y2-y1)**2 + (z2-z1)**2
+
 {--
 This is going to need very very much work.
 θ, φ cases individually.
@@ -65,7 +69,3 @@ transport (x, z) (θ, φ)
             (xv,yv,zv) -- pt
             (i, j+1, k)
             (sθ, sφ)
-
-segment :: Coords -> Coords -> SegmentLength
-segment (x1, y1, z1) (x2, y2, z2) =
-  sqrt $ (x2-x1)**2 + (y2-y1)**2 + (z2-z1)**2
