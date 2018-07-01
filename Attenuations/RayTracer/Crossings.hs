@@ -35,8 +35,8 @@ zcrossings (x, z) (θ, φ)
                  (k - frac z) * sin θ * tan φ,
                  ff z + k) | k <- [1..]]
 
-  | otherwise = [(x + (k - 1 + frac z) * cos θ * tan (pi - φ), -- This Guy needs settled.
-                  (frac z + k - 1) * sin θ * tan (pi - φ),
+  | otherwise = [(x - (k - 1 + frac z) * cos θ * tan φ, -- This Guy needs settled.
+                  -(frac z + k - 1) * sin θ * tan φ,
                   cc z - k) | k <- [1..]]
 
   -- | otherwise = [(x + (k - frac z) * cos θ * tan φ, -- This Guy needs settled.
