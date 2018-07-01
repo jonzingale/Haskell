@@ -45,16 +45,16 @@ test_lφ_lθ_xz' =
   where
     stopCond ((x,y,z), s) = x>=0 && y<1 && z>=0
 
-test_lφ_sθ_xz = -- Not yet good
-  let ijkSeg = transport (1/3, 3/4) (atan (3/2), pi - atan(4*sqrt 13 / 9)) in
+test_lφ_sθ_xz =
+  let ijkSeg = transport (1/4, 2/3) (atan (4/3), pi - atan(15/8)) in
   let eval = sum [ seg | (_, seg) <- takeWhile stopCond ijkSeg] in
   assertBool $ (eBall 10) eval (1 * 17/12)
   where
-    stopCond ((x,y,z), s) = x>=0 && y<1 && z > 0
+    stopCond ((x,y,z), s) = x>=0 && y<1 && z >= 0
 
 test_arbitrary_coords = -- Not yet good
   let ijkSeg = transport (1/5, 5/6) (pi/4, pi - atan (96*sqrt 2 / 70)) in
   let eval = sum [ seg | (_, seg) <- takeWhile stopCond ijkSeg] in
   assertBool $ (eBall 13) eval (1 * 23332 / 14400)
   where
-    stopCond ((x,y,z), s) = x>=0 && y<1 && z > 0
+    stopCond ((x,y,z), s) = x>=0 && y<1 && z >= 0

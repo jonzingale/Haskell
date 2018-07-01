@@ -6,7 +6,7 @@ type IntCoords = (Int, Int, Int)
 type SegmentLength = Double
 
 cheapZs (x, z) (t, p) = do
-  let ijkSeg = takeWhile stopCond $ zcrossings (x, z) (t, p)
+  let ijkSeg = take 10 $ takeWhile stopCond $ zcrossings (x, z) (t, p)
 
   putStr "evaluated total:\n\n"
   putStr.unlines.(map show) $ ijkSeg

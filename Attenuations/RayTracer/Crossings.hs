@@ -15,11 +15,11 @@ infList = repeat (infinity, infinity, infinity)
 xcrossings :: EntryCoords -> EntryAngles -> [Coords]
 xcrossings (x, z) (θ, φ)
   | φ == 0 || φ == pi || θ == pi/2 = infList
-  | θ > pi/2 = [(cc x - k, -(frac x + k) * tan θ, zc z θ φ (-k) x) | k<-[1..]]
-  | otherwise = [(ff x + k, (k - frac x) * tan θ, zc z θ φ k x) | k<-[1..]]
+  | θ > pi/2 = [(cc x - k, -(frac x + k) * tan θ, zc z θ φ (-k) x) | k <- [1..]]
+  | otherwise = [(ff x + k, (k - frac x) * tan θ, zc z θ φ k x) | k <- [1..]]
   where
     zc z θ φ k x | φ <= pi/2 = z + (k - frac x) / (tan φ * cos θ)
-                 | otherwise = z + (frac x + k) / (tan φ * cos θ)
+                 | otherwise = z + (k - frac x) / (tan φ * cos θ)
 
 ycrossings :: EntryCoords -> EntryAngles -> [Coords]
 ycrossings (x, z) (θ, φ)
@@ -27,7 +27,7 @@ ycrossings (x, z) (θ, φ)
   | otherwise = [ (x + k / tan θ, k, zc z θ φ k) | k <- [1..]]
   where
     zc z θ φ k | φ < pi/2  = z + k / (tan φ * sin θ)
-               | otherwise = z - k / (tan φ * sin θ)
+               | otherwise = z + k / (tan φ * sin θ)
 
 zcrossings :: EntryCoords -> EntryAngles -> [Coords]
 zcrossings (x, z) (θ, φ)
@@ -35,9 +35,13 @@ zcrossings (x, z) (θ, φ)
                  (k - frac z) * sin θ * tan φ,
                  ff z + k) | k <- [1..]]
 
-  | otherwise = [(x + (k - frac z) * cos θ * tan φ,
-                  (k - frac z) * sin θ * tan φ,
-                  ff z - k) | k <- [1..]]
+  | otherwise = [(x + (k - 1 + frac z) * cos θ * tan (pi - φ), -- This Guy needs settled.
+                  (frac z + k - 1) * sin θ * tan (pi - φ),
+                  cc z - k) | k <- [1..]]
+
+  -- | otherwise = [(x + (k - frac z) * cos θ * tan φ, -- This Guy needs settled.
+  --                 (k - frac z) * sin θ * tan φ,
+  --                 ff z - k) | k <- [1..]]
 
 
 cc, ff :: Double -> Double
