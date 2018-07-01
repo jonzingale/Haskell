@@ -5,6 +5,7 @@
 
 module AttenuationTests where
 import RayTracer.HelperMethods
+import Tests.ExplicitGenerators
 import RayTracer.Crossings
 import RayTracer.Transport
 import Test.Framework
