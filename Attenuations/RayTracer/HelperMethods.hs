@@ -30,7 +30,7 @@ cheapYs (x, z) (t, p) = do
     stopCond (x,y,z) = x< 7 && y< 7 && z < 7
 
 cheapSums (x,z) (t,p) = do
-  let n = 7
+  let n = 1
   let ijkSeg = transportStr (x,z) (t,p)
   let eval = take 20 $ [ (seg, (ijk, str)) |
                 (ijk, seg, str) <- takeWhile ((stopCond.floor) n) ijkSeg]
@@ -44,7 +44,7 @@ cheapSums (x,z) (t,p) = do
   where
     stopCond n ((x,y,z), s, str) =
       -- 0 < x && 0 < z &&
-      x < n && y < n && z < n
+      x >= 0 && y < n && z < n
 {--
 This is going to need very very much work.
 θ, φ cases individually.
