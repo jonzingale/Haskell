@@ -138,7 +138,7 @@ prop_Largeθ_XTranslations (Coords (x, z)) = do
   let seg2 = transport (3.5*x', 0) (θ, φ)
   return $ (eBall 12) (evalRay seg1) (evalRay seg2)
   where
-    stopCond ((x,y,z), s) = abs x < 7 && abs y < 7 && abs z < 7
+    stopCond ((x,y,z), s) = x >= 0 && y < 7 && z < 7 && z >= 0
     evalRay trans = sum [ seg | (ijk, seg) <- takeWhile stopCond trans]
 
 prop_Largeφ_ZTranslations :: TestCoords -> Gen Bool
@@ -150,7 +150,7 @@ prop_Largeφ_ZTranslations (Coords (x, z)) = do
   let seg2 = transport (7*z', 0) (θ, φ)
   return $ (eBall 13) (evalRay seg1) (evalRay seg2)
   where
-    stopCond ((x,y,z), s) = abs x < 7 && abs y < 7 && abs z < 7
+    stopCond ((x,y,z), s) = x < 7 && y < 7 && z >= 0
     evalRay trans = sum [ seg | (ijk, seg) <- takeWhile stopCond trans]
 
 -- better tests for angles and such?
