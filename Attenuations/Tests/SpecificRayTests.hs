@@ -55,6 +55,6 @@ test_lφ_sθ_xz =
 test_arbitrary_coords = -- Not yet good
   let ijkSeg = transport (1/5, 5/6) (pi/4, pi - atan (96*sqrt 2 / 70)) in
   let eval = sum [ seg | (_, seg) <- takeWhile stopCond ijkSeg] in
-  assertBool $ (eBall 13) eval (1 * 23332 / 14400)
+  assertBool $ (eBall 10) eval (1 * sqrt 5833 / 60)
   where
-    stopCond ((x,y,z), s) = x>=0 && y<1 && z >= 0
+    stopCond ((x,y,z), s) = x<1 && y<1 && z >= 0
