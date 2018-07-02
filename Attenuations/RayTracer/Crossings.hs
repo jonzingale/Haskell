@@ -11,12 +11,6 @@ type Angle  = Double
 infinity = 10^10
 infList = repeat (infinity, infinity, infinity)
 
-{--
-entry at integer points lead to very different outcomes
-from rational points. What can I do to rectify this?
---}
-
--- correct for cheapXs (0,0) (pi/3, pi/4)
 xcrossings :: EntryCoords -> EntryAngles -> [Coords]
 xcrossings (x, z) (θ, φ)
   | φ == 0 || φ == pi || θ == pi/2 = infList
@@ -25,16 +19,13 @@ xcrossings (x, z) (θ, φ)
   where
     f x | frac x == 0 = 0
         | otherwise = frac x - 1
-    zc θ φ k x | θ >= pi/2 = - (k + f x) / (tan φ * cos θ)
+    zc θ φ k x | θ >= pi/2 = -(k + f x) / (tan φ * cos θ)
                | otherwise = (k - frac x) / (tan φ * cos θ)
 
 ycrossings :: EntryCoords -> EntryAngles -> [Coords]
 ycrossings (x, z) (θ, φ)
   | φ == 0 || φ == pi || θ == 0 = infList
-  | otherwise = [ (x + k / tan θ, k, zc z θ φ k) | k <- [1..]]
-  where
-    zc z θ φ k | φ < pi/2  = z + k / (tan φ * sin θ)
-               | otherwise = z + k / (tan φ * sin θ)
+  | otherwise = [(x + k / tan θ, k, z + k / (tan φ * sin θ)) | k <- [1..]]
 
 zcrossings :: EntryCoords -> EntryAngles -> [Coords]
 zcrossings (x, z) (θ, φ)
@@ -42,15 +33,12 @@ zcrossings (x, z) (θ, φ)
                  (k - frac z) * sin θ * tan φ,
                  ff z + k) | k <- [1..]]
 
-  | otherwise = [(x - (k + frac z) * cos θ * tan φ, -- This Guy needs settled.
-                  -(frac z + k) * sin θ * tan φ,
+  | otherwise = [(x - (k + f z) * cos θ * tan φ,
+                  -(f z + k) * sin θ * tan φ,
                   cc z - k) | k <- [1..]]
   where
     f z | frac z == 0 = 0
         | otherwise = frac z - 1
-  -- | otherwise = [(x + (k - frac z) * cos θ * tan φ, -- This Guy needs settled.
-  --                 (k - frac z) * sin θ * tan φ,
-  --                 ff z - k) | k <- [1..]]
 
 
 cc, ff :: Double -> Double
