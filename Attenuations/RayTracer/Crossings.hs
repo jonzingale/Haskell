@@ -20,13 +20,13 @@ from rational points. What can I do to rectify this?
 xcrossings :: EntryCoords -> EntryAngles -> [Coords]
 xcrossings (x, z) (θ, φ)
   | φ == 0 || φ == pi || θ == pi/2 = infList
-  | θ > pi/2 = [(cc x - k, -(f x + k) * tan θ, zc z θ φ (-k) x) | k <- [1..]]
-  | otherwise = [(ff x + k, (k - frac x) * tan θ, zc z θ φ k x) | k <- [1..]]
+  | θ > pi/2 = [(cc x - k, -(f x + k) * tan θ, z + zc θ φ k x) | k <- [1..]]
+  | otherwise = [(ff x + k, (k - frac x) * tan θ, z + zc θ φ k x) | k <- [1..]]
   where
     f x | frac x == 0 = 0
         | otherwise = frac x - 1
-    zc z θ φ k x | φ <= pi/2 = z + (k - frac x) / (tan φ * cos θ)
-                 | otherwise = z + (k - frac x) / (tan φ * cos θ)
+    zc θ φ k x | θ >= pi/2 = - (k + f x) / (tan φ * cos θ)
+               | otherwise = (k - frac x) / (tan φ * cos θ)
 
 ycrossings :: EntryCoords -> EntryAngles -> [Coords]
 ycrossings (x, z) (θ, φ)
@@ -45,7 +45,9 @@ zcrossings (x, z) (θ, φ)
   | otherwise = [(x - (k + frac z) * cos θ * tan φ, -- This Guy needs settled.
                   -(frac z + k) * sin θ * tan φ,
                   cc z - k) | k <- [1..]]
-
+  where
+    f z | frac z == 0 = 0
+        | otherwise = frac z - 1
   -- | otherwise = [(x + (k - frac z) * cos θ * tan φ, -- This Guy needs settled.
   --                 (k - frac z) * sin θ * tan φ,
   --                 ff z - k) | k <- [1..]]

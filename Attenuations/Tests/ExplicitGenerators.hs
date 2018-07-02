@@ -15,6 +15,11 @@ squareInt = (^ 2) `fmap` (arbitrary :: Gen Int) `suchThat` (> 0)
 cubeInt = (^ 3) `fmap` (arbitrary :: Gen Int) `suchThat` (> 0)
 exitAngle x = choose((1+x)*pi/4, pi/2 + x*pi/4)
 
+-- strange needs.
+multiplesof20Int = (arbitrary :: Gen Int) `suchThat` cond
+  where
+    cond n = n > 0 && (mod n 20 == 0) && n < 1001
+
 squareEvenInt = (^ 2) `fmap` (arbitrary :: Gen Int) `suchThat` cond
   where
     cond n = n > 0 && even n && n < 1001

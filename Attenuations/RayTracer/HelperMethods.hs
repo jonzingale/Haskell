@@ -6,13 +6,14 @@ type IntCoords = (Int, Int, Int)
 type SegmentLength = Double
 
 -- rs = 3
-allThem (x, z) (t, p) = do
-  cheapXs (x, z) (t, p)
-  cheapYs (x, z) (t, p)
-  cheapZs (x, z) (t, p)
+allThem (x, z) (t, p) n = do
+  cheapXs (x, z) (t, p) n
+  cheapYs (x, z) (t, p) n
+  cheapZs (x, z) (t, p) n
+  cheapSums (x, z) (t, p) n
+  putStr.show $ (n * sqrt 881 / 20)
 
-cheapZs (x, z) (t, p) = do
-  let n = 4
+cheapZs (x, z) (t, p) n = do
   let ijkSeg = take 10 $ takeWhile (stopCond n) $ zcrossings (x, z) (t, p)
 
   putStr "evaluated Zs:\n"
@@ -24,8 +25,7 @@ cheapZs (x, z) (t, p) = do
       y < n && y >= 0 &&
       z < n && z >= 0
 
-cheapXs (x, z) (t, p) = do
-  let n = 4
+cheapXs (x, z) (t, p) n = do
   let ijkSeg = takeWhile (stopCond n) $ xcrossings (x, z) (t, p)
 
   putStr "evaluated Xs:\n"
@@ -37,8 +37,7 @@ cheapXs (x, z) (t, p) = do
       y < n && y >= 0 &&
       z < n && z >= 0
 
-cheapYs (x, z) (t, p) = do
-  let n = 4
+cheapYs (x, z) (t, p) n = do
   let ijkSeg = takeWhile (stopCond n) $ ycrossings (x, z) (t, p)
 
   putStr "evaluated Ys:\n"
@@ -50,10 +49,9 @@ cheapYs (x, z) (t, p) = do
       y < n && y >= 0 &&
       z < n && z >= 0
 
-cheapSums (x,z) (t,p) = do
-  let n = 4
+cheapSums (x,z) (t,p) n = do
   let ijkSeg = transportStr (x,z) (t,p)
-  let eval = take 20 $ [ (seg, (ijk, str)) |
+  let eval =  [ (seg, (ijk, str)) |
                 (ijk, seg, str) <- takeWhile ((stopCond.floor) n) ijkSeg]
 
   putStr "totals:\n"
