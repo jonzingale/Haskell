@@ -16,14 +16,12 @@ transport (x, z) (θ, φ) =
     (zcs (x, z) (θ, φ))
     (x, 0, z) -- pt
     (floor x, 0, floor z) -- i j k, z offset by φ?
-    (orientation θ φ) -- sig
+    (orient θ, orient φ) -- sig
   where
     (xcs, ycs, zcs) = (xcrossings, ycrossings, zcrossings)
 
-    orientation θ φ | θ > pi/2 && φ > pi/2 = (negate 1, negate 1)
-                    | θ > pi/2 && φ <= pi/2 = (negate 1, 1)
-                    | θ <= pi/2 && φ > pi/2 = (1, negate 1)
-                    | θ <= pi/2 && φ <= pi/2 = (1, 1)
+    orient τ | τ > pi/2 = -1
+             | otherwise = 1
 
     -- xcs ycs zcs (p,q,r) (i,j,k) sig
     f ((xh,yh,zh): xcs) ((xv,yv,zv): ycs) ((xd,yd,zd): zcs) pt (i, j, k) (sθ, sφ)
