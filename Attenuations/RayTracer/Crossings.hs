@@ -8,12 +8,8 @@ type YCoord = Double
 type ZCoord = Double
 type Angle  = Double
 
-infinity = 10^10
-infList = repeat (infinity, infinity, infinity)
-
 xcrossings :: EntryCoords -> EntryAngles -> [Coords]
 xcrossings (x, z) (θ, φ)
-  | φ == 0 || φ == pi || θ == pi/2 = infList
   | θ > pi/2 = [(cc x - k, -(f x + k) * tan θ, z + zc θ φ k x) | k <- [1..]]
   | otherwise = [(ff x + k, (k - frac x) * tan θ, z + zc θ φ k x) | k <- [1..]]
   where
@@ -23,9 +19,8 @@ xcrossings (x, z) (θ, φ)
                | otherwise = (k - frac x) / (tan φ * cos θ)
 
 ycrossings :: EntryCoords -> EntryAngles -> [Coords]
-ycrossings (x, z) (θ, φ)
-  | φ == 0 || φ == pi || θ == 0 = infList
-  | otherwise = [(x + k / tan θ, k, z + k / (tan φ * sin θ)) | k <- [1..]]
+ycrossings (x, z) (θ, φ) =
+  [(x + k / tan θ, k, z + k / (tan φ * sin θ)) | k <- [1..]]
 
 zcrossings :: EntryCoords -> EntryAngles -> [Coords]
 zcrossings (x, z) (θ, φ)
