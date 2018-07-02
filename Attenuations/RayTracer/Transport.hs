@@ -11,15 +11,13 @@ segment (x1, y1, z1) (x2, y2, z2) =
 
 transport:: EntryCoords-> EntryAngles -> [(IntCoords, SegmentLength)]
 transport (x, z) (θ, φ) =
-    f (xcs (x, z) (θ, φ))
-      (ycs (x, z) (θ, φ))
-      (zcs (x, z) (θ, φ))
+    f (xcrossings (x, z) (θ, φ))
+      (ycrossings (x, z) (θ, φ))
+      (zcrossings (x, z) (θ, φ))
       (x, 0, z) -- pt
       (floor x, 0, floor z) -- i j k, z offset by φ?
       (orient θ, orient φ) -- sig
   where
-    (xcs, ycs, zcs) = (xcrossings, ycrossings, zcrossings)
-
     orient τ | τ > pi/2 = -1
              | otherwise = 1
 
