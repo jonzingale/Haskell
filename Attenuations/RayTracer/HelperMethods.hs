@@ -19,11 +19,6 @@ cheapZs (x, z) (t, p) n = do
   putStr "evaluated Zs:\n"
   putStr.unlines.(map show) $ ijkSeg
   putStr "\n"
-  where
-    stopCond n (x,y,z) =
-      x < n && x >= 0 &&
-      y < n && y >= 0 &&
-      z < n && z >= 0
 
 cheapXs (x, z) (t, p) n = do
   let ijkSeg = takeWhile (stopCond n) $ xcrossings (x, z) (t, p)
@@ -31,11 +26,6 @@ cheapXs (x, z) (t, p) n = do
   putStr "evaluated Xs:\n"
   putStr.unlines.(map show) $ ijkSeg
   putStr "\n"
-  where
-    stopCond n (x,y,z) =
-      x < n && x >= 0 &&
-      y < n && y >= 0 &&
-      z < n && z >= 0
 
 cheapYs (x, z) (t, p) n = do
   let ijkSeg = takeWhile (stopCond n) $ ycrossings (x, z) (t, p)
@@ -43,11 +33,6 @@ cheapYs (x, z) (t, p) n = do
   putStr "evaluated Ys:\n"
   putStr.unlines.(map show) $ ijkSeg
   putStr "\n"
-  where
-    stopCond n (x,y,z) =
-      x < n && x >= 0 &&
-      y < n && y >= 0 &&
-      z < n && z >= 0
 
 cheapSums (x,z) (t,p) n = do
   let ijkSeg = transportStr (x,z) (t,p)
@@ -57,7 +42,6 @@ cheapSums (x,z) (t,p) n = do
   putStr "totals:\n"
   putStr.unlines.(map show) $ eval
   putStr "\ntotals: "
-  -- putStr.show $ sum eval
   putStr.show $ sum.map fst $ eval
   putStr "\n"
   where
@@ -130,3 +114,8 @@ transportStr (x, z) (θ, φ)
 segment :: Coords -> Coords -> SegmentLength
 segment (x1, y1, z1) (x2, y2, z2) =
   sqrt $ (x2-x1)**2 + (y2-y1)**2 + (z2-z1)**2
+
+stopCond n (x,y,z) =
+  x < n && x >= 0 &&
+  y < n && y >= 0 &&
+  z < n && z >= 0
