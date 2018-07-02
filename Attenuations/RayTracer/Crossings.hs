@@ -11,13 +11,20 @@ type Angle  = Double
 infinity = 10^10
 infList = repeat (infinity, infinity, infinity)
 
+{--
+entry at integer points lead to very different outcomes
+from rational points. What can I do to rectify this?
+--}
+
 -- correct for cheapXs (0,0) (pi/3, pi/4)
 xcrossings :: EntryCoords -> EntryAngles -> [Coords]
 xcrossings (x, z) (θ, φ)
   | φ == 0 || φ == pi || θ == pi/2 = infList
-  | θ > pi/2 = [(cc x - k, -(frac x + k) * tan θ, zc z θ φ (-k) x) | k <- [1..]]
+  | θ > pi/2 = [(cc x - k, -(f x + k) * tan θ, zc z θ φ (-k) x) | k <- [1..]]
   | otherwise = [(ff x + k, (k - frac x) * tan θ, zc z θ φ k x) | k <- [1..]]
   where
+    f x | frac x == 0 = 0
+        | otherwise = frac x - 1
     zc z θ φ k x | φ <= pi/2 = z + (k - frac x) / (tan φ * cos θ)
                  | otherwise = z + (k - frac x) / (tan φ * cos θ)
 

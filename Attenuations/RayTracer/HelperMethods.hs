@@ -1,36 +1,57 @@
 module RayTracer.HelperMethods (cheapSums, cheapXs, cheapYs,
-                                cheapZs, transportStr) where
+                                cheapZs, transportStr, allThem) where
 import RayTracer.Crossings
 
 type IntCoords = (Int, Int, Int)
 type SegmentLength = Double
 
-cheapZs (x, z) (t, p) = do
-  let ijkSeg = take 10 $ takeWhile stopCond $ zcrossings (x, z) (t, p)
+-- rs = 3
+allThem (x, z) (t, p) = do
+  cheapXs (x, z) (t, p)
+  cheapYs (x, z) (t, p)
+  cheapZs (x, z) (t, p)
 
-  putStr "evaluated total:\n\n"
+cheapZs (x, z) (t, p) = do
+  let n = 4
+  let ijkSeg = take 10 $ takeWhile (stopCond n) $ zcrossings (x, z) (t, p)
+
+  putStr "evaluated Zs:\n"
   putStr.unlines.(map show) $ ijkSeg
+  putStr "\n"
   where
-    stopCond (x,y,z) = x< 7 && y< 7 && z < 7
+    stopCond n (x,y,z) =
+      x < n && x >= 0 &&
+      y < n && y >= 0 &&
+      z < n && z >= 0
 
 cheapXs (x, z) (t, p) = do
-  let ijkSeg = takeWhile stopCond $ xcrossings (x, z) (t, p)
+  let n = 4
+  let ijkSeg = takeWhile (stopCond n) $ xcrossings (x, z) (t, p)
 
-  putStr "evaluated total:\n\n"
+  putStr "evaluated Xs:\n"
   putStr.unlines.(map show) $ ijkSeg
+  putStr "\n"
   where
-    stopCond (x,y,z) = x< 7 && y< 7 && z < 7    
+    stopCond n (x,y,z) =
+      x < n && x >= 0 &&
+      y < n && y >= 0 &&
+      z < n && z >= 0
 
 cheapYs (x, z) (t, p) = do
-  let ijkSeg = takeWhile stopCond $ ycrossings (x, z) (t, p)
+  let n = 4
+  let ijkSeg = takeWhile (stopCond n) $ ycrossings (x, z) (t, p)
 
-  putStr "evaluated total:\n\n"
+  putStr "evaluated Ys:\n"
   putStr.unlines.(map show) $ ijkSeg
+  putStr "\n"
   where
-    stopCond (x,y,z) = x< 7 && y< 7 && z < 7
+    stopCond n (x,y,z) =
+      x < n && x >= 0 &&
+      y < n && y >= 0 &&
+      z < n && z >= 0
 
 cheapSums (x,z) (t,p) = do
-  let n = 7
+  let n = 4
   let ijkSeg = transportStr (x,z) (t,p)
   let eval = take 20 $ [ (seg, (ijk, str)) |
                 (ijk, seg, str) <- takeWhile ((stopCond.floor) n) ijkSeg]
@@ -43,8 +64,9 @@ cheapSums (x,z) (t,p) = do
   putStr "\n"
   where
     stopCond n ((x,y,z), s, str) =
-      -- 0 < x && 0 < z &&
-      x< 7 && y< 7 && z >= 0
+      x < n && x >= 0 &&
+      y < n && y >= 0 &&
+      z < n && z >= 0
 {--
 This is going to need very very much work.
 θ, φ cases individually.

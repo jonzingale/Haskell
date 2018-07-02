@@ -15,6 +15,10 @@ squareInt = (^ 2) `fmap` (arbitrary :: Gen Int) `suchThat` (> 0)
 cubeInt = (^ 3) `fmap` (arbitrary :: Gen Int) `suchThat` (> 0)
 exitAngle x = choose((1+x)*pi/4, pi/2 + x*pi/4)
 
+squareEvenInt = (^ 2) `fmap` (arbitrary :: Gen Int) `suchThat` cond
+  where
+    cond n = n > 0 && even n && n < 1001
+
 -- Compound Generators
 data TestRay = Ray (Double, Double) (Double, Double) deriving (Show, Eq)
 data TestCoords = Coords (Double, Double) deriving (Show, Eq)
