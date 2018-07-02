@@ -26,20 +26,14 @@ transport (x, z) (θ, φ) =
       | yh == minimum [yh, yv, yd] = -- x case
         ((i,j,k), segment pt (xh,yh,zh)) :
           f xcs ((xv,yv,zv): ycs) ((xd,yd,zd): zcs)
-          (xh,yh,zh) -- pt
-          (i+sθ, j, k)
-          (sθ, sφ)
+          (xh,yh,zh) (i+sθ, j, k) (sθ, sφ)
 
       | yd == minimum [yh, yv, yd]  = -- z case
         ((i,j,k), segment pt (xd,yd,zd)) :
           f ((xh,yh,zh): xcs) ((xv,yv,zv): ycs) zcs
-          (xd,yd,zd) -- pt
-          (i, j, k+sφ)
-          (sθ, sφ)
+          (xd,yd,zd) (i, j, k+sφ) (sθ, sφ)
 
       | yv == minimum [yh, yv, yd] = -- y case
         ((i,j,k), segment pt (xv,yv,zv)) :
           f ((xh,yh,zh): xcs) ycs ((xd,yd,zd): zcs)
-            (xv,yv,zv) -- pt
-            (i, j+1, k)
-            (sθ, sφ)
+            (xv,yv,zv) (i, j+1, k) (sθ, sφ)
