@@ -134,8 +134,8 @@ prop_Largeθ_XTranslations (Coords (x, z)) = do
   x'<- choose (x, 1)
   θ <- choose (pi/2, pi/2 + x*pi/4)
   φ <- choose (θ, pi)
-  let seg1 = transport (3.5*x , 0) (θ, φ)
-  let seg2 = transport (3.5*x', 0) (θ, φ)
+  let seg1 = transport (7*x , 0) (θ, φ)
+  let seg2 = transport (7*x', 0) (θ, φ)
   return $ (eBall 12) (evalRay seg1) (evalRay seg2)
   where
     stopCond ((x,y,z), s) = x >= 0 && y < 7 && z < 7 && z >= 0
