@@ -10,13 +10,13 @@ type Angle  = Double
 
 xcrossings :: EntryCoords -> EntryAngles -> [Coords]
 xcrossings (x, z) (θ, φ)
-  | θ > pi/2 = [(cc x - k, -(f x + k) * tan θ, z + zc θ φ k x) | k <- [1..]]
-  | otherwise = [(ff x + k, (k - frac x) * tan θ, z + zc θ φ k x) | k <- [1..]]
-  where
-    f x | frac x == 0 = 0
-        | otherwise = frac x - 1
-    zc θ φ k x | θ >= pi/2 = -(k + f x) / (tan φ * cos θ)
-               | otherwise = (k - frac x) / (tan φ * cos θ)
+  | θ > pi/2 = [(cc x - k,
+                 0 - (k + frac_offset x) * tan θ,
+                 z - (k + frac_offset x) / (tan φ * cos θ)) | k <- [1..]]
+
+  | otherwise = [(ff x + k,
+                  0 + (k - frac x) * tan θ,
+                  z + (k - frac x) / (tan φ * cos θ)) | k <- [1..]]
 
 ycrossings :: EntryCoords -> EntryAngles -> [Coords]
 ycrossings (x, z) (θ, φ) =
@@ -24,19 +24,18 @@ ycrossings (x, z) (θ, φ) =
 
 zcrossings :: EntryCoords -> EntryAngles -> [Coords]
 zcrossings (x, z) (θ, φ)
-  | φ <= pi/2 = [(x + (k - frac z) * cos θ * tan φ,
-                 (k - frac z) * sin θ * tan φ,
-                 ff z + k) | k <- [1..]]
+  | φ > pi/2 = [(x - (k + frac_offset z) * cos θ * tan φ,
+                 0 - (k + frac_offset z) * sin θ * tan φ,
+                 cc z - k) | k <- [1..]]
 
-  | otherwise = [(x - (k + f z) * cos θ * tan φ,
-                  -(f z + k) * sin θ * tan φ,
-                  cc z - k) | k <- [1..]]
-  where
-    f z | frac z == 0 = 0
-        | otherwise = frac z - 1
+  | otherwise = [(x + (k - frac z) * cos θ * tan φ,
+                  0 + (k - frac z) * sin θ * tan φ,
+                  ff z + k) | k <- [1..]]
 
-
-cc, ff :: Double -> Double
+cc, ff, frac, frac_offset :: Double -> Double
 cc = fromIntegral.ceiling
 ff = fromIntegral.floor
 frac = snd.properFraction
+
+frac_offset z | frac z == 0 = 0
+              | otherwise = frac z - 1
