@@ -11,7 +11,7 @@ allThem (x, z) (t, p) n = do
   cheapYs (x, z) (t, p) n
   cheapZs (x, z) (t, p) n
   cheapSums (x, z) (t, p) n
-  putStr.show $ (n * sqrt 881 / 20)
+  -- putStr.show $ (n * sqrt 881 / 20)
 
 cheapZs (x, z) (t, p) n = do
   let ijkSeg = take 10 $ takeWhile (stopCond n) $ zcrossings (x, z) (t, p)
