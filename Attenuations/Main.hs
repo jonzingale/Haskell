@@ -24,13 +24,19 @@ totalAttenuation (x, z) (θ, φ) ary =
       x>=0 && y>=0 && z>=0
 
 rCoords =
-  let [a, b, c, d] = take 4 $ randomRs (3, 100) $ mkStdGen 10 in
+  let [a, b, c, d] = take 4 $ randomRs (3, 100) $ mkStdGen 78 in
   let xs = randomRs (0, 100::Double) $ mkStdGen a in
   let zs = randomRs (0, 100::Double) $ mkStdGen b in
   let θs = randomRs (0, pi::Double)  $ mkStdGen c in
   let φs = randomRs (0, pi::Double)  $ mkStdGen d in
   zip (zip xs zs) (zip θs φs)
 
-main = do -- 1M ~ 15 minutes
+{--
+1M rays, 100^3 ~ 15 minutes
+1M rays, 50^3  ~ 8 minutes
+1M rays, 10^3  ~ 2 minutes
+--}
+
+main = do
   ary <- allOnes
   return $ sum [totalAttenuation cs as ary | (cs, as) <- take (10^6) rCoords ]
