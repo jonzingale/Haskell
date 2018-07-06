@@ -31,12 +31,6 @@ rCoords =
   let φs = randomRs (0, pi::Double)  $ mkStdGen d in
   zip (zip xs zs) (zip θs φs)
 
-{--
-1M rays, 100^3 ~ 15 minutes
-1M rays, 50^3  ~ 8 minutes
-1M rays, 10^3  ~ 2 minutes
---}
-
 main = do
   ary <- allOnes
   return $ sum [totalAttenuation cs as ary | (cs, as) <- take (10^6) rCoords ]
