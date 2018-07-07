@@ -1,9 +1,5 @@
 module Main where
-import RayTracer.FileToVector
-import RayTracer.Transport
-import RayTracer.Crossings
 import RayTracer.ParallelTracer
-import System.Random
 
 {--
 Todo:
