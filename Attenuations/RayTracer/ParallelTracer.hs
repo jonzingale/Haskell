@@ -11,7 +11,7 @@ Parallel Threaded: 1M rays, 100^3 ~ 42 secs
 
 allOnes = fileToAry "./Tests/data1M"
 
-totalAttenuation (x, z) (θ, φ) ary =
+attenuation ary ((x, z), (θ, φ)) =
   let ijkSeg = transport (x, z) (θ, φ) in
   sum [ seg * qArray 100 ijk ary | (ijk, seg) <- takeWhile stopCond ijkSeg]
   where
@@ -29,7 +29,6 @@ rCoords =
 
 parallelTrace = do
   ary <- allOnes
-  let results = parMap rdeepseq (thread ary) $ take (10^6) rCoords
+  let coords = take (10^6) rCoords
+  let results = parMap rdeepseq (attenuation ary) coords
   print $ sum results
-  where
-    thread ary (cs, as) = totalAttenuation cs as ary

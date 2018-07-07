@@ -4,9 +4,9 @@ import RayTracer.ParallelTracer
 {--
 Todo:
 * Simulate 1M rays from gaussian point source
-* pass file names to compiled tracer
-* seed simulations
-* return data
+* pass (filename, seed) to compiled tracer
+* return fileType
+* Repa images: computeP etc...
 
 To Run:
 ghc -O2 --make Main.hs -threaded -rtsopts
