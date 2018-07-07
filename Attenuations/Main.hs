@@ -6,6 +6,7 @@ Todo:
 * Simulate 1M rays from gaussian point source
 * pass file names to compiled tracer
 * seed simulations
+* return data
 
 To Run:
 ghc -O2 --make Main.hs -threaded -rtsopts
