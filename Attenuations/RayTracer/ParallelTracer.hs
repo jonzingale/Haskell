@@ -4,13 +4,16 @@ import RayTracer.Transport
 import RayTracer.Crossings
 import System.Random
 
-import Control.Parallel.Strategies (runEval, rpar, rdeepseq, parMap)
+import Control.Parallel.Strategies (rdeepseq, parMap)
 
 {--
 Single Threaded:
 1M rays, 100^3 ~ 15 minutes
 1M rays, 50^3  ~ 8 minutes
 1M rays, 10^3  ~ 2 minutes
+
+Parallel Threaded:
+1M rays, 100^3 ~ 42 secs
 --}
 
 allOnes = fileToAry "./Tests/data1M"
@@ -31,16 +34,9 @@ rCoords =
   let φs = randomRs (0, pi::Double)  $ mkStdGen d in
   zip (zip xs zs) (zip θs φs)
 
--- main = do
---   ary <- allOnes
---   print $ runEval $ do
---     a <- rpar $ thread ary (rCoords!!0)
---     b <- rpar $ thread ary (rCoords!!1)
---     return (b+a)
-
-pTrace = do
+parallelTrace = do
   ary <- allOnes
-  let results = parMap rdeepseq (thread ary) $ take (100^3) rCoords
+  let results = parMap rdeepseq (thread ary) $ take (10^6) rCoords
   print $ sum results
   where
     thread ary (cs, as) = totalAttenuation cs as ary
