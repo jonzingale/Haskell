@@ -2,6 +2,7 @@ module Main where
 import RayTracer.FileToVector
 import RayTracer.Transport
 import RayTracer.Crossings
+import RayTracer.ParallelTracer
 import System.Random
 
 {--
@@ -11,6 +12,10 @@ Todo:
 * Monadic Run?
 * Tests: Verify / Validate
 * Is Strictness on FileToVector valuable?
+
+To Run:
+ghc -o2 --make Main.hs -threaded -rtsopts
+./Main +RTS -N4
 --}
 
 allOnes = fileToAry "./Tests/data1M"
@@ -32,5 +37,4 @@ rCoords =
   zip (zip xs zs) (zip θs φs)
 
 main = do
-  ary <- allOnes
-  return $ sum [totalAttenuation cs as ary | (cs, as) <- take (10^6) rCoords ]
+  pTrace

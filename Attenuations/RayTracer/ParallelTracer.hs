@@ -4,7 +4,7 @@ import RayTracer.Transport
 import RayTracer.Crossings
 import System.Random
 
-import Control.Parallel.Strategies
+import Control.Parallel.Strategies (runEval, rpar, rdeepseq, parMap)
 
 {--
 Single Threaded:
@@ -31,7 +31,16 @@ rCoords =
   let φs = randomRs (0, pi::Double)  $ mkStdGen d in
   zip (zip xs zs) (zip θs φs)
 
-main = do
-  ary <- allOnes
-  return $ sum [totalAttenuation cs as ary | (cs, as) <- take (10^6) rCoords ]
+-- main = do
+--   ary <- allOnes
+--   print $ runEval $ do
+--     a <- rpar $ thread ary (rCoords!!0)
+--     b <- rpar $ thread ary (rCoords!!1)
+--     return (b+a)
 
+pTrace = do
+  ary <- allOnes
+  let results = parMap rdeepseq (thread ary) $ take (10^3) rCoords
+  print $ sum results
+  where
+    thread ary (cs, as) = totalAttenuation cs as ary
