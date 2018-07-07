@@ -14,8 +14,11 @@ Todo:
 * Is Strictness on FileToVector valuable?
 
 To Run:
-ghc -o2 --make Main.hs -threaded -rtsopts
+ghc -O2 --make Main.hs -threaded -rtsopts
 ./Main +RTS -N4
+
+To Clear:
+rm Main.o Main.hi Main
 --}
 
 allOnes = fileToAry "./Tests/data1M"

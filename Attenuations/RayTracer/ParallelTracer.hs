@@ -40,7 +40,7 @@ rCoords =
 
 pTrace = do
   ary <- allOnes
-  let results = parMap rdeepseq (thread ary) $ take (10^3) rCoords
+  let results = parMap rdeepseq (thread ary) $ take (100^3) rCoords
   print $ sum results
   where
     thread ary (cs, as) = totalAttenuation cs as ary
