@@ -12,14 +12,14 @@ import Test.Framework
 
 import {-@ HTF_TESTS @-} Tests.PureComponentsTests
 import {-@ HTF_TESTS @-} Tests.SpecificRayTests
-import {-@ HTF_TESTS @-} Tests.LatticeTests
 import {-@ HTF_TESTS @-} Tests.SymmetryTests
 import {-@ HTF_TESTS @-} Tests.DiagonalTests
+import {-@ HTF_TESTS @-} Tests.LatticeTests
 
 main = htfMain htf_importedTests
 
 pureComponentsTests = htfMain htf_Tests_PureComponentsTests_thisModulesTests
-latticeTests = htfMain htf_Tests_LatticeTests_thisModulesTests
+specificRayTests = htfMain htf_Tests_SpecificRayTests_thisModulesTests
 symmetryTests = htfMain htf_Tests_SymmetryTests_thisModulesTests
 diagonalTests = htfMain htf_Tests_DiagonalTests_thisModulesTests
-specificRayTests = htfMain htf_Tests_SpecificRayTests_thisModulesTests
+latticeTests = htfMain htf_Tests_LatticeTests_thisModulesTests

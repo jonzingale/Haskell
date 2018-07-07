@@ -1,19 +1,12 @@
 module RayTracer.ParallelTracer where
-import RayTracer.FileToVector
-import RayTracer.Transport
-import RayTracer.Crossings
+import Control.Parallel.Strategies (rdeepseq, parMap)
+import RayTracer.FileToVector (qArray, fileToAry)
+import RayTracer.Transport (transport)
 import System.Random
 
-import Control.Parallel.Strategies (rdeepseq, parMap)
-
 {--
-Single Threaded:
-1M rays, 100^3 ~ 15 minutes
-1M rays, 50^3  ~ 8 minutes
-1M rays, 10^3  ~ 2 minutes
-
-Parallel Threaded:
-1M rays, 100^3 ~ 42 secs
+Single Threaded: 1M rays, 100^3 ~ 15 minutes
+Parallel Threaded: 1M rays, 100^3 ~ 42 secs
 --}
 
 allOnes = fileToAry "./Tests/data1M"
