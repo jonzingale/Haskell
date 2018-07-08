@@ -1,6 +1,6 @@
 module Main where
-import RayTracer.ParallelTracer
 import RayTracer.GaussianNozzle
+import RayTracer.ParallelTracer
 import RayTracer.PhotoPlate
 
 {--
