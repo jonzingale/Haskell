@@ -31,6 +31,6 @@ rCoords =
 parallelTrace = do
   ary <- allOnes
   let coords = take (10^6) rCoords
-  let thing =  map (attenuation ary) coords
-  let results = thing `using` parListChunk 64 rdeepseq
+  let rays = map (attenuation ary) coords
+  let results = rays `using` parListChunk 64 rdeepseq
   print $ sum results
