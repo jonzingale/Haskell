@@ -1,5 +1,5 @@
 module RayTracer.ParallelTracer where
-import Control.Parallel.Strategies -- (rdeepseq, parMap, rseq)
+import Control.Parallel.Strategies (rdeepseq, parListChunk, rseq, using)
 import RayTracer.FileToVector (qArray, fileToAry)
 import RayTracer.Transport (transport)
 import System.Random
