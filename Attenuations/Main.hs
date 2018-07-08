@@ -1,5 +1,7 @@
 module Main where
 import RayTracer.ParallelTracer
+import RayTracer.GaussianNozzle
+import RayTracer.PhotoPlate
 
 {--
 Todo:
@@ -7,6 +9,9 @@ Todo:
 * pass (filename, seed) to compiled tracer
 * thread and return fileType.
 * self-contained bash script.
+
+Gaussian Nozzle
+Photo Plate
 
 To Compile and Run:
 ghc -O2 --make Main.hs -threaded -rtsopts
