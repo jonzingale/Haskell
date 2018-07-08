@@ -1,4 +1,5 @@
 module RayTracer.PhotoPlate where
+import qualified Data.Vector.Unboxed as U
 
 type ExitCoords = (XCoord, ZCoord)
 type Attenuation = Double
