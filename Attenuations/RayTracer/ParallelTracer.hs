@@ -1,6 +1,6 @@
 module RayTracer.ParallelTracer where
 import Control.Parallel.Strategies (rdeepseq, parListChunk, rseq, using)
-import RayTracer.FileToVector (qArray, fileToAry)
+import RayTracer.FileToVector (qArray)
 import RayTracer.Transport (transport)
 import System.Random
 
@@ -9,8 +9,6 @@ Single Threaded interpreted: 1M rays, 100^3 ~ 15 minutes
 Single Threaded compiled: 1M rays, 100^3 ~ 42 secs
 Eight Threaded compiled: 1M rays, 100^3 ~ 9 secs
 --}
-
-allOnes = fileToAry "./Tests/data1M"
 
 attenuation ary ((x, z), (θ, φ)) =
   let ijkSeg = transport (x, z) (θ, φ) in
@@ -28,8 +26,7 @@ rCoords =
   let φs = randomRs (0, pi::Double)  $ mkStdGen d in
   zip (zip xs zs) (zip θs φs)
 
-parallelTrace = do
-  ary <- allOnes
+parallelTrace ary = do
   let coords = take (10^6) rCoords
   let rays = map (attenuation ary) coords
   let results = rays `using` parListChunk 64 rdeepseq
