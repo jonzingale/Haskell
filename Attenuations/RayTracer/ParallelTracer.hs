@@ -1,12 +1,13 @@
 module RayTracer.ParallelTracer where
-import Control.Parallel.Strategies (rdeepseq, parMap)
+import Control.Parallel.Strategies -- (rdeepseq, parMap, rseq)
 import RayTracer.FileToVector (qArray, fileToAry)
 import RayTracer.Transport (transport)
 import System.Random
 
 {--
-Single Threaded: 1M rays, 100^3 ~ 15 minutes
-Parallel Threaded: 1M rays, 100^3 ~ 42 secs
+Single Threaded interpreted: 1M rays, 100^3 ~ 15 minutes
+Single Threaded compiled: 1M rays, 100^3 ~ 42 secs
+Eight Threaded compiled: 1M rays, 100^3 ~ 9 secs
 --}
 
 allOnes = fileToAry "./Tests/data1M"
@@ -17,7 +18,7 @@ attenuation ary ((x, z), (θ, φ)) =
   where
     stopCond ((x,y,z), s) =
       x<100 && y<100 && z<100 &&
-      x>=0 && y>=0 && z>=0
+      x>=0  && y>=0  && z>=0
 
 rCoords =
   let [a, b, c, d] = take 4 $ randomRs (3, 100) $ mkStdGen 78 in
@@ -30,5 +31,6 @@ rCoords =
 parallelTrace = do
   ary <- allOnes
   let coords = take (10^6) rCoords
-  let results = parMap rdeepseq (attenuation ary) coords
+  let thing =  map (attenuation ary) coords
+  let results = thing `using` parListChunk 64 rdeepseq
   print $ sum results
