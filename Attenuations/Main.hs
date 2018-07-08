@@ -9,9 +9,7 @@ Todo:
 * pass (filename, seed) to compiled tracer
 * thread and return fileType.
 * self-contained bash script.
-
-Gaussian Nozzle
-Photo Plate
+* produce file of comparable size.
 
 To Compile and Run:
 ghc -O2 --make Main.hs -threaded -rtsopts
