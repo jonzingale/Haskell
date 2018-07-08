@@ -15,6 +15,6 @@ the rays and returning a UArray to publish
 as a File.
 --}
 
-plate :: Perspective -> Distance -> [(ExitCoords, Attenuation)]
-nozzle ((x, z), (θ, φ)) d = [((x, z), (θ, φ))]
+plate :: [ExitCoords] -> Distance -> [(ExitCoords, Attenuation)]
+plate cs d = [(c, 1.0) | c <- cs ]
 
