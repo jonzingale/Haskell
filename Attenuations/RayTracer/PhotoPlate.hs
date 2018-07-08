@@ -1,14 +1,19 @@
 module RayTracer.PhotoPlate where
 
-type Perspective = (EntryCoords, EntryAngles)
-type EntryCoords = (XCoord, ZCoord)
-type EntryAngles = (Angle, Angle)
+type ExitCoords = (XCoord, ZCoord)
+type Attenuation = Double
 type Distance = Double
 type XCoord = Double
 type YCoord = Double
 type ZCoord = Double
 type Angle  = Double
 
-nozzle :: Perspective -> Distance -> [Perspective]
+{--
+Here there should be a method for averaging
+the rays and returning a UArray to publish
+as a File.
+--}
+
+plate :: Perspective -> Distance -> [(ExitCoords, Attenuation)]
 nozzle ((x, z), (θ, φ)) d = [((x, z), (θ, φ))]
 
