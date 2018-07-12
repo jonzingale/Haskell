@@ -19,13 +19,14 @@ Then there likely should be an affine or projective
 transformation passing the conic to the interface.
 
 coords: (x, z, θ, φ)
+center: (x', z')
 distance: d
 density: ρ
 radius: r
 --}
 
-nozzle :: Perspective -> Distance -> [Perspective]
-nozzle ((x, z), (θ, φ)) d = [((x, z), (θ, φ))]
+beam :: Perspective -> Distance -> [Perspective]
+beam ((x, z), (θ, φ)) d = [((x, z), (θ, φ))]
 
 -- convert to conic: take 10 rdiscCarte
 rdiscCarte = [(r*cos θ, r*sin θ) | (r,θ) <- zip rs θs]
