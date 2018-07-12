@@ -2,7 +2,7 @@ module Main where
 import RayTracer.FileToVector (fileToAry)
 import RayTracer.GaussianNozzle
 import RayTracer.ParallelTracer
-import RayTracer.PhotoPlate
+import RayTracer.PhotographicPlateFloat
 import System.Environment
 {--
 Todo:

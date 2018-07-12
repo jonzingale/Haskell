@@ -1,4 +1,4 @@
-module RayTracer.PhotoPlate where
+module RayTracer.PhotographicPlateFloat where
 
 import qualified Data.Vector.Unboxed as U
 import RayTracer.Transport
@@ -20,16 +20,14 @@ Of course, the fidelity may not need be any better
 than 1000 x 1000 and so the x-z projection on the
 array value may be sufficient.
 
-I will try the first one.
+Still averaging can get pretty clever with Floats.
 --}
 
--- exitCoords (25, 0.2) (pi/4, pi/3)
-
+-- exitCoords (25, 0.2) (pi/3, pi/3)
 -- scale -> transport -> scale
 exitCoords :: EntryCoords -> EntryAngles -> ExitCoords
 exitCoords (x, z) as =
-  let cs = (x / 1000, z / 1000) in
-  let ((i, j, _), _) = head $ exitVals cs as in
+  let (((i, j, _), _):xs) = exitVals (x / 1000, z / 1000) as in
   (i*1000, j*1000)
 
 exitVals:: EntryCoords-> EntryAngles -> [(Coords, SegmentLength)]

@@ -1,4 +1,5 @@
 module RayTracer.GaussianNozzle where
+import System.Random
 
 type Perspective = (EntryCoords, EntryAngles)
 type EntryCoords = (XCoord, ZCoord)
@@ -22,3 +23,8 @@ transformation passing the conic to the interface.
 nozzle :: Perspective -> Distance -> [Perspective]
 nozzle ((x, z), (θ, φ)) d = [((x, z), (θ, φ))]
 
+-- convert to conic: take 10 rdiscCarte
+rdiscCarte = [(r*cos θ, r*sin θ) | (r,θ) <- zip rs θs]
+  where
+    rs = map sqrt $ randomRs (0, 1::Double) $ mkStdGen 32
+    θs = randomRs (0, 2*pi::Double) $ mkStdGen 32
