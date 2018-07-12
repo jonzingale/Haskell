@@ -1,4 +1,4 @@
-module RayTracer.GaussianNozzle where
+module RayTracer.GaussianBeam where
 import System.Random
 
 type Perspective = (EntryCoords, EntryAngles)
@@ -11,13 +11,17 @@ type ZCoord = Double
 type Angle  = Double
 
 {--
-Perhaps build a file contain data
-for a conic projection.
-Perhaps write a random number generator
-using system data and producing a gaussian process.
+Perhaps build a file contain data for a conic projection.
+Perhaps write a random number generator using system data
+and producing a gaussian process.
 
 Then there likely should be an affine or projective
 transformation passing the conic to the interface.
+
+coords: (x, z, θ, φ)
+distance: d
+density: ρ
+radius: r
 --}
 
 nozzle :: Perspective -> Distance -> [Perspective]

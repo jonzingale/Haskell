@@ -1,6 +1,6 @@
 module Main where
 import RayTracer.FileToVector (fileToAry)
-import RayTracer.GaussianNozzle
+import RayTracer.GaussianBeam
 import RayTracer.ParallelTracer
 import RayTracer.PhotographicPlateFloat
 import System.Environment
