@@ -3,9 +3,9 @@ module RayTracer.GaussianBeam where
 import Data.Random.Normal
 import System.Random
 
-type Ray = ((Double, Double), (Double, Double))
+type Ray = (EntryCoords, (Double, Double))
 type EntryCoords = (Double, Double)
-type Center = (Double, Double)
+type Center = EntryCoords
 type Distance = Double
 {--
 normally distributed values about (μ, σ).
