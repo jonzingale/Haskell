@@ -28,11 +28,10 @@ ray d (x, z) = ((x, z), (aTan (x) d, aTan (z) d))
         0 -> atan $ t / 10**(-13)
         _ -> atan $ t / d
 
--- rs has 50 hard-coded, generalize this.
 rDisc :: Center -> [EntryCoords]
 rDisc c = [(r*cos θ + c, r*sin θ + c) | (r, θ) <- zip (rs c) θs]
   where
+    θs = randomRs (0, 2*pi::Double) $ mkStdGen 32
     rs c = mkNormals' (c::Double, 2) 32 -- loose beam
     -- rs = mkNormals' (50::Double, 0.1) 32 -- tight beam
-    θs = randomRs (0, 2*pi::Double) $ mkStdGen 32
 
