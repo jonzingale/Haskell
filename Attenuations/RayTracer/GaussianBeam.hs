@@ -1,4 +1,3 @@
-
 -- http://hackage.haskell.org/package/normaldistribution-1.1.0.3/docs/Data-Random-Normal.html
 module RayTracer.GaussianBeam where
 import Data.Random.Normal
@@ -35,13 +34,14 @@ mkNormals' (2::Double, 0.001) 32
 maximum $ take 10000 $ mkNormals' (50::Double, 12) 32
 99.44566204060355
 --}
-beam :: Perspective -> Distance -> [Perspective]
-beam ((x, z), (θ, φ)) d = [((x, z), (θ, φ))]
+beam :: Distance -> [Perspective]
+beam d = [((x, z), (theta x z d, phi x z d)) | (x, z) <- rDisc]
 
 -- normally distributed disc: take 10 rdiscCarte
 rDisc = [(r*cos θ, r*sin θ) | (r, θ) <- zip rs θs]
   where
-    rs = mkNormals' (50::Double, 0.1) 32
+    rs = mkNormals' (50::Double, 12) 32 -- loose beam
+    -- rs = mkNormals' (50::Double, 0.1) 32 -- tight beam
     θs = randomRs (0, 2*pi::Double) $ mkStdGen 32
 
 theta x z d =

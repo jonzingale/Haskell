@@ -3,6 +3,11 @@ import RayTracer.GaussianBeam
 -- import Data.Random.Normal
 import System.Random
 
+cheapBeam = do
+  let vals = take 20 $ beam 1
+  putStr "(x, z)  (θ, φ)\n"
+  putStr.unlines.(map show) $ vals
+
 cheapAngles = do
   cheapθs
   cheapφs
@@ -23,7 +28,7 @@ cheapφs = do
   putStr.unlines.(map show) $ vals
   putStr "\n"
 
-  
+
 {-- some kind of dependent theory
 
   theta x z d =
