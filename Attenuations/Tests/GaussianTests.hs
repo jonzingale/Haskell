@@ -6,11 +6,14 @@ import Tests.ExplicitGenerators
 import RayTracer.GaussianBeam
 import Test.Framework
 
+-- Given a unit cone, diagonals are what I expect.
 prop_DiagonalAngles :: Gen Bool
 prop_DiagonalAngles = do
-  d <- interval
-  let ray' = ray d (sqrt 2/2, sqrt 2/2) -- only works for d==1
+  s <- oneof [return 1, return (-1)]
+  r <- oneof [return 1, return (-1)]
+  d <- distance
+  let ray' = ray d (s*d*sqrt 2/2, r*d*sqrt 2/2)
+  let dAngle = 0.6154797086703874
   let (θ, φ) = snd ray'
-  let c = 0.6154797086703874
-  return $ eBall 13 θ c && eBall 13 φ c
+  return $ eBall 13 θ (s*dAngle) && eBall 13 φ (r*dAngle)
 
