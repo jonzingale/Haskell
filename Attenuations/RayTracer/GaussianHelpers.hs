@@ -23,34 +23,20 @@ cheapBeam d (x, z) = do
     g ω = rr.radToDeg $ ω
 
 cheapAngles = do
-  cheapθs
-  cheapφs
-
-cheapθs = do
   let ins = [(0,1,1),(0,1,0),(0,-1,1),(0,-1,0),(1,0,1),
              (1,0,0),(-1,0,1),(-1,0,0),(sqrt 2/2, sqrt 2/2, 1),
              (sqrt 2/2, -sqrt 2/2, 1)]
-  let vals = [(x, z, d, theta x z d) | (x,z,d) <- ins]
-
   putStr "X Z D θ\n"
-  putStr.unlines.(map show) $ vals
+  cheapie theta ins
+  putStr "\nX Z D φ\n"
+  cheapie phi ins
   putStr "\n"
 
-cheapφs = do
-  let ins = [(0,1,1),(0,1,0),(0,-1,1),(0,-1,0),(1,0,1),
-             (1,0,0),(-1,0,1),(-1,0,0),(sqrt 2/2, sqrt 2/2, 1),
-             (sqrt 2/2, -sqrt 2/2, 1)]
-  let vals = [(x, z, d, phi x z d) | (x,z,d) <- ins]
+  where
+    f d = if d == 0 then 10**(-13) else d
+    phi x z d = pi/2 - atan (z/f d)
+    theta x z d = atan (x/f d)
 
-  putStr "X Z D φ\n"
-  putStr.unlines.(map show) $ vals
-  putStr "\n"
-
-
-theta x z d =
-  let d' = if d == 0 then 10**(-13) else d in
-  atan (x/d')
-
-phi x z d =
-  let d' = if d == 0 then 10**(-13) else d in
-  pi/2 - atan (z/d')
+    cheapie aa ins = do
+      let vals = [(x, z, d, aa x z d) | (x,z,d) <- ins]
+      putStr.unlines.(map show) $ vals
