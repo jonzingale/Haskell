@@ -21,12 +21,9 @@ beam :: Distance -> Center -> [Ray]
 beam d c = map (ray d) $ rDisc c
 
 ray :: Distance -> EntryCoords -> Ray
-ray d (x, z) = ((x, z), (aTan (x) d, aTan (z) d))
-  where
-    aTan t d =
-      case d of
-        0 -> atan $ t / 10**(-13)
-        _ -> atan $ t / d
+ray d (x, z) =
+  let d' = if d == 0 then 10**(-13) else d in
+  ((x, z), (atan (x/d'), atan (z/d')))
 
 rDisc :: Center -> [EntryCoords]
 rDisc c = [(r*cos θ + c, r*sin θ + c) | (r, θ) <- zip (rs c) θs]
