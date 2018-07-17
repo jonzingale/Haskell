@@ -7,6 +7,7 @@ module AttenuationTests where
 import RayTracer.HelperMethods
 import RayTracer.GaussianHelpers
 import Tests.ExplicitGenerators
+import RayTracer.GaussianBeam
 import RayTracer.Crossings
 import RayTracer.Transport
 import Test.Framework
