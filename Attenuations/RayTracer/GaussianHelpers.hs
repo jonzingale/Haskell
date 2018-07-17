@@ -7,6 +7,7 @@ radToDeg :: Double -> Double
 radToDeg θ = θ * 180 / pi
 
 -- centered at (x, z) with distance d
+-- cheapBeam 50 (50,50)
 cheapBeam d (x, z) = do
   let vals = take 20 $ f (beam d (x, z))
   let s2 = sqrt 2 / 2

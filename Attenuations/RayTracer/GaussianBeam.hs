@@ -3,16 +3,10 @@ module RayTracer.GaussianBeam where
 import Data.Random.Normal
 import System.Random
 
-type Ray = (EntryCoords, EntryAngles)
-type EntryCoords = (XCoord, ZCoord)
-type Center = (XCoord, ZCoord)
-type EntryAngles = (Angle, Angle)
+type Ray = ((Double, Double), (Double, Double))
+type EntryCoords = (Double, Double)
+type Center = (Double, Double)
 type Distance = Double
-type XCoord = Double
-type YCoord = Double
-type ZCoord = Double
-type Angle  = Double
-
 {--
 normally distributed values about (μ, σ).
 small values of σ give sharper peaks.
@@ -20,9 +14,6 @@ small values of σ give sharper peaks.
 mkNormals' (2::Double, 0.001) 32
 
 * What radius or deviation covers the lattice face?
-* How best to assign angles? distance?
-
-maximum $ take 10000 $ mkNormals' (50::Double, 2) 32
 --}
 
 beam :: Distance -> Center -> [Ray]
@@ -36,7 +27,6 @@ ray d (x, z) = ((x, z), (aTan (x) d, aTan (z) d))
         0 -> atan $ t / 10**(-13)
         _ -> atan $ t / d
 
--- normally distributed disc: take 10 rdiscCarte
 rDisc (x, z) = [(r*cos θ + x, r*sin θ + z) | (r, θ) <- zip rs θs]
   where
     rs = mkNormals' (50::Double, 2) 32 -- loose beam
