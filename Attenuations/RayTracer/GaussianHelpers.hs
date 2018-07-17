@@ -9,17 +9,16 @@ radToDeg θ = θ * 180 / pi
 -- centered at (c, c) with distance d
 -- cheapBeam 50 50
 cheapBeam d c = do
-  let vals = take 20 $ f (beam d c)
+  let vals = take 10 $ f (beam d c)
   let s2 = sqrt 2 / 2
-  let inits = f $ map (ray d) [(50,50), (100,50),
-                               (50,100),(100*s2,100*s2)]
+  let dd = c * 2.0
+  let inits = f $ map (ray d) [(c,c), (dd,c), (c,dd), (dd*s2,dd*s2)]
   putStr "(x ,z , θ deg, φ deg)\n"
   putStr.unlines.(map show) $ inits
   putStr "\n" 
   putStr.unlines.(map show) $ vals
   where
     f rs = [(round x, round z, g θ, g φ) | ((x,z),(θ,φ)) <- rs]
-    e t x = abs (x-t) < 10**(-10)
     rr x = (fromIntegral.round $ x*10^2)/10^2::Double
     g ω = rr.radToDeg $ ω
 
