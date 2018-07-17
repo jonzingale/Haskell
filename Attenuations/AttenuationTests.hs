@@ -5,6 +5,7 @@
 
 module AttenuationTests where
 import RayTracer.HelperMethods
+import RayTracer.GaussianHelpers
 import Tests.ExplicitGenerators
 import RayTracer.Crossings
 import RayTracer.Transport
@@ -15,6 +16,7 @@ import {-@ HTF_TESTS @-} Tests.SpecificRayTests
 import {-@ HTF_TESTS @-} Tests.SymmetryTests
 import {-@ HTF_TESTS @-} Tests.DiagonalTests
 import {-@ HTF_TESTS @-} Tests.LatticeTests
+import {-@ HTF_TESTS @-} Tests.GaussianTests
 
 main = htfMain htf_importedTests
 
@@ -23,3 +25,5 @@ specificRayTests = htfMain htf_Tests_SpecificRayTests_thisModulesTests
 symmetryTests = htfMain htf_Tests_SymmetryTests_thisModulesTests
 diagonalTests = htfMain htf_Tests_DiagonalTests_thisModulesTests
 latticeTests = htfMain htf_Tests_LatticeTests_thisModulesTests
+
+gaussianTests = htfMain htf_Tests_GaussianTests_thisModulesTests
