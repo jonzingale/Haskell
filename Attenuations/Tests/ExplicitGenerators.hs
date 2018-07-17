@@ -6,6 +6,7 @@ import Test.Framework
 tau = 2 * pi
 
 -- Explicit Generators
+distance = choose(1, 1000::Double)
 interval = choose (0, 1::Double)
 zeroToPi = choose (0, pi::Double)
 zeroToTau = choose (0, tau::Double)
