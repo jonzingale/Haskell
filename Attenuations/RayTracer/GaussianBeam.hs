@@ -23,7 +23,7 @@ beam d c = map (ray d) $ rDisc c
 ray :: Distance -> EntryCoords -> Ray
 ray d (x, z) =
   let d' = if d == 0 then 10**(-13) else d in
-  ((x, z), (atan (x/d'), atan (z/d')))
+  ((x, z), (pi/2 - atan (x/d'), pi/2 - atan (z/d')))
 
 rDisc :: Center -> [EntryCoords]
 rDisc c = [(r*cos θ + c, r*sin θ + c) | (r, θ) <- zip (rs c) θs]
