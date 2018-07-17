@@ -27,6 +27,8 @@ ray d (x, z) = ((x, z), (aTan (x) d, aTan (z) d))
         0 -> atan $ t / 10**(-13)
         _ -> atan $ t / d
 
+-- rs has 50 hard-coded, generalize this.
+rDisc :: Center -> [EntryCoords]
 rDisc (x, z) = [(r*cos θ + x, r*sin θ + z) | (r, θ) <- zip rs θs]
   where
     rs = mkNormals' (50::Double, 2) 32 -- loose beam
