@@ -15,6 +15,7 @@ zeroToHalfPi = choose (0, pi/2::Double)
 squareInt = (^ 2) `fmap` (arbitrary :: Gen Int) `suchThat` (> 0)
 cubeInt = (^ 3) `fmap` (arbitrary :: Gen Int) `suchThat` (> 0)
 exitAngle x = choose((1+x)*pi/4, pi/2 + x*pi/4)
+sign = oneof [return 1.0, return (-1.0)]
 
 -- strange needs.
 multiplesof20Int = (arbitrary :: Gen Int) `suchThat` cond
@@ -87,6 +88,9 @@ type IntegerCoords = ((Integer, Integer), Integer)
 
 eBall :: Double -> Double -> Double -> Bool
 eBall t a b = (< 1/10**t).abs $ a - b
+
+eBalls :: Double -> (Double, Double) -> (Double, Double) -> Bool
+eBalls t (a, b) (c, d) = eBall t a c && eBall t b d
 
 tol :: Double -> Integer
 tol d = round $ d * 10^12
