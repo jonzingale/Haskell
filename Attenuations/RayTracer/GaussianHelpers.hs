@@ -28,9 +28,8 @@ cheapAngles = do
              (sqrt 2/2, -sqrt 2/2, 1)]
   putStr "X Z D θ\n"
   cheapie theta ins
-  putStr "\nX Z D φ\n"
+  putStr "X Z D φ\n"
   cheapie phi ins
-  putStr "\n"
 
   where
     f d = if d == 0 then 10**(-13) else d
@@ -40,3 +39,4 @@ cheapAngles = do
     cheapie aa ins = do
       let vals = [(x, z, d, aa x z d) | (x,z,d) <- ins]
       putStr.unlines.(map show) $ vals
+      putStr "\n"
