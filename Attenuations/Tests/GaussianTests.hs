@@ -32,10 +32,14 @@ prop_EqualComponents (Distance d) = do
 -- As d -> 0 all angles tend toward 0 or pi.
 prop_AngleSpraysAway :: TestCoords -> Gen Bool
 prop_AngleSpraysAway (Coords (x, z)) = do
-  let d = 0
-  let (θ, φ) = snd.ray d $ (x*1000, z*1000)
-  return $ eBall 13 0 (abs θ) || eBall 13 pi (abs θ) &&
-           eBall 13 0 (abs φ) || eBall 13 pi (abs φ)
+  s <- sign
+  r <- sign
+  let (θ, φ) = snd.ray 0 $ (s*x*1000, r*z*1000)
+  return $ eBall 13 (rad s) θ && eBall 13 (rad r) φ
+  where
+    rad s | s == 1 = 0
+          | otherwise = pi
+
 
 -- As d -> ∞ all angles tend toward pi/2
 prop_AnglesTendsToParallel :: TestCoords -> Gen Bool
