@@ -35,8 +35,7 @@ prop_AngleSpraysAway (Coords (x, z)) (Sigs (s, r)) = do
           | otherwise = pi
 
 -- As d -> ∞ all angles tend toward pi/2
-prop_AnglesTendsToParallel :: TestCoords -> Gen Bool
-prop_AnglesTendsToParallel (Coords (x, z)) = do
-  let d = 10**13
-  let (θ, φ) = snd.ray d $ (x*1000, z*1000)
+prop_AnglesTendsToParallel :: TestCoords -> TestSignPair -> Gen Bool
+prop_AnglesTendsToParallel (Coords (x, z)) (Sigs (s, r)) = do
+  let (θ, φ) = snd.ray (10**13) $ (s*x*1000, r*z*1000)
   return $ eBalls 10 (abs θ, abs φ) (pi/2, pi/2)
