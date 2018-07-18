@@ -7,10 +7,8 @@ import RayTracer.GaussianBeam
 import Test.Framework
 
 -- Given a unit cone, diagonals are what I expect.
-prop_NormalDiagonals :: TestDistance -> Gen Bool
-prop_NormalDiagonals (Distance d) = do
-  s <- sign
-  r <- sign
+prop_NormalDiagonals :: TestDistance -> TestSignPair -> Gen Bool
+prop_NormalDiagonals (Distance d) (Sigs (s, r)) = do
   let (θ, φ) = snd.ray d $ (s * d * dd, r * d * dd)
   return $ eBalls 10 (θ, φ) (rad s, rad r)
   where
@@ -19,10 +17,8 @@ prop_NormalDiagonals (Distance d) = do
           | otherwise = pi - atan (1 / dd)
 
 -- X and Z components in equal parts give 45s.
-prop_EqualComponents :: TestDistance -> Gen Bool
-prop_EqualComponents (Distance d) = do
-  s <- sign
-  r <- sign
+prop_EqualComponents :: TestDistance -> TestSignPair -> Gen Bool
+prop_EqualComponents (Distance d) (Sigs (s, r)) = do
   let (θ, φ) = snd.ray d $ (s * d, r * d)
   return $ eBalls 10 (θ, φ) (rad s, rad r)
   where
@@ -30,16 +26,13 @@ prop_EqualComponents (Distance d) = do
           | otherwise = 3*pi/4
 
 -- As d -> 0 all angles tend toward 0 or pi.
-prop_AngleSpraysAway :: TestCoords -> Gen Bool
-prop_AngleSpraysAway (Coords (x, z)) = do
-  s <- sign
-  r <- sign
+prop_AngleSpraysAway :: TestCoords -> TestSignPair -> Gen Bool
+prop_AngleSpraysAway (Coords (x, z)) (Sigs (s, r)) = do
   let (θ, φ) = snd.ray 0 $ (s*x*1000, r*z*1000)
   return $ eBall 13 (rad s) θ && eBall 13 (rad r) φ
   where
     rad s | s == 1 = 0
           | otherwise = pi
-
 
 -- As d -> ∞ all angles tend toward pi/2
 prop_AnglesTendsToParallel :: TestCoords -> Gen Bool

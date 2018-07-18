@@ -32,6 +32,13 @@ data TestCoords = Coords (Double, Double) deriving (Show, Eq)
 data TestAngle = Angle Double deriving (Show, Eq)
 data TestExit = Vars (Double, Double) (Double, Double) deriving (Show, Eq)
 data TestDistance = Distance Double deriving (Show, Eq)
+data TestSignPair = Sigs (Double, Double) deriving (Show, Eq)
+
+instance Arbitrary TestSignPair where
+  arbitrary = do
+    s <- sign
+    r <- sign
+    return $ Sigs (s, r)
 
 instance Arbitrary TestDistance where
   arbitrary = do
