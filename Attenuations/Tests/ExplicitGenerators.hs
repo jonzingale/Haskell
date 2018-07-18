@@ -31,6 +31,12 @@ data TestRay = Ray (Double, Double) (Double, Double) deriving (Show, Eq)
 data TestCoords = Coords (Double, Double) deriving (Show, Eq)
 data TestAngle = Angle Double deriving (Show, Eq)
 data TestExit = Vars (Double, Double) (Double, Double) deriving (Show, Eq)
+data TestDistance = Distance Double deriving (Show, Eq)
+
+instance Arbitrary TestDistance where
+  arbitrary = do
+    d <- distance
+    return $ Distance d
 
 instance Arbitrary TestExit where
   arbitrary = do
