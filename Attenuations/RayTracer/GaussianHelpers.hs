@@ -12,15 +12,21 @@ cheapBeam d c = do
   let vals = take 10 $ f (beam d c)
   let s2 = sqrt 2 / 2
   let dd = c * 2.0
+  putStr "(x ,z ,θ ,φ ) in degrees\n"
+
   let inits = f $ map (ray d) [(c,c), (dd,c), (c,dd), (dd*s2,dd*s2)]
-  putStr "(x ,z , θ deg, φ deg)\n"
   putStr.unlines.(map show) $ inits
-  putStr "\n" 
-  putStr.unlines.(map show) $ vals
+  putStr "\n"
+  let inits = f $ map (ray d) [(-c,c), (-dd,c), (-c,dd), (-dd*s2,dd*s2)]
+  putStr.unlines.(map show) $ inits
+  putStr "\n"
+  let inits = f $ map (ray d) [(-c,-c), (-dd,-c), (-c,-dd), (-dd*s2,-dd*s2)]
+  putStr.unlines.(map show) $ inits
+  putStr "\n"
+  -- putStr.unlines.(map show) $ vals
   where
     f rs = [(round x, round z, g θ, g φ) | ((x,z),(θ,φ)) <- rs]
-    rr x = (fromIntegral.round $ x*10^2)/10^2::Double
-    g ω = rr.radToDeg $ ω
+    g ω = round.radToDeg $ ω
 
 cheapAngles = do
   let ins = [(0,1,1),(0,1,0),(0,-1,1),(0,-1,0),(1,0,1),
