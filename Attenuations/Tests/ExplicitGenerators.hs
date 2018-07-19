@@ -27,12 +27,12 @@ squareEvenInt = (^ 2) `fmap` (arbitrary :: Gen Int) `suchThat` cond
     cond n = n > 0 && even n && n < 1001
 
 -- Compound Generators
+data TestExit = Vars (Double, Double) (Double, Double) deriving (Show, Eq)
 data TestRay = Ray (Double, Double) (Double, Double) deriving (Show, Eq)
 data TestCoords = Coords (Double, Double) deriving (Show, Eq)
-data TestAngle = Angle Double deriving (Show, Eq)
-data TestExit = Vars (Double, Double) (Double, Double) deriving (Show, Eq)
-data TestDistance = Distance Double deriving (Show, Eq)
 data TestSignPair = Sigs (Double, Double) deriving (Show, Eq)
+data TestDistance = Distance Double deriving (Show, Eq)
+data TestAngle = Angle Double deriving (Show, Eq)
 
 instance Arbitrary TestSignPair where
   arbitrary = do
