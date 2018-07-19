@@ -14,13 +14,13 @@ cheapBeam d c = do
   let dd = c * 2.0
   putStr "(x ,z ,θ ,φ ) in degrees\n"
 
-  let inits = f $ map (ray d) [(c,c), (dd,c), (c,dd), (dd*s2,dd*s2)]
+  let inits = f $ map (ray d 0) [(c,c), (dd,c), (c,dd), (dd*s2,dd*s2)]
   putStr.unlines.(map show) $ inits
   putStr "\n"
-  let inits = f $ map (ray d) [(-c,c), (-dd,c), (-c,dd), (-dd*s2,dd*s2)]
+  let inits = f $ map (ray d 0) [(-c,c), (-dd,c), (-c,dd), (-dd*s2,dd*s2)]
   putStr.unlines.(map show) $ inits
   putStr "\n"
-  let inits = f $ map (ray d) [(-c,-c), (-dd,-c), (-c,-dd), (-dd*s2,-dd*s2)]
+  let inits = f $ map (ray d 0) [(-c,-c), (-dd,-c), (-c,-dd), (-dd*s2,-dd*s2)]
   putStr.unlines.(map show) $ inits
   putStr "\n"
   -- putStr.unlines.(map show) $ vals

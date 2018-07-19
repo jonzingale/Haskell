@@ -15,19 +15,21 @@ small values of σ give sharper peaks.
 mkNormals' (2::Double, 0.001) 32
 
 * What radius or deviation covers the lattice face?
-
-:t isNaN
+* Remember to throw away values outside the lattice.
+It may be best to hard code the center at 500.
 --}
 
 beam :: Distance -> Center -> [Ray]
-beam d c = map (ray d) $ rDisc c
+beam d c = map (ray d c) $ rDisc c
 
-ray :: Distance -> EntryCoords -> Ray
-ray d (x, z) = ((x, z), (aTan x d, aTan z d))
+-- ray is derived from a cone with apex
+-- a distance d from the center c
+ray :: Distance -> Center -> EntryCoords -> Ray
+ray d c (x, z) = ((x, z), (aTan (x-c) d, aTan (z-c) d))
   where
-    aTan t d | d == 0 = aTan t (10**(-13))
+    aTan t d | d == 0 = aTan t $ 10**(-20) -- see prop_AngleSpraysAway test
              | t >= 0 = atan (d/t)
-             | otherwise = pi/2 - atan (t/d) -- revisit
+             | otherwise = pi/2 - atan (t/d)
 
 rDisc :: Center -> [EntryCoords]
 rDisc c = [(r*cos θ + c, r*sin θ + c) | (r, θ) <- zip (rs c) θs]
