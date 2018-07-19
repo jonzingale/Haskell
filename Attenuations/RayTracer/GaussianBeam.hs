@@ -3,6 +3,7 @@ module RayTracer.GaussianBeam where
 import Data.Random.Normal
 import System.Random
 
+type Beam = [Ray]
 type Ray = (EntryCoords, (Double, Double))
 type EntryCoords = (Double, Double)
 type Distance = Double
@@ -19,11 +20,10 @@ mkNormals' (2::Double, 0.001) 32
 It may be best to hard code the center at 500.
 --}
 
-beam :: Distance -> Center -> [Ray]
+beam :: Distance -> Center -> Beam
 beam d c = map (ray d c) $ rDisc c
 
--- ray is derived from a cone with apex
--- a distance d from the center c
+-- ray is derived from a cone with apex distance d from the center c
 ray :: Distance -> Center -> EntryCoords -> Ray
 ray d c (x, z) = ((x, z), (aTan (x-c) d, aTan (z-c) d))
   where
