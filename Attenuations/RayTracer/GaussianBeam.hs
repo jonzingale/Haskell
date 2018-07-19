@@ -20,6 +20,10 @@ mkNormals' (2::Double, 0.001) 32
 It may be best to hard code the center at 500.
 --}
 
+-- values less than 10**(-20) may produce errors in 10^5 tests.
+-- quickCheck $ withMaxSuccess (10^5) prop_AngleSpraysAway
+zero =  10**(-20)
+
 beam :: Distance -> Center -> Beam
 beam d c = map (ray d c) $ rDisc c
 
@@ -27,7 +31,7 @@ beam d c = map (ray d c) $ rDisc c
 ray :: Distance -> Center -> EntryCoords -> Ray
 ray d c (x, z) = ((x, z), (aTan (x-c) d, aTan (z-c) d))
   where
-    aTan t d | d == 0 = aTan t $ 10**(-20) -- see prop_AngleSpraysAway test
+    aTan t d | d == 0 = aTan t zero
              | t >= 0 = atan (d/t)
              | otherwise = pi/2 - atan (t/d)
 
