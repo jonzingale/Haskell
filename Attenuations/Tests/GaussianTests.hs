@@ -26,6 +26,8 @@ prop_EqualComponents c (Distance d) (Sigs (s, r)) = do
           | otherwise = 3*pi/4
 
 -- As d -> 0 all angles tend toward 0 or pi, unless exactly on center.
+-- quickCheck $ withMaxSuccess (10^5) prop_AngleSpraysAway
+-- value less than 10**(-20) produces errors in 10^5 tests.
 prop_AngleSpraysAway :: Center -> TestCoords -> TestSignPair -> Gen Bool
 prop_AngleSpraysAway c (Coords (x, z)) (Sigs (s, r)) = do
   let (θ, φ) = snd.ray 0 c $ (c + s*x*100, c + r*z*100)

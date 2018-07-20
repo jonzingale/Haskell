@@ -28,6 +28,7 @@ beam :: Distance -> Center -> Beam
 beam d c = map (ray d c) $ rDisc c
 
 -- ray is derived from a cone with apex distance d from the center c
+-- be sure to rescale the distribution.
 ray :: Distance -> Center -> EntryCoords -> Ray
 ray d c (x, z) = ((x, z), (aTan (x-c) d, aTan (z-c) d))
   where
@@ -38,7 +39,7 @@ ray d c (x, z) = ((x, z), (aTan (x-c) d, aTan (z-c) d))
 rDisc :: Center -> [EntryCoords]
 rDisc c = [(r*cos θ + c, r*sin θ + c) | (r, θ) <- zip (rs c) θs]
   where
-    θs = randomRs (0, 2*pi::Double) $ mkStdGen 32
-    rs c = mkNormals' (c::Double, 2) 32 -- loose beam
+    θs = randomRs (c::Double, 2*pi::Double) $ mkStdGen 32
+    rs c = mkNormals' (c, 2) 32 -- loose beam
     -- rs = mkNormals' (50::Double, 0.1) 32 -- tight beam
 
