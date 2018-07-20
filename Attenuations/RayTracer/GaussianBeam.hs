@@ -16,7 +16,7 @@ small values of σ give sharper peaks.
 
 * What radius or deviation covers the lattice face?
 * Remember to throw away values outside the lattice.
-It may be best to hard code the center at 500.
+* It may be best to hard code the center at 500.
 --}
 
 beam :: Distance -> Center -> Beam
