@@ -24,6 +24,10 @@ It may be best to hard code the center at 500.
 {--
 values less than 10**(-20) may produce errors in 10^5 tests.
 quickCheck $ withMaxSuccess (10^5) prop_AngleSpraysAway
+
+aTan t d | d == 0 = aTan t zero -- zero may not be necessary!
+         | t >= 0 = atan (d/t)
+         | otherwise = pi/2 - atan (t/d)
 --}
 zero =  10**(-20)
 
@@ -35,8 +39,7 @@ beam d c = map (ray d c) rDisc
 ray :: Distance -> Center -> EntryCoords -> Ray
 ray d c (x, z) = ((x*c+c, z*c+c), (aTan x d, aTan z d))
   where
-    aTan t d | d == 0 = aTan t zero
-             | t >= 0 = atan (d/t)
+    aTan t d | t >= 0 = atan (d/t)
              | otherwise = pi/2 - atan (t/d)
 
 rDisc :: [EntryCoords]

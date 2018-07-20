@@ -6,8 +6,8 @@ import Tests.ExplicitGenerators
 import RayTracer.GaussianBeam
 import Test.Framework
 
--- Note when writing tests for ray, the coords
--- are normalized around 0 by default.
+-- Note when writing tests for the ray function,
+-- the coords are normalized around 0 by default.
 
 -- Given a unit cone, diagonals are what I expect.
 prop_NormalDiagonals :: Center -> TestDistance -> TestSignPair -> Gen Bool
