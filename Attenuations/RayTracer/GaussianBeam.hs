@@ -21,7 +21,7 @@ small values of σ give sharper peaks.
 --}
 
 -- parallelize me? see ParallelTracer
--- rays `using` parListChunk 64 rdeepseq
+-- beam `using` parListChunk 64 rdeepseq
 beam :: Distance -> Center -> Beam
 beam d c = map (ray d c) rDisc
 
@@ -35,6 +35,6 @@ ray d c (x, z) = ((x*c+c, z*c+c), (aTan x d, aTan z d))
 rDisc :: [EntryCoords]
 rDisc = [(r*cos θ, r*sin θ) | (r, θ) <- zip rs θs]
   where
-    θs = randomRs (0::Double, 2*pi::Double) $ mkStdGen 32
+    θs = randomRs (0::Double, pi::Double) $ mkStdGen 32
     rs = mkNormals' (0, 0.1) 32 -- (μ, σ) loose beam
 
