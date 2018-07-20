@@ -27,8 +27,7 @@ beam d c = map (ray d c) rDisc
 ray :: Distance -> Center -> EntryCoords -> Ray
 ray d c (x, z) = ((x*c+c, z*c+c), (aTan x d, aTan z d))
   where
-    aTan t d | t >= 0 = atan (d/t)
-             | otherwise = pi/2 - atan (t/d)
+    aTan t d = pi/2 - atan (t/d)
 
 rDisc :: [EntryCoords]
 rDisc = [(r*cos θ, r*sin θ) | (r, θ) <- zip rs θs]
