@@ -14,8 +14,6 @@ type Beam = [Ray]
 normally distributed values about (μ, σ).
 small values of σ give sharper peaks.
 
-mkNormals' (2::Double, 0.001) 32
-
 * What radius or deviation covers the lattice face?
 * Remember to throw away values outside the lattice.
 It may be best to hard code the center at 500.
