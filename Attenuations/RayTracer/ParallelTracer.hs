@@ -2,9 +2,8 @@ module RayTracer.ParallelTracer where
 import Control.Parallel.Strategies (rdeepseq, parListChunk, rseq, using)
 import RayTracer.FileToVector (qArray)
 import RayTracer.Transport (transport)
-import System.Random
-
 import RayTracer.GaussianBeam (beam)
+import System.Random
 
 {--
 Single Threaded interpreted: 1M rays, 100^3 ~ 15 minutes
@@ -21,9 +20,8 @@ attenuation ary ((x, z), (θ, φ)) =
       x>=0  && y>=0  && z>=0
 
 -- TODO: filter non-lattice values
-gBeams = take (10^6) $ beam 50 50
-
 parallelTrace ary = do
+  let gBeams = take (10^6) $ beam 50 50
   let rays = map (attenuation ary) gBeams
   let results = rays `using` parListChunk 64 rdeepseq
   print $ sum results

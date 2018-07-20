@@ -20,7 +20,7 @@ small values of σ give sharper peaks.
 * It may be best to hard code the center at 500.
 --}
 
--- parallelize me! see ParallelTracer
+-- parallelize me? see ParallelTracer
 -- rays `using` parListChunk 64 rdeepseq
 beam :: Distance -> Center -> Beam
 beam d c = map (ray d c) rDisc
