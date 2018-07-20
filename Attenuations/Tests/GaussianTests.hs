@@ -19,7 +19,7 @@ prop_NormalDiagonals c (Distance d) (Sigs (s, r)) = do
     rad s | s == 1 = atan (1 / dd)
           | otherwise = pi - atan (1 / dd)
 
--- X and Z components in equal parts give 45s.
+-- Given a unit cone, X and Z components in equal parts give 45s.
 prop_EqualComponents :: Center -> TestDistance -> TestSignPair -> Gen Bool
 prop_EqualComponents c (Distance d) (Sigs (s, r)) = do
   let (θ, φ) = snd.ray d c $ (s*d, r*d)
@@ -29,8 +29,6 @@ prop_EqualComponents c (Distance d) (Sigs (s, r)) = do
           | otherwise = 3*pi/4
 
 -- As d -> 0 all angles tend toward 0 or pi, unless exactly on center.
--- quickCheck $ withMaxSuccess (10^5) prop_AngleSpraysAway
--- value less than 10**(-20) produces errors in 10^5 tests.
 prop_AngleSpraysAway :: Center -> TestCoords -> TestSignPair -> Gen Bool
 prop_AngleSpraysAway c (Coords (x, z)) (Sigs (s, r)) = do
   let (θ, φ) = snd.ray 0 c $ (s*x, r*z)
