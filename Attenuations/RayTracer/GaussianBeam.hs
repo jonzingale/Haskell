@@ -36,5 +36,5 @@ rDisc :: [EntryCoords]
 rDisc = [(r*cos θ, r*sin θ) | (r, θ) <- zip rs θs]
   where
     θs = randomRs (0::Double, pi::Double) $ mkStdGen 32
-    rs = mkNormals' (0, 0.1) 32 -- (μ, σ) loose beam
+    rs = mkNormals' (0, 0.1) 32 -- (μ, σ)
 
