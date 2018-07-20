@@ -20,19 +20,10 @@ attenuation ary ((x, z), (θ, φ)) =
       x<100 && y<100 && z<100 &&
       x>=0  && y>=0  && z>=0
 
-rCoords =
-  let [a, b, c, d] = take 4 $ randomRs (3, 100) $ mkStdGen 78 in
-  let xs = randomRs (0, 100::Double) $ mkStdGen a in
-  let zs = randomRs (0, 100::Double) $ mkStdGen b in
-  let θs = randomRs (0, pi::Double)  $ mkStdGen c in
-  let φs = randomRs (0, pi::Double)  $ mkStdGen d in
-  zip (zip xs zs) (zip θs φs)
-
-gCoords = beam 50 50 -- be sure to filter non-lattice values
+-- TODO: filter non-lattice values
+gBeams = take (10^6) $ beam 50 50
 
 parallelTrace ary = do
-  let beams = take (10^6) gCoords
-  let pBeams = beams `using` parListChunk 64 rdeepseq
-  let rays = map (attenuation ary) pBeams
+  let rays = map (attenuation ary) gBeams
   let results = rays `using` parListChunk 64 rdeepseq
   print $ sum results
