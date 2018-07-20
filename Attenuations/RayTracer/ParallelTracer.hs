@@ -4,6 +4,8 @@ import RayTracer.FileToVector (qArray)
 import RayTracer.Transport (transport)
 import System.Random
 
+import RayTracer.GaussianBeam (beam)
+
 {--
 Single Threaded interpreted: 1M rays, 100^3 ~ 15 minutes
 Single Threaded compiled: 1M rays, 100^3 ~ 42 secs
@@ -26,8 +28,11 @@ rCoords =
   let φs = randomRs (0, pi::Double)  $ mkStdGen d in
   zip (zip xs zs) (zip θs φs)
 
+gCoords = beam 50 50 -- be sure to filter non-lattice values
+
 parallelTrace ary = do
-  let coords = take (10^6) rCoords
-  let rays = map (attenuation ary) coords
+  let beams = take (10^6) gCoords
+  let pBeams = beams `using` parListChunk 64 rdeepseq
+  let rays = map (attenuation ary) pBeams
   let results = rays `using` parListChunk 64 rdeepseq
   print $ sum results

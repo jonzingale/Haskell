@@ -1,5 +1,6 @@
 -- http://hackage.haskell.org/package/normaldistribution-1.1.0.3/docs/Data-Random-Normal.html
 module RayTracer.GaussianBeam where
+import Control.Parallel.Strategies (rdeepseq, parListChunk, rseq, using)
 import Data.Random.Normal
 import System.Random
 
@@ -19,6 +20,8 @@ small values of σ give sharper peaks.
 * It may be best to hard code the center at 500.
 --}
 
+-- parallelize me! see ParallelTracer
+-- rays `using` parListChunk 64 rdeepseq
 beam :: Distance -> Center -> Beam
 beam d c = map (ray d c) rDisc
 
@@ -33,5 +36,5 @@ rDisc :: [EntryCoords]
 rDisc = [(r*cos θ, r*sin θ) | (r, θ) <- zip rs θs]
   where
     θs = randomRs (0::Double, 2*pi::Double) $ mkStdGen 32
-    rs = mkNormals' (0, 2) 32 -- (μ, σ) loose beam
+    rs = mkNormals' (0, 0.1) 32 -- (μ, σ) loose beam
 
