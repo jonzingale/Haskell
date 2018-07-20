@@ -11,6 +11,7 @@ Todo:
 * thread and return fileType.
 * self-contained bash script.
 * produce file of comparable size.
+* a pre-computation determining number of valid rays
 
 To Compile and Run:
 ghc -O2 --make Main.hs -threaded -rtsopts
