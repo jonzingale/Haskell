@@ -6,10 +6,13 @@ import Tests.ExplicitGenerators
 import RayTracer.GaussianBeam
 import Test.Framework
 
+-- Note when writing tests for ray, the coords
+-- are normalized around 0 by default.
+
 -- Given a unit cone, diagonals are what I expect.
 prop_NormalDiagonals :: Center -> TestDistance -> TestSignPair -> Gen Bool
 prop_NormalDiagonals c (Distance d) (Sigs (s, r)) = do
-  let (θ, φ) = snd.ray d c $ (c + s * d * dd, c + r * d * dd)
+  let (θ, φ) = snd.ray d c $ (s * d * dd, r * d * dd)
   return $ eBalls 14 (θ, φ) (rad s, rad r)
   where
     dd = sqrt 2 / 2
@@ -19,7 +22,7 @@ prop_NormalDiagonals c (Distance d) (Sigs (s, r)) = do
 -- X and Z components in equal parts give 45s.
 prop_EqualComponents :: Center -> TestDistance -> TestSignPair -> Gen Bool
 prop_EqualComponents c (Distance d) (Sigs (s, r)) = do
-  let (θ, φ) = snd.ray d c $ (c + s * d, c + r * d)
+  let (θ, φ) = snd.ray d c $ (s*d, r*d)
   return $ eBalls 14 (θ, φ) (rad s, rad r)
   where
     rad s | s == 1 = pi/4
@@ -30,7 +33,7 @@ prop_EqualComponents c (Distance d) (Sigs (s, r)) = do
 -- value less than 10**(-20) produces errors in 10^5 tests.
 prop_AngleSpraysAway :: Center -> TestCoords -> TestSignPair -> Gen Bool
 prop_AngleSpraysAway c (Coords (x, z)) (Sigs (s, r)) = do
-  let (θ, φ) = snd.ray 0 c $ (c + s*x*100, c + r*z*100)
+  let (θ, φ) = snd.ray 0 c $ (s*x, r*z)
   return $ c == 0 || eBall 14 (rad s) θ && eBall 13 (rad r) φ
   where
     rad s | s == 1 = 0
@@ -39,5 +42,5 @@ prop_AngleSpraysAway c (Coords (x, z)) (Sigs (s, r)) = do
 -- As d -> ∞ all angles tend toward pi/2
 prop_AnglesTendsToParallel :: Center -> TestCoords -> TestSignPair -> Gen Bool
 prop_AnglesTendsToParallel c (Coords (x, z)) (Sigs (s, r)) = do
-  let (θ, φ) = snd.ray (10**20) c $ (c + s*x*100, c + r*z*100)
+  let (θ, φ) = snd.ray (10**20) c $ (s*x, r*z)
   return $ eBalls 14 (abs θ, abs φ) (pi/2, pi/2)

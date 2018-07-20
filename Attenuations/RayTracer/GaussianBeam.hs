@@ -3,11 +3,12 @@ module RayTracer.GaussianBeam where
 import Data.Random.Normal
 import System.Random
 
-type Beam = [Ray]
-type Ray = (EntryCoords, (Double, Double))
+type Ray = (EntryCoords, EntryAngles)
+type EntryAngles = (Double, Double)
 type EntryCoords = (Double, Double)
 type Distance = Double
 type Center = Double
+type Beam = [Ray]
 
 {--
 normally distributed values about (μ, σ).
@@ -20,26 +21,27 @@ mkNormals' (2::Double, 0.001) 32
 It may be best to hard code the center at 500.
 --}
 
--- values less than 10**(-20) may produce errors in 10^5 tests.
--- quickCheck $ withMaxSuccess (10^5) prop_AngleSpraysAway
+{--
+values less than 10**(-20) may produce errors in 10^5 tests.
+quickCheck $ withMaxSuccess (10^5) prop_AngleSpraysAway
+--}
 zero =  10**(-20)
 
 beam :: Distance -> Center -> Beam
-beam d c = map (ray d c) $ rDisc c
+beam d c = map (ray d c) rDisc
 
--- ray is derived from a cone with apex distance d from the center c
--- be sure to rescale the distribution.
+-- ray is derived from a cone with apex distance d
+-- from the center c be sure to rescale the distribution.
 ray :: Distance -> Center -> EntryCoords -> Ray
-ray d c (x, z) = ((x, z), (aTan (x-c) d, aTan (z-c) d))
+ray d c (x, z) = ((x*c+c, z*c+c), (aTan x d, aTan z d))
   where
     aTan t d | d == 0 = aTan t zero
              | t >= 0 = atan (d/t)
              | otherwise = pi/2 - atan (t/d)
 
-rDisc :: Center -> [EntryCoords]
-rDisc c = [(r*cos θ + c, r*sin θ + c) | (r, θ) <- zip (rs c) θs]
+rDisc :: [EntryCoords]
+rDisc = [(r*cos θ, r*sin θ) | (r, θ) <- zip rs θs]
   where
-    θs = randomRs (c::Double, 2*pi::Double) $ mkStdGen 32
-    rs c = mkNormals' (c, 2) 32 -- loose beam
-    -- rs = mkNormals' (50::Double, 0.1) 32 -- tight beam
+    θs = randomRs (0::Double, 2*pi::Double) $ mkStdGen 32
+    rs = mkNormals' (0, 2) 32 -- (μ, σ) loose beam
 
