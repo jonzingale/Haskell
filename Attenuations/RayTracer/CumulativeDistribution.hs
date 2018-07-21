@@ -16,3 +16,16 @@ getProb μ σ x = cumulative (normalDistr μ σ) x
 
 getStdProb :: Double -> Double
 getStdProb x = cumulative standard x
+
+{--
+P { 2 < X < 5 }, μ = 3 σ = 9
+P { (2-3)/3 < (x-3)/3 < (5-3)/3 }
+P { -1/3 < Z < 2/3 }
+φ (2/3) - φ (-1/3)
+φ (2/3) - [ 1 - φ (1/3) ] ~ .3779
+--}
+testProb :: Double
+testProb =
+  let l = getStdProb (2/3) in
+  let r = getStdProb (-1/3) in
+  l - r
