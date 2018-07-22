@@ -13,6 +13,9 @@ type Beam = [Ray]
 
 {--
 the coords are normalized around 0 by default.
+ray 1 (1, 0) => (100, 50) for coords
+d == 1 => d == 50 cells.
+d == 2 from output plane places apex on input plane.
 
 normally distributed values about (μ, σ).
 small values of σ give sharper peaks.
@@ -30,7 +33,7 @@ beam :: Distance -> Beam
 beam d = map (ray d) rDisc
 
 -- ray is derived from a cone with apex distance d
--- from the center c be sure to rescale the distribution.
+-- from the center. Be sure to rescale the distribution.
 ray :: Distance -> EntryCoords -> Ray
 ray d (x, z) = ((x*center+center, z*center+center), (aTan x d, aTan z d))
   where
@@ -40,5 +43,5 @@ rDisc :: [EntryCoords]
 rDisc = [(r*cos θ, r*sin θ) | (r, θ) <- zip rs θs]
   where
     θs = randomRs (0::Double, pi::Double) $ mkStdGen 32
-    rs = mkNormals' (0, 0.1) 32 -- (μ, σ)
+    rs = mkNormals' (0, 1) 32 -- (μ, σ)
 
