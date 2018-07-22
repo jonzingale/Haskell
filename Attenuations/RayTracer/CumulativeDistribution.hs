@@ -6,7 +6,7 @@ import Statistics.Distribution
 
 {--
 Here I would like to calculate the probability
-that a ray will land outside of a given lattice.
+that a ray will land inside of a given lattice.
 --}
 type Center = Double
 type Deviation = Double
