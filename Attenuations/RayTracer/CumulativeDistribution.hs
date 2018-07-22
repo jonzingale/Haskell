@@ -3,6 +3,8 @@
 module RayTracer.CumulativeDistribution where
 import Statistics.Distribution.Normal
 import Statistics.Distribution
+import Data.Random.Normal (mkNormals')
+import Data.List (sort)
 
 {--
 Here I would like to calculate the probability
@@ -31,3 +33,7 @@ testProb μ σ (l, u) =
   let lower = (l-μ)/sqrt σ in
   let upper = (u-μ)/sqrt σ in
   getStdProb upper - getStdProb lower
+
+neededRays :: Deviation -> Integer
+neededRays σ = floor $ (10^6) / (testProb 0 σ (-1, 1))
+
