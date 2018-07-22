@@ -34,6 +34,15 @@ testProb μ σ (l, u) =
   let upper = (u-μ)/sqrt σ in
   getStdProb upper - getStdProb lower
 
-neededRays :: Deviation -> Integer
-neededRays σ = floor $ (10^6) / (testProb 0 σ (-1, 1))
+neededRays :: Deviation -> Int
+neededRays σ = ceiling $ (10^6) / (testProb 0 σ (-1, 1))
+
+testNeeded :: Deviation -> (Int, Int)
+testNeeded σ =
+  let needed = neededRays σ in
+  let pts = take needed $ mkNormals' (0, σ) 32 in
+  --- needed rays, rays meeting criteria.
+  (needed, length.filter cond $ pts)
+  where
+    cond x = abs x < 1
 
