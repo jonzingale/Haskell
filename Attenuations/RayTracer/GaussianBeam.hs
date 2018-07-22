@@ -12,11 +12,6 @@ type Center = Double
 type Beam = [Ray]
 
 {--
-the coords are normalized around 0 by default.
-ray 1 (1, 0) => (100, 50) for coords
-d == 1 => d == 50 cells.
-d == 2 from output plane places apex on input plane.
-
 normally distributed values about (μ, σ).
 small values of σ give sharper peaks.
 
@@ -30,7 +25,7 @@ center = 50
 -- parallelize me? see ParallelTracer
 -- beam `using` parListChunk 64 rdeepseq
 beam :: Distance -> Beam
-beam d = map (ray d) rDisc
+beam d = map ((ray.λd) d) rDisc
 
 -- ray is derived from a cone with apex distance d
 -- from the center. Be sure to rescale the distribution.
@@ -45,3 +40,24 @@ rDisc = [(r*cos θ, r*sin θ) | (r, θ) <- zip rs θs]
     θs = randomRs (0::Double, pi::Double) $ mkStdGen 32
     rs = mkNormals' (0, 1) 32 -- (μ, σ)
 
+{--
+Cone Normalization:
+The coords are normalized around 0 by default.
+ray 1 (1, 0) => (100, 50) for coords
+d == 1 => d == 50 cells.
+d == 2 from output plane places apex on input plane.
+
+The goal here is to scale the users input distance
+to be consistent with the ray tracers internal
+representation.
+
+The internal representation assumes the base of
+the light cone to be situated at the output plane.
+the distance from the output plane to the input
+plane is 2 units, ~ 1mm.
+--}
+
+-- 6 mm distance from point source to input plane.
+-- 14 units from point source to output plane.
+λd :: Distance -> Distance
+λd d  = 2 * d + 2
