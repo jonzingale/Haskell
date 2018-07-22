@@ -22,7 +22,7 @@ small values of σ give sharper peaks.
 * It may be best to hard code the center at 500.
 --}
 
-c = 50 -- center constant.
+center = 50
 
 -- parallelize me? see ParallelTracer
 -- beam `using` parListChunk 64 rdeepseq
@@ -32,7 +32,7 @@ beam d = map (ray d) rDisc
 -- ray is derived from a cone with apex distance d
 -- from the center c be sure to rescale the distribution.
 ray :: Distance -> EntryCoords -> Ray
-ray d (x, z) = ((x*c+c, z*c+c), (aTan x d, aTan z d))
+ray d (x, z) = ((x*center+center, z*center+center), (aTan x d, aTan z d))
   where
     aTan t d = pi/2 - atan (t/d)
 

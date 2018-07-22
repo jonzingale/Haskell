@@ -39,7 +39,7 @@ prop_EqualComponents (Distance d) (Sigs (s, r)) = do
 prop_AngleSpraysAway :: TestCoords -> TestSignPair -> Gen Bool
 prop_AngleSpraysAway (Coords (x, z)) (Sigs (s, r)) = do
   let (θ, φ) = snd.ray 0 $ (s*x, r*z)
-  return $ c == 0 || eBall 14 (rad s) θ && eBall 13 (rad r) φ
+  return $ center == 0 || eBall 14 (rad s) θ && eBall 13 (rad r) φ
   where
     rad s | s == 1 = 0
           | otherwise = pi

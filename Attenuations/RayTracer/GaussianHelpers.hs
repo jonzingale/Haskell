@@ -9,6 +9,7 @@ radToDeg θ = θ * 180 / pi
 -- centered at (c, c) with distance d
 -- cheapBeam 50 50
 cheapBeam d = do
+  let c = center
   let vals = take 10 $ f (beam d)
   let s2 = sqrt 2 / 2
   let dd = c * 2.0
