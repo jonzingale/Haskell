@@ -27,5 +27,5 @@ P { -1/3 < Z < 2/3 }
 testProb :: Double
 testProb =
   let l = getStdProb (2/3) in
-  let r = getStdProb (-1/3) in
+  let r = 1 - getStdProb (1/3) in
   l - r
