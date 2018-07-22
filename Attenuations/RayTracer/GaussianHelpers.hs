@@ -8,19 +8,19 @@ radToDeg θ = θ * 180 / pi
 
 -- centered at (c, c) with distance d
 -- cheapBeam 50 50
-cheapBeam d c = do
-  let vals = take 10 $ f (beam d c)
+cheapBeam d = do
+  let vals = take 10 $ f (beam d)
   let s2 = sqrt 2 / 2
   let dd = c * 2.0
   putStr "(x ,z ,θ ,φ ) in degrees\n"
 
-  let inits = f $ map (ray d 0) [(c,c), (dd,c), (c,dd), (dd*s2,dd*s2)]
+  let inits = f $ map (ray d) [(c,c), (dd,c), (c,dd), (dd*s2,dd*s2)]
   putStr.unlines.(map show) $ inits
   putStr "\n"
-  let inits = f $ map (ray d 0) [(-c,c), (-dd,c), (-c,dd), (-dd*s2,dd*s2)]
+  let inits = f $ map (ray d) [(-c,c), (-dd,c), (-c,dd), (-dd*s2,dd*s2)]
   putStr.unlines.(map show) $ inits
   putStr "\n"
-  let inits = f $ map (ray d 0) [(-c,-c), (-dd,-c), (-c,-dd), (-dd*s2,-dd*s2)]
+  let inits = f $ map (ray d) [(-c,-c), (-dd,-c), (-c,-dd), (-dd*s2,-dd*s2)]
   putStr.unlines.(map show) $ inits
   putStr "\n"
   -- putStr.unlines.(map show) $ vals

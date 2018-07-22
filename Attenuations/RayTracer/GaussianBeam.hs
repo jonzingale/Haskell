@@ -12,6 +12,8 @@ type Center = Double
 type Beam = [Ray]
 
 {--
+the coords are normalized around 0 by default.
+
 normally distributed values about (μ, σ).
 small values of σ give sharper peaks.
 
@@ -20,15 +22,17 @@ small values of σ give sharper peaks.
 * It may be best to hard code the center at 500.
 --}
 
+c = 50 -- center constant.
+
 -- parallelize me? see ParallelTracer
 -- beam `using` parListChunk 64 rdeepseq
-beam :: Distance -> Center -> Beam
-beam d c = map (ray d c) rDisc
+beam :: Distance -> Beam
+beam d = map (ray d) rDisc
 
 -- ray is derived from a cone with apex distance d
 -- from the center c be sure to rescale the distribution.
-ray :: Distance -> Center -> EntryCoords -> Ray
-ray d c (x, z) = ((x*c+c, z*c+c), (aTan x d, aTan z d))
+ray :: Distance -> EntryCoords -> Ray
+ray d (x, z) = ((x*c+c, z*c+c), (aTan x d, aTan z d))
   where
     aTan t d = pi/2 - atan (t/d)
 
