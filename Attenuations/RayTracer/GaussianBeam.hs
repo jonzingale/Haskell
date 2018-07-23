@@ -12,34 +12,6 @@ type Center = Double
 type Beam = [Ray]
 
 {--
-normally distributed values about (μ, σ).
-small values of σ give sharper peaks.
-
-* What radius or deviation covers the lattice face?
-* Remember to throw away values outside the lattice.
---}
-
-center = 50
-
--- parallelize me? see ParallelTracer
--- beam `using` parListChunk 64 rdeepseq
-beam :: Distance -> Beam
-beam d = map ((ray.λd) d) rDisc
-
--- ray is derived from a cone with apex distance d
--- from the center. Be sure to rescale the distribution.
-ray :: Distance -> EntryCoords -> Ray
-ray d (x, z) = ((x*center+center, z*center+center), (aTan x d, aTan z d))
-  where
-    aTan t d = pi/2 - atan (t/d)
-
-rDisc :: [EntryCoords]
-rDisc = [(r*cos θ, r*sin θ) | (r, θ) <- zip rs θs]
-  where
-    θs = randomRs (0::Double, pi::Double) $ mkStdGen 32
-    rs = mkNormals' (0, 1) 32 -- (μ, σ)
-
-{--
 Cone Normalization:
 The coords are normalized around 0 by default.
 ray 1 (1, 0) => (100, 50) for coords
@@ -50,17 +22,39 @@ The goal here is to scale the users input distance
 to be consistent with the ray tracers internal
 representation.
 
+Dimensions: 1mm lattice. 6mm distance to point source.
+6 mm distance from point source to input plane.
+14 units from point source to output plane.
+
 The internal representation assumes the base of
 the light cone to be situated at the output plane.
 the distance from the output plane to the input
 plane is 2 units, ~ 1mm.
 --}
 
-{--
-Dimensions: 1mm lattice. 6mm distance to point source.
-  
-6 mm distance from point source to input plane.
-14 units from point source to output plane.
---}
-λd :: Distance -> Distance
-λd d  = 2 * d + 2
+-- distance from source to face and converts mm to units.
+-- a source 1mm distance to the front face is 4 units from the exit.
+mmToUnits :: Distance -> Distance
+mmToUnits d  = 2 * d + 2
+
+center = 50
+
+beam :: Distance -> Beam
+beam d = map (ray (mmToUnits d)) rDisc -- rays in mm
+
+-- ray is derived from a cone with apex distance d from the center.
+ray :: Distance -> EntryCoords -> Ray
+ray d (x, z) =
+  -- let λ = d / (d + 2) in -- scales radius to front plane standard unit.
+  let λ = d / (2*d + 2) in -- scales radius to front plane, mm.
+  (( λ*(x * center + center), λ*(z * center + center)), -- coords
+  (aTan x d, aTan z d)) -- angles
+  where
+    aTan t d = pi/2 - atan (t/d)
+
+rDisc :: [EntryCoords]
+rDisc = [(r*cos θ, r*sin θ) | (r, θ) <- zip rs θs]
+  where
+    θs = randomRs (0::Double, pi::Double) $ mkStdGen 32
+    rs = mkNormals' (0, 1) 32 -- (μ, σ)
+
