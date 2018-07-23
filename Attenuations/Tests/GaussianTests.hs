@@ -2,6 +2,9 @@
 {-# LANGUAGE BangPatterns #-}
 
 module Tests.GaussianTests where
+import RayTracer.CumulativeDistribution
+import Data.Random.Normal (mkNormals')
+
 import Tests.ExplicitGenerators
 import RayTracer.GaussianBeam
 import Test.Framework
@@ -10,8 +13,19 @@ import Test.Framework
 Scaling and Translation Tests:
 --}
 
--- prop_PullbackPushforwardID ::  
+-- prop_PullbackPushforwardID ::
 -- prop_PullbackPushforwardID
+
+{--
+Cumulative Distribution Tests:
+--}
+
+prop_NearlyOneThousandRays :: StdDev -> Gen Bool
+prop_NearlyOneThousandRays (Dev σ) = do
+  let needed = neededRays 1000 σ
+  let pts = take needed $ mkNormals' (0, σ) 32
+  return $ 900 < (length.filter cond) pts
+  where cond x = abs x < 1
 
 {--
 Angle Tests:
