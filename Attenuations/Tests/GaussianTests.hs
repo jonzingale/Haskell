@@ -24,7 +24,7 @@ prop_NearlyOneThousandRays :: StdDev -> Gen Bool
 prop_NearlyOneThousandRays (Dev σ) = do
   let needed = neededRays 1000 σ
   let pts = take needed $ mkNormals' (0, σ) 32
-  return $ 900 < (length.filter cond) pts
+  return $ 940 < (length.filter cond) pts
   where cond x = abs x < 1
 
 {--
