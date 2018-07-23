@@ -16,7 +16,7 @@ squareInt = (^ 2) `fmap` (arbitrary :: Gen Int) `suchThat` (> 0)
 cubeInt = (^ 3) `fmap` (arbitrary :: Gen Int) `suchThat` (> 0)
 exitAngle x = choose((1+x)*pi/4, pi/2 + x*pi/4)
 sign = oneof [return 1.0, return (-1.0)]
-deviation = choose(1, 3::Double)
+deviation = choose(1, 5::Double)
 
 -- strange needs.
 multiplesof20Int = (arbitrary :: Gen Int) `suchThat` cond
