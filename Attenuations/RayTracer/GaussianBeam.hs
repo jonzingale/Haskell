@@ -17,7 +17,6 @@ small values of σ give sharper peaks.
 
 * What radius or deviation covers the lattice face?
 * Remember to throw away values outside the lattice.
-* It may be best to hard code the center at 500.
 --}
 
 center = 50
@@ -57,7 +56,11 @@ the distance from the output plane to the input
 plane is 2 units, ~ 1mm.
 --}
 
--- 6 mm distance from point source to input plane.
--- 14 units from point source to output plane.
+{--
+Dimensions: 1mm lattice. 6mm distance to point source.
+  
+6 mm distance from point source to input plane.
+14 units from point source to output plane.
+--}
 λd :: Distance -> Distance
 λd d  = 2 * d + 2
