@@ -1,15 +1,21 @@
 -- http://hackage.haskell.org/package/statistics-0.14.0.2/docs/Statistics-Distribution.html
 -- http://hackage.haskell.org/package/statistics-0.14.0.2/docs/Statistics-Distribution-Normal.html#t:NormalDistribution
 module RayTracer.CumulativeDistribution where
+import Data.Random.Normal (mkNormals')
 import Statistics.Distribution.Normal
 import Statistics.Distribution
-import Data.Random.Normal (mkNormals')
-import Data.List (sort)
 
 {--
 Here I would like to calculate the probability
 that a ray will land inside of a given lattice.
+
+P { 2 < X < 5 }, μ = 3 σ = 9
+P { (2-3)/3 < (x-3)/3 < (5-3)/3 }
+P { -1/3 < Z < 2/3 }
+φ (2/3) - φ (-1/3)
+φ (2/3) - [ 1 - φ (1/3) ] ~ .3779
 --}
+
 type Center = Double
 type Deviation = Double
 
@@ -19,30 +25,7 @@ getProb μ σ x = cumulative (normalDistr μ σ) x
 getStdProb :: Double -> Double
 getStdProb x = cumulative standard x
 
-{--
-testProb 3 9 (2,5)
-
-P { 2 < X < 5 }, μ = 3 σ = 9
-P { (2-3)/3 < (x-3)/3 < (5-3)/3 }
-P { -1/3 < Z < 2/3 }
-φ (2/3) - φ (-1/3)
-φ (2/3) - [ 1 - φ (1/3) ] ~ .3779
---}
-testProb :: Center -> Deviation -> (Double, Double) -> Double
-testProb μ σ (l, u) =
-  let lower = (l-μ)/sqrt σ in
-  let upper = (u-μ)/sqrt σ in
-  getStdProb upper - getStdProb lower
-
-neededRays :: Deviation -> Int
-neededRays σ = ceiling $ (10^6) / (testProb 0 σ (-1, 1))
-
-testNeeded :: Deviation -> (Int, Int)
-testNeeded σ =
-  let needed = neededRays σ in
-  let pts = take needed $ mkNormals' (0, σ) 32 in
-  --- needed rays, rays meeting criteria.
-  (needed, length.filter cond $ pts)
+neededRays :: Double -> Deviation -> Int -- (10^6)
+neededRays n σ = truncate $ n / probArea σ (-1, 1)
   where
-    cond x = abs x < 1
-
+    probArea σ (l, u) = getProb 0 σ 1 - getProb 0 σ (-1)
