@@ -45,9 +45,8 @@ beam d = map (ray (mmToUnits d)) rDisc -- rays in mm
 -- ray is derived from a cone with apex distance d from the center.
 ray :: Distance -> EntryCoords -> Ray
 ray d (x, z) =
-  -- let λ = d / (d + 2) in -- scales radius to front plane standard unit.
-  let λ = d / (2*d + 2) in -- scales radius to front plane, mm.
-  (( λ*(x * center + center), λ*(z * center + center)), -- coords
+  let λ = d / (d + 1) in -- scales radius to front plane, mm.
+  ((x * λ * center + center, z * λ * center + center), -- coords
   (aTan x d, aTan z d)) -- angles
   where
     aTan t d = pi/2 - atan (t/d)
