@@ -32,24 +32,38 @@ the distance from the output plane to the input
 plane is 2 units, ~ 1mm.
 --}
 
--- distance from source to face and converts mm to units.
--- a source 1mm distance to the front face is 4 units from the exit.
+{-- Legacy:
+distance from source to face and converts mm to units.
+a source 1mm distance to the front face is 4 units from the exit.
 mmToUnits :: Distance -> Distance
 mmToUnits d  = 2 * d + 2
+--}
+ray :: Distance -> EntryCoords -> Ray
+ray d' (x, z) =
+  let d = 0.5 * d' / (d' + 1) in -- scales radius to front plane.
+  ((coords x d, coords z d), (angles x d, angles z d))
+  where
+    coords t d = t * center + center -- og
+    angles t d = pi/2 - atan (t/d)
+--}
 
 center = 50
 
 beam :: Distance -> Beam
-beam d = map (ray (mmToUnits d)) rDisc -- rays in mm
+beam d = map (ray d) rDisc -- rays in mm
 
--- ray is derived from a cone with apex distance d from the center.
-ray :: Distance -> EntryCoords -> Ray
-ray d (x, z) =
-  let λ = d / (d + 1) in -- scales radius to front plane, mm.
-  ((x * λ * center + center, z * λ * center + center), -- coords
-  (aTan x d, aTan z d)) -- angles
-  where
-    aTan t d = pi/2 - atan (t/d)
+-- ray is derived from a cone with apex-
+-- distance d millimeters from the center.
+-- ray :: Distance -> EntryCoords -> Ray
+-- ray d' (x, z) =
+--   let d = 0.5 * d' / (d' + 1) in -- scales radius to front plane.
+--   -- let d = d' in -- 0.5 * d' / (d' + 1) in -- scales radius to front plane.
+--   ((coords x d, coords z d), (angles x d, angles z d))
+--   where
+--     -- coords t d = t * center + center -- og
+--     coords t d = t * d * center + center
+--     angles t d = pi/2 - atan (t/d)
+
 
 rDisc :: [EntryCoords]
 rDisc = [(r*cos θ, r*sin θ) | (r, θ) <- zip rs θs]
