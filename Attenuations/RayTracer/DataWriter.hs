@@ -48,6 +48,9 @@ stratifiedArray100 =
     sevenOfEm = (take 7).repeat
 
 -- 3D Files
+millionOnes :: ULattice
+millionOnes = listArray (1::Int, 10^6) $ take (10^6).repeat $ 1.0
+
 allOnes3D :: ULattice
 allOnes3D = listArray (1::Int, 343) $ (take 343).repeat $ 1.0
 
