@@ -44,9 +44,12 @@ center = 50
 beam :: Distance -> Beam
 beam d = map (ray d) rDisc -- rays in mm
 
--- ray is derived from a cone with apex-
--- distance d standard units from the center.
--- radius scaled to front plane from exit plane.
+{--
+ray is derived from a cone with apex-
+distance d standard units from the center.
+radius scaled to front plane from exit plane.
+front face is 2 units from exit face.
+--}
 ray :: Distance -> EntryCoords -> Ray
 ray d (x, z) = ((coords x (d/2), coords z (d/2)), (angles x d, angles z d))
   where
