@@ -18,6 +18,7 @@ testTrace = do
   let rays = map (attenuation ary) gBeams
   let results = rays `using` parListChunk 64 rdeepseq
   print $ sum results
+
 {--
 distance from source to face and converts mm to units.
 a source 1mm distance to the front face is 4 units from the exit.
