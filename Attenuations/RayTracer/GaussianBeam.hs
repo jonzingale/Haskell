@@ -57,7 +57,7 @@ ray d (x, z) = ((coords x (d/2), coords z (d/2)), (angles x d, angles z d))
     -- @(x < 0, d == 0) => 2.0344439357957027
     coords t d = center * t * d / (d + 1) + center
     angles t d | t > 0 = atan ((d+2)/t)
-               | otherwise = pi + atan ((d+2)/t) --correct
+               | otherwise = pi + atan ((d+2)/t)
 
 rDisc :: [EntryCoords]
 rDisc = [(r*cos θ, r*sin θ) | (r, θ) <- zip rs θs]
