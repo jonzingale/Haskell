@@ -7,14 +7,23 @@ import Data.Random.Normal (mkNormals')
 
 import Tests.ExplicitGenerators
 import RayTracer.GaussianBeam
+import RayTracer.Transport
 import Test.Framework
 
 {--
 Scaling and Translation Tests:
 --}
 
--- prop_PullbackPushforwardID ::
--- prop_PullbackPushforwardID
+rLen :: Double -> Double -> Double
+rLen x y = sqrt $ x**2 + y**2
+
+prop_PullbackPushforwardID :: Gen Bool --generalize me
+prop_PullbackPushforwardID = do
+  let (cs, as) = ray 2 (1,0)
+  let seg = transport cs as
+  let stopCond s ((x,y,z), _) = x< s &&  z< s
+  let integrate l = sum [ seg | (_, seg) <- takeWhile (stopCond 100) l]
+  return $ (eBall 13) (integrate seg) (rLen 25 100)
 
 {--
 Cumulative Distribution Tests:
