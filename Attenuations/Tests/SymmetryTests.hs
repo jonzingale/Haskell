@@ -124,7 +124,7 @@ prop_Smallφ_ZTranslations (Coords (x, z)) = do
   φ <- choose ((1+z')*pi/4, pi/2)
   let seg1 = transport (0, 3.5*z ) (θ, φ)
   let seg2 = transport (0, 3.5*z') (θ, φ)
-  return $ (eBall 13) (evalRay seg1) (evalRay seg2)
+  return $ (eBall 12) (evalRay seg1) (evalRay seg2)
   where
     stopCond ((x,y,z), s) = x<7 && y<7 && z<7
     evalRay trans = sum [ seg | (ijk, seg) <- takeWhile stopCond trans]
