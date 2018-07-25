@@ -10,6 +10,20 @@ Single Threaded interpreted: 1M rays, 100^3 ~ 15 minutes
 Single Threaded compiled: 1M rays, 100^3 ~ 42 secs
 Eight Threaded compiled: 1M rays, 100^3 ~ 9 secs
 --}
+import RayTracer.FileToVector (fileToAry)
+
+testTrace = do
+  ary <- fileToAry "./Tests/dataMillionOnes"
+  let gBeams = take (10^2) $ beam.mmToUnits $ 1
+  let rays = map (attenuation ary) gBeams
+  let results = rays `using` parListChunk 64 rdeepseq
+  print $ sum results
+{--
+distance from source to face and converts mm to units.
+a source 1mm distance to the front face is 4 units from the exit.
+--}
+mmToUnits :: Double -> Double
+mmToUnits d  = 2 * d
 
 attenuation ary ((x, z), (θ, φ)) =
   let ijkSeg = takeWhile stopCond $ transport (x, z) (θ, φ) in
@@ -21,7 +35,7 @@ attenuation ary ((x, z), (θ, φ)) =
 
 -- TODO: filter non-lattice values
 parallelTrace ary = do
-  let gBeams = take (10^6) $ beam 50 50
+  let gBeams = take (10^6) $ beam.mmToUnits $ 1
   let rays = map (attenuation ary) gBeams
   let results = rays `using` parListChunk 64 rdeepseq
   print $ sum results

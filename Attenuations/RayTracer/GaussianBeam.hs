@@ -32,13 +32,6 @@ the distance from the output plane to the input
 plane is 2 units, ~ 1mm.
 --}
 
-{-- Legacy:
-distance from source to face and converts mm to units.
-a source 1mm distance to the front face is 4 units from the exit.
-mmToUnits :: Distance -> Distance
-mmToUnits d  = 2 * d + 2
---}
-
 center = 50
 
 beam :: Distance -> Beam
