@@ -2,12 +2,18 @@ import numpy as np
 import matplotlib
 import matplotlib.pyplot as plt
 
-# Fixing random state for reproducibility
-np.random.seed(19680801)
+from pdb import set_trace as st
 
+# convert file to ary
+ary = np.loadtxt('dataTenThousandOnes', dtype='float')
 
-matplotlib.rcParams['axes.unicode_minus'] = False
-fig, ax = plt.subplots()
-ax.plot(10*np.random.randn(100), 10*np.random.randn(100), 'o')
-ax.set_title('Using hyphen instead of Unicode minus')
+# pxl to plot
+xs = [t % 10 for t in range(0,10**2)]
+ys = [t //10 for t in range(0,10**2)]
+
+plt.plot(xs, ys, 'ro')
+plt.axis([-1, 10, , 10])
+
 plt.show()
+
+# st()
