@@ -33,7 +33,7 @@ Angle Tests:
 -- Given a unit cone, diagonals are what I expect.
 prop_NormalDiagonals :: TestDistance -> TestSignPair -> Gen Bool
 prop_NormalDiagonals (Distance d) (Sigs (s, r)) = do
-  let (θ, φ) = snd.ray d $ (s * d * dd, r * d * dd)
+  let (θ, φ) = snd.ray (d-2) $ (s * d * dd, r * d * dd)
   return $ eBalls 14 (θ, φ) (rad s, rad r)
   where
     dd = sqrt 2 / 2
@@ -43,7 +43,7 @@ prop_NormalDiagonals (Distance d) (Sigs (s, r)) = do
 -- Given a unit cone, X and Z components in equal parts give 45s.
 prop_EqualComponents :: TestDistance -> TestSignPair -> Gen Bool
 prop_EqualComponents (Distance d) (Sigs (s, r)) = do
-  let (θ, φ) = snd.ray d $ (s*d, r*d)
+  let (θ, φ) = snd.ray (d-2) $ (s*d, r*d)
   return $ eBalls 14 (θ, φ) (rad s, rad r)
   where
     rad s | s == 1 = pi/4
@@ -52,7 +52,7 @@ prop_EqualComponents (Distance d) (Sigs (s, r)) = do
 -- As d -> exit plane, angles tend toward 0, π, or π/2.
 prop_AngleSpraysAway :: TestCoords -> TestSignPair -> Gen Bool
 prop_AngleSpraysAway (Coords (x, z)) (Sigs (s, r)) = do
-  let (θ, φ) = snd.ray (-0.5) $ (s*x, r*z)
+  let (θ, φ) = snd.ray (-2) $ (s*x, r*z)
   return $ center == 0 || eBall 14 (rad s) θ && eBall 13 (rad r) φ
   where
     rad s | s == 1 = 0
