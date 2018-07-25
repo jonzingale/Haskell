@@ -6,6 +6,19 @@ import System.Random
 radToDeg :: Double -> Double
 radToDeg θ = θ * 180 / pi
 
+cheapTrans = do
+  let string = ["0   => ","1   => ","2   => ", "Big => "]
+  let them = [s ++ f (ray k (1,0)) | (s, k)<- zip string [0, 1, 2, 10^10]]
+  putStr.unlines $ them
+
+  putStr "\nNegative xs\n"
+  let string = ["0   => ","1   => ","2   => ", "Big => "]
+  let them = [s ++ f (ray k (-1,0)) | (s, k)<- zip string [0, 1, 2, 10^10]]
+  putStr.unlines $ them
+
+  where
+    f ((x,_),(θ,_)) = "x: " ++ (show.round )x ++ ", θ: " ++ show θ
+
 -- centered at (c, c) with distance d
 -- cheapBeam 50 50
 cheapBeam d = do

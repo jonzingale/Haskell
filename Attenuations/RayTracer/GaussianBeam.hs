@@ -37,19 +37,9 @@ distance from source to face and converts mm to units.
 a source 1mm distance to the front face is 4 units from the exit.
 mmToUnits :: Distance -> Distance
 mmToUnits d  = 2 * d + 2
-
-ray :: Distance -> EntryCoords -> Ray
-ray d' (x, z) =
-  let d = d' / (d' + 1) in -- scales radius to front plane.
-  ((coords x d, coords z d), (angles x d', angles z d'))
-  where
-    -- @d == 0 => atan 0.5 == 0.46364760900080615
-    coords t d = t * d * center + center
-    angles t d = pi/2 - atan (t/(d+0.5))
 --}
 
 center = 50
-halfPi = 1.5707963267948966
 
 beam :: Distance -> Beam
 beam d = map (ray d) rDisc -- rays in mm
@@ -58,12 +48,13 @@ beam d = map (ray d) rDisc -- rays in mm
 -- distance d standard units from the center.
 -- radius scaled to front plane from exit plane.
 ray :: Distance -> EntryCoords -> Ray
-ray d (x, z) = ((coords x d, coords z d), (angles x d, angles z d))
+ray d (x, z) = ((coords x (d/2), coords z (d/2)), (angles x d, angles z d))
   where
-    -- @d == 0 => atan 0.5 == 0.46364760900080615: 1/2 rise to run
+    -- @(x > 0, d == 0) => 1.1071487177940904
+    -- @(x < 0, d == 0) => 2.0344439357957027
     coords t d = center * t * d / (d + 1) + center
-    angles t d = halfPi - atan (t/(d+0.5))
-
+    angles t d | t > 0 = atan ((d+2)/t)
+               | otherwise = pi + atan ((d+2)/t) --correct
 
 rDisc :: [EntryCoords]
 rDisc = [(r*cos θ, r*sin θ) | (r, θ) <- zip rs θs]

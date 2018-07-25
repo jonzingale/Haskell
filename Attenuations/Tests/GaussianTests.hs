@@ -49,10 +49,10 @@ prop_EqualComponents (Distance d) (Sigs (s, r)) = do
     rad s | s == 1 = pi/4
           | otherwise = 3*pi/4
 
--- As d -> 0 all angles tend toward 0 or pi, unless exactly on center.
+-- As d -> exit plane, angles tend toward 0, π, or π/2.
 prop_AngleSpraysAway :: TestCoords -> TestSignPair -> Gen Bool
 prop_AngleSpraysAway (Coords (x, z)) (Sigs (s, r)) = do
-  let (θ, φ) = snd.ray 0 $ (s*x, r*z)
+  let (θ, φ) = snd.ray (-0.5) $ (s*x, r*z)
   return $ center == 0 || eBall 14 (rad s) θ && eBall 13 (rad r) φ
   where
     rad s | s == 1 = 0
