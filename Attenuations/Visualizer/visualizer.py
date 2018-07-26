@@ -6,7 +6,6 @@ import numpy as np
 Stratified = './../Tests/dataStratified1M'
 randos1M = './../Tests/data1M'
 
-
 def renderImage(filename):
   ary = np.loadtxt(filename, dtype='float')
   size = int(np.sqrt(ary.size))
