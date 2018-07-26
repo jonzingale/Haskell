@@ -3,32 +3,20 @@ import matplotlib
 import matplotlib.pyplot as plt
 
 from pdb import set_trace as st
+from PIL import Image
 
 # convert file to ary
 ary = np.loadtxt('dataTenThousandOnes', dtype='float')
 
-# pxl to plot
-xs = [t % 10 for t in range(0,10**2)]
-ys = [t //10 for t in range(0,10**2)]
+# load tmp file as HSV
+img = Image.open("tmp.jpeg")
+hsv_img = img.convert("HSV")
+px = hsv_img.load()
 
-plt.plot(xs, ys, 'ro')
-plt.axis([-1, 10, , 10])
+for t in range(0,10**4):
+  # value to pixel
+  px[t % 100, t // 100] = (int(ary[t]*140), 1000, 100)
 
-plt.show()
+hsv_img.show()
 
 # st()
-
-
-# Take a look at using PIL or Pillow
-# from __future__ import print_function
-# import os, sys
-# from PIL import Image
-
-# for infile in sys.argv[1:]:
-#     f, e = os.path.splitext(infile)
-#     outfile = f + ".jpg"
-#     if infile != outfile:
-#         try:
-#             Image.open(infile).save(outfile)
-#         except IOError:
-#             print("cannot convert", infile)
