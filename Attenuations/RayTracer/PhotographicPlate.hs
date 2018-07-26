@@ -19,6 +19,8 @@ type Distance = Double
 Here there should be a method for averaging
 the rays and returning a UArray to publish
 as a File.
+
+Look at Diff Arrays: Data.Array.Diff for faster updates.
 --}
 
 getAry = do
