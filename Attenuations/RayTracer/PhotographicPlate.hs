@@ -6,7 +6,6 @@ module RayTracer.PhotographicPlate where
 import qualified Data.ByteString.Lex.Fractional as L
 import qualified Data.ByteString.Char8 as L
 import qualified Data.Vector.Unboxed as U
-import System.Environment
 
 type Dimension = Int -- length of lattice side
 type Coords = (Int, Int, Int)
