@@ -1,3 +1,5 @@
+-- http://hackage.haskell.org/package/diffarray-0.1.1/docs/Data-Array-Diff.html
+
 {-# LANGUAGE BangPatterns #-}
 
 module RayTracer.PhotographicPlate where

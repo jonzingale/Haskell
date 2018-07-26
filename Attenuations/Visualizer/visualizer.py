@@ -2,7 +2,9 @@ from pdb import set_trace as st
 from PIL import Image
 import numpy as np
 
+# http://pillow.readthedocs.io/en/3.0.x/
 # HSV: (360, 255, 255)
+
 Stratified = './../Tests/dataStratified1M'
 randos1M = './../Tests/data1M'
 
