@@ -59,6 +59,15 @@ stratifiedArray10K =
   where
     sevenOfEm = (take 100).repeat
 
+stratifiedArray1M :: ULattice
+stratifiedArray1M =
+  let grades = take 1000 $ randos in
+  let bounds = (1::Int, 10^6) in
+  let ary = foldr (++) [] $ map sevenOfEm grades in
+  listArray bounds ary
+  where
+    sevenOfEm = (take 1000).repeat
+
 -- 3D Files
 millionOnes :: ULattice
 millionOnes = listArray (1::Int, 10^6) $ take (10^6).repeat $ 1.0
