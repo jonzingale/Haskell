@@ -23,7 +23,7 @@ as a File.
 Look at Diff Arrays: Data.Array.Diff for faster updates.
 --}
 
-getAry = do
+testUpdate = do
   ary <- fileToAry "./Tests/data1M" -- :: U.Vector Double
   putStr.show $ qArray2D 1000 (0,0) ary
   let bry = uArray2D 1000 (0,0) 1.0 ary
