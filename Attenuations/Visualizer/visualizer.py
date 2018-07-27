@@ -9,6 +9,13 @@ testTrace = './../Tests/dataTestTrace'
 Stratified = './../Tests/dataStratified1M'
 randos1M = './../Tests/data1M'
 
+def renderPixel(t, ary):
+  val = ary[t]
+  if val == 0:
+    return((0,0,0))
+  else:
+    return((int(ary[t]*50), 255, 255))
+
 def renderImage(filename):
   ary = np.loadtxt(filename, dtype='float')
   size = int(np.sqrt(ary.size))
@@ -19,7 +26,7 @@ def renderImage(filename):
 
   for t in range(0,size**2): # value to pixel
     # px[t % size, t // size] = (170, 255, int(ary[t]*255)) # actual file LIGHT
-    px[t % size, t // size] = (int(ary[t]*200), 255, 255) # actual file HUE
+    px[t % size, t // size] = renderPixel(t, ary) # actual file HUE
 
   img.show()
 
