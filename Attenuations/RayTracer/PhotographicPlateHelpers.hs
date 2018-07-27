@@ -18,14 +18,5 @@ testUpdate = do
   let bry = uArray2D 1000 (0,0) 1.0 ary
   putStr $ "\n" ++ show (qArray2D 1000 (0,0) bry) ++ "\n"
 
--- Write a moving average
-avg :: [Double] -> Double
-avg (x:xs) = a*x + (1-a)*(avg xs)
-  -- where a = 0.95 --recommended
-  where a = 0.001 -- closer: 0.4896627203851963
-avg [] = 0
-
 mean :: [Double] -> Double
 mean xs = sum xs / (fromIntegral.length $ xs)
-
--- Write an update with lookup

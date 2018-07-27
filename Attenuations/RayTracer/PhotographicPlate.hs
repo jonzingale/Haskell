@@ -34,5 +34,13 @@ rayToPlate ray ary =
   let s = mAvg t (qArray2D 1000 (x,y) ary) in
   uArray2D 1000 (x,y) s ary
 
+-- how to choose α? coupon collection?
+mAvg :: Double -> Double -> Double
 mAvg a b = 0.01 * (b-a) + b
 -- exitValue = ?
+
+avg :: [Double] -> Double
+avg (x:xs) = a*x + (1-a)*(avg xs)
+  -- where a = 0.95 --recommended
+  where a = 0.001 -- closer: 0.4896627203851963
+avg [] = 0
