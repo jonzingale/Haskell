@@ -1,6 +1,7 @@
 
 {-# LANGUAGE BangPatterns #-}
-module RayTracer.FileToVector (qArray, fileToAry, vLength, vSum, qArray2D) where
+module RayTracer.FileToVector (qArray, fileToAry, vLength, vSum,
+                               uArray2D, qArray2D) where
 import qualified Data.ByteString.Lex.Fractional as L
 import qualified Data.ByteString.Char8 as L
 import qualified Data.Vector.Unboxed as U
@@ -36,6 +37,9 @@ fileToAry :: FilePath -> IO (U.Vector Double)
 fileToAry file = do
   !s <- L.readFile file
   return.parse $ s
+
+uArray2D :: U.Unbox a => Dimension -> Coords2D -> a -> U.Vector a -> U.Vector a
+uArray2D size (x, y) v a = (U.//) a [(x + y * size, v)]
 
 qArray2D :: U.Unbox a => Dimension -> Coords2D -> U.Vector a -> a
 qArray2D size (x, y) a = (U.!) a (x + y * size)
