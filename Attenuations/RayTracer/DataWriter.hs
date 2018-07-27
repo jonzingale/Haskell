@@ -17,6 +17,9 @@ bigArray = listArray bounds randos
   where bounds = (0::Int, 10^6-1)
 
 -- 2D Files
+emptyAry :: ULattice
+emptyAry = listArray (1::Int, 100^2) $ (take (100^2)).repeat $ 0.0
+
 tenThousandOnes :: ULattice
 tenThousandOnes = listArray (1::Int, 10^4) $ (take 10000).repeat $ 1.0
 
