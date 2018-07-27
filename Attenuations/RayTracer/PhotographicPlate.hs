@@ -31,7 +31,6 @@ processPlate :: [PlateVal] -> Lattice -> Lattice
 processPlate [] ll = ll
 processPlate (x:xs) ll = processPlate xs (rayToPlate x ll)
 
-
 rayToPlate :: PlateVal -> Lattice -> Lattice
 rayToPlate (x, y, t) ary =
   let s = mAvg t (qArray2D size (x,y) ary) in
