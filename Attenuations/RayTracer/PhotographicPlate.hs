@@ -7,6 +7,7 @@ import qualified Data.ByteString.Lex.Fractional as L
 import qualified Data.ByteString.Char8 as L
 import qualified Data.Vector.Unboxed as U
 import RayTracer.FileToVector
+import RayTracer.Transport
 
 type Dimension = Int -- length of lattice side
 
@@ -14,6 +15,7 @@ type Ray = (EntryCoords, EntryAngles)
 type EntryAngles = (Double, Double)
 type EntryCoords = (Double, Double)
 type Lattice = U.Vector Double
+type PlateVal = (Int, Int, Double)
 
 {--
 Here there should be a method for averaging
@@ -23,21 +25,21 @@ as a File.
 Look at Diff Arrays: Data.Array.Diff for faster updates.
 --}
 
-ary :: IO Lattice
-ary = do
-  a <- fileToAry "./Tests/data1M" -- :: U.Vector Double
-  return a
+size = 100 -- TODO: make 1000
 
-rayToPlate :: Ray -> Lattice -> Lattice
-rayToPlate ray ary =
-  let (x, y, t) = (0,0,1) in-- exitValue r # once i can
-  let s = mAvg t (qArray2D 1000 (x,y) ary) in
-  uArray2D 1000 (x,y) s ary
+processPlate :: [PlateVal] -> Lattice -> Lattice
+processPlate [] ll = ll
+processPlate (x:xs) ll = processPlate xs (rayToPlate x ll)
+
+
+rayToPlate :: PlateVal -> Lattice -> Lattice
+rayToPlate (x, y, t) ary =
+  let s = mAvg t (qArray2D size (x,y) ary) in
+  uArray2D size (x,y) s ary
 
 -- how to choose α? coupon collection?
 mAvg :: Double -> Double -> Double
 mAvg a b = 0.01 * (b-a) + b
--- exitValue = ?
 
 avg :: [Double] -> Double
 avg (x:xs) = a*x + (1-a)*(avg xs)
