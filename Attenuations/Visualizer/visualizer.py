@@ -5,6 +5,7 @@ import numpy as np
 # http://pillow.readthedocs.io/en/3.0.x/
 # HSV: (360, 255, 255)
 
+testTrace = './../Tests/dataTestTrace'
 Stratified = './../Tests/dataStratified1M'
 randos1M = './../Tests/data1M'
 

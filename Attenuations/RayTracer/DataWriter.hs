@@ -20,8 +20,10 @@ saveArr file ary =
 
 -- savePlate :: String -> Lattice -> IO()
 savePlate filename ary = -- generalize size here.
+  writeFile "./Tests/dataTestTrace" $ aryToStr ary
+  where aryToStr = unlines.(map show).(U.toList)
   -- let uLattice = listArray (1::Int, 10^4) ary in
-  saveArr "./Tests/dataTestTrace" ary
+  -- saveArr "./Tests/dataTestTrace" ary
 
 bigArray :: ULattice
 bigArray = listArray bounds randos

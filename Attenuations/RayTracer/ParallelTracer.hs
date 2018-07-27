@@ -56,10 +56,12 @@ parallelTrace ary = do
   let results = rays `using` parListChunk 64 rdeepseq
   return results -- [(x, z, SegmentLength)]
 
+-- processedPlate :: RayTracer.PhotographicPlate.Lattice
+
 testTrace = do
   emptyAry <- fileToAry "./Tests/dataEmptyAry"
   ary <- fileToAry "./Tests/data1M"
   plateAry <- parallelTrace ary
   let processedPlate = processPlate plateAry emptyAry
-  -- savePlate "tmp" processedPlate
-  return $ processPlate plateAry emptyAry
+  savePlate "tmp" processedPlate
+  -- return $ processPlate plateAry emptyAry
