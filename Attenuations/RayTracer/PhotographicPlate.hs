@@ -36,7 +36,7 @@ rayToPlate (x, y, t) ary =
 
 -- how to choose α? coupon collection?
 mAvg :: Double -> Double -> Double
-mAvg a b = 0.01 * (b-a) + b
+mAvg a b = 0.01 * (a-b) + b
 
 avg :: [Double] -> Double
 avg (x:xs) = a*x + (1-a)*(avg xs)

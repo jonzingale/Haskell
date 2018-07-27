@@ -23,4 +23,4 @@ def renderImage(filename):
 
   img.show()
 
-renderImage(randos1M)
+renderImage(testTrace)
