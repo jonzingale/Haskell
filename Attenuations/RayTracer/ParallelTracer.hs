@@ -40,7 +40,7 @@ parallelTrace ary = do
 size = 100
 
 attenuation ary ((x, z), (θ, φ)) = -- this could be written better
-  let path = takeWhile stopCond $ transport (x, z) (θ, φ) in
+  let path = ((0,0,0), 0) : (takeWhile stopCond $ transport (x, z) (θ, φ)) in
   let s = sum [ seg * qArray size ijk ary | (ijk, seg) <- path] in
   let (i,j,k) = fst.last $ path in
   (i, k, s)
@@ -51,7 +51,7 @@ attenuation ary ((x, z), (θ, φ)) = -- this could be written better
 
 -- TODO: filter non-lattice values
 parallelTrace ary = do
-  let gBeams = take (10^1) $ beam.mmToUnits $ 1
+  let gBeams = take (10^4) $ beam.mmToUnits $ 1
   let rays = map (attenuation ary) gBeams
   let results = rays `using` parListChunk 64 rdeepseq
   return results -- [(x, z, SegmentLength)]
