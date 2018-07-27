@@ -6,13 +6,14 @@ module RayTracer.PhotographicPlate where
 import qualified Data.ByteString.Lex.Fractional as L
 import qualified Data.ByteString.Char8 as L
 import qualified Data.Vector.Unboxed as U
+import RayTracer.FileToVector
 
 type Dimension = Int -- length of lattice side
-type Coords = (Int, Int, Int)
-type Coords2D = (Int, Int)
 
-type Attenuation = Double
-type Distance = Double
+type Ray = (EntryCoords, EntryAngles)
+type EntryAngles = (Double, Double)
+type EntryCoords = (Double, Double)
+type Lattice = U.Vector Double
 
 {--
 Here there should be a method for averaging
@@ -22,31 +23,16 @@ as a File.
 Look at Diff Arrays: Data.Array.Diff for faster updates.
 --}
 
-testUpdate = do
-  ary <- fileToAry "./Tests/data1M" -- :: U.Vector Double
-  putStr.show $ qArray2D 1000 (0,0) ary
-  let bry = uArray2D 1000 (0,0) 1.0 ary
-  putStr $ "\n" ++ show (qArray2D 1000 (0,0) bry) ++ "\n"
+ary :: IO Lattice
+ary = do
+  a <- fileToAry "./Tests/data1M" -- :: U.Vector Double
+  return a
 
-uArray2D :: U.Unbox a => Dimension -> Coords2D -> a -> U.Vector a -> U.Vector a
-uArray2D size (x, y) v a = (U.//) a [(x + y * size, v)]
+rayToPlate :: Ray -> Lattice -> Lattice
+rayToPlate ray ary =
+  let (x, y, t) = (0,0,1) in-- exitValue r # once i can
+  let s = mAvg t (qArray2D 1000 (x,y) ary) in
+  uArray2D 1000 (x,y) s ary
 
-qArray2D :: U.Unbox a => Dimension -> Coords2D -> U.Vector a -> a
-qArray2D size (x, y) a = (U.!) a (x + y * size)
-
--- qArray :: U.Unbox a => Dimension -> Coords -> U.Vector a -> a
--- qArray size (x, y, z) a = (U.!) a (x + y * size * size + z * size)
-
--- File To Vector
-fileToAry :: FilePath -> IO (U.Vector Double)
-fileToAry file = do
-  !s <- L.readFile file
-  return.parse $ s
-
-parse :: L.ByteString -> U.Vector Double
-parse = U.unfoldr step
-  where
-     step !s = case L.readExponential s of
-        Nothing       -> Nothing
-        Just (!k, !t) -> Just (k, L.tail t)
-
+mAvg a b = 0.01 * (b-a) + b
+-- exitValue = ?
