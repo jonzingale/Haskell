@@ -1,11 +1,11 @@
 module RayTracer.ParallelTracer where
 import Control.Parallel.Strategies (rdeepseq, parListChunk, rseq, using)
 import RayTracer.PhotographicPlate (processPlate)
-import RayTracer.FileToVector (fileToAry)
-import RayTracer.FileToVector (qArray)
+import RayTracer.FileToVector (fileToAry, qArray, qArray2D)
 import RayTracer.Transport (transport)
 import RayTracer.GaussianBeam (beam)
-import System.Random
+
+import RayTracer.DataWriter (savePlate)
 
 {--
 Single Threaded interpreted: 1M rays, 100^3 ~ 15 minutes
@@ -60,4 +60,6 @@ testTrace = do
   emptyAry <- fileToAry "./Tests/dataEmptyAry"
   ary <- fileToAry "./Tests/data1M"
   plateAry <- parallelTrace ary
-  print $ processPlate plateAry emptyAry
+  let processedPlate = processPlate plateAry emptyAry
+  -- savePlate "tmp" processedPlate
+  return $ processPlate plateAry emptyAry

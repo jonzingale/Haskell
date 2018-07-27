@@ -1,8 +1,14 @@
+module RayTracer.DataWriter where
 import Data.Array.Unboxed -- strict fast Arrays
 import System.Random -- randomRs
 import Data.List -- sort
 
+import qualified Data.ByteString.Lex.Fractional as L
+import qualified Data.ByteString.Char8 as L
+import qualified Data.Vector.Unboxed as U
+
 type ULattice = UArray Int Double
+type Lattice = U.Vector Double
 
 randos = randomRs (0, 1::Double).mkStdGen $ 42
 
@@ -11,6 +17,11 @@ saveArr :: String -> ULattice -> IO()
 saveArr file ary =
   writeFile ("./Tests/data" ++ file) $ aryToStr ary
   where aryToStr = unlines.(map show).elems
+
+-- savePlate :: String -> Lattice -> IO()
+savePlate filename ary = -- generalize size here.
+  -- let uLattice = listArray (1::Int, 10^4) ary in
+  saveArr "./Tests/dataTestTrace" ary
 
 bigArray :: ULattice
 bigArray = listArray bounds randos

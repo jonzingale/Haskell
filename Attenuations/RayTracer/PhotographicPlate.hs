@@ -9,8 +9,6 @@ import qualified Data.Vector.Unboxed as U
 import RayTracer.FileToVector
 import RayTracer.Transport
 
-type Dimension = Int -- length of lattice side
-
 type Ray = (EntryCoords, EntryAngles)
 type EntryAngles = (Double, Double)
 type EntryCoords = (Double, Double)
