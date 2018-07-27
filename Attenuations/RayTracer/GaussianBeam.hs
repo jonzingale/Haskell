@@ -35,8 +35,9 @@ plane is 2 units, ~ 1mm.
 center = 50
 
 beam :: Distance -> Beam
-beam d = map (ray d) rDisc -- rays in mm
-
+beam d = filter posiCond $ map (ray d) rDisc -- rays in mm
+  where
+    posiCond ((x,z),(_,_)) = x > 0 && z > 0
 {--
 ray is derived from a cone with apex-
 distance d standard units from the center.
