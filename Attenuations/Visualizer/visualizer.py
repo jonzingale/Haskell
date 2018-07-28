@@ -6,7 +6,8 @@ import numpy as np
 # HSV: (360, 255, 255)
 
 testTrace = './../Tests/dataTestTrace'
-Stratified = './../Tests/dataStratified1M'
+
+Stratified = './../Tests/dataStratifiedArray3D'
 randos1M = './../Tests/data1M'
 
 def renderPixel(t, ary):
@@ -14,7 +15,8 @@ def renderPixel(t, ary):
   if val == 0:
     return((0,0,0))
   else:
-    return((int(ary[t]*50), 255, 255))
+    # return((int(ary[t]*50), 255, 255))
+    return((int((ary[t]*10)**2), 255, 255))
 
 def renderImage(filename):
   ary = np.loadtxt(filename, dtype='float')
