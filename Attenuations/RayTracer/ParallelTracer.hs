@@ -1,11 +1,10 @@
 module RayTracer.ParallelTracer where
 import Control.Parallel.Strategies (rdeepseq, parListChunk, rseq, using)
-import RayTracer.PhotographicPlate (processPlate)
 import RayTracer.FileToVector (fileToAry, qArray, qArray2D)
+import RayTracer.PhotographicPlate (processPlate)
+import RayTracer.DataWriter (savePlate)
 import RayTracer.Transport (transport)
 import RayTracer.GaussianBeam (beam)
-
-import RayTracer.DataWriter (savePlate)
 
 {--
 Single Threaded interpreted: 1M rays, 100^3 ~ 15 minutes
@@ -20,23 +19,6 @@ a source 1mm distance to the front face is 4 units from the exit.
 mmToUnits :: Double -> Double
 mmToUnits d  = 2 * d
 
-{-- LEGACY:
-attenuation ary ((x, z), (θ, φ)) =
-  let ijkSeg = takeWhile stopCond $ transport (x, z) (θ, φ) in
-  sum [ seg * qArray 100 ijk ary | (ijk, seg) <- ijkSeg]
-  where
-    stopCond ((x,y,z), s) =
-      x<100 && y<100 && z<100 &&
-      x>=0  && y>=0  && z>=0
-
--- TODO: filter non-lattice values
-parallelTrace ary = do
-  let gBeams = take (10^6) $ beam.mmToUnits $ 1
-  let rays = map (attenuation ary) gBeams
-  let results = rays `using` parListChunk 64 rdeepseq
-  print $ sum results
---}
-
 size = 100
 
 attenuation ary ((x, z), (θ, φ)) = -- this could be written better
@@ -49,19 +31,18 @@ attenuation ary ((x, z), (θ, φ)) = -- this could be written better
       x<size && y<size && z<size &&
       x>=0  && y>=0  && z>=0
 
--- TODO: filter non-lattice values
+-- TODO: better filter non-lattice values
 parallelTrace ary = do
-  let gBeams = take (10^4) $ beam.mmToUnits $ 1
+  let gBeams = take (100^3) $ beam.mmToUnits $ 1
   let rays = map (attenuation ary) gBeams
   let results = rays `using` parListChunk 64 rdeepseq
   return results -- [(x, z, SegmentLength)]
 
--- processedPlate :: RayTracer.PhotographicPlate.Lattice
-
+-- import qualified Data.Vector.Unboxed as U
 testTrace = do
   emptyAry <- fileToAry "./Tests/dataEmptyAry"
-  ary <- fileToAry "./Tests/data1M"
+  ary <- fileToAry "./Tests/dataStratifiedArray3D"
   plateAry <- parallelTrace ary
   let processedPlate = processPlate plateAry emptyAry
   savePlate "tmp" processedPlate
-  -- return $ processPlate plateAry emptyAry
+  -- return $ plateAry
