@@ -3,22 +3,15 @@
 {-# LANGUAGE BangPatterns #-}
 
 module RayTracer.PhotographicPlate where
-import qualified Data.ByteString.Lex.Fractional as L
-import qualified Data.ByteString.Char8 as L
+import RayTracer.FileToVector (qArray2D, uArray2D)
 import qualified Data.Vector.Unboxed as U
-import RayTracer.FileToVector
-import RayTracer.Transport
 
-type Ray = (EntryCoords, EntryAngles)
-type EntryAngles = (Double, Double)
-type EntryCoords = (Double, Double)
-type Lattice = U.Vector Double
 type PlateVal = (Int, Int, Double)
+type Lattice = U.Vector Double
 
 {--
 Here there should be a method for averaging
-the rays and returning a UArray to publish
-as a File.
+the rays and returning a UArray to publish.
 
 Look at Diff Arrays: Data.Array.Diff for faster updates.
 --}
