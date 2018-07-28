@@ -10,7 +10,7 @@ import qualified Data.Vector.Unboxed as U
 type ULattice = UArray Int Double
 type Lattice = U.Vector Double
 
-randos = randomRs (0, 1::Double).mkStdGen $ 42
+randos = randomRs (0, 1::Double).mkStdGen $ 32
 
 -- saveArr "GradArray" gradArray => "./Tests/dataGradArray"
 saveArr :: String -> ULattice -> IO()
@@ -102,9 +102,9 @@ gradArray3D =
 
 stratifiedArray3D :: ULattice
 stratifiedArray3D =
-  let grades = take 7 $ randos in
-  let bounds = (1::Int, 343) in
+  let grades = take 100 $ randos in
+  let bounds = (1::Int, 100^3) in
   let ary = foldr (++) [] $ map sevenOfEm grades in
   listArray bounds ary
   where
-    sevenOfEm = (take 7).repeat
+    sevenOfEm = (take 100).repeat
