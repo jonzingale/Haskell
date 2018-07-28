@@ -5,7 +5,7 @@ import numpy as np
 # http://pillow.readthedocs.io/en/3.0.x/
 # HSV: (360, 255, 255)
 
-testTrace = './../Tests/dataTestTrace'
+testTrace = './Tests/dataTestTrace'
 
 Stratified = './../Tests/dataStratifiedArray3D'
 randos1M = './../Tests/data1M'
@@ -16,7 +16,7 @@ def renderPixel(t, ary):
     return((0,0,0))
   else:
     # return((int(ary[t]*50), 255, 255))
-    return((int((ary[t])**1.4), 255, 255))
+    return((int((ary[t])**1.2), 255, 255))
 
 def renderImage(filename):
   ary = np.loadtxt(filename, dtype='float')

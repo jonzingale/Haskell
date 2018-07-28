@@ -34,5 +34,5 @@ mAvg a b = 0.01 * (a-b) + b
 avg :: [Double] -> Double
 avg (x:xs) = a*x + (1-a)*(avg xs)
   -- where a = 0.95 --recommended
-  where a = 0.001 -- closer: 0.4896627203851963
+  where a = 0.01 -- closer: 0.4896627203851963
 avg [] = 0

@@ -25,12 +25,15 @@ rm Main.o Main.hi Main RayTracer/*.o RayTracer/*.hi
 testFile = fileToAry "./Tests/data1M"
 
 main = do
-    args <- getArgs
-    case args of
-      [file] -> do
-        ary <- fileToAry file
-        parallelTrace ary
-      [] -> do
-        ary <- testFile
-        parallelTrace ary
-      _ -> putStrLn "Wrong number of arguments"
+  testTrace
+
+-- main = do
+--     args <- getArgs
+--     case args of
+--       [file] -> do
+--         ary <- fileToAry file
+--         parallelTrace ary
+--       [] -> do
+--         ary <- testFile
+--         parallelTrace ary
+--       _ -> putStrLn "Wrong number of arguments"
