@@ -16,7 +16,7 @@ def renderPixel(t, ary):
     return((0,0,0))
   else:
     # return((int(ary[t]*50), 255, 255))
-    return((int((ary[t]*10)**2), 255, 255))
+    return((int((ary[t])**1.4), 255, 255))
 
 def renderImage(filename):
   ary = np.loadtxt(filename, dtype='float')
