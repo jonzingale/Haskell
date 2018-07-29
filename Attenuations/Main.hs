@@ -6,12 +6,9 @@ import RayTracer.DataWriter (savePlate)
 import System.Environment
 {--
 Todo:
-* Simulate 1M rays from gaussian point source
 * pass (filename, seed) to compiled tracer
-* thread and return fileType.
-* self-contained bash script.
 * produce file of comparable size.
-* a pre-computation determining number of valid rays
+* scale constants
 
 To Compile and Run:
 ghc -O2 --make Main.hs -threaded -rtsopts
