@@ -7,16 +7,14 @@ import numpy as np
 
 testTrace = './Tests/dataTestTrace'
 
-Stratified = './../Tests/dataStratifiedArray3D'
-randos1M = './../Tests/data1M'
-
 def renderPixel(t, ary):
   val = ary[t]
   if val == 0:
     return((0,0,0))
   else:
-    # return((int(ary[t]*50), 255, 255))
-    return((int((ary[t])**1.2), 255, 255))
+    # return((int(ary[t]**0.5, 255, 255))
+    return((int((ary[t])*2), 255, 255)) # HUE
+    # return((170, 255, int(ary[t]*4))) # LIGHT
 
 def renderImage(filename):
   ary = np.loadtxt(filename, dtype='float')
@@ -27,9 +25,9 @@ def renderImage(filename):
   px = img.load()
 
   for t in range(0,size**2): # value to pixel
-    # px[t % size, t // size] = (170, 255, int(ary[t]*255)) # actual file LIGHT
-    px[t % size, t // size] = renderPixel(t, ary) # actual file HUE
+    px[t % size, t // size] = renderPixel(t, ary)
 
-  img.show()
+  resized = img.resize((1000, 1000))
+  resized.show()
 
 renderImage(testTrace)
