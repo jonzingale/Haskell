@@ -1,7 +1,7 @@
 
 {-# LANGUAGE BangPatterns #-}
 module RayTracer.FileToVector (qArray, fileToAry, vLength, vSum,
-                               uArray2D, qArray2D) where
+                               uArray2D, qArray2D, displayRange) where
 import qualified Data.ByteString.Lex.Fractional as L
 import qualified Data.ByteString.Char8 as L
 import qualified Data.Vector.Unboxed as U
@@ -53,3 +53,9 @@ vLength = U.length
 
 vSum :: (Num b, U.Unbox b) => U.Vector b -> b
 vSum = U.sum
+
+displayRange :: U.Vector Double -> IO ()
+displayRange vect = do
+  let ary = (U.toList) vect
+  let (s, l) = (show.minimum $ ary, show.maximum $ ary)
+  putStr $ "\nminimum: " ++ s ++ "\nmaximum: " ++ l ++ "\n"
