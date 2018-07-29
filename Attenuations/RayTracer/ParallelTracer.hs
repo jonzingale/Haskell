@@ -1,8 +1,6 @@
 module RayTracer.ParallelTracer where
 import Control.Parallel.Strategies (rdeepseq, parListChunk, rseq, using)
-import RayTracer.FileToVector (fileToAry, qArray, qArray2D, displayRange)
-import RayTracer.PhotographicPlate (processPlate)
-import RayTracer.DataWriter (savePlate)
+import RayTracer.FileToVector (qArray)
 import RayTracer.Transport (transport)
 import RayTracer.GaussianBeam (beam)
 
@@ -14,14 +12,14 @@ Single Threaded compiled: 1M rays, 100^3 ~ 42 secs
 Eight Threaded compiled: 1M rays, 100^3 ~ 9 secs
 --}
 
+size = 100 -- lattice side length
+
 {--
 distance from source to face and converts mm to units.
 a source 1mm distance to the front face is 4 units from the exit.
 --}
 mmToUnits :: Double -> Double
 mmToUnits d  = 2 * d
-
-size = 100 -- lattice side length
 
 attenuation ary ((x, z), (θ, φ)) = -- this could be written better
   let path = takeWhile stopCond $ transport (x, z) (θ, φ) in
@@ -38,17 +36,3 @@ parallelTrace ary = do
   let rays = map (attenuation ary) gBeams
   let results = rays `using` parListChunk 64 rdeepseq
   return results -- [(x, z, SegmentLength)]
-
-testTrace = do
-  emptyAry <- fileToAry "./Tests/dataEmptyAry"
-  ary <- fileToAry "./Tests/dataStratifiedArray3D"
-  -- trace lattice
-  plateAry <- parallelTrace ary
-  -- process image file
-  let processedPlate = processPlate plateAry emptyAry
-  savePlate "tmp" processedPlate
-  -- displays dynamic range for new file
-  test <- fileToAry "./Tests/dataTestTrace"
-  displayRange test
-
-
