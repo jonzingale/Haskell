@@ -33,4 +33,6 @@ main = do
     case args of
       [string] -> do
         saveArr string bigSparceArray
+      [] -> do
+        saveArr "tmp" bigSparceArray
       _ -> putStrLn "Wrong number of arguments"
