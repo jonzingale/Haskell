@@ -1,8 +1,8 @@
 module Main where
+import RayTracer.PhotographicPlate (processPlate)
+import RayTracer.ParallelTracer (parallelTrace)
 import RayTracer.FileToVector (fileToAry)
-import RayTracer.GaussianBeam
-import RayTracer.ParallelTracer
-import RayTracer.PhotographicPlateFloat
+import RayTracer.DataWriter (savePlate)
 import System.Environment
 {--
 Todo:
@@ -22,18 +22,20 @@ To Clear:
 rm Main.o Main.hi Main RayTracer/*.o RayTracer/*.hi
 --}
 
-testFile = fileToAry "./Tests/data1M"
+testFile = fileToAry "./Tests/dataStratifiedArray3D"
 
 main = do
-  testTrace
-
--- main = do
---     args <- getArgs
---     case args of
---       [file] -> do
---         ary <- fileToAry file
---         parallelTrace ary
---       [] -> do
---         ary <- testFile
---         parallelTrace ary
---       _ -> putStrLn "Wrong number of arguments"
+    emptyAry <- fileToAry "./Tests/dataEmptyAry"
+    args <- getArgs
+    case args of
+      [file] -> do
+        ary <- fileToAry file
+        plateAry <- parallelTrace ary
+        let processedPlate = processPlate plateAry emptyAry
+        savePlate "tmp" processedPlate
+      [] -> do
+        ary <- testFile
+        plateAry <- parallelTrace ary
+        let processedPlate = processPlate plateAry emptyAry
+        savePlate "tmp" processedPlate
+      _ -> putStrLn "Wrong number of arguments"
