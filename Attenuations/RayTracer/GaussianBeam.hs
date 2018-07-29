@@ -1,12 +1,14 @@
 -- http://hackage.haskell.org/package/normaldistribution-1.1.0.3/docs/Data-Random-Normal.html
 module RayTracer.GaussianBeam where
 import Control.Parallel.Strategies (rdeepseq, parListChunk, rseq, using)
+import RayTracer.CumulativeDistribution (neededRays)
 import Data.Random.Normal
 import System.Random
 
 type Ray = (EntryCoords, EntryAngles)
 type EntryAngles = (Double, Double)
 type EntryCoords = (Double, Double)
+type Deviation = Double
 type Distance = Double
 type Center = Double
 type Beam = [Ray]
@@ -33,9 +35,12 @@ plane is 2 units, ~ 1mm.
 --}
 
 center = 50
+size = 10**6 -- number of rays desired
 
-beam :: Distance -> Beam
-beam d = filter posiCond $ map (ray d) rDisc -- rays in mm
+beam :: Distance -> Deviation -> Beam
+beam d σ =
+  let needed = neededRays size σ in
+  filter posiCond $ take needed $ map (ray d) (rDisc σ) -- rays in mm
   where
     posiCond ((x,z),(_,_)) = x > 0 && z > 0
 {--
@@ -53,9 +58,9 @@ ray d (x, z) = ((coords x (d/2), coords z (d/2)), (angles x d, angles z d))
     angles t d | t >= 0    = atan ((d+2)/t)
                | otherwise = atan ((d+2)/t) + pi
 
-rDisc :: [EntryCoords]
-rDisc = [(r*cos θ, r*sin θ) | (r, θ) <- zip rs θs]
+rDisc :: Deviation -> [EntryCoords]
+rDisc σ = [(r*cos θ, r*sin θ) | (r, θ) <- zip (rs σ) θs]
   where
     θs = randomRs (0::Double, pi::Double) $ mkStdGen 32
-    rs = mkNormals' (0, 1) 31 -- (μ, σ)
+    rs σ = mkNormals' (0, σ) 31 -- (μ, σ)
 
