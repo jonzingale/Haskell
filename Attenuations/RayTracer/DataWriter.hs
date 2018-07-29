@@ -18,16 +18,21 @@ saveArr file ary =
   writeFile ("./Tests/data" ++ file) $ aryToStr ary
   where aryToStr = unlines.(map show).elems
 
--- savePlate :: String -> Lattice -> IO()
-savePlate filename ary = -- generalize size here.
+savePlate :: String -> Lattice -> IO()
+savePlate filename ary =
   writeFile "./Tests/dataTestTrace" $ aryToStr ary
   where aryToStr = unlines.(map show).(U.toList)
-  -- let uLattice = listArray (1::Int, 10^4) ary in
-  -- saveArr "./Tests/dataTestTrace" ary
 
 bigArray :: ULattice
 bigArray = listArray bounds randos
   where bounds = (0::Int, 10^6-1)
+
+bigSparceArray :: ULattice
+bigSparceArray =
+  let sparse = randomRs (1::Int, 1000) $ mkStdGen 32 in
+  let spRandos = [ if r == 1 then t else 0.0 | (t, r) <- zip randos sparse] in
+  let bounds = (0::Int, 10^9-1) in
+  listArray bounds spRandos
 
 -- 2D Files
 emptyAry :: ULattice
