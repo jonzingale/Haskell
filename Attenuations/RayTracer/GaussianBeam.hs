@@ -42,7 +42,8 @@ beam d σ =
   let needed = neededRays size σ in
   filter posiCond $ take needed $ map (ray d) (rDisc σ) -- rays in mm
   where
-    posiCond ((x,z),(_,_)) = x > 0 && z > 0
+    posiCond ((x,z),(_,_)) = x >= 0 && z >= 0 &&
+                             x <= 2*center && z <= 2*center
 {--
 ray is derived from a cone with apex-
 distance d standard units from the center.
