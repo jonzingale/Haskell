@@ -24,7 +24,7 @@ mmToUnits d  = 2 * d
 attenuation ary ((x, z), (θ, φ)) = -- this could be written better
   let path = takeWhile stopCond $ transport (x, z) (θ, φ) in
   let s = sum [ seg * qArray size ijk ary | (ijk, seg) <- path] in
-  let (i,j,k) = fst.last $ path in
+  let (i,j,k) = fst.last $ path in -- perhaps better here too?
   (i, k, s)
   where
     stopCond ((x,y,z), s) =
@@ -32,7 +32,7 @@ attenuation ary ((x, z), (θ, φ)) = -- this could be written better
       x>=0  && y>=0  && z>=0
 
 parallelTrace ary = do
-  let gBeams = (beam.mmToUnits) 100 2 -- Distance Deviation
+  let gBeams = (beam.mmToUnits) (10^3) 2 -- Distance Deviation
   let rays = map (attenuation ary) gBeams
   let results = rays `using` parListChunk 64 rdeepseq
   return results -- [(x, z, SegmentLength)]
