@@ -1,7 +1,7 @@
 module RayTracer.DataWriter where
 import Data.Array.Unboxed -- strict fast Arrays
-import System.Random -- randomRs
-import Data.List -- sort
+import System.Random (mkStdGen, randomRs)
+import Data.List (sort)
 
 import qualified Data.ByteString.Lex.Fractional as L
 import qualified Data.ByteString.Char8 as L
