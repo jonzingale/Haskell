@@ -1,6 +1,6 @@
 module RayTracer.ParallelTracer where
 import Control.Parallel.Strategies (rdeepseq, parListChunk, rseq, using)
-import RayTracer.FileToVector (fileToAry, qArray, qArray2D)
+import RayTracer.FileToVector (fileToAry, qArray, qArray2D, displayRange)
 import RayTracer.PhotographicPlate (processPlate)
 import RayTracer.DataWriter (savePlate)
 import RayTracer.Transport (transport)
@@ -23,6 +23,7 @@ size = 100
 
 attenuation ary ((x, z), (θ, φ)) = -- this could be written better
   let path = ((0,0,0), 0) : (takeWhile stopCond $ transport (x, z) (θ, φ)) in
+  -- let path = takeWhile stopCond $ transport (x, z) (θ, φ) in
   let s = sum [ seg * qArray size ijk ary | (ijk, seg) <- path] in
   let (i,j,k) = fst.last $ path in
   (i, k, s)
@@ -33,7 +34,7 @@ attenuation ary ((x, z), (θ, φ)) = -- this could be written better
 
 -- TODO: better filter non-lattice values
 parallelTrace ary = do
-  let gBeams = take (100^3) $ beam.mmToUnits $ 1
+  let gBeams = (beam.mmToUnits) 100 1 -- Distance Deviation
   let rays = map (attenuation ary) gBeams
   let results = rays `using` parListChunk 64 rdeepseq
   return results -- [(x, z, SegmentLength)]
@@ -45,4 +46,8 @@ testTrace = do
   plateAry <- parallelTrace ary
   let processedPlate = processPlate plateAry emptyAry
   savePlate "tmp" processedPlate
-  -- return $ plateAry
+  -- displays dynamic range for new file
+  test <- fileToAry "./Tests/dataTestTrace"
+  displayRange test
+
+
