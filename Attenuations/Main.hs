@@ -20,6 +20,7 @@ rm Main.o Main.hi Main RayTracer/*.o RayTracer/*.hi
 --}
 
 testFile = fileToAry "./Tests/dataStratifiedArray3D"
+-- testFile = fileToAry "./Tests/dataBigSparsey"
 
 main = do
     emptyAry <- fileToAry "./Tests/dataEmptyAry"
