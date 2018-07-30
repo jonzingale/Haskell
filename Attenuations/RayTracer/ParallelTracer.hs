@@ -13,6 +13,7 @@ Eight Threaded compiled: 1M rays, 100^3 ~ 9 secs
 --}
 
 size = 100 -- lattice side length
+-- size = 1000
 
 {--
 distance from source to face and converts mm to units.
