@@ -1,25 +1,23 @@
+-- https://wiki.haskell.org/Numeric_Haskell:_A_Vector_Tutorial
 
 {-# LANGUAGE BangPatterns #-}
+
 module RayTracer.FileToVector (qArray, fileToAry, vLength, vSum,
                                uArray2D, qArray2D, displayRange) where
+
 import qualified Data.ByteString.Lex.Fractional as L
 import qualified Data.ByteString.Char8 as L
 import qualified Data.Vector.Unboxed as U
 import System.Environment
 
-{--
-Vector parsing via:
-https://wiki.haskell.org/Numeric_Haskell:_A_Vector_Tutorial
+type Dimension = Int -- a single dimension of lattice
+type Coords = (Int, Int, Int)
+type Coords2D = (Int, Int)
 
-optimize at compilation time:
-$ ghc -Odph --make FileToVector.hs
-$ time ./FileToVector
---}
-
--- The basic idea:
-main = do
-  ary <- fileToAry "./Tests/data1M"
-  return $ qArray 1000 (20, 300, 0) ary
+fileToAry :: FilePath -> IO (U.Vector Double)
+fileToAry file = do
+  !s <- L.readFile file
+  return.parse $ s
 
 parse :: L.ByteString -> U.Vector Double
 parse = U.unfoldr step
@@ -27,16 +25,6 @@ parse = U.unfoldr step
      step !s = case L.readExponential s of
         Nothing       -> Nothing
         Just (!k, !t) -> Just (k, L.tail t)
-
-type Dimension = Int -- a single dimension of lattice
-type Coords = (Int, Int, Int)
-type Coords2D = (Int, Int)
-
--- The following methods perhaps part of type class?
-fileToAry :: FilePath -> IO (U.Vector Double)
-fileToAry file = do
-  !s <- L.readFile file
-  return.parse $ s
 
 uArray2D :: U.Unbox a => Dimension -> Coords2D -> a -> U.Vector a -> U.Vector a
 uArray2D size (x, y) v a = (U.//) a [(x + y * size, v)]
