@@ -21,7 +21,7 @@ saveArr file ary =
   writeFile ("./Tests/data" ++ file) $ aryToStr ary
   where aryToStr = unlines.(map show).elems
 
--- 4GB 1/1000 density 10^9 floats
+-- 4GB 1/1000 density 10^9 Doubles: real 22m35.839s
 bigSparceArray :: ULattice
 bigSparceArray =
   let sparse = randomRs (1::Int, 1000) $ mkStdGen 32 in
