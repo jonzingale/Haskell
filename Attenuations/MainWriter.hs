@@ -16,11 +16,12 @@ type ULattice = UArray Int Double
 randos :: [Double]
 randos = randomRs (0, 1).mkStdGen $ 32
 
-saveArr :: String -> ULattice -> IO()
+saveArr :: String -> ULattice -> IO ()
 saveArr file ary =
   writeFile ("./Tests/data" ++ file) $ aryToStr ary
   where aryToStr = unlines.(map show).elems
 
+-- 4GB 1/1000 density 10^9 floats
 bigSparceArray :: ULattice
 bigSparceArray =
   let sparse = randomRs (1::Int, 1000) $ mkStdGen 32 in
