@@ -14,6 +14,12 @@ type Dimension = Int -- a single dimension of lattice
 type Coords = (Int, Int, Int)
 type Coords2D = (Int, Int)
 
+{--
+https://mail.haskell.org/pipermail/haskell-cafe/2009-August/064900.html
+Suggested Fix? Data.ByteString.Lazy.Char8
+
+--}
+
 fileToAry :: FilePath -> IO (U.Vector Double)
 fileToAry file = do
   !s <- L.readFile file
