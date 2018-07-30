@@ -15,12 +15,15 @@ ghc -O2 --make Main.hs -threaded -rtsopts
 time ./Main +RTS -N8
 time ./Main Tests/data1M +RTS -N8
 
+Additional CPU data:
+time ./Main +RTS -s -N8
+
 To Clear:
 rm Main.o Main.hi Main RayTracer/*.o RayTracer/*.hi
 --}
 
-testFile = fileToAry "./Tests/dataStratifiedArray3D"
--- testFile = fileToAry "./Tests/dataBigSparsey"
+-- testFile = fileToAry "./Tests/dataStratifiedArray3D"
+testFile = fileToAry "./Tests/dataBigSparsey"
 
 main = do
     emptyAry <- fileToAry "./Tests/dataEmptyAry"
