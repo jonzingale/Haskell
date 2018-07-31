@@ -1,6 +1,5 @@
 -- http://hackage.haskell.org/package/diffarray-0.1.1/docs/Data-Array-Diff.html
-
-{-# LANGUAGE BangPatterns #-}
+-- {-# LANGUAGE BangPatterns #-}
 
 module RayTracer.PhotographicPlate where
 import RayTracer.FileToVector (qArray2D, uArray2D)

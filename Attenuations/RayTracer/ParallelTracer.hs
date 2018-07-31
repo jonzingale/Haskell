@@ -4,8 +4,6 @@ import RayTracer.FileToVector (qArray)
 import RayTracer.Transport (transport)
 import RayTracer.GaussianBeam (beam)
 
--- import qualified Data.Vector.Unboxed as U
-
 {-- Trace times:
 Single Threaded interpreted: 1M rays, 100^3 ~ 15 minutes
 Single Threaded compiled: 1M rays, 100^3 ~ 42 secs
