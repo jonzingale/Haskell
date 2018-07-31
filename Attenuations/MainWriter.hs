@@ -22,25 +22,15 @@ size   ary_size   time
 302 MB 250^3      user: 8mins
 2.42GB 500^3      user: 20mins # expect 12 mins
 4   GB 1000^3     user: _mins
-
-Exp regression:
-a = 10293934.8
-b = 1.010689625
-y = a*b^500
-
-Log regression:
-a = -2.322580826
-b = 1.807672315
-y = a + b * log x
 --}
 
 -- Estimation functions
-arySize x =
-  let a = 8.657703936 in
+arySize x = -- for 1000, size -> 1 terrabyte
+  let a = 8657703.9 in
   let b = 1.011799709 in
   a * b ** x
 
-aryTime x =
+aryTime x = -- for 1000, time -> 15 mins
   let a = -22.1294159 in
   let b = 5.45678334 in
   a + b * log x
@@ -59,7 +49,7 @@ dataGeneration :: Int -> IO()
 dataGeneration n = do
   let filename = ("StratifiedArray3D_" ++ show n)
   saveArr filename (stratifiedArray3D n)
-  -- saveZeros n
+  saveZeros n
 
 -- saveArr "GradArray" gradArray => "./Tests/dataGradArray"
 saveArr :: String -> ULattice -> IO()
