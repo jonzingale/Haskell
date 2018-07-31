@@ -26,10 +26,10 @@ processPlate (x:xs) ll = processPlate xs (rayToPlate x ll)
 
 rayToPlate :: PlateVal -> Lattice -> Lattice
 rayToPlate (x, y, t) ary =
-  let s = mAvg t (qArray2D size (x,y) ary) in
+  let s = mAvg t (qArray2D size (x, y) ary) in
   uArray2D size (x,y) s ary
 
 -- how to choose α? coupon collection?
 mAvg :: Double -> Double -> Double
 -- mAvg a 0 = a
-mAvg a b = 0.7 * (a-b) + b
+mAvg a avg = 0.01 * (a-avg) + avg
