@@ -16,7 +16,8 @@ Look at Diff Arrays: Data.Array.Diff for faster updates.
 --}
 
 -- size = 100 -- TODO: make 1000
-size = 1000
+-- size = 1000
+size = 250
 
 processPlate :: [PlateVal] -> Lattice -> Lattice
 processPlate [] ll = ll
@@ -29,10 +30,5 @@ rayToPlate (x, y, t) ary =
 
 -- how to choose α? coupon collection?
 mAvg :: Double -> Double -> Double
-mAvg a b = 0.01 * (a-b) + b
-
-avg :: [Double] -> Double
-avg (x:xs) = a*x + (1-a)*(avg xs)
-  where a = 0.95 -- HDACB recommended
-  -- where a = 0.01 -- closer: 0.4896627203851963
-avg [] = 0
+-- mAvg a 0 = a
+mAvg a b = 0.7 * (a-b) + b
