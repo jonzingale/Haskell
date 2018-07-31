@@ -1,5 +1,6 @@
 # http://pillow.readthedocs.io/en/3.0.x/
 from PIL import Image
+from pdb import set_trace as st
 import numpy as np
 
 testTrace = './Tests/dataTestTrace'
@@ -7,18 +8,19 @@ window = (750, 750)
 
 def renderPixel(t, ary):
   val = ary[t]
-  mm = 300
+  mm = 600
   # mm = max(ary) # max val
   if val == 0: return((0,0,0))
   else: # HSV: (360, 255, 255)
     normedV = int((ary[t]/mm)*255)
-    # return(normedV, normedV, normedV) # HUE
+    return(normedV, normedV, normedV) # HUE
     # return((170, 255, int(ary[t]*4))) # LIGHT
-    return(0, 0, normedV) # BLACK AND WHITE
+    # return(0, 0, normedV) # BLACK AND WHITE
 
 def renderImage(filename):
   ary = np.loadtxt(filename, dtype='float')
-  size = int(np.sqrt(ary.size))
+  # size = int(np.sqrt(ary.size)) # may be too slow.
+  size = 500
 
   # generate HSV image of corresponding size
   img = Image.new('HSV', (size, size), 0)
@@ -28,6 +30,9 @@ def renderImage(filename):
     px[t % size, t // size] = renderPixel(t, ary)
 
   resized = img.resize(window)
+  resized.mode = 'RGB' # convert back for save.
+  resized.save('./Visualizer/niceImage.png')
   resized.show()
 
 renderImage(testTrace)
+
