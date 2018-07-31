@@ -17,7 +17,8 @@ Look at Diff Arrays: Data.Array.Diff for faster updates.
 
 -- size = 100 -- TODO: make 1000
 -- size = 1000
-size = 250
+-- size = 250
+size = 500
 
 processPlate :: [PlateVal] -> Lattice -> Lattice
 processPlate [] ll = ll

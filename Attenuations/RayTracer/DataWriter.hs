@@ -12,6 +12,12 @@ type Lattice = U.Vector Double
 
 randos = randomRs (0, 1::Double).mkStdGen $ 32
 
+-- Produces an empty plate and a stratified data file of given size
+dataGeneration :: Int -> IO()
+dataGeneration n = do
+  saveZeros n
+  saveArr ("StratifiedArray3D_" ++ show n) $ stratifiedArray3D n
+
 -- saveArr "GradArray" gradArray => "./Tests/dataGradArray"
 saveArr :: String -> ULattice -> IO()
 saveArr file ary =
@@ -25,7 +31,7 @@ savePlate filename ary =
 
 saveZeros :: Int -> IO()
 saveZeros n =
-  let zeros = take n $ repeat (0.0::Double) in
+  let zeros = take (n^2) $ repeat (0.0::Double) in
   writeFile ("./Tests/dataEmptyAry_" ++ (show n)) $ aryToStr zeros
   where aryToStr = unlines.(map show)
 
@@ -114,4 +120,4 @@ stratifiedArray3D size =
   let ary = foldr (++) [] $ map crossSection grades in
   listArray (1::Int, size^3) ary
   where
-    crossSection = take (size^2) $ repeat
+    crossSection = take (size^2) . repeat

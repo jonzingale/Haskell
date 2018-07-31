@@ -20,14 +20,28 @@ time ./Main +RTS -s -N8
 
 To Clear:
 rm Main.o Main.hi Main RayTracer/*.o RayTracer/*.hi
+
+To Change:
+center @ GaussianBeam
+size   @ ParallelTracer
+size   @ PhotographicPlate
+range(0, size**3) @ visualizer
+
+Benchmarks:
+size   time
+100^3  user: 3mins
+250^3  user: 8mins
 --}
 
--- testFile = fileToAry "./Tests/dataStratifiedArray3D"
-testFile = fileToAry "./Tests/dataBigSparsey"
+-- testFile = fileToAry "./Tests/dataStratifiedArray3D_100" -- 1M lines
+-- testFile = fileToAry "./Tests/dataStratifiedArray3D_250" -- 15M lines
+-- testFile = fileToAry "./Tests/dataBigSparsey"
+testFile = fileToAry "./Tests/dataStratifiedArray3D_500"
 
 main = do
-    -- emptyAry <- fileToAry "./Tests/dataEmptyAry"
-    emptyAry <- fileToAry "./Tests/dataBigSparsey"
+    -- emptyAry <- fileToAry "./Tests/dataEmptyAry_10000" -- 100
+    -- emptyAry <- fileToAry "./Tests/dataEmptyAry_62500" -- 250
+    emptyAry <- fileToAry "./Tests/dataEmptyAry_250000" -- 500
     args <- getArgs
     case args of
       [file] -> do
