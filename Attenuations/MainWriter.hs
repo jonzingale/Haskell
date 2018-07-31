@@ -7,16 +7,20 @@ import System.Environment
 import System.Random
 
 type ULattice = UArray Int Double
+-- ghc -O2 MainWriter.hs
+-- time ./MainWriter bigSparsey
+
+-- rm MainWriter.o MainWriter.hi MainWriter
 
 {--
 4GB 1/1000 density 10^9 Doubles: real 22m35.839s
 
 Benchmarks:
-size  ary_size   time
-19 MB 100^3      user: 3mins
-302MB 250^3      user: 8mins
-1.5GB 500^3      user: _mins # expect 2.4GB, 12 mins
-4  GB 1000^3     user: _mins
+size   ary_size   time
+19  MB 100^3      user: 3mins
+302 MB 250^3      user: 8mins
+2.42GB 500^3      user: _mins # expect 12 mins
+4   GB 1000^3     user: _mins
 
 Exp regression:
 a = 10293934.8
@@ -28,6 +32,18 @@ a = -2.322580826
 b = 1.807672315
 y = a + b * log x
 --}
+
+-- Estimation functions
+arySize x =
+  let a = 8.657703936 in
+  let b = 1.011799709 in
+  a * b ** x
+
+aryTime x =
+  let a = -22.1294159 in
+  let b = 5.45678334 in
+  a + b * log x
+
 main = do
     args <- getArgs
     case args of
@@ -42,15 +58,8 @@ main = do
 dataGeneration :: Int -> IO()
 dataGeneration n = do
   saveZeros n
-  saveArr ("StratifiedArray3D_" ++ show n) $ stratifiedArray3D n
-
--- ghc -O2 MainWriter.hs
--- time ./MainWriter bigSparsey
-
--- rm MainWriter.o MainWriter.hi MainWriter
-
-randos :: [Double]
-randos = randomRs (0, 1).mkStdGen $ 32
+  saveArr ("StratifiedArray3D_" ++ show n) $ 
+    stratifiedArray3D n
 
 -- saveArr "GradArray" gradArray => "./Tests/dataGradArray"
 saveArr :: String -> ULattice -> IO()
@@ -72,3 +81,6 @@ stratifiedArray3D size =
   listArray (1::Int, size^3) ary
   where
     crossSection = take (size^2) . repeat
+
+randos :: [Double]
+randos = randomRs (0, 1).mkStdGen $ 32
