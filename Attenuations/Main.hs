@@ -26,7 +26,8 @@ rm Main.o Main.hi Main RayTracer/*.o RayTracer/*.hi
 testFile = fileToAry "./Tests/dataBigSparsey"
 
 main = do
-    emptyAry <- fileToAry "./Tests/dataEmptyAry"
+    -- emptyAry <- fileToAry "./Tests/dataEmptyAry"
+    emptyAry <- fileToAry "./Tests/dataBigSparsey"
     args <- getArgs
     case args of
       [file] -> do
