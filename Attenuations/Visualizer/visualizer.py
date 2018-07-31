@@ -23,7 +23,7 @@ def renderImage(filename):
   img = Image.new('HSV', (size, size), 0)
   px = img.load()
 
-  for t in range(0,size**2): # value to pixel
+  for t in range(0, size**3): # value to pixel
     px[t % size, t // size] = renderPixel(t, ary)
 
   resized = img.resize((800, 800))
