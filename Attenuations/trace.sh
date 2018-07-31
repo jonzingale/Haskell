@@ -8,5 +8,5 @@
 
 ghc -O2 --make Main.hs -threaded -rtsopts
 time ./Main +RTS -N8
-rm Main.o Main.hi Main RayTracer/*.o RayTracer/*.hi
+# rm Main.o Main.hi Main RayTracer/*.o RayTracer/*.hi
 python ./Visualizer/visualizer.py
