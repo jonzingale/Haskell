@@ -7,19 +7,19 @@ import System.Environment
 import System.Random
 
 type ULattice = UArray Int Double
--- ghc -O2 MainWriter.hs
--- time ./MainWriter bigSparsey
-
--- rm MainWriter.o MainWriter.hi MainWriter
-
 {--
+To Compile and Run:
+ghc -O2 MainWriter.hs
+time ./MainWriter 500
+rm MainWriter.o MainWriter.hi MainWriter
+
 4GB 1/1000 density 10^9 Doubles: real 22m35.839s
 
-Benchmarks:
+Benchmarks for running Main:
 size   ary_size   time
 19  MB 100^3      user: 3mins
 302 MB 250^3      user: 8mins
-2.42GB 500^3      user: _mins # expect 12 mins
+2.42GB 500^3      user: 20mins # expect 12 mins
 4   GB 1000^3     user: _mins
 
 Exp regression:
