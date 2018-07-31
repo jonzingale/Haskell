@@ -23,9 +23,11 @@ savePlate filename ary =
   writeFile "./Tests/dataTestTrace" $ aryToStr ary
   where aryToStr = unlines.(map show).(U.toList)
 
-bigArray :: ULattice
-bigArray = listArray bounds randos
-  where bounds = (0::Int, 10^6-1)
+saveZeros :: Int -> IO()
+saveZeros n =
+  let zeros = take n $ repeat (0.0::Double) in
+  writeFile ("./Tests/dataEmptyAry_" ++ (show n)) $ aryToStr zeros
+  where aryToStr = unlines.(map show)
 
 bigSparceArray :: ULattice
 bigSparceArray =
@@ -105,11 +107,11 @@ gradArray3D =
   where
     sevenOfEm = (take 7).repeat
 
-stratifiedArray3D :: ULattice
-stratifiedArray3D =
-  let grades = take 100 $ randos in
-  let bounds = (1::Int, 100^3) in
-  let ary = foldr (++) [] $ map sevenOfEm grades in
-  listArray bounds ary
+-- takes a size and returns a cube.
+stratifiedArray3D :: Int -> ULattice
+stratifiedArray3D size =
+  let grades = take size randos in
+  let ary = foldr (++) [] $ map crossSection grades in
+  listArray (1::Int, size^3) ary
   where
-    sevenOfEm = (take 100).repeat
+    crossSection = take (size^2) $ repeat
