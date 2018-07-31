@@ -38,7 +38,7 @@ plane is 2 units, ~ 1mm.
 -- center = 125
 center = 250
 
-size = 10**6 -- number of rays desired
+size = 10**8 -- number of rays desired
 
 beam :: Distance -> Deviation -> Beam
 beam d σ =
