@@ -13,6 +13,11 @@ type Distance = Double
 type Center = Double
 type Beam = [Ray]
 
+-- center = 50
+-- center = 125
+center = 250
+size = 10**8 -- number of rays desired
+
 {--
 Cone Normalization:
 The coords are normalized around 0 by default.
@@ -33,12 +38,6 @@ the light cone to be situated at the output plane.
 the distance from the output plane to the input
 plane is 2 units, ~ 1mm.
 --}
-
--- center = 50
--- center = 125
-center = 250
-
-size = 10**8 -- number of rays desired
 
 beam :: Distance -> Deviation -> Beam
 beam d σ =

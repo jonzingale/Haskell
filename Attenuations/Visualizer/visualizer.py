@@ -2,37 +2,38 @@
 from PIL import Image
 from pdb import set_trace as st
 import numpy as np
+import datetime
 
 testTrace = './Tests/dataTestTrace'
 window = (750, 750)
+sqrt3 = np.sqrt(2.4)
+mm = 500 * sqrt3
+size = 500 # lookup too slow, try by file size.
 
-def renderPixel(t, ary):
+def time():
+  return(datetime.datetime.now().strftime('%s'))
+
+def renderPixel(t, ary): # RGB
   val = ary[t]
-  mm = 600
-  # mm = max(ary) # max val
   if val == 0: return((0,0,0))
-  else: # HSV: (360, 255, 255)
-    normedV = int((ary[t]/mm)*255)
-    return(normedV, normedV, normedV) # HUE
-    # return((170, 255, int(ary[t]*4))) # LIGHT
-    # return(0, 0, normedV) # BLACK AND WHITE
+  else:
+    normedV = int((val/mm)*255)
+    return(normedV, normedV, normedV)
 
 def renderImage(filename):
-  ary = np.loadtxt(filename, dtype='float')
-  # size = int(np.sqrt(ary.size)) # may be too slow.
-  size = 500
+  ary = np.loadtxt(filename, dtype='d')
 
-  # generate HSV image of corresponding size
-  img = Image.new('HSV', (size, size), 0)
+  # generate image of corresponding size
+  img = Image.new('RGB',(size, size), 0)
   px = img.load()
 
-  for t in range(0, ary.size): # value to pixel
+  for t in range(0, size**2): # value to pixel
     px[t % size, t // size] = renderPixel(t, ary)
 
   resized = img.resize(window)
-  resized.mode = 'RGB' # convert back for save.
-  resized.save('./Visualizer/niceImage.png')
   resized.show()
+
+  resized.save('./Visualizer/niceImage'+time()+'.png')
 
 renderImage(testTrace)
 

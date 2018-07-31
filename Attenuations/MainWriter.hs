@@ -2,8 +2,9 @@ module Main where
 import qualified Data.ByteString.Lex.Fractional as L
 import qualified Data.ByteString.Char8 as L
 import qualified Data.Vector.Unboxed as U
-import Data.Array.Unboxed -- UArray
+import Data.Array.Unboxed (UArray, elems, listArray)
 import System.Environment
+import Data.List (sort)
 import System.Random
 
 type ULattice = UArray Int Double
@@ -53,13 +54,12 @@ main = do
         dataGeneration 100
       _ -> putStrLn "Wrong number of arguments"
 
-
 -- Produces an empty plate and a stratified data file of given size
 dataGeneration :: Int -> IO()
 dataGeneration n = do
-  saveZeros n
-  saveArr ("StratifiedArray3D_" ++ show n) $ 
-    stratifiedArray3D n
+  let filename = ("StratifiedArray3D_" ++ show n)
+  saveArr filename (stratifiedArray3D n)
+  -- saveZeros n
 
 -- saveArr "GradArray" gradArray => "./Tests/dataGradArray"
 saveArr :: String -> ULattice -> IO()
@@ -69,14 +69,15 @@ saveArr file ary =
 
 saveZeros :: Int -> IO()
 saveZeros n =
-  let zeros = take (n^2) $ repeat (0.0::Double) in
-  writeFile ("./Tests/dataEmptyAry_" ++ (show n)) $ aryToStr zeros
+  let nn = n^2 in
+  let zeros = take (nn) $ repeat (0.0::Double) in
+  writeFile ("./Tests/dataEmptyAry_" ++ (show nn)) $ aryToStr zeros
   where aryToStr = unlines.(map show)
 
 -- takes a size and returns a cube.
 stratifiedArray3D :: Int -> ULattice
 stratifiedArray3D size =
-  let grades = take size randos in
+  let grades = sort $ take size randos in
   let ary = foldr (++) [] $ map crossSection grades in
   listArray (1::Int, size^3) ary
   where
