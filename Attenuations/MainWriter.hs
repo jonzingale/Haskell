@@ -2,7 +2,7 @@ module Main where
 import qualified Data.ByteString.Lex.Fractional as L
 import qualified Data.ByteString.Char8 as L
 import qualified Data.Vector.Unboxed as U
-import Data.Array.Unboxed -- strict fast Arrays
+import Data.Array.Unboxed -- UArray
 import System.Environment
 import System.Random
 
@@ -15,13 +15,18 @@ Benchmarks:
 size  ary_size   time
 19 MB 100^3      user: 3mins
 302MB 250^3      user: 8mins
-1.5GB 500^3      user: _mins # expect 2GB
+1.5GB 500^3      user: _mins # expect 2.4GB, 12 mins
 4  GB 1000^3     user: _mins
 
 Exp regression:
 a = 10293934.8
 b = 1.010689625
 y = a*b^500
+
+Log regression:
+a = -2.322580826
+b = 1.807672315
+y = a + b * log x
 --}
 main = do
     args <- getArgs
