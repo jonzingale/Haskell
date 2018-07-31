@@ -3,7 +3,7 @@ import RayTracer.PhotographicPlate (processPlate)
 import RayTracer.ParallelTracer (parallelTrace)
 import RayTracer.FileToVector (fileToAry)
 import RayTracer.DataWriter (savePlate)
-import System.Environment
+import System.Environment (getArgs)
 {--
 Todo:
 * pass (filename, seed) to compiled tracer
