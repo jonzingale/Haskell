@@ -3,15 +3,16 @@ from PIL import Image
 import numpy as np
 
 testTrace = './Tests/dataTestTrace'
+window = (750, 750)
 
 def renderPixel(t, ary):
   val = ary[t]
-  mm = 95
+  mm = 300
   # mm = max(ary) # max val
   if val == 0: return((0,0,0))
   else: # HSV: (360, 255, 255)
-    normedV = int((ary[t]/mm)*240)
-    # return(normedV, 255, 255) # HUE
+    normedV = int((ary[t]/mm)*255)
+    # return(normedV, normedV, normedV) # HUE
     # return((170, 255, int(ary[t]*4))) # LIGHT
     return(0, 0, normedV) # BLACK AND WHITE
 
@@ -23,10 +24,10 @@ def renderImage(filename):
   img = Image.new('HSV', (size, size), 0)
   px = img.load()
 
-  for t in range(0, size**3): # value to pixel
+  for t in range(0, ary.size): # value to pixel
     px[t % size, t // size] = renderPixel(t, ary)
 
-  resized = img.resize((800, 800))
+  resized = img.resize(window)
   resized.show()
 
 renderImage(testTrace)
