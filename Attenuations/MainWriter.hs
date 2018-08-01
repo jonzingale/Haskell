@@ -1,5 +1,5 @@
 module Main where
-import Data.Array.Unboxed -- (UArray, elems, listArray)
+import Data.Array.Unboxed (UArray, elems, listArray)
 import System.Environment
 import Data.List (sort)
 import System.Random
@@ -42,7 +42,7 @@ main = do
         dataGeneration 100
       _ -> putStrLn "Wrong number of arguments"
 
--- Produces an empty plate and a stratified data file of given size
+-- Produces a traceable data file of given size and an empty plate 
 dataGeneration :: Int -> IO()
 dataGeneration n = do
   let filename = ("StratifiedArray3D_" ++ show n)
