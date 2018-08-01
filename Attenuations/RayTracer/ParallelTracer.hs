@@ -3,17 +3,7 @@ import Control.Parallel.Strategies (rdeepseq, parListChunk, rseq, using)
 import RayTracer.FileToVector (qArray)
 import RayTracer.Transport (transport)
 import RayTracer.GaussianBeam (beam)
-
-{-- Trace times:
-Single Threaded interpreted: 1M rays, 100^3 ~ 15 minutes
-Single Threaded compiled: 1M rays, 100^3 ~ 42 secs
-Eight Threaded compiled: 1M rays, 100^3 ~ 9 secs
---}
-
--- size = 100
--- size = 250
-size = 500
--- size = 1000
+import RayTracer.Constants (size)
 
 {--
 distance from source to face and converts mm to units.

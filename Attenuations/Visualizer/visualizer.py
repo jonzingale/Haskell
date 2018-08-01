@@ -4,18 +4,21 @@ from pdb import set_trace as st
 import numpy as np
 import datetime
 
+size = 250 # file size ~ 4411000
+# size = 250 # lookup too slow, try by file size.
+# size = 100 # lookup too slow, try by file size.
+
 testTrace = './Tests/dataTestTrace'
 window = (750, 750)
-sqrt3 = np.sqrt(3.0)
-mm = 500 * sqrt3
-size = 500 # lookup too slow, try by file size.
+sqrt3 = np.sqrt(3)
+mm = size * sqrt3
 
 def time():
   return(datetime.datetime.now().strftime('%s'))
 
 def renderPixel(t, ary): # RGB
   val = ary[t]
-  if val == 0: return((0,0,0))
+  if val <= 0: return((0,0,0))
   else:
     normedV = int((val/mm)*255)
     return(normedV, normedV, normedV)
@@ -33,7 +36,7 @@ def renderImage(filename):
   resized = img.resize(window)
   resized.show()
 
-  # resized.save('./Visualizer/niceImage'+time()+'.png')
+  resized.save('./Visualizer/Images/niceImage'+time()+'.png')
 
 renderImage(testTrace)
 

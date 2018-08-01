@@ -1,9 +1,9 @@
 -- http://hackage.haskell.org/package/diffarray-0.1.1/docs/Data-Array-Diff.html
--- {-# LANGUAGE BangPatterns #-}
-
+-- https://en.wikipedia.org/wiki/Moving_average#Exponential_moving_average
 module RayTracer.PhotographicPlate where
 import RayTracer.FileToVector (qArray2D, uArray2D)
 import qualified Data.Vector.Unboxed as U
+import RayTracer.Constants (size)
 
 type PlateVal = (Int, Int, Double)
 type Lattice = U.Vector Double
@@ -14,11 +14,6 @@ the rays and returning a UArray to publish.
 
 Look at Diff Arrays: Data.Array.Diff for faster updates.
 --}
-
--- size = 100
--- size = 250
-size = 500
--- size = 1000
 
 processPlate :: [PlateVal] -> Lattice -> Lattice
 processPlate [] ll = ll
@@ -31,5 +26,7 @@ rayToPlate (x, y, t) ary =
 
 -- how to choose α? coupon collection?
 mAvg :: Double -> Double -> Double
--- mAvg a 0 = a
-mAvg a avg = 0.01 * (a-avg) + avg
+mAvg a 0 = a
+mAvg t avg = α * t + (1 - α) * avg
+  where α = 0.7
+-- mAvg a avg = 0.7 * (avg-a) + avg

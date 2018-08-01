@@ -2,6 +2,7 @@
 module RayTracer.GaussianBeam where
 import Control.Parallel.Strategies (rdeepseq, parListChunk, rseq, using)
 import RayTracer.CumulativeDistribution (neededRays)
+import RayTracer.Constants (center, size)
 import Data.Random.Normal
 import System.Random
 
@@ -13,10 +14,11 @@ type Distance = Double
 type Center = Double
 type Beam = [Ray]
 
--- center = 50
--- center = 125
-center = 250
-size = 3*10**6 -- number of rays desired, coupon collection?
+-- Number of rays desired by coupon collection.
+raySize | size < 500 = 1*10**6
+        | otherwise =
+          let s = (fromIntegral size)::Double in
+          (s*s) * log (s*s)
 
 {--
 Cone Normalization:
@@ -41,7 +43,7 @@ plane is 2 units, ~ 1mm.
 
 beam :: Distance -> Deviation -> Beam
 beam d σ =
-  let needed = neededRays size σ in
+  let needed = neededRays raySize σ in
   filter posiCond $ take needed $ map (ray d) (rDisc σ) -- rays in mm
   where
     posiCond ((x,z),(_,_)) = x >= 0 && z >= 0 &&

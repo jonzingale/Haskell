@@ -4,6 +4,8 @@ import RayTracer.ParallelTracer (parallelTrace)
 import RayTracer.FileToVector (fileToAry)
 import RayTracer.DataWriter (savePlate)
 import System.Environment (getArgs)
+import RayTracer.Constants (size)
+
 {--
 Todo:
 * pass (filename, seed) to compiled tracer
@@ -20,33 +22,30 @@ time ./Main +RTS -s -N8
 
 To Clear:
 rm Main.o Main.hi Main RayTracer/*.o RayTracer/*.hi
-
-To Change:
-center @ GaussianBeam
-size   @ ParallelTracer
-size   @ PhotographicPlate
-range(0, size**3) @ visualizer
 --}
 
--- testFile = fileToAry "./Tests/dataStratifiedArray3D_100"
--- testFile = fileToAry "./Tests/dataStratifiedArray3D_250"
-testFile = fileToAry "./Tests/dataStratifiedArray3D_500"
--- testFile = fileToAry "./Tests/dataBigSparsey"
-
+getFiles n =
+    case n of
+        100 -> ("./Tests/dataStratifiedArray3D_100",
+                "./Tests/dataEmptyAry_10000")
+        250 -> ("./Tests/dataStratifiedArray3D_250",
+                "./Tests/dataEmptyAry_62500")
+        500 -> ("./Tests/dataStratifiedArray3D_500",
+                "./Tests/dataEmptyAry_250000")
+        1000 -> ("./Tests/dataBigSparsey",
+                 "./Tests/dataBigSparsey")
 main = do
-    -- emptyAry <- fileToAry "./Tests/dataEmptyAry_10000" -- 100
-    -- emptyAry <- fileToAry "./Tests/dataEmptyAry_62500" -- 250
-    emptyAry <- fileToAry "./Tests/dataEmptyAry_250000" -- 500
-
+    let (dFile, eFile) = getFiles size -- remove once finished
+    emptyAry <- fileToAry eFile
     args <- getArgs
     case args of
-      [file] -> do
-        ary <- fileToAry file
-        plateAry <- parallelTrace ary
-        let processedPlate = processPlate plateAry emptyAry
-        savePlate "tmp" processedPlate
+      -- [file] -> do
+      --   ary <- fileToAry file
+      --   plateAry <- parallelTrace ary
+      --   let processedPlate = processPlate plateAry emptyAry
+      --   savePlate "tmp" processedPlate
       [] -> do
-        ary <- testFile
+        ary <- fileToAry dFile
         plateAry <- parallelTrace ary
         let processedPlate = processPlate plateAry emptyAry
         savePlate "tmp" processedPlate
