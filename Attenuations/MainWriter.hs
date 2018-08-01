@@ -19,6 +19,7 @@ size   ary_size   time         rays
 19  MB 100^3      user: 3mins  1M
 302 MB 250^3      user: 8mins  1M
 2.42GB 500^3      user: 30mins 3M
+6.65GB 700^3      user: 60mins 1M
 4   GB 1000^3     user: _mins  _
 --}
 
@@ -47,7 +48,7 @@ dataGeneration :: Int -> IO()
 dataGeneration n = do
   let filename = ("StratifiedArray3D_" ++ show n)
   saveArr filename (stratifiedArray3D n)
-  -- saveZeros n -- uncomment and recompile for new sizes
+  saveZeros n -- uncomment and recompile for new sizes
 
 -- saveArr "GradArray" gradArray => "./Tests/dataGradArray"
 saveArr :: String -> ULattice -> IO()

@@ -15,10 +15,11 @@ type Center = Double
 type Beam = [Ray]
 
 -- Number of rays desired by coupon collection.
-raySize | size < 500 = 1*10**6
-        | otherwise =
-          let s = (fromIntegral size)::Double in
-          (s*s) * log (s*s)
+raySize = 1*10**6
+-- raySize | size < 500 = 1*10**6
+--         | otherwise =
+--           let s = (fromIntegral size)::Double in
+--           (s*s) * log (s*s)
 
 {--
 Cone Normalization:

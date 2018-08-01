@@ -32,8 +32,10 @@ getFiles n =
                 "./Tests/dataEmptyAry_62500")
         500 -> ("./Tests/dataStratifiedArray3D_500",
                 "./Tests/dataEmptyAry_250000")
-        1000 -> ("./Tests/dataBigSparsey",
-                 "./Tests/dataBigSparsey")
+        700 -> ("./Tests/dataStratifiedArray3D_700",
+                "./Tests/dataEmptyAry_490000")
+        1000 -> ("./Tests/dataStratifiedArray3D_1000",
+                 "./Tests/dataEmptyAry_1000000")
 main = do
     let (dFile, eFile) = getFiles size -- remove once finished
     emptyAry <- fileToAry eFile

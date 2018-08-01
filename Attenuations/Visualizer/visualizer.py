@@ -4,7 +4,9 @@ from pdb import set_trace as st
 import numpy as np
 import datetime
 
-size = 500 # file size ~ 4411000
+size = 1000
+# size = 700 # file size ~ 123965k
+# size = 500 # file size ~ 4411k
 # size = 250 # 1154993
 # size = 100 # lookup too slow, try by file size.
 
