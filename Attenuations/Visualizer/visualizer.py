@@ -4,8 +4,8 @@ from pdb import set_trace as st
 import numpy as np
 import datetime
 
-size = 250 # file size ~ 4411000
-# size = 250 # lookup too slow, try by file size.
+size = 500 # file size ~ 4411000
+# size = 250 # 1154993
 # size = 100 # lookup too slow, try by file size.
 
 testTrace = './Tests/dataTestTrace'
