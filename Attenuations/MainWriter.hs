@@ -1,13 +1,11 @@
 module Main where
-import qualified Data.ByteString.Lex.Fractional as L
-import qualified Data.ByteString.Char8 as L
-import qualified Data.Vector.Unboxed as U
-import Data.Array.Unboxed (UArray, elems, listArray)
+import Data.Array.Unboxed -- (UArray, elems, listArray)
 import System.Environment
 import Data.List (sort)
 import System.Random
 
 type ULattice = UArray Int Double
+
 {--
 To Compile and Run:
 ghc -O2 MainWriter.hs
@@ -21,7 +19,7 @@ size   ary_size   time
 19  MB 100^3      user: 3mins
 302 MB 250^3      user: 8mins
 2.42GB 500^3      user: 20mins # expect 12 mins
-4   GB 1000^3     user: _mins
+4   GB 1000^3     user: _mins # expect 15 mins, though so wrong im sure.
 --}
 
 -- Estimation functions
@@ -49,7 +47,7 @@ dataGeneration :: Int -> IO()
 dataGeneration n = do
   let filename = ("StratifiedArray3D_" ++ show n)
   saveArr filename (stratifiedArray3D n)
-  saveZeros n
+  -- saveZeros n -- uncomment and recompile for new sizes
 
 -- saveArr "GradArray" gradArray => "./Tests/dataGradArray"
 saveArr :: String -> ULattice -> IO()

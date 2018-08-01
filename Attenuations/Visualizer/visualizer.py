@@ -6,7 +6,7 @@ import datetime
 
 testTrace = './Tests/dataTestTrace'
 window = (750, 750)
-sqrt3 = np.sqrt(2.4)
+sqrt3 = np.sqrt(3.0)
 mm = 500 * sqrt3
 size = 500 # lookup too slow, try by file size.
 
@@ -33,7 +33,7 @@ def renderImage(filename):
   resized = img.resize(window)
   resized.show()
 
-  resized.save('./Visualizer/niceImage'+time()+'.png')
+  # resized.save('./Visualizer/niceImage'+time()+'.png')
 
 renderImage(testTrace)
 

@@ -37,14 +37,15 @@ readDouble bs = map (read.(L.unpack)) $ L.lines $ bs
 --         Just (!k, !t) -> Just (k, L.tail t)
 
 uArray2D :: U.Unbox a => Dimension -> Coords2D -> a -> U.Vector a -> U.Vector a
-uArray2D size (x, y) v a = (U.//) a [(x + y * size, v)]
+uArray2D size (x, z) v a = (U.//) a [(x + z * size, v)]
 
 qArray2D :: U.Unbox a => Dimension -> Coords2D -> U.Vector a -> a
 qArray2D size (x, y) a = (U.!) a (x + y * size)
 
 qArray :: U.Unbox a => Dimension -> Coords -> U.Vector a -> a
--- qArray size (x, y, z) a = (U.!) a (x + y * size * size + z * size)
-qArray size (x, y, z) a = (U.!) a (x + z * size * size + y * size)
+qArray size (x, y, z) a = (U.!) a (x + y * size * size + z * size)
+-- qArray size (x, y, z) a = (U.!) a (z + y * size * size + x * size)
+-- qArray size (x, y, z) a = (U.!) a (x + z * size * size + y * size)
 
 vLength :: U.Unbox a => U.Vector a -> Int
 vLength = U.length

@@ -16,7 +16,7 @@ type Beam = [Ray]
 -- center = 50
 -- center = 125
 center = 250
-size = 10**8 -- number of rays desired
+size = 3*10**6 -- number of rays desired, coupon collection?
 
 {--
 Cone Normalization:
