@@ -20,7 +20,7 @@ size   ary_size   time         rays
 302 MB 250^3      user: 8mins  1M
 2.42GB 500^3      user: 30mins 3M
 6.65GB 700^3      user: 60mins 1M
-4   GB 1000^3     user: _mins  _
+19.4GB 1000^3     user: _mins  1M
 --}
 
 -- Estimation functions
