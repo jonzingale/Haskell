@@ -1,10 +1,10 @@
 {-# OPTIONS_GHC -F -pgmF htfpp #-}
-{-# LANGUAGE BangPatterns #-}
 
 module Tests.GaussianTests where
-import RayTracer.CumulativeDistribution
+import RayTracer.CumulativeDistribution (neededRays)
 import Data.Random.Normal (mkNormals')
 
+import RayTracer.Constants (center, size)
 import Tests.ExplicitGenerators
 import RayTracer.GaussianBeam
 import RayTracer.Transport
@@ -17,13 +17,15 @@ Scaling and Translation Tests:
 rLen :: Double -> Double -> Double
 rLen x y = sqrt $ x**2 + y**2
 
-prop_PullbackPushforwardID :: Gen Bool --generalize me
+-- impure as ray depends on center located in Constants.
+prop_PullbackPushforwardID :: Gen Bool
 prop_PullbackPushforwardID = do
+  let size' = (fromIntegral size)::Double
   let (cs, as) = ray 2 (1,0)
   let seg = transport cs as
   let stopCond s ((x,y,z), _) = x< s &&  z< s
-  let integrate l = sum [ seg | (_, seg) <- takeWhile (stopCond 100) l]
-  return $ (eBall 13) (integrate seg) (rLen 25 100)
+  let integrate l = sum [ seg | (_, seg) <- takeWhile (stopCond size) l]
+  return $ (eBall 10) (integrate seg) (rLen (center/2) size')
 
 {--
 Cumulative Distribution Tests:
@@ -59,10 +61,10 @@ prop_EqualComponents (Distance d) (Sigs (s, r)) = do
           | otherwise = 3*pi/4
 
 -- As d -> exit plane, angles tend toward 0, π, or π/2.
-prop_AngleSpraysAway :: TestCoords -> TestSignPair -> Gen Bool
-prop_AngleSpraysAway (Coords (x, z)) (Sigs (s, r)) = do
+prop_AngleSpraysAway :: TestCoords -> TestSignPair -> TestDistance -> Gen Bool
+prop_AngleSpraysAway (Coords (x, z)) (Sigs (s, r)) (Distance c) = do
   let (θ, φ) = snd.ray (-2) $ (s*x, r*z)
-  return $ center == 0 || eBall 14 (rad s) θ && eBall 13 (rad r) φ
+  return $ c == 0 || eBall 14 (rad s) θ && eBall 13 (rad r) φ
   where
     rad s | s == 1 = 0
           | otherwise = pi

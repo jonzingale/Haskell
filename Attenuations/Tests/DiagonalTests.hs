@@ -3,7 +3,7 @@
 
 module Tests.DiagonalTests where
 import Tests.ExplicitGenerators
-import RayTracer.FileToVector -- fileToAry, qArray, vLength, vSum
+import RayTracer.FileToVector
 import RayTracer.Transport
 import RayTracer.Crossings
 

@@ -1,8 +1,8 @@
 module RayTracer.GaussianHelpers where
 import RayTracer.GaussianBeam
+import RayTracer.Constants
 import System.Random
 
--- verify that gaussian has ~ equal parts about 50
 radToDeg :: Double -> Double
 radToDeg θ = θ * 180 / pi
 
@@ -23,7 +23,7 @@ cheapTrans = do
 -- cheapBeam 50 50
 cheapBeam d = do
   let c = center
-  let vals = take 10 $ f (beam d)
+  let vals = take 10 $ f (beam d 1)
   let s2 = sqrt 2 / 2
   let dd = c * 2.0
   putStr "(x ,z ,θ ,φ ) in degrees\n"

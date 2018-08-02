@@ -4,7 +4,7 @@
 
 module Tests.LatticeTests where
 import Tests.ExplicitGenerators
-import RayTracer.FileToVector -- fileToAry, qArray, vLength, vSum
+import RayTracer.FileToVector
 import RayTracer.Transport
 import RayTracer.Crossings
 
@@ -14,15 +14,6 @@ import Test.Framework
 
 -- 3D data files: 7x7x7
 allOnes = fileToAry "./Tests/dataAllOnes3D"
-
--- General Array Tests.
-test_ArrayIsSevenCubed = do
-  ones <- allOnes
-  assertEqual (vLength ones) 343
-
-test_ArrayIsAllOnes = do
-  ones <- allOnes
-  assertEqual (vSum ones) 343
 
 -- Arbitrary Lattice Tests
 prop_QueryArbitraryLattice :: U.Vector Double -> Gen Bool

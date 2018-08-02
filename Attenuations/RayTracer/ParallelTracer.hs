@@ -12,20 +12,14 @@ a source 1mm distance to the front face is 4 units from the exit.
 mmToUnits :: Double -> Double
 mmToUnits d  = 2 * d
 
-{--
-I suspect this could be written better.
-Method would perform the sum and get the last ijk value
-on the same pass.
---}
 attenuation ary ((x, z), (θ, φ)) =
   let path = takeWhile stopCond $ transport (x, z) (θ, φ) in
   let s = sum [ seg * qArray size ijk ary | (ijk, seg) <- path] in
-  let (i,j,k) = fst.last $ path in -- <--
-  (i, k, s)
+  let (i,j,k) = fst.last $ path in (i, k, s)
   where
     stopCond ((x,y,z), s) =
       x<size && y<size && z<size &&
-      x>=0 && z>=0 -- && y>=0
+      x>=0 && z>=0
 
 parallelTrace ary = do
   let gBeams = (beam.mmToUnits) (10^3) 2 -- Distance Deviation
