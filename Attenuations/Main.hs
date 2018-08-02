@@ -9,7 +9,7 @@ import RayTracer.Constants (size)
 {--
 Todo:
 * pass (
-  filename, size, seed, distance, deviation,
+  filename, seed, distance, deviation,
   couponCollected Beam) to compiled tracer
 
 * produce file of comparable size.
