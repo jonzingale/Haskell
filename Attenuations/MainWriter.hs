@@ -1,8 +1,8 @@
 module Main where
 import Data.Array.Unboxed (UArray, elems, listArray)
-import System.Environment
+import System.Random (mkStdGen, randomRs)
+import System.Environment (getArgs)
 import Data.List (sort)
-import System.Random
 
 type ULattice = UArray Int Double
 
@@ -50,17 +50,17 @@ dataGeneration n = do
   saveArr filename (stratifiedArray3D n)
   saveZeros n -- uncomment and recompile for new sizes
 
--- saveArr "GradArray" gradArray => "./Tests/dataGradArray"
+-- saveArr "GradArray" gradArray => "./Data/dataGradArray"
 saveArr :: String -> ULattice -> IO()
 saveArr file ary =
-  writeFile ("./Tests/data" ++ file) $ aryToStr ary
+  writeFile ("./Data/data" ++ file) $ aryToStr ary
   where aryToStr = unlines.(map show).elems
 
 saveZeros :: Int -> IO()
 saveZeros n =
   let nn = n^2 in
   let zeros = take (nn) $ repeat (0.0::Double) in
-  writeFile ("./Tests/dataEmptyAry_" ++ (show nn)) $ aryToStr zeros
+  writeFile ("./Data/dataEmptyAry_" ++ (show nn)) $ aryToStr zeros
   where aryToStr = unlines.(map show)
 
 -- takes a size and returns a cube.
