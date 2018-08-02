@@ -10,7 +10,7 @@ size = 100
 # size = 250 # 1154993
 # size = 100 # lookup too slow, try by file size.
 
-testTrace = './Tests/dataTestTrace'
+testTrace = './Data/dataSavedPlate'
 window = (750, 750)
 sqrt3 = np.sqrt(3)
 mm = size * sqrt3

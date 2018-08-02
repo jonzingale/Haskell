@@ -18,21 +18,21 @@ dataGeneration n = do
   saveZeros n
   saveArr ("StratifiedArray3D_" ++ show n) $ stratifiedArray3D n
 
--- saveArr "GradArray" gradArray => "./Tests/dataGradArray"
+-- saveArr "GradArray" gradArray => "./Data/dataGradArray"
 saveArr :: String -> ULattice -> IO()
 saveArr file ary =
-  writeFile ("./Tests/data" ++ file) $ aryToStr ary
+  writeFile ("./Data/data" ++ file) $ aryToStr ary
   where aryToStr = unlines.(map show).elems
 
 savePlate :: String -> Lattice -> IO()
 savePlate filename ary =
-  writeFile "./Tests/dataTestTrace" $ aryToStr ary
+  writeFile "./Data/dataSavedPlate" $ aryToStr ary
   where aryToStr = unlines.(map show).(U.toList)
 
 saveZeros :: Int -> IO()
 saveZeros n =
   let zeros = take (n^2) $ repeat (0.0::Double) in
-  writeFile ("./Tests/dataEmptyAry_" ++ (show n)) $ aryToStr zeros
+  writeFile ("./Data/dataEmptyAry_" ++ (show n)) $ aryToStr zeros
   where aryToStr = unlines.(map show)
 
 bigSparceArray :: ULattice
