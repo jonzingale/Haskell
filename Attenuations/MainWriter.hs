@@ -15,12 +15,12 @@ rm MainWriter.o MainWriter.hi MainWriter
 4GB 1/1000 density 10^9 Doubles: real 22m35.839s
 
 Benchmarks for running Main:
-size   ary_size   time         rays
-19  MB 100^3      user: 3mins  1M
-302 MB 250^3      user: 8mins  1M
-2.42GB 500^3      user: 30mins 3M
-6.65GB 700^3      user: 40mins 1M
-19.4GB 1000^3     user: 80mins 1M
+size   ary_size   time          rays
+19  MB 100^3      user: 1.3mins 1M
+302 MB 250^3      user: 2.5mins 1M
+2.42GB 500^3      user: 30mins  3M
+6.65GB 700^3      user: 40mins  1M
+19.4GB 1000^3     user: 80mins  1M
 --}
 
 -- Estimation functions
