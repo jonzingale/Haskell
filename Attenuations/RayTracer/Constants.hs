@@ -6,7 +6,7 @@ size   @ PhotographicPlate
 range(0, size**3) @ visualizer.py
 --}
 
-size = 250::Int
+size = 700::Int
 
 center :: Double
 center = (fromIntegral size) /  2

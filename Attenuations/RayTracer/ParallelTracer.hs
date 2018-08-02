@@ -20,7 +20,7 @@ attenuation ary ((x, z), (θ, φ)) = -- this could be written better
   where
     stopCond ((x,y,z), s) =
       x<size && y<size && z<size &&
-      x>=0  && y>=0  && z>=0
+      x>=0  && y>=0  && z>=0 -- is y ever less ?
 
 parallelTrace ary = do
   let gBeams = (beam.mmToUnits) (10^3) 2 -- Distance Deviation

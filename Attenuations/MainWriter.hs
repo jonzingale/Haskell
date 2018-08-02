@@ -19,7 +19,7 @@ size   ary_size   time         rays
 19  MB 100^3      user: 3mins  1M
 302 MB 250^3      user: 8mins  1M
 2.42GB 500^3      user: 30mins 3M
-6.65GB 700^3      user: 60mins 1M
+6.65GB 700^3      user: 40mins 1M
 19.4GB 1000^3     user: _mins  1M
 --}
 
@@ -29,9 +29,9 @@ arySize x = -- for 1000, size -> 1 terrabyte
   let b = 1.011799709 in
   a * b ** x
 
-aryTime x = -- for 1000, time -> 15 mins
-  let a = -22.1294159 in
-  let b = 5.45678334 in
+aryTime x = -- for 1000, time -> 63 mins
+  let a = -141.595473 in
+  let b = 9.90916174 in
   a + b * log x
 
 main = do
