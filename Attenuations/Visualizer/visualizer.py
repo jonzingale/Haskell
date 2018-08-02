@@ -3,10 +3,10 @@ from PIL import Image
 import numpy as np
 import datetime
 
-size = 100
+# size = 500
 # size = 700 # file size ~ 123965k
 # size = 500 # file size ~ 4411k
-# size = 250 # 1154993
+size = 100 # 1154993
 
 testTrace = './Data/dataSavedPlate'
 window = (750, 750)
