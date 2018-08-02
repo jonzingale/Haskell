@@ -1,11 +1,8 @@
 module RayTracer.DataWriter where
 import Data.Array.Unboxed -- strict fast Arrays
+import qualified Data.Vector.Unboxed as U
 import System.Random (mkStdGen, randomRs)
 import Data.List (sort)
-
-import qualified Data.ByteString.Lex.Fractional as L
-import qualified Data.ByteString.Char8 as L
-import qualified Data.Vector.Unboxed as U
 
 type ULattice = UArray Int Double
 type Lattice = U.Vector Double
