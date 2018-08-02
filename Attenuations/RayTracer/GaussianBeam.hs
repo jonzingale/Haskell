@@ -1,25 +1,16 @@
 -- http://hackage.haskell.org/package/normaldistribution-1.1.0.3/docs/Data-Random-Normal.html
 module RayTracer.GaussianBeam where
-import Control.Parallel.Strategies (rdeepseq, parListChunk, rseq, using)
 import RayTracer.CumulativeDistribution (neededRays)
-import RayTracer.Constants (center, size)
-import Data.Random.Normal
-import System.Random
+import RayTracer.Constants (center, size, raySize)
+import System.Random (randomRs, mkStdGen)
+import Data.Random.Normal (mkNormals')
 
 type Ray = (EntryCoords, EntryAngles)
 type EntryAngles = (Double, Double)
 type EntryCoords = (Double, Double)
 type Deviation = Double
 type Distance = Double
-type Center = Double
 type Beam = [Ray]
-
--- Number of rays desired by coupon collection.
-raySize = 1*10**6
--- raySize | size < 500 = 1*10**6
---         | otherwise =
---           let s = (fromIntegral size)::Double in
---           (s*s) * log (s*s)
 
 {--
 Cone Normalization:
