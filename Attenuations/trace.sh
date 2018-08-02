@@ -5,10 +5,11 @@
 # time for benchmarking
 # time ./Main $file +RTS -N8
 
-ghc -O2 MainWriter.hs
-time ./MainWriter 100
-rm MainWriter.o MainWriter.hi MainWriter
-echo 'finished data writing'
+# Writing Zeros is important the first time.
+# ghc -O2 MainWriter.hs
+# time ./MainWriter 100
+# rm MainWriter.o MainWriter.hi MainWriter
+# echo 'finished data writing'
 
 echo 'starting tracer compilation'
 ghc -O2 --make Main.hs -threaded -rtsopts
