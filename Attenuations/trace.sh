@@ -6,7 +6,7 @@
 # time ./Main $file +RTS -N8
 
 ghc -O2 MainWriter.hs
-time ./MainWriter 700
+time ./MainWriter 100
 rm MainWriter.o MainWriter.hi MainWriter
 echo 'finished data writing'
 
