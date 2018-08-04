@@ -2,7 +2,6 @@ module Main where
 import Data.Array.Unboxed (UArray, elems, listArray)
 import System.Random (mkStdGen, randomRs)
 import System.Directory (doesPathExist)
-import System.Environment (getArgs)
 import Data.List (sort)
 
 type ULattice = UArray Int Double
@@ -29,7 +28,6 @@ main = do -- Write empty plates and test data.
         putStr "creating dataEmptyAry_1000000"
         saveZeros 1000
 
--- saveArr "GradArray" gradArray => "./Data/dataGradArray"
 saveArr :: String -> ULattice -> IO()
 saveArr file ary =
   writeFile ("./Data/data" ++ file) $ aryToStr ary
