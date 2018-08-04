@@ -2,11 +2,10 @@
 
 file="$1"
 
-# Writing Zeros is important the first time.
-# ghc -O2 MainWriter.hs
-# time ./MainWriter 100
-# rm MainWriter.o MainWriter.hi MainWriter
-# echo 'finished data writing'
+ghc -O2 MainWriter.hs
+time ./MainWriter
+rm MainWriter.o MainWriter.hi MainWriter
+echo 'finished writing necessary data'
 
 echo 'starting tracer compilation'
 ghc -O2 --make Main.hs -threaded -rtsopts

@@ -1,26 +1,33 @@
 module Main where
 import Data.Array.Unboxed (UArray, elems, listArray)
 import System.Random (mkStdGen, randomRs)
+import System.Directory (doesPathExist)
 import System.Environment (getArgs)
 import Data.List (sort)
 
 type ULattice = UArray Int Double
 
-main = do
-    args <- getArgs
-    case args of
-      [n] -> do
-        dataGeneration (read n)
-      [] -> do
-        dataGeneration 100
-      _ -> putStrLn "Wrong number of arguments"
+main = do -- Write empty plates and test data.
+    test100 <- doesPathExist "./Data/dataStratifiedArray3D_100"
+    path100 <- doesPathExist "./Data/dataEmptyAry_10000"
+    path1K <- doesPathExist "./Data/dataEmptyAry_1000000"
+    if test100
+      then putStr "test data: dataStratifiedArray3D_100 exists\n"
+      else do
+        putStr "creating dataStratifiedArray3D_100"
+        saveArr "StratifiedArray3D_100" (stratifiedArray3D 100)
 
--- Produces a traceable data file of given size and an empty plate 
-dataGeneration :: Int -> IO()
-dataGeneration n = do
-  let filename = ("StratifiedArray3D_" ++ show n)
-  saveArr filename (stratifiedArray3D n)
-  saveZeros n -- uncomment and recompile for new sizes
+    if path100
+      then putStr "empty 100 exists\n"
+      else do
+        putStr "creating dataEmptyAry_10000"
+        saveZeros 100
+
+    if path1K
+      then putStr "empty 1k exists\n"
+      else do
+        putStr "creating dataEmptyAry_1000000"
+        saveZeros 1000
 
 -- saveArr "GradArray" gradArray => "./Data/dataGradArray"
 saveArr :: String -> ULattice -> IO()
