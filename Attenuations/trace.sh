@@ -9,10 +9,10 @@ file="$1"
 # echo 'finished data writing'
 
 echo 'starting tracer compilation'
-ghc -O2 --make Main.hs $file -threaded -rtsopts
+ghc -O2 --make Main.hs -threaded -rtsopts
 echo 'starting trace'
 time ./Main +RTS -N8 # 8 virtual cores
-# time ./Main +RTS file -N8 # 8 virtual cores, pass file to script.
+# time ./Main +RTS $file -N8 # 8 virtual cores, pass file to script.
 rm Main.o Main.hi Main RayTracer/*.o RayTracer/*.hi
 
 echo 'visualizing data'
