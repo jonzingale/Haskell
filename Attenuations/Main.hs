@@ -48,7 +48,7 @@ main = do
         savePlate "tmp" processedPlate
 
       [] -> do -- test path
-        let (dFile, eFile) = getFiles 100
+        let (dFile, eFile) = getFiles size --100
         ary <- fileToAry dFile
         emptyAry <- fileToAry eFile
         plateAry <- parallelTrace ary
