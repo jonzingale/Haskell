@@ -12,16 +12,7 @@ Todo:
   filename, seed, distance, deviation,
   couponCollected Beam) to compiled tracer
 
-* produce file of comparable size.
-* scale constants
-
-To Compile and Run:
-ghc -O2 --make Main.hs -threaded -rtsopts
-time ./Main +RTS -N8
-time ./Main Data/dataStratifiedArray3D_100 +RTS -N8
-
-To Clear:
-rm Main.o Main.hi Main RayTracer/*.o RayTracer/*.hi
+* verify params
 --}
 
 getFiles n =
@@ -37,18 +28,31 @@ getFiles n =
         1000 -> ("./Data/dataStratifiedArray3D_1000",
                  "./Data/dataEmptyAry_1000000")
 main = do
-    let (dFile, eFile) = getFiles size -- remove once finished
-    emptyAry <- fileToAry eFile
     args <- getArgs
     case args of
-      -- [file] -> do
-      --   ary <- fileToAry file
-      --   plateAry <- parallelTrace ary
-      --   let processedPlate = processPlate plateAry emptyAry
-      --   savePlate "tmp" processedPlate
-      [] -> do
-        ary <- fileToAry dFile
+
+      [filename] -> do -- default path
+        let (dFile, eFile) = getFiles 1000
+        ary <- fileToAry filename
+        emptyAry <- fileToAry eFile
         plateAry <- parallelTrace ary
         let processedPlate = processPlate plateAry emptyAry
         savePlate "tmp" processedPlate
+
+      [filename, seed] -> do -- with random seed
+        let (dFile, eFile) = getFiles 1000
+        ary <- fileToAry filename
+        emptyAry <- fileToAry eFile
+        plateAry <- parallelTrace ary
+        let processedPlate = processPlate plateAry emptyAry
+        savePlate "tmp" processedPlate
+
+      [] -> do -- test path
+        let (dFile, eFile) = getFiles 100
+        ary <- fileToAry dFile
+        emptyAry <- fileToAry eFile
+        plateAry <- parallelTrace ary
+        let processedPlate = processPlate plateAry emptyAry
+        savePlate "tmp" processedPlate
+
       _ -> putStrLn "Wrong number of arguments"

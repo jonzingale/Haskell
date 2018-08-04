@@ -1,9 +1,6 @@
 #!/bin/bash
 
-# file="$1"
-# preset for 8 threads
-# time for benchmarking
-# time ./Main $file +RTS -N8
+file="$1"
 
 # Writing Zeros is important the first time.
 # ghc -O2 MainWriter.hs
@@ -12,10 +9,11 @@
 # echo 'finished data writing'
 
 echo 'starting tracer compilation'
-ghc -O2 --make Main.hs -threaded -rtsopts
-time ./Main +RTS -N8
-# echo 'finished trace at:'
-# date +%H-%M-%S
+ghc -O2 --make Main.hs $file -threaded -rtsopts
+echo 'starting trace'
+time ./Main +RTS -N8 # 8 virtual cores
+# time ./Main +RTS file -N8 # 8 virtual cores, pass file to script.
 rm Main.o Main.hi Main RayTracer/*.o RayTracer/*.hi
-echo 'removed files, visualizing data'
+
+echo 'visualizing data'
 python ./Visualizer/visualizer.py
