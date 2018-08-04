@@ -1,5 +1,5 @@
 module Main where
-import Control.Parallel.Strategies (rdeepseq, parListChunk, rseq, using)
+import qualified Data.Vector.Unboxed as U
 import Data.Int (Int32)
 import System.Random
 import SortsShuffles
@@ -21,17 +21,18 @@ type Volume = Int32
 makeWavFile :: WAVE -> IO ()
 makeWavFile wav = putWAVEFile "temp.wav" wav
 {--
-ghc -O2 --make WaveTest.hs -threaded -rtsopts
-time ./WaveTest +RTS -N8
+ghc -O2 --make WaveTest.hs
+time ./WaveTest
 rm *.hi *.o WaveTest
 --}
 main = do
-  w <- wavToVect "test.wav"
+  wav <- getWAVEFile "hello.wav"
+  let size = 16000
+  let stereo = waveSamples wav
+  let mono = map (\ [x,y] -> x) stereo
+  let keyed = zip [0..] $ take size mono
+  let vv = U.fromList $ shuffle keyed
 
-
-  -- let shKeyMono = shuffle $ keySamples stereo
-  -- let them = iterate (partialBubbleSort 100) shKeyMono
-  -- let sampChunks = take 100 $ map ((:[]).unkey) them
-  -- let pSamps = sampChunks `using` parListChunk 64 rdeepseq
-  -- makeWavFile $ WAVE header $ foldr (++) [] pSamps
-  return Nothing
+  let vals = take (1*10^6) $ iterativeSort size vv
+  let samples = map (:[]) vals
+  makeWavFile $ WAVE header samples
