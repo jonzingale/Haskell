@@ -2,11 +2,15 @@ module SortsShuffles where
 import System.Random (mkStdGen, randoms)
 import Data.List (sort)
 
+seedShuffle :: Ord a => Int -> [a] -> [a]
+seedShuffle n xs = snd.unzip.sort.zip (randos n) $ xs 
+  where randos n = (randoms $ mkStdGen n)::[Int]
+
 shuffle :: Ord a => [a] -> [a]
 shuffle xs = snd.unzip.sort.zip randos $ xs 
   where randos = (randoms $ mkStdGen 23)::[Int]
 
-bubbleSort :: Ord a => [a] -> [a] -- 37 secs for 48k samples
+bubbleSort :: Ord a => [a] -> [a]
 bubbleSort ks = bs 0 ks
   where
     bswap i ks = take i ks ++ [ks !! (i+1)] ++ [ks !! i] ++ drop (i+2) ks
@@ -28,6 +32,3 @@ testPartialBS = do
   let ary = shuffle [0..100]
   let those = iterate (partialBubbleSort 10) ary
   putStr.unlines.map show $ those
-
--- nested probabilistic sort.
-
