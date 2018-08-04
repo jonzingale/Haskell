@@ -3,7 +3,6 @@
 module RayTracer.FileToVector (qArray, fileToAry, uArray2D, qArray2D) where
 import qualified Data.ByteString.Lazy.Char8 as L
 import qualified Data.Vector.Unboxed as U
-import System.Environment
 
 type Dimension = Int -- single side of lattice
 type Coords = (Int, Int, Int)
