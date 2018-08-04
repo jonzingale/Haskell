@@ -6,17 +6,6 @@ import Data.List (sort)
 
 type ULattice = UArray Int Double
 
--- Estimation functions
-arySize x = -- for 1000, size -> 1 terrabyte
-  let a = 8657703.9 in
-  let b = 1.011799709 in
-  a * b ** x
-
-aryTime x = -- for 1000, time -> 63 mins
-  let a = -141.595473 in
-  let b = 9.90916174 in
-  a + b * log x
-
 main = do
     args <- getArgs
     case args of
