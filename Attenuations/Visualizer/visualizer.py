@@ -3,7 +3,7 @@ from PIL import Image
 import numpy as np
 import datetime
 
-size = 500
+size = 250
 
 testTrace = './Data/dataSavedPlate'
 window = (750, 750)
@@ -27,7 +27,7 @@ def renderImage(filename):
 
   time = datetime.datetime.now().strftime('%s')
   resized = img.resize(window)
-  resized.save('./Visualizer/Images/image_' + time + '.png')
+  # resized.save('./Visualizer/Images/image_' + time + '.png')
   resized.show()
 
 renderImage(testTrace)
