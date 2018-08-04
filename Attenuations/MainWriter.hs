@@ -43,6 +43,4 @@ stratifiedArray3D size =
   listArray (1::Int, size^3) ary
   where
     crossSection = take (size^2) . repeat
-
-randos :: [Double]
-randos = randomRs (0, 1).mkStdGen $ 32
+    randos = randomRs (0, 1).mkStdGen $ 32
