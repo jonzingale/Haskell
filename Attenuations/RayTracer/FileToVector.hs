@@ -5,9 +5,9 @@ import qualified Data.ByteString.Lazy.Char8 as L
 import qualified Data.Vector.Unboxed as U
 
 type Lattice = U.Vector Double
-type Dimension = Int -- single side of lattice
 type Coords = (Int, Int, Int)
 type Coords2D = (Int, Int)
+type Dimension = Int
 
 fileToAry :: FilePath -> IO Lattice
 fileToAry file = do
