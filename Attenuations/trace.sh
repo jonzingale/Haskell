@@ -8,6 +8,7 @@ time ./MainWriter
 rm MainWriter.o MainWriter.hi MainWriter
 echo 'finished writing necessary data'
 
+date
 echo 'starting tracer compilation'
 ghc -O2 --make Main.hs -threaded -rtsopts
 echo 'starting trace'

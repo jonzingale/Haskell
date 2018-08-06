@@ -3,7 +3,7 @@ from PIL import Image
 import numpy as np
 import datetime
 
-size = 700
+size = 1000
 
 testTrace = './Data/dataSavedPlate'
 window = (750, 750)
