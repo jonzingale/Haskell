@@ -1,19 +1,21 @@
 #!/bin/bash
 
 # . trace.sh filename, if arg is blank tests for size found in Constants.hs
-file="$1"
+# file="$1"
 
-ghc -O2 MainWriter.hs
-time ./MainWriter
-rm MainWriter.o MainWriter.hi MainWriter
-echo 'finished writing necessary data'
+# ghc -O2 MainWriter.hs
+# time ./MainWriter
+# rm MainWriter.o MainWriter.hi MainWriter
+# echo 'finished writing necessary data'
 
-date
 echo 'starting tracer compilation'
 ghc -O2 --make Main.hs -threaded -rtsopts
-echo 'starting trace'
-time ./Main +RTS $file -N8 # 8 virtual cores
+echo 'starting trace' ; date
+
+time ./Main +RTS -sstderr -N8 # 8 virtual cores
 rm Main.o Main.hi Main RayTracer/*.o RayTracer/*.hi
 
 echo 'visualizing data'
 python ./Visualizer/visualizer.py
+rm Data/dataSavedPlate
+open Visualizer/Images/niceImage*

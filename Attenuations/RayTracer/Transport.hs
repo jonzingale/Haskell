@@ -1,4 +1,4 @@
-module RayTracer.Transport where
+module RayTracer.Transport (transport) where
 import RayTracer.HelperMethods
 import RayTracer.Crossings
 

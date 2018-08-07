@@ -8,6 +8,14 @@ type YCoord = Double
 type ZCoord = Double
 type Angle  = Double
 
+{--
+rewrite using U.Vector?
+https://stackoverflow.com/questions/3276240/tools-for-analyzing-performance-of-a-haskell-program/3276557#3276557
+http://hackage.haskell.org/package/vector-0.12.0.1/docs/Data-Vector-Unboxed.html
+
+U.enumFrom 1 top
+--}
+
 xcrossings :: EntryCoords -> EntryAngles -> [Coords]
 xcrossings (x, z) (θ, φ)
   | θ > pi/2 = [(cc x - k,

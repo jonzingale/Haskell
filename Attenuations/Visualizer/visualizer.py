@@ -27,7 +27,7 @@ def renderImage(filename):
 
   time = datetime.datetime.now().strftime('%s')
   resized = img.resize(window)
-  # resized.save('./Visualizer/Images/image_' + time + '.png')
+  resized.save('./Visualizer/Images/image_' + time + '.png')
   resized.show()
 
 renderImage(testTrace)

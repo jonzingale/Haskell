@@ -8,7 +8,7 @@ import RayTracer.Constants (size)
 
 {--
 Todo:
-* pass (filename, seed, distance, deviation, rays)
+* pass (filename, seed, distance, deviation)
 * couponCollected Beam estimation to compiled tracer
 --}
 
