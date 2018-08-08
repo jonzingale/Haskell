@@ -32,7 +32,8 @@ readDouble ls = unsafePerformIO $ B.useAsCString s $ \cstr ->
     s = B.concat . L.toChunks $ ls
 
 uArray2D :: Dimension -> Coords2D -> Double -> Lattice -> Lattice
-uArray2D size (x, z) v a = (U.//) a [(x + z * size, v)]
+uArray2D size (x, z) v a = U.update a $ U.singleton (x + z * size, v)
+-- uArray2D size (x, z) v a = (U.//) a [(x + z * size, v)]
 
 qArray2D :: Dimension -> Coords2D -> Lattice -> Double
 qArray2D size (x, y) a = (U.!) a (x + y * size)

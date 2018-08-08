@@ -9,13 +9,17 @@
 # echo 'finished writing necessary data'
 
 echo 'starting tracer compilation'
-ghc -O2 --make Main.hs -threaded -rtsopts
-echo 'starting trace' ; date
 
-time ./Main +RTS -sstderr -N8 # 8 virtual cores
+# -prof -fprof-auto -fprof-cafs -fforce-recomp
+# ghc -O2 --make Main.hs -threaded -rtsopts -fforce-recomp
+ghc -O2 --make Main.hs -threaded -rtsopts -prof -fprof-auto -fprof-cafs -fforce-recomp
+
+clear ; echo 'starting trace' ; date
+
+time ./Main +RTS -N8 -sstderr -p # 8 virtual cores
 rm Main.o Main.hi Main RayTracer/*.o RayTracer/*.hi
 
-echo 'visualizing data'
-python ./Visualizer/visualizer.py
-rm Data/dataSavedPlate
-open Visualizer/Images/niceImage*
+# echo 'visualizing data'
+# python ./Visualizer/visualizer.py
+# rm Data/dataSavedPlate
+# open Visualizer/Images/niceImage*

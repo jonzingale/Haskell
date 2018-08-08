@@ -18,8 +18,7 @@ size   ary_size   time          rays
 19.4GB 1000^3     out-of-range  3M
 --}
 
-size = 1000::Int
-
 center, raySize :: Double
 center = (fromIntegral size) /  2
 raySize = 1*10**6
+size = 100::Int
