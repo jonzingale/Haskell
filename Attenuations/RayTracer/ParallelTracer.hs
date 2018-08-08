@@ -24,7 +24,7 @@ attenuation ary ((x, z), (θ, φ)) =
       x>=0 && z>=0
 
 parallelTrace ary = do
-  let gBeams = beam (2 * 10^3) 1 -- Distance Deviation
+  let gBeams = beam (2 * 10^3) 2 -- Distance Deviation
   let rays = map (attenuation ary) gBeams
   let results = rays `using` parListChunk 64 rdeepseq
   return results -- [(x, z, SegmentLength)]

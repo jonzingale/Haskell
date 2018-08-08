@@ -1,186 +1,189 @@
-	Wed Aug  8 14:01 2018 Time and Allocation Profiling Report  (Final)
+	Wed Aug  8 14:39 2018 Time and Allocation Profiling Report  (Final)
 
 	   Main +RTS -N8 -sstderr -p -RTS
 
-	total time  =       41.89 secs   (155191 ticks @ 1000 us, 8 processors)
-	total alloc = 145,055,467,432 bytes  (excludes profiling overheads)
+	total time  =       38.22 secs   (141594 ticks @ 1000 us, 8 processors)
+	total alloc = 57,346,183,680 bytes  (excludes profiling overheads)
 
 COST CENTRE      MODULE                   SRC                                    %time %alloc
 
-transport.f      RayTracer.Transport      RayTracer/Transport.hs:(25,5)-(39,43)   36.6   16.0
-ycrossings       RayTracer.Crossings      RayTracer/Crossings.hs:(30,1)-(31,60)   21.6   11.8
-segment          RayTracer.Transport      RayTracer/Transport.hs:(9,1)-(10,45)     8.5    1.1
-attenuation.path RayTracer.ParallelTracer RayTracer/ParallelTracer.hs:18:7-57      6.5    3.5
-attenuation.s    RayTracer.ParallelTracer RayTracer/ParallelTracer.hs:19:7-63      5.9    0.0
-uArray2D         RayTracer.FileToVector   RayTracer/FileToVector.hs:44:1-55        5.7   59.5
-qArray           RayTracer.FileToVector   RayTracer/FileToVector.hs:50:1-66        5.7    1.1
-rDisc.θs         RayTracer.GaussianBeam   RayTracer/GaussianBeam.hs:61:5-55        2.8    2.4
-normals          Data.Random.Normal       Data/Random/Normal.hs:109:1-30           2.2    2.1
+transport.f      RayTracer.Transport      RayTracer/Transport.hs:(25,5)-(39,43)   39.6   38.6
+ycrossings       RayTracer.Crossings      RayTracer/Crossings.hs:(30,1)-(31,60)   22.9   29.4
+segment          RayTracer.Transport      RayTracer/Transport.hs:(9,1)-(10,45)     9.0    2.8
+attenuation.path RayTracer.ParallelTracer RayTracer/ParallelTracer.hs:18:7-57      7.4    8.8
+attenuation.s    RayTracer.ParallelTracer RayTracer/ParallelTracer.hs:19:7-63      6.3    0.0
+qArray           RayTracer.FileToVector   RayTracer/FileToVector.hs:39:1-66        5.2    2.8
+rDisc.θs         RayTracer.GaussianBeam   RayTracer/GaussianBeam.hs:61:5-55        2.9    6.1
+normals          Data.Random.Normal       Data/Random/Normal.hs:109:1-30           2.3    5.4
 
 
                                                                                                                                                                          individual      inherited
 COST CENTRE                MODULE                            SRC                                                                                      no.     entries  %time %alloc   %time %alloc
 
-MAIN                       MAIN                              <built-in>                                                                               424          0    0.0    0.0   100.0  100.0
- CAF                       Statistics.Distribution.Normal    <entire-module>                                                                          727          0    0.0    0.0     0.0    0.0
-  cumulative               Statistics.Distribution.Normal    Statistics/Distribution/Normal.hs:69:5-32                                                893          1    0.0    0.0     0.0    0.0
- CAF                       Control.Parallel.Strategies       <entire-module>                                                                          720          0    0.0    0.0     0.0    0.0
-  evalList                 Control.Parallel.Strategies       /var/folders/fv/ct49fxsj14z0rknfclr1mvpm0000gn/T/ghc29266_0/ghc_5.hscpp:513:1-26         922          1    0.0    0.0     0.0    0.0
-  parList                  Control.Parallel.Strategies       /var/folders/fv/ct49fxsj14z0rknfclr1mvpm0000gn/T/ghc29266_0/ghc_5.hscpp:523:1-24         883          1    0.0    0.0     0.0    0.0
- CAF                       System.Random                     <entire-module>                                                                          718          0    0.0    0.0     0.0    0.0
- CAF                       Data.Primitive.MachDeps           <entire-module>                                                                          641          0    0.0    0.0     0.0    0.0
-  sIZEOF_DOUBLE            Data.Primitive.MachDeps           /var/folders/fv/ct49fxsj14z0rknfclr1mvpm0000gn/T/ghc34406_0/ghc_3.hscpp:781:1-17         872          1    0.0    0.0     0.0    0.0
- CAF                       GHC.Conc.Signal                   <entire-module>                                                                          525          0    0.0    0.0     0.0    0.0
- CAF                       GHC.Float                         <entire-module>                                                                          517          0    0.0    0.0     0.0    0.0
- CAF                       GHC.IO.Encoding                   <entire-module>                                                                          507          0    0.0    0.0     0.0    0.0
- CAF                       GHC.IO.Encoding.Iconv             <entire-module>                                                                          505          0    0.0    0.0     0.0    0.0
- CAF                       GHC.IO.FD                         <entire-module>                                                                          498          0    0.0    0.0     0.0    0.0
- CAF                       GHC.IO.Handle.FD                  <entire-module>                                                                          496          0    0.0    0.0     0.0    0.0
- CAF                       GHC.IO.Handle.Text                <entire-module>                                                                          494          0    0.0    0.0     0.0    0.0
- CAF                       GHC.Event.Poll                    <entire-module>                                                                          442          0    0.0    0.0     0.0    0.0
- CAF                       GHC.Event.Thread                  <entire-module>                                                                          441          0    0.0    0.0     0.0    0.0
- CAF                       GHC.Integer.Type                  <entire-module>                                                                          435          0    0.0    0.0     0.0    0.0
- CAF:cc                    RayTracer.Crossings               RayTracer/Crossings.hs:44:1-2                                                            842          0    0.0    0.0     0.0    0.0
-  cc                       RayTracer.Crossings               RayTracer/Crossings.hs:44:1-25                                                           958          1    0.0    0.0     0.0    0.0
- CAF:center                RayTracer.Constants               RayTracer/Constants.hs:22:1-6                                                            847          0    0.0    0.0     0.0    0.0
-  center                   RayTracer.Constants               RayTracer/Constants.hs:22:1-33                                                           919          1    0.0    0.0     0.0    0.0
- CAF:ff                    RayTracer.Crossings               RayTracer/Crossings.hs:45:1-2                                                            841          0    0.0    0.0     0.0    0.0
-  ff                       RayTracer.Crossings               RayTracer/Crossings.hs:45:1-23                                                           955          1    0.0    0.0     0.0    0.0
- CAF:frac                  RayTracer.Crossings               RayTracer/Crossings.hs:46:1-4                                                            840          0    0.0    0.0     0.0    0.0
-  frac                     RayTracer.Crossings               RayTracer/Crossings.hs:46:1-25                                                           939          1    0.0    0.0     0.0    0.0
- CAF:getFiles22            Main                              <no location info>                                                                       739          0    0.0    0.0     0.0    0.0
- CAF:getFiles24            Main                              <no location info>                                                                       738          0    0.0    0.0     0.0    0.0
- CAF:lvl_r3Ko              RayTracer.Crossings               <no location info>                                                                       843          0    0.0    0.0     0.0    0.0
-  zcrossings               RayTracer.Crossings               RayTracer/Crossings.hs:(34,1)-(41,41)                                                    933          0    0.0    0.0     0.0    0.0
- CAF:mAvg_α                RayTracer.PhotographicPlate       RayTracer/PhotographicPlate.hs:23:9                                                      750          0    0.0    0.0     0.0    0.0
-  mAvg                     RayTracer.PhotographicPlate       RayTracer/PhotographicPlate.hs:(21,1)-(23,15)                                            970          0    0.0    0.0     0.0    0.0
-   mAvg.α                  RayTracer.PhotographicPlate       RayTracer/PhotographicPlate.hs:23:9-15                                                   971          1    0.0    0.0     0.0    0.0
- CAF:main1                 Main                              <no location info>                                                                       746          0    0.0    0.0     0.0    0.0
-  main                     Main                              Main.hs:(27,1)-(55,47)                                                                   848          1    0.0    0.0     0.0    0.0
- CAF:main4                 Main                              <no location info>                                                                       743          0    0.0    0.0     0.0    0.0
-  main                     Main                              Main.hs:(27,1)-(55,47)                                                                   860          0    0.0    0.0     0.0    0.0
-   fileToAry               RayTracer.FileToVector            RayTracer/FileToVector.hs:(32,1)-(34,50)                                                 861          1    0.0    0.0     0.0    0.0
-   main.eFile              Main                              Main.hs:48:13-42                                                                         862          1    0.0    0.0     0.0    0.0
- CAF:main5                 Main                              <no location info>                                                                       742          0    0.0    0.0     0.0    0.0
-  main                     Main                              Main.hs:(27,1)-(55,47)                                                                   863          0    0.0    0.0     0.0    0.0
-   main.eFile              Main                              Main.hs:48:13-42                                                                         864          0    0.0    0.0     0.0    0.0
- CAF:main6                 Main                              <no location info>                                                                       740          0    0.0    0.0     0.0    0.0
-  main                     Main                              Main.hs:(27,1)-(55,47)                                                                   856          0    0.0    0.0     0.0    0.0
-   main.(...)              Main                              Main.hs:48:13-42                                                                         857          1    0.0    0.0     0.0    0.0
-    getFiles               Main                              Main.hs:(15,1)-(26,47)                                                                   858          1    0.0    0.0     0.0    0.0
- CAF:main7                 Main                              <no location info>                                                                       745          0    0.0    0.0     0.0    0.0
-  main                     Main                              Main.hs:(27,1)-(55,47)                                                                   850          0    0.0    0.0     0.0    0.0
-   fileToAry               RayTracer.FileToVector            RayTracer/FileToVector.hs:(32,1)-(34,50)                                                 851          1    0.0    0.0     0.0    0.0
-   main.dFile              Main                              Main.hs:48:13-42                                                                         853          1    0.0    0.0     0.0    0.0
- CAF:main8                 Main                              <no location info>                                                                       744          0    0.0    0.0     0.0    0.0
-  main                     Main                              Main.hs:(27,1)-(55,47)                                                                   854          0    0.0    0.0     0.0    0.0
-   main.dFile              Main                              Main.hs:48:13-42                                                                         855          0    0.0    0.0     0.0    0.0
- CAF:parallelTrace_gBeams  RayTracer.ParallelTracer          RayTracer/ParallelTracer.hs:27:7-12                                                      748          0    0.0    0.0     2.9    2.8
-  parallelTrace            RayTracer.ParallelTracer          RayTracer/ParallelTracer.hs:(26,1)-(30,16)                                               885          0    0.0    0.0     2.9    2.8
-   parallelTrace.gBeams    RayTracer.ParallelTracer          RayTracer/ParallelTracer.hs:27:7-32                                                      886          1    0.0    0.0     2.9    2.8
-    beam                   RayTracer.GaussianBeam            RayTracer/GaussianBeam.hs:(37,1)-(42,59)                                                 887          1    0.2    0.2     2.9    2.8
-     beam.posiCond         RayTracer.GaussianBeam            RayTracer/GaussianBeam.hs:(41,5)-(42,59)                                                 920    1464794    0.0    0.0     0.0    0.0
-     ray                   RayTracer.GaussianBeam            RayTracer/GaussianBeam.hs:(50,1)-(56,48)                                                 917    1464794    0.1    0.0     0.3    0.1
-      ray.coords           RayTracer.GaussianBeam            RayTracer/GaussianBeam.hs:54:5-47                                                        918    2819154    0.0    0.0     0.0    0.0
-      ray.angles           RayTracer.GaussianBeam            RayTracer/GaussianBeam.hs:(55,5)-(56,48)                                                 930    2147307    0.2    0.0     0.2    0.0
-     beam.needed           RayTracer.GaussianBeam            RayTracer/GaussianBeam.hs:38:7-35                                                        888          1    0.0    0.0     0.0    0.0
-      neededRays           RayTracer.CumulativeDistribution  RayTracer/CumulativeDistribution.hs:(29,1)-(31,56)                                       890          1    0.0    0.0     0.0    0.0
-       neededRays.probArea RayTracer.CumulativeDistribution  RayTracer/CumulativeDistribution.hs:31:5-56                                              891          1    0.0    0.0     0.0    0.0
-        getProb            RayTracer.CumulativeDistribution  RayTracer/CumulativeDistribution.hs:23:1-46                                              892          2    0.0    0.0     0.0    0.0
-         normalDistr       Statistics.Distribution.Normal    Statistics/Distribution/Normal.hs:114:1-69                                               897          2    0.0    0.0     0.0    0.0
-          normalDistrE     Statistics.Distribution.Normal    Statistics/Distribution/Normal.hs:(123,1)-(129,23)                                       898          2    0.0    0.0     0.0    0.0
-         cumulative        Statistics.Distribution.Normal    Statistics/Distribution/Normal.hs:69:5-32                                                894          0    0.0    0.0     0.0    0.0
-          cumulative       Statistics.Distribution.Normal    Statistics/Distribution/Normal.hs:153:1-55                                               895          2    0.0    0.0     0.0    0.0
-           mean            Statistics.Distribution.Normal    Statistics/Distribution/Normal.hs:42:7-10                                                896          2    0.0    0.0     0.0    0.0
-           ndCdfDenom      Statistics.Distribution.Normal    Statistics/Distribution/Normal.hs:45:7-16                                                899          2    0.0    0.0     0.0    0.0
-     rDisc                 RayTracer.GaussianBeam            RayTracer/GaussianBeam.hs:(59,1)-(62,31)                                                 900          1    0.1    0.2     2.4    2.5
-      rDisc.rs             RayTracer.GaussianBeam            RayTracer/GaussianBeam.hs:62:5-31                                                        901          1    0.0    0.0     2.3    2.3
-       mkNormals'          Data.Random.Normal                Data/Random/Normal.hs:148:1-38                                                           902          1    0.0    0.0     2.3    2.3
-        mkStdGen           System.Random                     /var/folders/fv/ct49fxsj14z0rknfclr1mvpm0000gn/T/ghc35216_0/ghc_1.hscpp:954:1-40         905          1    0.0    0.0     0.0    0.0
-        normals'           Data.Random.Normal                Data/Random/Normal.hs:143:1-67                                                           903          1    0.1    0.2     2.3    2.3
-         normals           Data.Random.Normal                Data/Random/Normal.hs:109:1-30                                                           904          1    2.2    2.1     2.2    2.1
-      rDisc.θs             RayTracer.GaussianBeam            RayTracer/GaussianBeam.hs:61:5-55                                                        910          1    0.0    0.0     0.0    0.0
- CAF:rDisc1                RayTracer.GaussianBeam            <no location info>                                                                       763          0    0.0    0.0     2.8    2.4
-  rDisc                    RayTracer.GaussianBeam            RayTracer/GaussianBeam.hs:(59,1)-(62,31)                                                 911          0    0.0    0.0     2.8    2.4
-   rDisc.θs                RayTracer.GaussianBeam            RayTracer/GaussianBeam.hs:61:5-55                                                        912          0    2.8    2.4     2.8    2.4
-    mkStdGen               System.Random                     /var/folders/fv/ct49fxsj14z0rknfclr1mvpm0000gn/T/ghc35216_0/ghc_1.hscpp:954:1-40         913          1    0.0    0.0     0.0    0.0
- CAF:rDisc2                RayTracer.GaussianBeam            <no location info>                                                                       762          0    0.0    0.0     0.0    0.0
-  rDisc                    RayTracer.GaussianBeam            RayTracer/GaussianBeam.hs:(59,1)-(62,31)                                                 914          0    0.0    0.0     0.0    0.0
-   rDisc.θs                RayTracer.GaussianBeam            RayTracer/GaussianBeam.hs:61:5-55                                                        915          0    0.0    0.0     0.0    0.0
-    mkStdGen               System.Random                     /var/folders/fv/ct49fxsj14z0rknfclr1mvpm0000gn/T/ghc35216_0/ghc_1.hscpp:954:1-40         916          0    0.0    0.0     0.0    0.0
- CAF:rDisc3                RayTracer.GaussianBeam            <no location info>                                                                       761          0    0.0    0.0     0.0    0.0
-  rDisc                    RayTracer.GaussianBeam            RayTracer/GaussianBeam.hs:(59,1)-(62,31)                                                 906          0    0.0    0.0     0.0    0.0
-   rDisc.rs                RayTracer.GaussianBeam            RayTracer/GaussianBeam.hs:62:5-31                                                        907          0    0.0    0.0     0.0    0.0
-    mkNormals'             Data.Random.Normal                Data/Random/Normal.hs:148:1-38                                                           908          0    0.0    0.0     0.0    0.0
-     mkStdGen              System.Random                     /var/folders/fv/ct49fxsj14z0rknfclr1mvpm0000gn/T/ghc35216_0/ghc_1.hscpp:954:1-40         909          0    0.0    0.0     0.0    0.0
- CAF:raySize               RayTracer.Constants               RayTracer/Constants.hs:23:1-7                                                            846          0    0.0    0.0     0.0    0.0
-  raySize                  RayTracer.Constants               RayTracer/Constants.hs:23:1-17                                                           889          1    0.0    0.0     0.0    0.0
- CAF:savePlate2            RayTracer.DataWriter              <no location info>                                                                       779          0    0.0    0.0     0.0    0.0
- CAF:size                  RayTracer.Constants               RayTracer/Constants.hs:24:1-4                                                            845          0    0.0    0.0     0.0    0.0
-  size                     RayTracer.Constants               RayTracer/Constants.hs:24:1-15                                                           859          1    0.0    0.0     0.0    0.0
- CAF:xcrossings1           RayTracer.Crossings               <no location info>                                                                       844          0    0.0    0.0     0.0    0.0
-  xcrossings               RayTracer.Crossings               RayTracer/Crossings.hs:(20,1)-(27,67)                                                    937          0    0.0    0.0     0.0    0.0
- CAF:ycrossings1           RayTracer.Crossings               <no location info>                                                                       839          0    0.0    0.0     0.0    0.0
-  ycrossings               RayTracer.Crossings               RayTracer/Crossings.hs:(30,1)-(31,60)                                                    935          0    0.0    0.0     0.0    0.0
- main                      Main                              Main.hs:(27,1)-(55,47)                                                                   849          0    0.0    0.0    94.3   94.8
-  main.processedPlate      Main                              Main.hs:52:13-59                                                                         868          1    0.0    0.0     5.9   59.5
-   processPlate            RayTracer.PhotographicPlate       RayTracer/PhotographicPlate.hs:(12,1)-(13,58)                                            878    1077318    0.1    0.0     5.9   59.5
-    rayToPlate             RayTracer.PhotographicPlate       RayTracer/PhotographicPlate.hs:(16,1)-(18,27)                                            961    1077317    0.0    0.0     5.8   59.5
-     rayToPlate.s          RayTracer.PhotographicPlate       RayTracer/PhotographicPlate.hs:17:7-43                                                   962    1077317    0.0    0.0     0.1    0.0
-      mAvg                 RayTracer.PhotographicPlate       RayTracer/PhotographicPlate.hs:(21,1)-(23,15)                                            965    1077317    0.0    0.0     0.0    0.0
-      qArray2D             RayTracer.FileToVector            RayTracer/FileToVector.hs:47:1-47                                                        963    1077317    0.0    0.0     0.0    0.0
-       unId                Data.Vector.Fusion.Util           Data/Vector/Fusion/Util.hs:25:21-24                                                      964    2154634    0.0    0.0     0.0    0.0
-     uArray2D              RayTracer.FileToVector            RayTracer/FileToVector.hs:44:1-55                                                        966    1077317    5.7   59.5     5.7   59.5
-      sizeOf               Data.Primitive                    Data/Primitive.hs:31:1-25                                                                968    3231951    0.0    0.0     0.0    0.0
-      unId                 Data.Vector.Fusion.Util           Data/Vector/Fusion/Util.hs:25:21-24                                                      967    3231951    0.0    0.0     0.0    0.0
-      sElems               Data.Vector.Fusion.Bundle.Monadic Data/Vector/Fusion/Bundle/Monadic.hs:121:30-35                                           969    1077317    0.0    0.0     0.0    0.0
-  parallelTrace            RayTracer.ParallelTracer          RayTracer/ParallelTracer.hs:(26,1)-(30,16)                                               865          1    0.0    0.0    88.1   34.9
-   parallelTrace.rays      RayTracer.ParallelTracer          RayTracer/ParallelTracer.hs:28:7-41                                                      884          1    0.1    0.1    87.7   34.7
-    attenuation            RayTracer.ParallelTracer          RayTracer/ParallelTracer.hs:(17,1)-(24,18)                                               926    1074076    0.3    0.1    87.6   34.6
-     attenuation.path      RayTracer.ParallelTracer          RayTracer/ParallelTracer.hs:18:7-57                                                      929    1075416    6.5    3.5    75.3   33.4
-      attenuation.stopCond RayTracer.ParallelTracer          RayTracer/ParallelTracer.hs:(22,5)-(24,18)                                               942   97342695    0.8    0.0     0.8    0.0
-      transport            RayTracer.Transport               RayTracer/Transport.hs:(13,1)-(39,43)                                                    931    1075257    0.3    0.1    68.0   29.8
-       transport.f         RayTracer.Transport               RayTracer/Transport.hs:(25,5)-(39,43)                                                    938   91358947   36.6   16.0    45.1   17.2
-        segment            RayTracer.Transport               RayTracer/Transport.hs:(9,1)-(10,45)                                                     945   95403208    8.5    1.1     8.5    1.1
-       xcrossings          RayTracer.Crossings               RayTracer/Crossings.hs:(20,1)-(27,67)                                                    936    1072319    0.3    0.3     0.6    0.3
-        frac_offset        RayTracer.Crossings               RayTracer/Crossings.hs:(48,1)-(49,38)                                                    947     554793    0.0    0.0     0.2    0.1
-         frac              RayTracer.Crossings               RayTracer/Crossings.hs:46:1-25                                                           949          0    0.1    0.1     0.1    0.1
-        frac_offset        RayTracer.Crossings               RayTracer/Crossings.hs:(48,1)-(49,38)                                                    946          1    0.0    0.0     0.0    0.0
-         frac              RayTracer.Crossings               RayTracer/Crossings.hs:46:1-25                                                           948          0    0.0    0.0     0.0    0.0
-        cc                 RayTracer.Crossings               RayTracer/Crossings.hs:44:1-25                                                           959          0    0.0    0.0     0.0    0.0
-        ff                 RayTracer.Crossings               RayTracer/Crossings.hs:45:1-23                                                           956          0    0.0    0.0     0.0    0.0
-        frac               RayTracer.Crossings               RayTracer/Crossings.hs:46:1-25                                                           940          0    0.1    0.0     0.1    0.0
-       zcrossings          RayTracer.Crossings               RayTracer/Crossings.hs:(34,1)-(41,41)                                                    932    1071558    0.3    0.3     0.4    0.3
-        frac_offset        RayTracer.Crossings               RayTracer/Crossings.hs:(48,1)-(49,38)                                                    950     555148    0.0    0.0     0.1    0.1
-         frac              RayTracer.Crossings               RayTracer/Crossings.hs:46:1-25                                                           951          0    0.1    0.1     0.1    0.1
-        cc                 RayTracer.Crossings               RayTracer/Crossings.hs:44:1-25                                                           960          0    0.0    0.0     0.0    0.0
-        ff                 RayTracer.Crossings               RayTracer/Crossings.hs:45:1-23                                                           957          0    0.0    0.0     0.0    0.0
-        frac               RayTracer.Crossings               RayTracer/Crossings.hs:46:1-25                                                           941          0    0.0    0.0     0.0    0.0
-       ycrossings          RayTracer.Crossings               RayTracer/Crossings.hs:(30,1)-(31,60)                                                    934    1071394   21.6   11.8    21.6   11.8
-       transport.orient    RayTracer.Transport               RayTracer/Transport.hs:(21,5)-(22,28)                                                    952      35430    0.0    0.0     0.0    0.0
-     attenuation.(...)     RayTracer.ParallelTracer          RayTracer/ParallelTracer.hs:20:7-31                                                      928    1075169    0.5    0.0     0.5    0.0
-     attenuation.i         RayTracer.ParallelTracer          RayTracer/ParallelTracer.hs:20:7-31                                                      927    1074602    0.0    0.0     0.0    0.0
-     attenuation.s         RayTracer.ParallelTracer          RayTracer/ParallelTracer.hs:19:7-63                                                      944    1072655    5.9    0.0    11.6    1.1
-      qArray               RayTracer.FileToVector            RayTracer/FileToVector.hs:50:1-66                                                        953   93202016    5.7    1.1     5.7    1.1
-       unId                Data.Vector.Fusion.Util           Data/Vector/Fusion/Util.hs:25:21-24                                                      954  190632246    0.0    0.0     0.0    0.0
-     attenuation.k         RayTracer.ParallelTracer          RayTracer/ParallelTracer.hs:20:7-31                                                      943    1071522    0.0    0.0     0.0    0.0
-   parallelTrace.results   RayTracer.ParallelTracer          RayTracer/ParallelTracer.hs:29:7-53                                                      879          1    0.0    0.0     0.3    0.2
-    using                  Control.Parallel.Strategies       /var/folders/fv/ct49fxsj14z0rknfclr1mvpm0000gn/T/ghc29266_0/ghc_5.hscpp:362:1-35         880          1    0.0    0.0     0.3    0.2
-     runEval               Control.Parallel.Strategies       /var/folders/fv/ct49fxsj14z0rknfclr1mvpm0000gn/T/ghc29266_0/ghc_5.hscpp:297:1-55         881          1    0.0    0.0     0.3    0.2
-      parListChunk         Control.Parallel.Strategies       /var/folders/fv/ct49fxsj14z0rknfclr1mvpm0000gn/T/ghc29266_0/ghc_5.hscpp:(571,1)-(573,67) 882          1    0.1    0.1     0.3    0.2
-       rparWith            Control.Parallel.Strategies       /var/folders/fv/ct49fxsj14z0rknfclr1mvpm0000gn/T/ghc29266_0/ghc_5.hscpp:(483,1)-(486,48) 921      16834    0.0    0.0     0.2    0.0
-        evalList           Control.Parallel.Strategies       /var/folders/fv/ct49fxsj14z0rknfclr1mvpm0000gn/T/ghc29266_0/ghc_5.hscpp:513:1-26         923          0    0.1    0.0     0.2    0.0
-         rdeepseq          Control.Parallel.Strategies       /var/folders/fv/ct49fxsj14z0rknfclr1mvpm0000gn/T/ghc29266_0/ghc_5.hscpp:451:1-38         924    1073287    0.1    0.0     0.1    0.0
-          rseq             Control.Parallel.Strategies       /var/folders/fv/ct49fxsj14z0rknfclr1mvpm0000gn/T/ghc29266_0/ghc_5.hscpp:433:1-30         925    1073764    0.0    0.0     0.0    0.0
-  savePlate                RayTracer.DataWriter              RayTracer/DataWriter.hs:(25,1)-(27,48)                                                   866          1    0.0    0.0     0.0    0.1
-   savePlate.aryToStr      RayTracer.DataWriter              RayTracer/DataWriter.hs:27:9-48                                                          867          1    0.0    0.1     0.0    0.1
-    unId                   Data.Vector.Fusion.Util           Data/Vector/Fusion/Util.hs:25:21-24                                                      972      10001    0.0    0.0     0.0    0.0
-  fileToAry                RayTracer.FileToVector            RayTracer/FileToVector.hs:(32,1)-(34,50)                                                 852          0    0.1    0.2     0.3    0.3
-   unId                    Data.Vector.Fusion.Util           Data/Vector/Fusion/Util.hs:25:21-24                                                      874    1010002    0.0    0.0     0.0    0.0
-   readDouble              RayTracer.FileToVector            RayTracer/FileToVector.hs:(37,1)-(40,34)                                                 875    1010000    0.0    0.1     0.2    0.2
-    readDouble.\           RayTracer.FileToVector            RayTracer/FileToVector.hs:38:5-43                                                        877    1010000    0.2    0.0     0.2    0.0
-    readDouble.s           RayTracer.FileToVector            RayTracer/FileToVector.hs:40:5-34                                                        876    1010000    0.0    0.1     0.0    0.1
-   sizeOf                  Data.Primitive                    Data/Primitive.hs:31:1-25                                                                871         74    0.0    0.0     0.0    0.0
-   sChunks                 Data.Vector.Fusion.Bundle.Monadic Data/Vector/Fusion/Bundle/Monadic.hs:122:30-36                                           873          2    0.0    0.0     0.0    0.0
-   sSize                   Data.Vector.Fusion.Bundle.Monadic Data/Vector/Fusion/Bundle/Monadic.hs:124:30-34                                           870          2    0.0    0.0     0.0    0.0
-   upperBound              Data.Vector.Fusion.Bundle.Size    Data/Vector/Fusion/Bundle/Size.hs:(118,1)-(120,30)                                       869          2    0.0    0.0     0.0    0.0
+MAIN                       MAIN                              <built-in>                                                                               428          0    0.0    0.0   100.0  100.0
+ CAF                       Statistics.Distribution.Normal    <entire-module>                                                                          731          0    0.0    0.0     0.0    0.0
+  cumulative               Statistics.Distribution.Normal    Statistics/Distribution/Normal.hs:69:5-32                                                904          1    0.0    0.0     0.0    0.0
+ CAF                       Control.Parallel.Strategies       <entire-module>                                                                          724          0    0.0    0.0     0.0    0.0
+  evalList                 Control.Parallel.Strategies       /var/folders/fv/ct49fxsj14z0rknfclr1mvpm0000gn/T/ghc29266_0/ghc_5.hscpp:513:1-26         933          1    0.0    0.0     0.0    0.0
+  parList                  Control.Parallel.Strategies       /var/folders/fv/ct49fxsj14z0rknfclr1mvpm0000gn/T/ghc29266_0/ghc_5.hscpp:523:1-24         894          1    0.0    0.0     0.0    0.0
+ CAF                       System.Random                     <entire-module>                                                                          722          0    0.0    0.0     0.0    0.0
+ CAF                       Data.Primitive.MachDeps           <entire-module>                                                                          645          0    0.0    0.0     0.0    0.0
+  sIZEOF_DOUBLE            Data.Primitive.MachDeps           /var/folders/fv/ct49fxsj14z0rknfclr1mvpm0000gn/T/ghc34406_0/ghc_3.hscpp:781:1-17         880          1    0.0    0.0     0.0    0.0
+ CAF                       GHC.Conc.Signal                   <entire-module>                                                                          529          0    0.0    0.0     0.0    0.0
+ CAF                       GHC.Float                         <entire-module>                                                                          521          0    0.0    0.0     0.0    0.0
+ CAF                       GHC.IO.Encoding                   <entire-module>                                                                          511          0    0.0    0.0     0.0    0.0
+ CAF                       GHC.IO.Encoding.Iconv             <entire-module>                                                                          509          0    0.0    0.0     0.0    0.0
+ CAF                       GHC.IO.FD                         <entire-module>                                                                          502          0    0.0    0.0     0.0    0.0
+ CAF                       GHC.IO.Handle.FD                  <entire-module>                                                                          500          0    0.0    0.0     0.0    0.0
+ CAF                       GHC.IO.Handle.Text                <entire-module>                                                                          498          0    0.0    0.0     0.0    0.0
+ CAF                       GHC.Event.Poll                    <entire-module>                                                                          446          0    0.0    0.0     0.0    0.0
+ CAF                       GHC.Event.Thread                  <entire-module>                                                                          445          0    0.0    0.0     0.0    0.0
+ CAF                       GHC.Integer.Type                  <entire-module>                                                                          439          0    0.0    0.0     0.0    0.0
+ CAF:cc                    RayTracer.Crossings               RayTracer/Crossings.hs:44:1-2                                                            850          0    0.0    0.0     0.0    0.0
+  cc                       RayTracer.Crossings               RayTracer/Crossings.hs:44:1-25                                                           976          1    0.0    0.0     0.0    0.0
+ CAF:center                RayTracer.Constants               RayTracer/Constants.hs:22:1-6                                                            855          0    0.0    0.0     0.0    0.0
+  center                   RayTracer.Constants               RayTracer/Constants.hs:22:1-33                                                           930          1    0.0    0.0     0.0    0.0
+ CAF:ff                    RayTracer.Crossings               RayTracer/Crossings.hs:45:1-2                                                            849          0    0.0    0.0     0.0    0.0
+  ff                       RayTracer.Crossings               RayTracer/Crossings.hs:45:1-23                                                           979          1    0.0    0.0     0.0    0.0
+ CAF:frac                  RayTracer.Crossings               RayTracer/Crossings.hs:46:1-4                                                            848          0    0.0    0.0     0.0    0.0
+  frac                     RayTracer.Crossings               RayTracer/Crossings.hs:46:1-25                                                           950          1    0.0    0.0     0.0    0.0
+ CAF:getFiles22            Main                              <no location info>                                                                       743          0    0.0    0.0     0.0    0.0
+ CAF:getFiles24            Main                              <no location info>                                                                       742          0    0.0    0.0     0.0    0.0
+ CAF:lvl_r3Ko              RayTracer.Crossings               <no location info>                                                                       851          0    0.0    0.0     0.0    0.0
+  zcrossings               RayTracer.Crossings               RayTracer/Crossings.hs:(34,1)-(41,41)                                                    944          0    0.0    0.0     0.0    0.0
+ CAF:main1                 Main                              <no location info>                                                                       750          0    0.0    0.0     0.0    0.0
+  main                     Main                              Main.hs:(27,1)-(55,47)                                                                   856          1    0.0    0.0     0.0    0.0
+ CAF:main4                 Main                              <no location info>                                                                       747          0    0.0    0.0     0.0    0.0
+  main                     Main                              Main.hs:(27,1)-(55,47)                                                                   868          0    0.0    0.0     0.0    0.0
+   fileToAry               RayTracer.FileToVector            RayTracer/FileToVector.hs:(25,1)-(27,50)                                                 869          1    0.0    0.0     0.0    0.0
+   main.eFile              Main                              Main.hs:48:13-42                                                                         870          1    0.0    0.0     0.0    0.0
+ CAF:main5                 Main                              <no location info>                                                                       746          0    0.0    0.0     0.0    0.0
+  main                     Main                              Main.hs:(27,1)-(55,47)                                                                   871          0    0.0    0.0     0.0    0.0
+   main.eFile              Main                              Main.hs:48:13-42                                                                         872          0    0.0    0.0     0.0    0.0
+ CAF:main6                 Main                              <no location info>                                                                       744          0    0.0    0.0     0.0    0.0
+  main                     Main                              Main.hs:(27,1)-(55,47)                                                                   864          0    0.0    0.0     0.0    0.0
+   main.(...)              Main                              Main.hs:48:13-42                                                                         865          1    0.0    0.0     0.0    0.0
+    getFiles               Main                              Main.hs:(15,1)-(26,47)                                                                   866          1    0.0    0.0     0.0    0.0
+ CAF:main7                 Main                              <no location info>                                                                       749          0    0.0    0.0     0.0    0.0
+  main                     Main                              Main.hs:(27,1)-(55,47)                                                                   858          0    0.0    0.0     0.0    0.0
+   fileToAry               RayTracer.FileToVector            RayTracer/FileToVector.hs:(25,1)-(27,50)                                                 859          1    0.0    0.0     0.0    0.0
+   main.dFile              Main                              Main.hs:48:13-42                                                                         861          1    0.0    0.0     0.0    0.0
+ CAF:main8                 Main                              <no location info>                                                                       748          0    0.0    0.0     0.0    0.0
+  main                     Main                              Main.hs:(27,1)-(55,47)                                                                   862          0    0.0    0.0     0.0    0.0
+   main.dFile              Main                              Main.hs:48:13-42                                                                         863          0    0.0    0.0     0.0    0.0
+ CAF:parallelTrace_gBeams  RayTracer.ParallelTracer          RayTracer/ParallelTracer.hs:27:7-12                                                      752          0    0.0    0.0     3.1    7.0
+  parallelTrace            RayTracer.ParallelTracer          RayTracer/ParallelTracer.hs:(26,1)-(30,16)                                               896          0    0.0    0.0     3.1    7.0
+   parallelTrace.gBeams    RayTracer.ParallelTracer          RayTracer/ParallelTracer.hs:27:7-32                                                      897          1    0.0    0.0     3.1    7.0
+    beam                   RayTracer.GaussianBeam            RayTracer/GaussianBeam.hs:(37,1)-(42,59)                                                 898          1    0.2    0.6     3.1    7.0
+     beam.posiCond         RayTracer.GaussianBeam            RayTracer/GaussianBeam.hs:(41,5)-(42,59)                                                 931    1464794    0.0    0.0     0.0    0.0
+     ray                   RayTracer.GaussianBeam            RayTracer/GaussianBeam.hs:(50,1)-(56,48)                                                 928    1464794    0.1    0.0     0.3    0.1
+      ray.coords           RayTracer.GaussianBeam            RayTracer/GaussianBeam.hs:54:5-47                                                        929    2819154    0.0    0.1     0.0    0.1
+      ray.angles           RayTracer.GaussianBeam            RayTracer/GaussianBeam.hs:(55,5)-(56,48)                                                 941    2143583    0.1    0.1     0.1    0.1
+     beam.needed           RayTracer.GaussianBeam            RayTracer/GaussianBeam.hs:38:7-35                                                        899          1    0.0    0.0     0.0    0.0
+      neededRays           RayTracer.CumulativeDistribution  RayTracer/CumulativeDistribution.hs:(29,1)-(31,56)                                       901          1    0.0    0.0     0.0    0.0
+       neededRays.probArea RayTracer.CumulativeDistribution  RayTracer/CumulativeDistribution.hs:31:5-56                                              902          1    0.0    0.0     0.0    0.0
+        getProb            RayTracer.CumulativeDistribution  RayTracer/CumulativeDistribution.hs:23:1-46                                              903          2    0.0    0.0     0.0    0.0
+         normalDistr       Statistics.Distribution.Normal    Statistics/Distribution/Normal.hs:114:1-69                                               908          2    0.0    0.0     0.0    0.0
+          normalDistrE     Statistics.Distribution.Normal    Statistics/Distribution/Normal.hs:(123,1)-(129,23)                                       909          2    0.0    0.0     0.0    0.0
+         cumulative        Statistics.Distribution.Normal    Statistics/Distribution/Normal.hs:69:5-32                                                905          0    0.0    0.0     0.0    0.0
+          cumulative       Statistics.Distribution.Normal    Statistics/Distribution/Normal.hs:153:1-55                                               906          2    0.0    0.0     0.0    0.0
+           mean            Statistics.Distribution.Normal    Statistics/Distribution/Normal.hs:42:7-10                                                907          2    0.0    0.0     0.0    0.0
+           ndCdfDenom      Statistics.Distribution.Normal    Statistics/Distribution/Normal.hs:45:7-16                                                910          2    0.0    0.0     0.0    0.0
+     rDisc                 RayTracer.GaussianBeam            RayTracer/GaussianBeam.hs:(59,1)-(62,31)                                                 911          1    0.1    0.4     2.6    6.2
+      rDisc.rs             RayTracer.GaussianBeam            RayTracer/GaussianBeam.hs:62:5-31                                                        912          1    0.0    0.0     2.5    5.8
+       mkNormals'          Data.Random.Normal                Data/Random/Normal.hs:148:1-38                                                           913          1    0.0    0.0     2.5    5.8
+        mkStdGen           System.Random                     /var/folders/fv/ct49fxsj14z0rknfclr1mvpm0000gn/T/ghc35216_0/ghc_1.hscpp:954:1-40         916          1    0.0    0.0     0.0    0.0
+        normals'           Data.Random.Normal                Data/Random/Normal.hs:143:1-67                                                           914          1    0.2    0.4     2.5    5.8
+         normals           Data.Random.Normal                Data/Random/Normal.hs:109:1-30                                                           915          1    2.3    5.4     2.3    5.4
+      rDisc.θs             RayTracer.GaussianBeam            RayTracer/GaussianBeam.hs:61:5-55                                                        921          1    0.0    0.0     0.0    0.0
+ CAF:rDisc1                RayTracer.GaussianBeam            <no location info>                                                                       774          0    0.0    0.0     2.9    6.1
+  rDisc                    RayTracer.GaussianBeam            RayTracer/GaussianBeam.hs:(59,1)-(62,31)                                                 922          0    0.0    0.0     2.9    6.1
+   rDisc.θs                RayTracer.GaussianBeam            RayTracer/GaussianBeam.hs:61:5-55                                                        923          0    2.9    6.1     2.9    6.1
+    mkStdGen               System.Random                     /var/folders/fv/ct49fxsj14z0rknfclr1mvpm0000gn/T/ghc35216_0/ghc_1.hscpp:954:1-40         924          1    0.0    0.0     0.0    0.0
+ CAF:rDisc2                RayTracer.GaussianBeam            <no location info>                                                                       773          0    0.0    0.0     0.0    0.0
+  rDisc                    RayTracer.GaussianBeam            RayTracer/GaussianBeam.hs:(59,1)-(62,31)                                                 925          0    0.0    0.0     0.0    0.0
+   rDisc.θs                RayTracer.GaussianBeam            RayTracer/GaussianBeam.hs:61:5-55                                                        926          0    0.0    0.0     0.0    0.0
+    mkStdGen               System.Random                     /var/folders/fv/ct49fxsj14z0rknfclr1mvpm0000gn/T/ghc35216_0/ghc_1.hscpp:954:1-40         927          0    0.0    0.0     0.0    0.0
+ CAF:rDisc3                RayTracer.GaussianBeam            <no location info>                                                                       772          0    0.0    0.0     0.0    0.0
+  rDisc                    RayTracer.GaussianBeam            RayTracer/GaussianBeam.hs:(59,1)-(62,31)                                                 917          0    0.0    0.0     0.0    0.0
+   rDisc.rs                RayTracer.GaussianBeam            RayTracer/GaussianBeam.hs:62:5-31                                                        918          0    0.0    0.0     0.0    0.0
+    mkNormals'             Data.Random.Normal                Data/Random/Normal.hs:148:1-38                                                           919          0    0.0    0.0     0.0    0.0
+     mkStdGen              System.Random                     /var/folders/fv/ct49fxsj14z0rknfclr1mvpm0000gn/T/ghc35216_0/ghc_1.hscpp:954:1-40         920          0    0.0    0.0     0.0    0.0
+ CAF:raySize               RayTracer.Constants               RayTracer/Constants.hs:23:1-7                                                            854          0    0.0    0.0     0.0    0.0
+  raySize                  RayTracer.Constants               RayTracer/Constants.hs:23:1-17                                                           900          1    0.0    0.0     0.0    0.0
+ CAF:savePlate2            RayTracer.DataWriter              <no location info>                                                                       787          0    0.0    0.0     0.0    0.0
+ CAF:size                  RayTracer.Constants               RayTracer/Constants.hs:24:1-4                                                            853          0    0.0    0.0     0.0    0.0
+  size                     RayTracer.Constants               RayTracer/Constants.hs:24:1-15                                                           867          1    0.0    0.0     0.0    0.0
+ CAF:xcrossings1           RayTracer.Crossings               <no location info>                                                                       852          0    0.0    0.0     0.0    0.0
+  xcrossings               RayTracer.Crossings               RayTracer/Crossings.hs:(20,1)-(27,67)                                                    948          0    0.0    0.0     0.0    0.0
+ CAF:ycrossings1           RayTracer.Crossings               <no location info>                                                                       847          0    0.0    0.0     0.0    0.0
+  ycrossings               RayTracer.Crossings               RayTracer/Crossings.hs:(30,1)-(31,60)                                                    946          0    0.0    0.0     0.0    0.0
+ main                      Main                              Main.hs:(27,1)-(55,47)                                                                   857          0    0.0    0.0    94.0   86.9
+  main.processedPlate      Main                              Main.hs:52:13-59                                                                         876          1    0.0    0.0     0.2    0.4
+   processPlate            RayTracer.PhotographicPlate       RayTracer/PhotographicPlate.hs:(13,1)-(14,78)                                            886          1    0.1    0.4     0.2    0.4
+    unId                   Data.Vector.Fusion.Util           Data/Vector/Fusion/Util.hs:25:21-24                                                      887    1077319    0.0    0.0     0.0    0.0
+    mAvg                   RayTracer.PhotographicPlate       RayTracer/PhotographicPlate.hs:(17,1)-(19,15)                                            984    1077317    0.0    0.0     0.0    0.0
+    qArray2D               RayTracer.FileToVector            RayTracer/FileToVector.hs:36:1-47                                                        982    1077317    0.0    0.0     0.0    0.0
+     unId                  Data.Vector.Fusion.Util           Data/Vector/Fusion/Util.hs:25:21-24                                                      983    2154634    0.0    0.0     0.0    0.0
+    sizeOf                 Data.Primitive                    Data/Primitive.hs:31:1-25                                                                888          3    0.0    0.0     0.0    0.0
+    sElems                 Data.Vector.Fusion.Bundle.Monadic Data/Vector/Fusion/Bundle/Monadic.hs:121:30-35                                           889          1    0.0    0.0     0.0    0.0
+  parallelTrace            RayTracer.ParallelTracer          RayTracer/ParallelTracer.hs:(26,1)-(30,16)                                               873          1    0.0    0.0    93.5   85.5
+   parallelTrace.rays      RayTracer.ParallelTracer          RayTracer/ParallelTracer.hs:28:7-41                                                      895          1    0.1    0.2    93.2   85.0
+    attenuation            RayTracer.ParallelTracer          RayTracer/ParallelTracer.hs:(17,1)-(24,18)                                               937    1073559    0.3    0.3    93.1   84.8
+     attenuation.(...)     RayTracer.ParallelTracer          RayTracer/ParallelTracer.hs:20:7-31                                                      939    1073152    0.5    0.0     0.5    0.0
+     attenuation.i         RayTracer.ParallelTracer          RayTracer/ParallelTracer.hs:20:7-31                                                      938    1073042    0.0    0.0     0.0    0.0
+     attenuation.path      RayTracer.ParallelTracer          RayTracer/ParallelTracer.hs:18:7-57                                                      940    1073004    7.4    8.8    80.8   81.7
+      attenuation.stopCond RayTracer.ParallelTracer          RayTracer/ParallelTracer.hs:(22,5)-(24,18)                                               953   94017701    0.7    0.0     0.7    0.0
+      transport            RayTracer.Transport               RayTracer/Transport.hs:(13,1)-(39,43)                                                    942    1073282    0.4    0.4    72.7   72.9
+       transport.f         RayTracer.Transport               RayTracer/Transport.hs:(25,5)-(39,43)                                                    949   89427862   39.6   38.6    48.6   41.4
+        segment            RayTracer.Transport               RayTracer/Transport.hs:(9,1)-(10,45)                                                     956   91460585    9.0    2.8     9.0    2.8
+       xcrossings          RayTracer.Crossings               RayTracer/Crossings.hs:(20,1)-(27,67)                                                    947    1070264    0.2    0.7     0.4    0.9
+        frac_offset        RayTracer.Crossings               RayTracer/Crossings.hs:(48,1)-(49,38)                                                    958     554340    0.0    0.0     0.1    0.1
+         frac              RayTracer.Crossings               RayTracer/Crossings.hs:46:1-25                                                           961          0    0.1    0.1     0.1    0.1
+         frac              RayTracer.Crossings               RayTracer/Crossings.hs:46:1-25                                                           960          0    0.0    0.0     0.0    0.0
+        frac_offset        RayTracer.Crossings               RayTracer/Crossings.hs:(48,1)-(49,38)                                                    957          1    0.0    0.0     0.0    0.0
+         frac              RayTracer.Crossings               RayTracer/Crossings.hs:46:1-25                                                           959          0    0.0    0.0     0.0    0.0
+        cc                 RayTracer.Crossings               RayTracer/Crossings.hs:44:1-25                                                           977          0    0.0    0.0     0.0    0.0
+        ff                 RayTracer.Crossings               RayTracer/Crossings.hs:45:1-23                                                           981          0    0.0    0.0     0.0    0.0
+        frac               RayTracer.Crossings               RayTracer/Crossings.hs:46:1-25                                                           951          0    0.1    0.1     0.1    0.1
+       zcrossings          RayTracer.Crossings               RayTracer/Crossings.hs:(34,1)-(41,41)                                                    943    1069938    0.3    0.7     0.4    0.9
+        frac_offset        RayTracer.Crossings               RayTracer/Crossings.hs:(48,1)-(49,38)                                                    963     554796    0.0    0.0     0.1    0.1
+         frac              RayTracer.Crossings               RayTracer/Crossings.hs:46:1-25                                                           966          0    0.1    0.1     0.1    0.1
+         frac              RayTracer.Crossings               RayTracer/Crossings.hs:46:1-25                                                           965          0    0.0    0.0     0.0    0.0
+        frac_offset        RayTracer.Crossings               RayTracer/Crossings.hs:(48,1)-(49,38)                                                    962          1    0.0    0.0     0.0    0.0
+         frac              RayTracer.Crossings               RayTracer/Crossings.hs:46:1-25                                                           964          0    0.0    0.0     0.0    0.0
+        cc                 RayTracer.Crossings               RayTracer/Crossings.hs:44:1-25                                                           978          0    0.0    0.0     0.0    0.0
+        ff                 RayTracer.Crossings               RayTracer/Crossings.hs:45:1-23                                                           980          0    0.0    0.0     0.0    0.0
+        frac               RayTracer.Crossings               RayTracer/Crossings.hs:46:1-25                                                           952          0    0.0    0.1     0.0    0.1
+       ycrossings          RayTracer.Crossings               RayTracer/Crossings.hs:(30,1)-(31,60)                                                    945    1069370   22.9   29.4    22.9   29.4
+       transport.orient    RayTracer.Transport               RayTracer/Transport.hs:(21,5)-(22,28)                                                    967      35429    0.0    0.0     0.0    0.0
+     attenuation.s         RayTracer.ParallelTracer          RayTracer/ParallelTracer.hs:19:7-63                                                      955    1070985    6.3    0.0    11.5    2.8
+      qArray               RayTracer.FileToVector            RayTracer/FileToVector.hs:39:1-66                                                        969   91293526    5.2    2.8     5.2    2.8
+       unId                Data.Vector.Fusion.Util           Data/Vector/Fusion/Util.hs:25:21-24                                                      975  180797136    0.0    0.0     0.0    0.0
+       unId                Data.Vector.Fusion.Util           Data/Vector/Fusion/Util.hs:25:21-24                                                      974        495    0.0    0.0     0.0    0.0
+       unId                Data.Vector.Fusion.Util           Data/Vector/Fusion/Util.hs:25:21-24                                                      973        160    0.0    0.0     0.0    0.0
+       unId                Data.Vector.Fusion.Util           Data/Vector/Fusion/Util.hs:25:21-24                                                      972         12    0.0    0.0     0.0    0.0
+      qArray               RayTracer.FileToVector            RayTracer/FileToVector.hs:39:1-66                                                        968          2    0.0    0.0     0.0    0.0
+       unId                Data.Vector.Fusion.Util           Data/Vector/Fusion/Util.hs:25:21-24                                                      971          2    0.0    0.0     0.0    0.0
+       unId                Data.Vector.Fusion.Util           Data/Vector/Fusion/Util.hs:25:21-24                                                      970          2    0.0    0.0     0.0    0.0
+     attenuation.k         RayTracer.ParallelTracer          RayTracer/ParallelTracer.hs:20:7-31                                                      954    1069424    0.0    0.0     0.0    0.0
+   parallelTrace.results   RayTracer.ParallelTracer          RayTracer/ParallelTracer.hs:29:7-53                                                      890          1    0.0    0.0     0.3    0.5
+    using                  Control.Parallel.Strategies       /var/folders/fv/ct49fxsj14z0rknfclr1mvpm0000gn/T/ghc29266_0/ghc_5.hscpp:362:1-35         891          1    0.0    0.0     0.3    0.5
+     runEval               Control.Parallel.Strategies       /var/folders/fv/ct49fxsj14z0rknfclr1mvpm0000gn/T/ghc29266_0/ghc_5.hscpp:297:1-55         892          1    0.0    0.0     0.3    0.5
+      parListChunk         Control.Parallel.Strategies       /var/folders/fv/ct49fxsj14z0rknfclr1mvpm0000gn/T/ghc29266_0/ghc_5.hscpp:(571,1)-(573,67) 893          1    0.1    0.3     0.3    0.5
+       rparWith            Control.Parallel.Strategies       /var/folders/fv/ct49fxsj14z0rknfclr1mvpm0000gn/T/ghc29266_0/ghc_5.hscpp:(483,1)-(486,48) 932      16834    0.0    0.0     0.2    0.1
+        evalList           Control.Parallel.Strategies       /var/folders/fv/ct49fxsj14z0rknfclr1mvpm0000gn/T/ghc29266_0/ghc_5.hscpp:513:1-26         934          0    0.1    0.1     0.2    0.1
+         rdeepseq          Control.Parallel.Strategies       /var/folders/fv/ct49fxsj14z0rknfclr1mvpm0000gn/T/ghc29266_0/ghc_5.hscpp:451:1-38         935    1070647    0.1    0.0     0.1    0.0
+          rseq             Control.Parallel.Strategies       /var/folders/fv/ct49fxsj14z0rknfclr1mvpm0000gn/T/ghc29266_0/ghc_5.hscpp:433:1-30         936    1071536    0.0    0.0     0.0    0.0
+  savePlate                RayTracer.DataWriter              RayTracer/DataWriter.hs:(25,1)-(27,48)                                                   874          1    0.0    0.0     0.0    0.2
+   savePlate.aryToStr      RayTracer.DataWriter              RayTracer/DataWriter.hs:27:9-48                                                          875          1    0.0    0.2     0.0    0.2
+    unId                   Data.Vector.Fusion.Util           Data/Vector/Fusion/Util.hs:25:21-24                                                      985      10001    0.0    0.0     0.0    0.0
+  fileToAry                RayTracer.FileToVector            RayTracer/FileToVector.hs:(25,1)-(27,50)                                                 860          0    0.1    0.5     0.3    0.9
+   unId                    Data.Vector.Fusion.Util           Data/Vector/Fusion/Util.hs:25:21-24                                                      882    1010002    0.0    0.0     0.0    0.0
+   readDouble              RayTracer.FileToVector            RayTracer/FileToVector.hs:(30,1)-(33,34)                                                 883    1010000    0.0    0.1     0.3    0.4
+    readDouble.\           RayTracer.FileToVector            RayTracer/FileToVector.hs:31:5-43                                                        885    1010000    0.2    0.0     0.2    0.0
+    readDouble.s           RayTracer.FileToVector            RayTracer/FileToVector.hs:33:5-34                                                        884    1010000    0.0    0.3     0.0    0.3
+   sizeOf                  Data.Primitive                    Data/Primitive.hs:31:1-25                                                                879         74    0.0    0.0     0.0    0.0
+   sChunks                 Data.Vector.Fusion.Bundle.Monadic Data/Vector/Fusion/Bundle/Monadic.hs:122:30-36                                           881          2    0.0    0.0     0.0    0.0
+   sSize                   Data.Vector.Fusion.Bundle.Monadic Data/Vector/Fusion/Bundle/Monadic.hs:124:30-34                                           878          2    0.0    0.0     0.0    0.0
+   upperBound              Data.Vector.Fusion.Bundle.Size    Data/Vector/Fusion/Bundle/Size.hs:(118,1)-(120,30)                                       877          2    0.0    0.0     0.0    0.0
