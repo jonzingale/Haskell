@@ -1,6 +1,7 @@
 -- https://wiki.haskell.org/Numeric_Haskell:_A_Vector_Tutorial
 
 {-# LANGUAGE ForeignFunctionInterface #-}
+{-# LANGUAGE BangPatterns #-}
 
 module RayTracer.FileToVector (qArray, fileToAry, uArray2D, qArray2D) where
 import qualified Data.ByteString.Char8      as B
@@ -22,7 +23,7 @@ foreign import ccall unsafe "static stdlib.h strtod" c_strtod
 
 fileToAry :: FilePath -> IO Lattice
 fileToAry file = do
-  s <- L.readFile file
+  !s <- L.readFile file
   return $ U.fromList $ map readDouble $ L.lines s
 
 readDouble :: ByteString -> Double

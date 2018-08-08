@@ -8,7 +8,7 @@ range(0, size**3) @ visualizer.py
 size   ary_size   time          rays
 19  MB 100^3      real: 25 secs 1M
 302 MB 250^3      real: 1m50sec 1M
-2.42GB 500^3      real: 8  mins 1M
+2.42GB 500^3      real: 8  mins 1M *
 6.65GB 700^3      user: 17m 40s 1M
 19.4GB 1000^3     real: 48 mins 1M
 
