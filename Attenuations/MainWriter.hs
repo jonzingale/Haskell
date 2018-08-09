@@ -12,7 +12,7 @@ main = do -- Write empty plates and test data.
     path1K <- doesPathExist "./Data/dataEmptyAry_1000000"
     datDir <- doesPathExist "./Data"
     if datDir
-      then putStr "\nData directory exists\n"
+      then putStr "\n/Data exists\n"
       else do
         putStr "creating Data directory"
         createDirectory "./Data"
