@@ -1,7 +1,8 @@
 #!/bin/bash
 
-# . trace.sh filename, if arg is blank tests for size found in Constants.hs
-# file="$1"
+# . trace.sh <FILENAME>
+# . trace.sh ./Data/dataStratifiedArray3D_1000
+file="$1"
 
 # ghc -O2 MainWriter.hs
 # time ./MainWriter
@@ -9,14 +10,12 @@
 # echo 'finished writing necessary data'
 
 echo 'starting tracer compilation'
-
 # -prof -fprof-auto -fprof-cafs -fforce-recomp
-# ghc -O2 --make Main.hs -threaded -rtsopts -fforce-recomp
 ghc -O2 --make Main.hs -threaded -rtsopts -fforce-recomp # -prof -fprof-auto -fprof-cafs
 
-clear ; echo 'starting trace' ; date
-
-time ./Main +RTS -N8 # -sstderr -p # 8 virtual cores
+echo "starting trace: $(date)"
+time ./Main $file +RTS -N8 # -sstderr -p # 8 virtual cores
+cp Main ./production/
 rm Main.o Main.hi Main RayTracer/*.o RayTracer/*.hi
 
 echo 'visualizing data'
