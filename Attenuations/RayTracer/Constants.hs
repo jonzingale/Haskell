@@ -27,7 +27,7 @@ rays
 center, raySize :: Double
 center = fromIntegral size /  2
 raySize = 1*10**6
-size = 500::Int
+size = 1000::Int
 
 type AryDim = Double
 type Mins = String
