@@ -3,10 +3,9 @@
 {-# LANGUAGE ForeignFunctionInterface #-}
 {-# LANGUAGE BangPatterns #-}
 
-module RayTracer.FileToVector (qArray, fileToAry, uArray2D, qArray2D) where
+module RayTracer.FileToVector (fileToAry, qArray, qArray2D) where
 import qualified Data.ByteString.Char8      as B
 import qualified Data.ByteString.Lazy.Char8 as L
-import Data.ByteString.Lazy.Char8 (ByteString)
 import qualified Data.Vector.Unboxed as U
 
 import Foreign
@@ -26,14 +25,11 @@ fileToAry file = do
   !s <- L.readFile file
   return $ U.fromList $ map readDouble $ L.lines s
 
-readDouble :: ByteString -> Double
+readDouble :: L.ByteString -> Double
 readDouble ls = unsafePerformIO $ B.useAsCString s $ \cstr ->
     realToFrac `fmap` c_strtod cstr nullPtr
   where
     s = B.concat . L.toChunks $ ls
-
-uArray2D :: Dimension -> Coords2D -> Double -> Lattice -> Lattice
-uArray2D size (x, z) v a = (U.//) a [(x + z * size, v)]
 
 qArray2D :: Dimension -> Coords2D -> Lattice -> Double
 qArray2D size (x, y) a = (U.!) a (x + y * size)

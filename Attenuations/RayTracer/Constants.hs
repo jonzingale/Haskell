@@ -10,12 +10,18 @@ size   ary_size   time          rays
 302 MB 250^3      real: 42 secs 1M
 2.42GB 500^3      real: 2m31sec 1M
 6.65GB 700^3      user: 7m13sec 1M
-19.4GB 1000^3     real: 48 mins 1M * exp 17mins
+19.4GB 1000^3     real: 40 mins 1M
 
 19  MB 100^3      user: 1.6mins 3M
 302 MB 250^3      real: 9 mins  3M
 2.42GB 500^3      user: 30mins  3M
 19.4GB 1000^3     out-of-range  3M
+
+culprits:
+parallelTrace
+attenuation
+transport
+rays
 --}
 
 center, raySize :: Double

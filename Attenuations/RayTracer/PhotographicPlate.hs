@@ -1,7 +1,7 @@
 -- https://en.wikipedia.org/wiki/Moving_average#Exponential_moving_average
 
 module RayTracer.PhotographicPlate where
-import RayTracer.FileToVector (qArray2D, uArray2D)
+import RayTracer.FileToVector (qArray2D)
 import qualified Data.Vector.Unboxed as U
 import RayTracer.Constants (size)
 
