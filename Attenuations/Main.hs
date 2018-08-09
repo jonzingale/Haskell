@@ -9,7 +9,6 @@ import RayTracer.Constants (size)
 {--
 Todo:
 * pass (filename, seed, distance, deviation)
-* couponCollected Beam estimation to compiled tracer
 --}
 
 getFiles n =
@@ -28,21 +27,13 @@ main = do
     args <- getArgs
     case args of
 
-      -- [filename] -> do -- default path
-      --   let (dFile, eFile) = getFiles 1000
-      --   ary <- fileToAry filename
-      --   emptyAry <- fileToAry eFile
-      --   plateAry <- parallelTrace ary
-      --   let processedPlate = processPlate plateAry emptyAry
-      --   savePlate "tmp" processedPlate
-
-      -- [filename, seed] -> do -- with random seed
-      --   let (dFile, eFile) = getFiles 1000
-      --   ary <- fileToAry filename
-      --   emptyAry <- fileToAry eFile
-      --   plateAry <- parallelTrace ary
-      --   let processedPlate = processPlate plateAry emptyAry
-      --   savePlate "tmp" processedPlate
+      [filename] -> do -- default path
+        let (dFile, eFile) = getFiles 1000
+        ary <- fileToAry filename
+        emptyAry <- fileToAry eFile
+        plateAry <- parallelTrace ary
+        let processedPlate = processPlate plateAry emptyAry
+        savePlate "tmp" processedPlate
 
       [] -> do -- test path
         let (dFile, eFile) = getFiles size --100
