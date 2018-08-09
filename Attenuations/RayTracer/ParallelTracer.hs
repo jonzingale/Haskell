@@ -1,3 +1,5 @@
+{-# LANGUAGE BangPatterns #-}
+
 module RayTracer.ParallelTracer (parallelTrace) where
 import Control.Parallel.Strategies (rdeepseq, parListChunk, using)
 import RayTracer.FileToVector (qArray)
@@ -22,14 +24,12 @@ mmToUnits d  = 2 * d
 parallelTrace ary = do
   let gBeams = beam (2 * 10^3) 2 -- Distance Deviation
   let rays = map (attenuation ary) gBeams
-  let results = rays `using` parListChunk 64 rdeepseq
+  let results = rays `using` parListChunk 1024 rdeepseq
   return results -- [(x, z, SegmentLength)]
 
 attenuation ary ((x, z), (θ, φ)) =
   let path = takeWhile stopCond $ transport (x, z) (θ, φ) in
-  let s = sum' ary path in
-  -- let s = sum [ seg * qArray size ijk ary | (ijk, seg) <- path] in
-  let (i,j,k) = fst.last $ path in (i, k, s)
+  let (i,j,k) = fst.last $ path in (i, k, sum' ary path)
   where
     stopCond ((x,y,z), s) =
       x<size && y<size && z<size &&

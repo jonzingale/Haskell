@@ -8,7 +8,7 @@ range(0, size**3) @ visualizer.py
 size   ary_size   time          rays
 19  MB 100^3      real: 14 secs 1M
 302 MB 250^3      real: 42 secs 1M
-2.42GB 500^3      real: 2m31sec 1M
+2.42GB 500^3      real: 2m3 sec 1M
 6.65GB 700^3      user: 7m13sec 1M
 19.4GB 1000^3     real: 40 mins 1M
 
@@ -27,7 +27,7 @@ rays
 center, raySize :: Double
 center = fromIntegral size /  2
 raySize = 1*10**6
-size = 1000::Int
+size = 500::Int
 
 type AryDim = Double
 type Mins = String
