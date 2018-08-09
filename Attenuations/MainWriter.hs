@@ -1,7 +1,7 @@
 module Main where
 import Data.Array.Unboxed (UArray, elems, listArray)
+import System.Directory (doesPathExist, createDirectory)
 import System.Random (mkStdGen, randomRs)
-import System.Directory (doesPathExist)
 import Data.List (sort)
 
 type ULattice = UArray Int Double
@@ -10,6 +10,11 @@ main = do -- Write empty plates and test data.
     test100 <- doesPathExist "./Data/dataStratifiedArray3D_100"
     path100 <- doesPathExist "./Data/dataEmptyAry_10000"
     path1K <- doesPathExist "./Data/dataEmptyAry_1000000"
+    if doesPathExist "./Data"
+      then putStr "./Data directory exists"
+      else do
+        putStr "creating Data directory"
+        createDirectory "./Data"
     if test100
       then putStr "test data: dataStratifiedArray3D_100 exists\n"
       else do
