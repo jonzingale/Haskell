@@ -1,7 +1,7 @@
 -- http://hackage.haskell.org/package/normaldistribution-1.1.0.3/docs/Data-Random-Normal.html
 module RayTracer.GaussianBeam where
 import RayTracer.CumulativeDistribution (neededRays)
-import RayTracer.Constants (center, size, raySize)
+import RayTracer.Constants (center, size, seed)
 import System.Random (randomRs, mkStdGen)
 import Data.Random.Normal (mkNormals')
 
@@ -35,7 +35,7 @@ plane is 2 units, ~ 1mm.
 
 beam :: Distance -> Deviation -> Beam
 beam d σ =
-  let needed = neededRays raySize σ in
+  let needed = neededRays (10^6) σ in
   filter posiCond $ take needed $ map (ray d) (rDisc σ) -- rays in mm
   where
     posiCond ((x,z),(_,_)) = x >= 0 && z >= 0 &&
@@ -58,6 +58,6 @@ ray d (x, z) = ((coords x (d/2), coords z (d/2)), (angles x d, angles z d))
 rDisc :: Deviation -> [EntryCoords]
 rDisc σ = [(r*cos θ, r*sin θ) | (r, θ) <- zip (rs σ) θs]
   where
-    θs = randomRs (0::Double, pi::Double) $ mkStdGen 32
+    θs = randomRs (0::Double, pi::Double) $ mkStdGen 23
     rs σ = mkNormals' (0, σ) 31 -- (μ, σ)
 
