@@ -10,8 +10,9 @@ main = do -- Write empty plates and test data.
     test100 <- doesPathExist "./Data/dataStratifiedArray3D_100"
     path100 <- doesPathExist "./Data/dataEmptyAry_10000"
     path1K <- doesPathExist "./Data/dataEmptyAry_1000000"
-    if doesPathExist "./Data"
-      then putStr "./Data directory exists"
+    datDir <- doesPathExist "./Data"
+    if datDir
+      then putStr "\nData directory exists\n"
       else do
         putStr "creating Data directory"
         createDirectory "./Data"
