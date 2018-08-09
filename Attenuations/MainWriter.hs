@@ -17,7 +17,7 @@ main = do -- Write empty plates and test data.
         putStr "creating Data directory"
         createDirectory "./Data"
     if test100
-      then putStr "test data: dataStratifiedArray3D_100 exists\n"
+      then putStr "dataStratifiedArray3D_100 exists\n"
       else do
         putStr "creating dataStratifiedArray3D_100"
         saveArr "StratifiedArray3D_100" (stratifiedArray3D 100)
