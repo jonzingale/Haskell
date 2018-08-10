@@ -23,4 +23,4 @@ rm Main.o Main.hi Main RayTracer/*.o RayTracer/*.hi
 # python ./Visualizer/visualizer.py
 # rm Data/dataSavedPlate
 
-. production/trace.sh ./Data/dataStratifiedArray3D_1000
+# . production/raytracer.sh ./Data/dataStratifiedArray3D_1000
