@@ -10,6 +10,7 @@ type VectSamples = U.Vector Int32
 {--
 Todo:
 cymbals hang over vectorized measure (length sample > length subDiv)
+dithering in mkEmptyZeroVector
 --}
 
 -- mkEmptyMeasure 120 exM
@@ -17,7 +18,7 @@ mkEmptyZeroVector :: BPM -> Measure -> VectSamples
 mkEmptyZeroVector bpm (M (Time b _) _) =
   let beats = (fromIntegral b)::Float in
   let samplesPerMeasure = beats * 60 * 44100 / bpm in
-  U.replicate (ceiling samplesPerMeasure) (0::Int32)
+  U.replicate (ceiling samplesPerMeasure) (0::Int32) -- dither this?
 
 buildTrack :: BPM -> Measure -> [Int32] -> VectSamples
 buildTrack bpm (M (Time n m) mstr) samples =
