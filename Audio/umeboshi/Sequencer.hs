@@ -1,6 +1,8 @@
 module Sequencer where
 import qualified Data.Vector.Unboxed as U
 import Data.Int (Int32)
+import Data.WAVE
+import Wave
 
 type BPM = Float
 data Signature = Time Int Int -- example: 3 4
@@ -27,8 +29,9 @@ mkEmptyZeroVector bpm (M (Time b _) _) =
   let samplesPerMeasure = beats * 60 * 44100 / bpm in
   U.replicate (ceiling samplesPerMeasure) (0::Int32) -- dither this?
 
-buildTrack :: BPM -> Measure -> [Int32] -> VectSamples
-buildTrack bpm (M (Time n m) mstr) samples =
+buildTrack :: BPM -> Measure -> WAVE -> VectSamples
+buildTrack bpm (M (Time n m) mstr) ss =
+  let samples = unpack ss in
   let empty = mkEmptyZeroVector bpm (M (Time n m) mstr) in
   let subDiv = div (U.length empty) (length mstr) in
   U.accum (+) empty (f mstr 0 subDiv samples)

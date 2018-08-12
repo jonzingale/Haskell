@@ -2,8 +2,6 @@ module Wave where
 import Data.Int (Int32)
 import Data.WAVE
 
-type Sample = IO WAVE
-
 header = WAVEHeader 1 44100 16 Nothing
 
 unpack :: WAVE -> [Int32]
