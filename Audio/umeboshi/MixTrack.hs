@@ -1,16 +1,25 @@
 module MixTrack where
 import qualified Data.Vector.Unboxed as U
 import Data.Int (Int32)
-import Sequencer
+-- import Sequencer
 import Samples
 import Wave
 
+type BPM = Float
+data Signature = Time Int Int -- example: 3 4
+data Measure = M Signature String
 type VectSamples = U.Vector Int32
+-- type SamplesPerBeat = Float
+-- data Track = Trk Sample [Measure]
+
+instance Show Measure where
+  show (M (Time b q) str) = show b ++ "/" ++ show q ++ ": " ++ str
 
 {--
 Todo:
 cymbals hang over vectorized measure (length sample > length subDiv)
 dithering in mkEmptyZeroVector
+display score
 --}
 
 -- mkEmptyMeasure 120 exM
@@ -50,7 +59,7 @@ testBuild = do
   let drums1 = foldr (U.zipWith (+)) track1 [track2, track3, track4, track5]
 
   let track1 = buildTrack 120 (M (Time 7 4) ".xx") drum1
-  let track2 = buildTrack 120 (M (Time 7 4) ".xxxxxx") drum2
+  let track2 = buildTrack 120 (M (Time 7 4) ".xxxxxx.xxxxxx") drum2
   let track3 = buildTrack 120 (M (Time 7 4) ".x.x") drum3
   let track4 = buildTrack 120 (M (Time 7 4) "x.") drum4
   let track5 = buildTrack 120 (M (Time 7 4) ".x") drum5
