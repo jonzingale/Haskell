@@ -1,41 +1,34 @@
 module Umeboshi where
 import qualified Data.Vector.Unboxed as U
-import Data.Int (Int32)
-import Data.WAVE
+import Sequencer
 import Samples
+import Wave
 
-data Rhythm = Rhythm WAVE String
-data Track = Track Rhythm
+testBuild = do
+  w1 <- hiTom
+  w2 <- maracas
+  w3 <- rimshot
+  w4 <- opHiHat
+  w5 <- handClap
+  let [drum1, drum2, drum3, drum4, drum5] = map unpack [w1, w2, w3, w4, w5]
+  let track1 = buildTrack 130 (M (Time 5 4) ".xx") drum1
+  let track2 = buildTrack 130 (M (Time 5 4) "xxxxx") drum2
+  let track3 = buildTrack 130 (M (Time 5 4) ".") drum3
+  let track4 = buildTrack 130 (M (Time 5 4) "x") drum4
+  let track5 = buildTrack 130 (M (Time 5 4) ".x") drum5
+  let drums1 = foldr (U.zipWith (+)) track1 [track2, track3, track4, track5]
 
-instance Show Rhythm where
-  show (Rhythm wav str) = str
+  let track1 = buildTrack 130 (M (Time 7 4) ".xx") drum1
+  let track2 = buildTrack 130 (M (Time 7 4) "xxxxxxx") drum2
+  let track3 = buildTrack 130 (M (Time 7 4) ".x.x") drum3
+  let track4 = buildTrack 130 (M (Time 7 4) "x.") drum4
+  let track5 = buildTrack 130 (M (Time 7 4) ".x") drum5
+  let drums2 = foldr (U.zipWith (+)) track1 [track2, track3, track4, track5]
 
--- measure based "x.x.x" => 5/4
--- sampleToString :: Sample -> String -> 
-
--- maxBound for Int32 is 2147483647 => 2^31 - 1
-samplesPS = 44100
-bitrate = 16
-
-header = WAVEHeader 1 samplesPS bitrate Nothing
-
-makeWavFile :: WAVE -> IO ()
-makeWavFile wav = putWAVEFile "temp.wav" wav
-{--
-ghc -O2 --make WaveTest.hs
-time ./WaveTest
-rm *.hi *.o WaveTest
---}
-main = do
-  wav <- getWAVEFile "./808Soundz/cl_hihat.wav"
-  let mono' = waveSamples wav
-  let mono = map (\ [x] -> x) mono'
-
-  let them = foldr (++) [] $ take 20 $ repeat mono
-  -- let keyed = zip [0..] mono
-  -- let size = length mono
-
-  -- let vv = U.fromList $ shuffle keyed
-  -- let vals = take (2*10^6) $ iterativeSort size vv
-  let samples = map (:[]) them
-  makeWavFile $ WAVE header samples
+  let track1 = buildTrack 130 (M (Time 3 4) ".") drum1
+  let track2 = buildTrack 130 (M (Time 3 4) ".x.") drum2
+  let track3 = buildTrack 130 (M (Time 3 4) "x.x") drum3
+  let track4 = buildTrack 130 (M (Time 3 4) "x.") drum4
+  let track5 = buildTrack 130 (M (Time 3 4) ".x") drum5
+  let drums3 = foldr (U.zipWith (+)) track1 [track2, track3, track4, track5]
+  makeWavFile $ pack $ U.toList $ U.concat [drums1,drums2,drums1,drums3]

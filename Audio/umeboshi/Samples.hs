@@ -1,6 +1,10 @@
 module Samples where
 import Data.WAVE
 
+{--
+write using directory perhaps?
+--}
+
 clHiHat = getWAVEFile "./808Soundz/cl_hihat.wav"
 claves = getWAVEFile "./808Soundz/claves.wav"
 cowbell = getWAVEFile "./808Soundz/cowbell.wav"
