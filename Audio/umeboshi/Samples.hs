@@ -18,5 +18,5 @@ roland808 = do
   snare    <- getWAVEFile "./808Soundz/snare.wav"
   tom      <- getWAVEFile "./808Soundz/tom1.wav"
 
-  return [clHiHat,claves,cowbell,conga,crashCym,handClap,hiConga,
-          hiTom,kick,kick2,maracas,opHiHat,rimshot,snare,tom]
+  return [clHiHat, claves, cowbell, conga, crashCym, handClap, hiConga,
+          hiTom, kick, kick2, maracas, opHiHat, rimshot, snare, tom]

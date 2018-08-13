@@ -10,7 +10,7 @@ display score
 --}
 
 testBuild = do
-  [clHiHat, claves, cowbell, conga, crashCym, handClap, hiConga, 
+  [clHiHat, claves, cowbell, conga, crashCym, handClap, hiConga,
    hiTom, kick, kick2, maracas, opHiHat, rimshot, snare, tom] <- roland808
 
   let m1 = [(".xx", hiTom),("xxxxx", maracas),(".", rimshot),
