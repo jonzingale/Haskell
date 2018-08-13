@@ -9,7 +9,7 @@ cymbals hang over vectorized measure (length sample > length subDiv)
 display score
 --}
 
-testBuild = do
+umeboshi = do
   [clHiHat, claves, cowbell, conga, crashCym, handClap, hiConga,
    hiTom, kick, kick2, maracas, opHiHat, rimshot, snare, tom] <- roland808
 
@@ -24,8 +24,8 @@ testBuild = do
   let m2 = buildMeasure 122 (Time 7 4) ensemble2
   let m3 = buildMeasure 122 (Time 3 4) ensemble3
 
-  let rhythm = [m2,m2,m2,
-                m1,m3,m1,m3,
-                m3,m3,m3]
+  let rhythm = U.concat [m2,m2,m2,
+                         m1,m3,m1,m3,
+                         m3,m3,m3]
 
-  makeWavFile $ pack $ U.toList $ U.concat $ rhythm
+  makeWavFile rhythm
