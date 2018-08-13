@@ -4,42 +4,32 @@ import Data.Int (Int32)
 import Data.WAVE
 import Wave
 
-type BPM = Float
-data Signature = Time Int Int -- example: 3 4
-data Measure = M Signature String
+type Performance = (Rhythm, WAVE)
 type VectSamples = U.Vector Int32
+data Signature = Time Int Int
+type Rhythm = String
+type BPM = Float
 
-instance Show Measure where
-  show (M (Time b q) str) = show b ++ "/" ++ show q ++ ": " ++ str
+buildTrack :: BPM -> Signature -> [Performance] -> VectSamples
+buildTrack bpm (Time n m) (sw:sws) =
+  let empty = mkEmptyMeasure bpm (Time n m) in
+  let banks = map (mixinBank empty) (sw:sws) in
+  U.accum (+) empty $ concat banks
 
-{--
-Todo:
-cymbals hang over vectorized measure (length sample > length subDiv)
-dithering in mkEmptyZeroVector
-display score
-
-rewrite build track to externalize emptyVector
-and as buildTracks without replicating BPM and TimeSig in same measure.
---}
-
--- mkEmptyMeasure 120 exM
-mkEmptyZeroVector :: BPM -> Measure -> VectSamples
-mkEmptyZeroVector bpm (M (Time b _) _) =
+mkEmptyMeasure :: BPM -> Signature -> VectSamples
+mkEmptyMeasure bpm (Time b _) =
   let beats = (fromIntegral b)::Float in
   let samplesPerMeasure = beats * 60 * 44100 / bpm in
-  U.replicate (ceiling samplesPerMeasure) (0::Int32) -- dither this?
+  U.replicate (ceiling samplesPerMeasure) (0::Int32)
 
-buildTrack :: BPM -> Measure -> WAVE -> VectSamples
-buildTrack bpm (M (Time n m) mstr) ss =
-  let samples = unpack ss in
-  let empty = mkEmptyZeroVector bpm (M (Time n m) mstr) in
+mixinBank :: VectSamples -> Performance -> [(Int, Int32)]
+mixinBank empty (mstr, ss) =
   let subDiv = div (U.length empty) (length mstr) in
-  U.accum (+) empty (f mstr 0 subDiv samples)
+  f mstr 0 subDiv (unpack ss)
   where
-    f [] _ _ _ = []
-    f (x:xs) i subDiv ss
-      | x == 'x' = getPairs ss i subDiv ++ f xs (i+1) subDiv ss
-      | otherwise = f xs (i+1) subDiv ss
+    getPairs ss i d = [(j + i*d, v) | (j, v) <- zip [0..] ss]
 
-    getPairs ss i subDiv = 
-      [(j + i*subDiv, val) | (j, val) <- zip [0..] ss]
+    f [] _ _ _ = []
+    f (x:xs) i d ss
+      | x == 'x' = getPairs ss i d ++ f xs (i+1) d ss
+      | otherwise = f xs (i+1) d ss

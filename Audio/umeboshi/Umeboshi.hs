@@ -3,35 +3,26 @@ import qualified Data.Vector.Unboxed as U
 import Sequencer
 import Samples
 import Wave
-
--- lift time signatures and bpm
--- write mixInstruments.
+{--
+Todo:
+cymbals hang over vectorized measure (length sample > length subDiv)
+display score
+--}
 
 testBuild = do
-  [clHiHat,claves,cowbell,conga,crashCym,handClap,hiConga,
-   hiTom,kick,kick2,maracas,opHiHat,rimshot,snare,tom] <- roland808
+  [clHiHat, claves, cowbell, conga, crashCym, handClap, hiConga, 
+   hiTom, kick, kick2, maracas, opHiHat, rimshot, snare, tom] <- roland808
 
-  let bank1 = buildTrack 120 (M (Time 5 4) ".xx") hiTom
-  let bank2 = buildTrack 120 (M (Time 5 4) "xxxxx") maracas
-  let bank3 = buildTrack 120 (M (Time 5 4) ".") rimshot
-  let bank4 = buildTrack 120 (M (Time 5 4) "x") opHiHat
-  let bank5 = buildTrack 120 (M (Time 5 4) ".x") handClap
-  let drums1 = foldr (U.zipWith (+)) bank1 [bank2, bank3, bank4, bank5]
+  let m1 = [(".xx", hiTom),("xxxxx", maracas),(".", rimshot),
+            ("x", opHiHat),(".x", handClap)]
+  let m2 = [(".xx", hiTom),("xxxxxxx", maracas),("...x", snare),
+            (".x..", rimshot),("x.", opHiHat),(".x", handClap)]
+  let m3 = [(".", hiTom),(".x.", maracas),("x.x", rimshot),
+            ("x.", opHiHat),(".x", handClap)]
 
-  let bank1 = buildTrack 120 (M (Time 7 4) ".xx") hiTom
-  let bank2 = buildTrack 120 (M (Time 7 4) "xxxxxxx") maracas
-  let bank6 = buildTrack 120 (M (Time 7 4) "...x") snare
-  let bank3 = buildTrack 120 (M (Time 7 4) ".x..") rimshot
-  let bank4 = buildTrack 120 (M (Time 7 4) "x.") opHiHat
-  let bank5 = buildTrack 120 (M (Time 7 4) ".x") handClap
-  let drums2 = foldr (U.zipWith (+)) bank1 [bank2, bank3, bank4, bank5, bank6]
+  let track1 = buildTrack 120 (Time 5 4) m1                     
+  let track2 = buildTrack 120 (Time 7 4) m2
+  let track3 = buildTrack 120 (Time 3 4) m3
 
-  let bank1 = buildTrack 120 (M (Time 3 4) ".") hiTom
-  let bank2 = buildTrack 120 (M (Time 3 4) ".x.") maracas
-  let bank3 = buildTrack 120 (M (Time 3 4) "x.x") rimshot
-  let bank4 = buildTrack 120 (M (Time 3 4) "x.") opHiHat
-  let bank5 = buildTrack 120 (M (Time 3 4) ".x") handClap
-  let drums3 = foldr (U.zipWith (+)) bank1 [bank2, bank3, bank4, bank5]
-
-  let rhythm = [drums2,drums2,drums1,drums3,drums1,drums3,drums3,drums3,drums3]
+  let rhythm = [track2,track2,track1,track3,track1,track3,track3,track3,track3]
   makeWavFile $ pack $ U.toList $ U.concat $ rhythm
