@@ -10,8 +10,8 @@ data Signature = Time Int Int
 type Rhythm = String
 type BPM = Float
 
-buildTrack :: BPM -> Signature -> [Performance] -> VectSamples
-buildTrack bpm (Time n m) (sw:sws) =
+buildMeasure :: BPM -> Signature -> [Performance] -> VectSamples
+buildMeasure bpm (Time n m) (sw:sws) =
   let empty = mkEmptyMeasure bpm (Time n m) in
   let banks = map (mixinBank empty) (sw:sws) in
   U.accum (+) empty $ concat banks
