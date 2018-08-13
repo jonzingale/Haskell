@@ -13,11 +13,11 @@ testBuild = do
   [clHiHat, claves, cowbell, conga, crashCym, handClap, hiConga,
    hiTom, kick, kick2, maracas, opHiHat, rimshot, snare, tom] <- roland808
 
-  let m1 = [(".xx", hiTom),("xxxxx", maracas),(".", rimshot),
+  let m1 = [(".xx", hiTom),("xxxxx", maracas),
             ("x", opHiHat),(".x", snare)]
   let m2 = [(".xx", hiTom),("xxxxxxx", maracas),("...x", snare),
             (".x..", rimshot),("x.", opHiHat),(".x", handClap)]
-  let m3 = [(".", hiTom),(".x.", maracas),("x.x", rimshot),
+  let m3 = [(".x.", maracas),("x.x", rimshot),
             ("x.", opHiHat),(".x", handClap)]
 
   let track1 = buildTrack 122 (Time 5 4) m1
