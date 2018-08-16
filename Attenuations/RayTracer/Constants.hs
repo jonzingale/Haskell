@@ -13,7 +13,7 @@ center = fromIntegral size /  2
 
 seed, size :: Int
 seed = 8675309
-size = 1000
+size = 100
 
 type AryDim = Double
 type Mins = String
