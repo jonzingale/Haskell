@@ -27,7 +27,7 @@ mixinBank empty (mstr, ss) =
   let subDiv = div (U.length empty) (length mstr) in
   f mstr 0 subDiv (unpack ss)
   where
-    getPairs ss i d = [(j + i*d, v) | (j, v) <- zip [0..] ss]
+    getPairs ss i d = [(j + i*d, div v 5) | (j, v) <- zip [0..] ss]
 
     f [] _ _ _ = []
     f (x:xs) i d ss
