@@ -26,17 +26,13 @@ getFiles n =
         100 -> testData
         1000 -> bigData
 
-distanceIs x = do
+dispFlags x d s = do
     if x == ""
     then putStr "\ndefault distance: 2 * 10^3"
     else putStr ("\ndistance is set to: "++x)
-
-deviationIs d = do
     if d == ""
     then putStr "\ndefault deviation: 2"
     else putStr ("\ndeviation is set to: "++d)
-
-seedIs s = do
     if s == ""
     then putStr "\ndefault seed: 23"
     else putStr ("\nseed is set to: "++s)
@@ -47,9 +43,8 @@ main = do
         (filename:flags) -> do -- file path
             let [x, d, s] = parseFlags $ intercalate " " flags
             putStr ("Loading File: " ++ filename)
-            distanceIs x
-            deviationIs d
-            seedIs s
+            dispFlags x d s
+
             let (dFile, eFile) = getFiles 100
             ary <- fileToAry filename
             emptyAry <- fileToAry eFile
