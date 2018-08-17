@@ -23,13 +23,13 @@ main = do -- Write empty plates and test data.
   if sparse
     then putStr "sparseArray3D exists\n"
     else do
-      putStr "creating sparseArray3D\n"
+      putStr "creating sparseArray3D\ntime estimate: 23 mins\n"
       saveArr "sparseArray3D" sparseArray3D
 
   if emptyA
     then putStr "emptyArray2D exists\n"
     else do
-      putStr "creating emptyArray2D\n"
+      putStr "creating emptyArray2D\ntime estimate: 23 mins\n"
       saveZeros 1000
 
 randos = randomRs (0, 1::Double).mkStdGen $ 32
