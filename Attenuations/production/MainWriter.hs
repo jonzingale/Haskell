@@ -18,18 +18,18 @@ main = do -- Write empty plates and test data.
   if dataDir
     then putStr "\n/Data exists\n"
     else do
-      putStr "creating Data directory"
+      putStr "creating Data directory\n"
       createDirectory "./Data"
   if sparse
     then putStr "sparseArray3D exists\n"
     else do
-      putStr "creating sparseArray3D"
+      putStr "creating sparseArray3D\n"
       saveArr "sparseArray3D" sparseArray3D
 
   if emptyA
     then putStr "emptyArray2D exists\n"
     else do
-      putStr "creating emptyArray2D"
+      putStr "creating emptyArray2D\n"
       saveZeros 1000
 
 randos = randomRs (0, 1::Double).mkStdGen $ 32
