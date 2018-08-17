@@ -28,8 +28,8 @@ time ./Main $file +RTS -N8 # -sstderr -p # 8 virtual cores
 rm Main.o Main.hi Main RayTracer/*.o RayTracer/*.hi
 # rm InterfaceTest.o InterfaceTest.hi InterfaceTest 
 
-# echo 'visualizing data'
-# python ./Visualizer/visualizer.py
-# rm Data/dataSavedPlate
+echo 'visualizing data'
+python ./Visualizer/visualizer.py
+rm Data/dataSavedPlate
 
 # . production/raytracer.sh ./Data/dataStratifiedArray3D_1000

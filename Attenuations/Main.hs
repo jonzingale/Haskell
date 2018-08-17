@@ -50,12 +50,12 @@ main = do
             let processedPlate = processPlate plateAry emptyAry
             savePlate "tmp" processedPlate
 
-      [] -> do -- test path
-        let (dFile, eFile) = getFiles size -- 100
-        ary <- fileToAry dFile
-        emptyAry <- fileToAry eFile
-        plateAry <- parallelTrace ary
-        let processedPlate = processPlate plateAry emptyAry
-        savePlate "tmp" processedPlate
+        [] -> do -- test path
+            let (dFile, eFile) = getFiles size -- 100
+            ary <- fileToAry dFile
+            emptyAry <- fileToAry eFile
+            plateAry <- parallelTrace ary
+            let processedPlate = processPlate plateAry emptyAry
+            savePlate "tmp" processedPlate
 
-        _ -> putStrLn "Wrong number of arguments"
+        -- _ -> putStrLn "Wrong number of arguments"
