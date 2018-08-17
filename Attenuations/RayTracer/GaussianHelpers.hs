@@ -20,7 +20,6 @@ cheapTrans = do
     f ((x,_),(θ,_)) = "x: " ++ (show.round )x ++ ", θ: " ++ show θ
 
 -- centered at (c, c) with distance d
--- cheapBeam 50 50
 cheapBeam d s= do
   let c = center
   let vals = take 10 $ f (beam d 1 s)
@@ -37,7 +36,6 @@ cheapBeam d s= do
   let inits = f $ map (ray d) [(-c,-c), (-dd,-c), (-c,-dd), (-dd*s2,-dd*s2)]
   putStr.unlines.(map show) $ inits
   putStr "\n"
-  -- putStr.unlines.(map show) $ vals
   where
     f rs = [(round x, round z, g θ, g φ) | ((x,z),(θ,φ)) <- rs]
     g ω = round.radToDeg $ ω
