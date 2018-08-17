@@ -1,8 +1,8 @@
 module Main where
-import RayTracer.DataWriter (savePlate, parseArgs)
 import RayTracer.PhotographicPlate (processPlate)
 import RayTracer.ParallelTracer (parallelTrace)
 import RayTracer.FileToVector (fileToAry)
+import RayTracer.DataWriter (savePlate)
 import System.Environment (getArgs)
 import RayTracer.Constants (size)
 import Data.List (intercalate)
@@ -16,6 +16,19 @@ bigData  = ("./Data/dataStratifiedArray3D_1000", "./Data/dataEmptyAry_1000000")
 
 -- Todo: -t flag for 100 test otherwise always 1000
 
+parseArgs :: String -> String -> String -> IO((Double, Double, Int))
+parseArgs x d s = do
+  let distance  = if x == "" then "2000" else x
+  let deviation = if d == "" then "2" else d
+  let seed = if s == "" then "23" else s
+  putStr $ "\ndistance: " ++ distance ++ "mm" ++
+           "\ndeviation: "++deviation ++
+           "\nseed: " ++ seed ++ "\n"
+  return $ ((read distance)::Double,
+            (read deviation)::Double,
+            (read seed)::Int)
+
+parseFlags :: String -> [String]
 parseFlags filename
     | filename == [] = ["","",""]
     | otherwise = map getVals $ f filename
@@ -25,6 +38,7 @@ parseFlags filename
       Just (_,_,_,[x]) -> x
       Nothing -> ""
 
+getFiles :: Int -> (String, String)
 getFiles n =
     case n of
         100 -> testData
