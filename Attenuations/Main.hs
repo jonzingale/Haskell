@@ -8,11 +8,10 @@ import RayTracer.Constants (size)
 import Data.List (intercalate)
 import Text.Regex
 
+regexes = repeat "([0-9]+\\.?[0-9]*)"
+flags = map mkRegex $ zipWith (++) ["-x ", "-d ", "-s "] regexes
 testData = ("./Data/dataStratifiedArray3D_100", "./Data/dataEmptyAry_10000")
 bigData  = ("./Data/dataStratifiedArray3D_1000", "./Data/dataEmptyAry_1000000")
-flags = map mkRegex ["-x ([0-9]+\\.?[0-9]*)",
-                     "-d ([0-9]+\\.?[0-9]*)",
-                     "-s ([0-9]+\\.?[0-9]*)"]
 
 parseFlags filename
     | filename == [] = ["","",""]
@@ -31,7 +30,7 @@ getFiles n =
 main = do
     args <- getArgs
     case args of
-        (filename:flags) -> do -- file path
+        (filename:flags) -> do
             let [x, d, s] = parseFlags $ intercalate " " flags
             putStr ("Loading File: " ++ filename)
             (distance, deviation, seed) <- parseArgs x d s
@@ -43,7 +42,7 @@ main = do
             let processedPlate = processPlate plateAry emptyAry
             savePlate "tmp" processedPlate
 
-        [] -> do -- test path
+        [] -> do
             putStr "Test Trace"
             let (dFile, eFile) = getFiles size -- 100
             ary <- fileToAry dFile
