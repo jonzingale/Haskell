@@ -11,7 +11,7 @@ import Text.Regex
 regexes = repeat "([0-9]+\\.?[0-9]*)"
 flags = map mkRegex $ zipWith (++) ["-x ", "-d ", "-s "] regexes
 testTraceString = "Test Trace\ndistance: 1000mm\ndeviation: 2\nseed: 23\n"
-testData = ("./Data/dataStratifiedArray3D_100", "./Data/dataEmptyAry_10000")
+testData = ("./Data/dataStratifiedArray3D_100" , "./Data/dataEmptyAry_10000")
 bigData  = ("./Data/dataStratifiedArray3D_1000", "./Data/dataEmptyAry_1000000")
 
 -- Todo: -t flag for 100 test otherwise always 1000

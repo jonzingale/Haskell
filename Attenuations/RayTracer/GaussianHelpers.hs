@@ -21,9 +21,9 @@ cheapTrans = do
 
 -- centered at (c, c) with distance d
 -- cheapBeam 50 50
-cheapBeam d = do
+cheapBeam d s= do
   let c = center
-  let vals = take 10 $ f (beam d 1)
+  let vals = take 10 $ f (beam d 1 s)
   let s2 = sqrt 2 / 2
   let dd = c * 2.0
   putStr "(x ,z ,θ ,φ ) in degrees\n"
