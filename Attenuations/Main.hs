@@ -10,6 +10,7 @@ import Text.Regex
 
 regexes = repeat "([0-9]+\\.?[0-9]*)"
 flags = map mkRegex $ zipWith (++) ["-x ", "-d ", "-s "] regexes
+testTraceString = "Test Trace\ndistance: 1000mm\ndeviation: 2\nseed: 23\n"
 testData = ("./Data/dataStratifiedArray3D_100", "./Data/dataEmptyAry_10000")
 bigData  = ("./Data/dataStratifiedArray3D_1000", "./Data/dataEmptyAry_1000000")
 
@@ -45,13 +46,10 @@ main = do
             savePlate "tmp" processedPlate
 
         [] -> do
-            putStr "Test Trace"
+            putStr testTraceString
             let (dFile, eFile) = getFiles size -- 100
-            putStr $ "\ndistance: 1000mm" ++
-                     "\ndeviation: 2"++
-                     "\nseed: 23" ++ "\n"
             ary <- fileToAry dFile
             emptyAry <- fileToAry eFile
-            plateAry <- parallelTrace ary (10^3) 2 23 -- distance deviation seed
+            plateAry <- parallelTrace ary 1000 2 23 -- distance deviation seed
             let processedPlate = processPlate plateAry emptyAry
             savePlate "tmp" processedPlate
