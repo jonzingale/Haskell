@@ -14,8 +14,6 @@ testTraceString = "Test Trace\ndistance: 1000mm\ndeviation: 2\nseed: 23\n"
 testData = ("./Data/dataStratifiedArray3D_100" , "./Data/dataEmptyAry_10000")
 bigData  = ("./Data/dataStratifiedArray3D_1000", "./Data/dataEmptyAry_1000000")
 
--- Todo: -t flag for 100 test otherwise always 1000
-
 parseArgs :: String -> String -> String -> IO((Double, Double, Int))
 parseArgs x d s = do
   let distance  = if x == "" then "2000" else x
@@ -52,7 +50,7 @@ main = do
             putStr ("Loading File: " ++ filename)
             (distance, deviation, seed) <- parseArgs x d s
 
-            let (dFile, eFile) = getFiles 100
+            let (dFile, eFile) = getFiles 1000
             ary <- fileToAry filename
             emptyAry <- fileToAry eFile
             plateAry <- parallelTrace ary distance deviation seed
@@ -61,7 +59,7 @@ main = do
 
         [] -> do
             putStr testTraceString
-            let (dFile, eFile) = getFiles size -- 100
+            let (dFile, eFile) = getFiles 100
             ary <- fileToAry dFile
             emptyAry <- fileToAry eFile
             plateAry <- parallelTrace ary 1000 2 23 -- distance deviation seed

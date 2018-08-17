@@ -2,8 +2,10 @@
 from PIL import Image
 import numpy as np
 import datetime
+import sys
 
 size = 100
+if len(sys.argv) > 1 : size = 1000
 
 testTrace = './Data/dataSavedPlate'
 window = (750, 750)
