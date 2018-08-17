@@ -13,6 +13,8 @@ flags = map mkRegex $ zipWith (++) ["-x ", "-d ", "-s "] regexes
 testData = ("./Data/dataStratifiedArray3D_100", "./Data/dataEmptyAry_10000")
 bigData  = ("./Data/dataStratifiedArray3D_1000", "./Data/dataEmptyAry_1000000")
 
+-- Todo: -t flag for 100 test otherwise always 1000
+
 parseFlags filename
     | filename == [] = ["","",""]
     | otherwise = map getVals $ f filename
@@ -45,6 +47,9 @@ main = do
         [] -> do
             putStr "Test Trace"
             let (dFile, eFile) = getFiles size -- 100
+            putStr $ "\ndistance: 1000mm" ++
+                     "\ndeviation: 2"++
+                     "\nseed: 23" ++ "\n"
             ary <- fileToAry dFile
             emptyAry <- fileToAry eFile
             plateAry <- parallelTrace ary (10^3) 2 23 -- distance deviation seed
