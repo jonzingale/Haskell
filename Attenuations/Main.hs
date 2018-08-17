@@ -46,6 +46,6 @@ main = do
             let (dFile, eFile) = getFiles size -- 100
             ary <- fileToAry dFile
             emptyAry <- fileToAry eFile
-            plateAry <- parallelTrace ary (10^3) 2 8675309 -- distance deviation seed
+            plateAry <- parallelTrace ary (10^3) 2 23 -- distance deviation seed
             let processedPlate = processPlate plateAry emptyAry
             savePlate "tmp" processedPlate

@@ -14,7 +14,7 @@ parseArgs x d s = do
   let distance  = if x == "" then "2000" else x
   let deviation = if d == "" then "2" else d
   let seed = if s == "" then "23" else s
-  putStr $ "\ndistance: " ++ distance ++
+  putStr $ "\ndistance: " ++ distance ++ "mm" ++
            "\ndeviation: "++deviation ++
            "\nseed: " ++ seed ++ "\n"
   return $ ((read distance)::Double,
