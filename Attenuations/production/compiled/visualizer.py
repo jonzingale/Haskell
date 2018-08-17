@@ -2,18 +2,18 @@
 from PIL import Image
 import numpy as np
 import datetime
-import sys
 
 size = 1000
 window = (750, 750)
 testTrace = './Data/savedPlate'
-mm = size * np.sqrt(3)
+mm = size * np.sqrt(3) # adjust for photo luminosity.
 
 def renderPixel(t, ary): # RGB
   val = ary[t]
   if val <= 0: return((0,0,0))
   else:
-    normedV = int((val/mm)*255)
+    normedV = int((val/3)*255)
+    # normedV = int((val/mm)*255)
     return(normedV, normedV, normedV)
 
 def renderImage(filename):
