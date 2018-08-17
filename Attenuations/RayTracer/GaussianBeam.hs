@@ -34,7 +34,7 @@ the distance from the output plane to the input
 plane is 2 units, ~ 1mm.
 --}
 
-beam :: Distance -> Deviation -> Int -> Beam
+beam :: Distance -> Deviation -> Seed -> Beam
 beam d σ s =
   let needed = neededRays (10^6) σ in
   filter posiCond $ take needed $ map (ray d) (rDisc σ s) -- rays in mm
@@ -60,5 +60,5 @@ rDisc :: Deviation -> Seed -> [EntryCoords]
 rDisc σ s = [(r*cos θ, r*sin θ) | (r, θ) <- zip (rs σ s) (θs s)]
   where
     θs seed = randomRs (0::Double, pi::Double) $ mkStdGen seed
-    rs σ seed = mkNormals' (0, σ) seed -- (μ, σ)
+    rs σ seed = mkNormals' (0, σ) (seed + 8) -- (μ, σ)
 

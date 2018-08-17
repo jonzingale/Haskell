@@ -21,8 +21,8 @@ mmToUnits :: Double -> Double
 mmToUnits d  = 2 * d
 --}
 
-parallelTrace ary d σ s = do
-  let gBeams = beam (2*d) σ s -- Distance Deviation
+parallelTrace ary d σ seed = do
+  let gBeams = beam (2*d) σ seed -- Distance Deviation
   let rays = map (attenuation ary) gBeams
   let results = rays `using` parListChunk 1024 rdeepseq
   return results -- [(x, z, SegmentLength)]
@@ -31,7 +31,7 @@ attenuation ary ((x, z), (θ, φ)) =
   let path = takeWhile stopCond $ transport (x, z) (θ, φ) in
   let (i,j,k) = fst.last $ path in (i, k, sum' ary path)
   where
-    stopCond ((x,y,z), s) =
+    stopCond ((x,y,z), _) =
       x<size && y<size && z<size &&
       x>=0 && z>=0
 

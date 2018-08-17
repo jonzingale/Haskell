@@ -1,7 +1,7 @@
 #!/bin/bash
 
-# . trace.sh <FILENAME>
-# . trace.sh ./Data/dataStratifiedArray3D_100 -d 12 -x 65 -s 23
+# . trace.sh <FILENAME> -x <Distance mm> -d <STANDARD DEVIATION> -s <SEED>
+# . trace.sh ./Data/dataStratifiedArray3D_100 -x 2000 -d 2 -s 23
 
 file="$1 $2 $3 $4 $5 $6 $7"
 

@@ -14,12 +14,12 @@ parseArgs x d s = do
   let distance  = if x == "" then "2000" else x
   let deviation = if d == "" then "2" else d
   let seed = if s == "" then "23" else s
-  putStr $ "\ndistance: " ++ distance ++ 
+  putStr $ "\ndistance: " ++ distance ++
            "\ndeviation: "++deviation ++
            "\nseed: " ++ seed ++ "\n"
-  -- writeFile ("./Data/arguments") $
-    -- unlines [distance, deviation, seed]
-  return $ ((read distance)::Double, (read deviation)::Double, (read seed)::Int)
+  return $ ((read distance)::Double,
+            (read deviation)::Double,
+            (read seed)::Int)
 
 -- Produces an empty plate and a stratified data file of given size
 dataGeneration :: Int -> IO()

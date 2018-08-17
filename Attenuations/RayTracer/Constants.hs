@@ -8,13 +8,6 @@ size   ary_size   time          rays
 19.4GB 1000^3     real: 12m 30s 1M
 --}
 
--- data Args = Args {getDist::Double, getDevi::Double, getSeed::Int}
-
--- getArguments = do -- x d s
---   file <- readFile "./Data/arguments"
---   let [x, d, s] = lines file
---   return $ Args (read x) (read d) (read s)
-
 center:: Double
 center = fromIntegral size /  2
 
