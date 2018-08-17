@@ -2,10 +2,10 @@
 
 module RayTracer.ParallelTracer (parallelTrace) where
 import Control.Parallel.Strategies (rdeepseq, parListChunk, using)
+import RayTracer.Constants (center, size)
 import RayTracer.FileToVector (qArray)
 import RayTracer.Transport (transport)
 import RayTracer.GaussianBeam (beam)
-import RayTracer.Constants (size)
 
 import qualified Data.Vector.Unboxed as U
 import Data.List (foldl')
@@ -21,8 +21,8 @@ mmToUnits :: Double -> Double
 mmToUnits d  = 2 * d
 --}
 
-parallelTrace ary = do
-  let gBeams = beam (2 * 10^3) 2 -- Distance Deviation
+parallelTrace ary d σ s = do
+  let gBeams = beam (2*d) σ s -- Distance Deviation
   let rays = map (attenuation ary) gBeams
   let results = rays `using` parListChunk 1024 rdeepseq
   return results -- [(x, z, SegmentLength)]

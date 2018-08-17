@@ -1,9 +1,9 @@
 -- http://hackage.haskell.org/package/normaldistribution-1.1.0.3/docs/Data-Random-Normal.html
 module RayTracer.GaussianBeam where
 import RayTracer.CumulativeDistribution (neededRays)
-import RayTracer.Constants (center, size, seed)
 import System.Random (randomRs, mkStdGen)
 import Data.Random.Normal (mkNormals')
+import RayTracer.Constants (center)
 
 type Ray = (EntryCoords, EntryAngles)
 type EntryAngles = (Double, Double)
@@ -11,6 +11,7 @@ type EntryCoords = (Double, Double)
 type Deviation = Double
 type Distance = Double
 type Beam = [Ray]
+type Seed = Int
 
 {--
 Cone Normalization:
@@ -33,10 +34,10 @@ the distance from the output plane to the input
 plane is 2 units, ~ 1mm.
 --}
 
-beam :: Distance -> Deviation -> Beam
-beam d σ =
+beam :: Distance -> Deviation -> Int -> Beam
+beam d σ s =
   let needed = neededRays (10^6) σ in
-  filter posiCond $ take needed $ map (ray d) (rDisc σ) -- rays in mm
+  filter posiCond $ take needed $ map (ray d) (rDisc σ s) -- rays in mm
   where
     posiCond ((x,z),(_,_)) = x >= 0 && z >= 0 &&
                              x <= 2*center && z <= 2*center
@@ -55,9 +56,9 @@ ray d (x, z) = ((coords x (d/2), coords z (d/2)), (angles x d, angles z d))
     angles t d | t >= 0    = atan ((d+2)/t)
                | otherwise = atan ((d+2)/t) + pi
 
-rDisc :: Deviation -> [EntryCoords]
-rDisc σ = [(r*cos θ, r*sin θ) | (r, θ) <- zip (rs σ) θs]
+rDisc :: Deviation -> Seed -> [EntryCoords]
+rDisc σ s = [(r*cos θ, r*sin θ) | (r, θ) <- zip (rs σ s) (θs s)]
   where
-    θs = randomRs (0::Double, pi::Double) $ mkStdGen 23
-    rs σ = mkNormals' (0, σ) 31 -- (μ, σ)
+    θs seed = randomRs (0::Double, pi::Double) $ mkStdGen seed
+    rs σ seed = mkNormals' (0, σ) seed -- (μ, σ)
 

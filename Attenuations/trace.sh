@@ -15,7 +15,7 @@ file="$1 $2 $3 $4 $5 $6 $7"
 # -prof -fprof-auto -fprof-cafs -fforce-recomp
 ghc -O2 --make Main.hs -threaded -rtsopts -fforce-recomp # -prof -fprof-auto -fprof-cafs
 
-# echo "starting trace: $(date)"
+echo "starting trace: $(date)"
 time ./Main $file +RTS -N8 # -sstderr -p # 8 virtual cores
 # cp Main ./production/
 rm Main.o Main.hi Main RayTracer/*.o RayTracer/*.hi
