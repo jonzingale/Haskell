@@ -10,7 +10,9 @@ import Text.Regex
 
 testData = ("./Data/dataStratifiedArray3D_100", "./Data/dataEmptyAry_10000")
 bigData  = ("./Data/dataStratifiedArray3D_1000", "./Data/dataEmptyAry_1000000")
-flags = map mkRegex ["-x ([0-9]+\\.?[0-9]*)", "-d ([0-9]+\\.?[0-9]*)", "-s ([0-9]+\\.?[0-9]*)"]
+flags = map mkRegex ["-x ([0-9]+\\.?[0-9]*)",
+                     "-d ([0-9]+\\.?[0-9]*)",
+                     "-s ([0-9]+\\.?[0-9]*)"]
 
 parseFlags filename
     | filename == [] = ["","",""]
@@ -18,7 +20,7 @@ parseFlags filename
   where
     f str = zipWith matchRegexAll flags (repeat str)
     getVals v = case v of
-      (Just (_,_,_,[x])) -> x
+      Just (_,_,_,[x]) -> x
       Nothing -> ""
 
 getFiles n =
