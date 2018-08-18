@@ -21,7 +21,7 @@ def renderPixel(t, ary, mm): # RGB
   val = ary[t]
   if val <= 0: return((0,0,0))
   else:
-    normedV = 255 * (1 - int(val/mm))
+    normedV = int(255 * (1 -val/mm))
     return(normedV, normedV, normedV)
 
 def renderImage(filename):
