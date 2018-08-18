@@ -19,7 +19,7 @@ def renderPixel(t, ary, mm): # RGB
   val = ary[t]
   if val <= 0: return((0,0,0))
   else:
-    normedV = int((val/mm)*255)
+    normedV = 255 * (1 - int(val/mm))
     return(normedV, normedV, normedV)
 
 def renderImage(filename):
@@ -29,12 +29,13 @@ def renderImage(filename):
   checkSum(ary)
 
   mm = np.amax(ary) # normalize photo luminosity.
+  print(mm)
   for t in range(0, size**2): # value to pixel
     px[t % size, t // size] = renderPixel(t, ary, mm)
 
   resized = img.resize(window)
   time = datetime.datetime.now().strftime('%s')
-  resized.save('./Images/image_' + time + '.png')
+  # resized.save('./Images/image_' + time + '.png')
   resized.show()
 
 
