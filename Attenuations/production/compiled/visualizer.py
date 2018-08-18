@@ -10,7 +10,7 @@ testTrace = './Data/savedPlate'
 time = datetime.datetime.now().strftime('%s')
 savedStr = './Images/image_' + time + '.png'
 checkSumMsg = "Test Trace Fails CheckSum: %.9f instead of %.9f"
-checkSumVal = 86781328.601920098
+checkSumVal = 14365.942363022965
 
 def checkSum(ary):
   sumAry = sum(ary)
@@ -35,7 +35,7 @@ def renderImage(filename):
     px[t % size, t // size] = renderPixel(t, ary, mm)
 
   resized = img.resize(window)
-  # resized.save(savedStr)
+  resized.save(savedStr)
   resized.show()
 
 
