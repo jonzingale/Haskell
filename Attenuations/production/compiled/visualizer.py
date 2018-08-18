@@ -4,8 +4,6 @@ import numpy as np
 import datetime
 import sys
 
-from pdb import set_trace as st
-
 size = 1000
 window = (750, 750)
 testTrace = './Data/savedPlate'
@@ -36,6 +34,7 @@ def renderImage(filename):
 
   time = datetime.datetime.now().strftime('%s')
   resized = img.resize(window)
+
   resized.save('./Images/image_' + time + '.png')
   resized.show()
 
