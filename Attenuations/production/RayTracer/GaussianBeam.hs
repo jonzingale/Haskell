@@ -40,7 +40,7 @@ beam d σ s =
   filter posiCond $ take needed $ map (ray d) (rDisc σ s) -- rays in mm
   where
     posiCond ((x,z),(_,_)) = x >= 0 && z >= 0 &&
-                             x <= size && z <= size
+                             x <= 2*center && z <= 2*center
 {--
 ray is derived from a cone with apex-
 distance d standard units from the center.

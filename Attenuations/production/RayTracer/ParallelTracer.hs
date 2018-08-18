@@ -21,7 +21,7 @@ mmToUnits d  = 2 * d
 --}
 
 parallelTrace ary d σ seed = do
-  let gBeams = beam (2*d) σ seed -- Distance Deviation
+  let gBeams = beam (2*d) σ seed
   let rays = map (attenuation ary) gBeams
   let results = rays `using` parListChunk 1024 rdeepseq
   return results -- [(x, z, SegmentLength)]
