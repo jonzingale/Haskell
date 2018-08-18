@@ -3,6 +3,7 @@
 *.png
 *.csv
 data*
+Data/*
 stable/
 
 Visualizer/Images/
