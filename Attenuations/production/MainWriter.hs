@@ -23,16 +23,13 @@ main = do -- Write empty plates and test data.
   if sparse
     then putStr "sparseArray3D exists\n"
     else do
-      putStr "creating sparseArray3D\ntime estimate: 23 mins\n"
+      putStr "creating sparseArray3D\ntime estimate: 24 mins\n"
       saveArr "sparseArray3D" sparseArray3D
-
   if emptyA
     then putStr "emptyArray2D exists\n"
     else do
       putStr "creating emptyArray2D\ntime estimate: 23 mins\n"
       saveZeros 1000
-
-randos = randomRs (0, 1::Double).mkStdGen $ 32
 
 -- Produces an empty plate and a stratified data file of given size
 dataGeneration :: Int -> IO()
@@ -57,10 +54,13 @@ saveZeros n =
   writeFile "./Data/emptyArray2D" $ aryToStr zeros
   where aryToStr = unlines.(map show)
 
+randos = randomRs (0, 1::Double).mkStdGen $ 32
+
 sparseArray3D :: ULattice
 sparseArray3D =
   let sparse = randomRs (1::Int, 5000) $ mkStdGen 32 in
-  let spRandos = [ if r == 10 then t else 0.0 | (t, r) <- zip randos sparse] in
+  let them = zip randos sparse in
+  let spRandos = [ if r == 1 then t*10 else 0.0 | (t, r) <- them] in
   let bounds = (0::Int, 10^9-1) in
   listArray bounds spRandos
 

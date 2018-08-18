@@ -6,6 +6,7 @@
 # . raytracer.sh ./Data/sparseArray3D -x 1000 -d 2 -s 23
 file="$1 $2 $3 $4 $5 $6 $7"
 
+echo "starting data writer: $(date)"
 time ./DataWriter ; echo ''
 echo 'finished writing necessary data'
 echo "starting trace: $(date)"
