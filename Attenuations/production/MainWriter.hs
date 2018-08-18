@@ -60,7 +60,7 @@ sparseArray3D :: ULattice
 sparseArray3D =
   let sparse = randomRs (1::Int, 5000) $ mkStdGen 32 in
   let them = zip randos sparse in
-  let spRandos = [ if r == 1 then t*10 else 0.0 | (t, r) <- them] in
+  let spRandos = [ if r == 1 then t*1500 else 0.0 | (t, r) <- them] in
   let bounds = (0::Int, 10^9-1) in
   listArray bounds spRandos
 
