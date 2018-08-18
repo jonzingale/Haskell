@@ -7,6 +7,8 @@ import sys
 size = 1000
 window = (750, 750)
 testTrace = './Data/savedPlate'
+time = datetime.datetime.now().strftime('%s')
+savedStr = './Images/image_' + time + '.png'
 checkSumMsg = "Test Trace Fails CheckSum: %.9f instead of %.9f"
 checkSumVal = 86781328.601920098
 
@@ -29,13 +31,11 @@ def renderImage(filename):
   checkSum(ary)
 
   mm = np.amax(ary) # normalize photo luminosity.
-  print(mm)
   for t in range(0, size**2): # value to pixel
     px[t % size, t // size] = renderPixel(t, ary, mm)
 
   resized = img.resize(window)
-  time = datetime.datetime.now().strftime('%s')
-  # resized.save('./Images/image_' + time + '.png')
+  # resized.save(savedStr)
   resized.show()
 
 
