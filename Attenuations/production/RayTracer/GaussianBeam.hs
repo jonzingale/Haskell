@@ -16,8 +16,8 @@ type Seed = Int
 {--
 Cone Normalization:
 The coords are normalized around 0 by default.
-ray 1 (1, 0) => (100, 50) for coords
-d == 1 => d == 50 cells.
+ray 1 (1, 0) => (1000, 500) for coords
+d == 1 => d == 500 cells.
 d == 2 from output plane places apex on input plane.
 
 The goal here is to scale the users input distance
@@ -40,7 +40,7 @@ beam d σ s =
   filter posiCond $ take needed $ map (ray d) (rDisc σ s) -- rays in mm
   where
     posiCond ((x,z),(_,_)) = x >= 0 && z >= 0 &&
-                             x <= 2*center && z <= 2*center
+                             x <= size && z <= size
 {--
 ray is derived from a cone with apex-
 distance d standard units from the center.

@@ -2,12 +2,11 @@
 
 module RayTracer.ParallelTracer (parallelTrace) where
 import Control.Parallel.Strategies (rdeepseq, parListChunk, using)
-import RayTracer.Constants (center, size)
+import qualified Data.Vector.Unboxed as U
 import RayTracer.FileToVector (qArray)
 import RayTracer.Transport (transport)
 import RayTracer.GaussianBeam (beam)
-
-import qualified Data.Vector.Unboxed as U
+import RayTracer.Constants (size)
 import Data.List (foldl')
 
 data Pair = Pair !Int !Double
@@ -15,7 +14,7 @@ data Pair = Pair !Int !Double
 {--
 distance from source to face and converts mm to units.
 a source 1mm distance to the front face is 4 units from the exit.
-Thus the x2 in the input to the beam.
+Thus the (2*d) in the input to the beam.
 
 mmToUnits :: Double -> Double
 mmToUnits d  = 2 * d
