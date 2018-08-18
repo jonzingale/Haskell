@@ -13,4 +13,4 @@ echo "starting trace: $(date)"
 time ./Main $file +RTS -N8 # 8 virtual cores
 echo 'visualizing data'
 python ./visualizer.py $file
-# rm Data/dataSavedPlate
+# rm Data/savedPlate
