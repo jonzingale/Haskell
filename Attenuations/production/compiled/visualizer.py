@@ -8,7 +8,7 @@ size = 1000
 window = (750, 750)
 testTrace = './Data/savedPlate'
 checkSumMsg = "Test Trace Fails CheckSum: %.9f instead of %.9f"
-mm = size * np.sqrt(3) # adjust for photo luminosity.
+mm = size # * np.sqrt(3) # adjust for photo luminosity.
 checkSumVal = 86781328.601920098
 
 def checkSum(ary):
