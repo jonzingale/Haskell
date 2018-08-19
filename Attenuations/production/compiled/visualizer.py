@@ -40,7 +40,7 @@ def circleToRGB(t):
 
 def renderImage(filename):
   ary = np.loadtxt(filename, dtype='d')
-  img = Image.new('RGB',(size, size), 0)
+  img = Image.new('RGB',(size, size))
   px = img.load()
   checkSum(ary)
 
