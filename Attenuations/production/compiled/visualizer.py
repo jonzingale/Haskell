@@ -17,15 +17,13 @@ def checkSum(ary):
   if (len(sys.argv) == 1) and (sumAry != checkSumVal):
     print(checkSumMsg % (sumAry, checkSumVal))
 
-def renderBlackWhite(t, ary, mm):
-  val = ary[t]
+def renderBlackWhite(val, mm):
   if val <= 0: return(0,0,0)
   else:
     normedV = int(255 * (1 - val/mm))
     return(normedV, normedV, normedV)
 
-def renderFalseColor(t, ary, mm):
-  val = ary[t]
+def renderFalseColor(val, mm):
   if val <= 0: return(0,0,0)
   else: return(circleToRGB(val/mm))
 
@@ -48,8 +46,8 @@ def renderImage(filename):
 
   mm = np.amax(ary) # normalize photo luminosity.
   for t in range(0, size**2): # value to pixel
-    px[t % size, t // size] = renderFalseColor(t, ary, mm)
-    # px[t % size, t // size] = renderBlackWhite(t, ary, mm)
+    px[t % size, t // size] = renderFalseColor(ary[t], mm)
+    # px[t % size, t // size] = renderBlackWhite(ary[t], mm)
 
   resized = img.resize(window)
   resized.save(imagePath)
