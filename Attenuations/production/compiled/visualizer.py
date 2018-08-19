@@ -4,32 +4,31 @@ import numpy as np
 import datetime
 import sys
 
-size = 1000
-window = (750, 750)
 testTrace = './Data/savedPlate'
 time = datetime.datetime.now().strftime('%s')
-savedStr = './Images/image_' + time + '.png'
+imagePath = './Images/image_' + time + '.png'
 checkSumMsg = "Test Trace Fails CheckSum: %.9f instead of %.9f"
 checkSumVal = 14365.942363022965
+window = (750, 750)
+size = 1000
 
 def checkSum(ary):
   sumAry = sum(ary)
   if (len(sys.argv) == 1) and (sumAry != checkSumVal):
     print(checkSumMsg % (sumAry, checkSumVal))
 
-def renderBlackWhite(t, ary, mm): # RGB
+def renderBlackWhite(t, ary, mm):
   val = ary[t]
-  if val <= 0: return((0,0,0))
+  if val <= 0: return(0,0,0)
   else:
     normedV = int(255 * (1 - val/mm))
     return(normedV, normedV, normedV)
 
-def renderFalseColor(t, ary, mm): # RGB
+def renderFalseColor(t, ary, mm):
   val = ary[t]
-  if val <= 0: return((0,0,0))
+  if val <= 0: return(0,0,0)
   else:
-    unit = (1 - val/mm)
-    (r,g,b) = circleToRGB(unit)
+    (r,g,b) = circleToRGB(val/mm)
     return(int(255*r), int(255*g), int(255*b))
 
 def norm(x1,y1,x2,y2):
@@ -55,7 +54,7 @@ def renderImage(filename):
     # px[t % size, t // size] = renderBlackWhite(t, ary, mm)
 
   resized = img.resize(window)
-  resized.save(savedStr)
+  resized.save(imagePath)
   resized.show()
 
 
