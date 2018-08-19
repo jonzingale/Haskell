@@ -27,9 +27,7 @@ def renderBlackWhite(t, ary, mm):
 def renderFalseColor(t, ary, mm):
   val = ary[t]
   if val <= 0: return(0,0,0)
-  else:
-    (r,g,b) = circleToRGB(val/mm)
-    return(int(255*r), int(255*g), int(255*b))
+  else: return(circleToRGB(val/mm))
 
 def norm(x1,y1,x2,y2):
   return(np.sqrt((x1-x2)**2 + (y1-y2)**2))
@@ -37,10 +35,10 @@ def norm(x1,y1,x2,y2):
 def circleToRGB(t):
   (x, y) = (np.cos(t), np.sin(t))
   (c, d) = (np.sqrt(3)/2, -0.5)
-  r = norm(x,y, 0,1)
-  g = norm(x,y,-c,d)
-  b = norm(x,y, c,d)
-  return(r,g,b)
+  r = 255 * norm(x,y, 0,1)
+  g = 255 * norm(x,y,-c,d)
+  b = 255 * norm(x,y, c,d)
+  return(int(r), int(g), int(b))
 
 def renderImage(filename):
   ary = np.loadtxt(filename, dtype='d')
