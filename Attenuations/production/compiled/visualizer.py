@@ -31,11 +31,12 @@ def norm(x1,y1,x2,y2):
   return(np.sqrt((x1-x2)**2 + (y1-y2)**2))
 
 def circleToRGB(t):
-  (x, y) = (np.cos(t), np.sin(t))
+  tt = 4*np.pi*t/2.5 # really 4/3
+  (x, y) = (np.sin(tt)/2.5, np.cos(tt)/2.5) # really 1/2
   (c, d) = (np.sqrt(3)/2, -0.5)
-  r = 255 * norm(x,y, 0,1)
-  g = 255 * norm(x,y,-c,d)
-  b = 255 * norm(x,y, c,d)
+  r = 255 * (1.5 - norm(x,y, 0,1))
+  g = 255 * (1.5 - norm(x,y, c,d))
+  b = 255 * (1.5 - norm(x,y,-c,d))
   return(int(r), int(g), int(b))
 
 def renderImage(filename):
@@ -50,7 +51,7 @@ def renderImage(filename):
     # px[t % size, t // size] = renderBlackWhite(ary[t], mm)
 
   resized = img.resize(window)
-  resized.save(imagePath)
+  # resized.save(imagePath)
   resized.show()
 
 
