@@ -18,13 +18,13 @@ def checkSum(ary):
     print(checkSumMsg % (sumAry, checkSumVal))
 
 def renderBlackWhite(val, mm):
-  if val <= 0: return(0,0,0)
+  if val <= 0: return(0)
   else:
     normedV = int(255 * (1 - val/mm))
     return(normedV, normedV, normedV)
 
 def renderFalseColor(val, mm):
-  if val <= 0: return(0,0,0)
+  if val <= 0: return(0)
   else: return(circleToRGB(val/mm))
 
 def norm(x1,y1,x2,y2):
