@@ -1,12 +1,12 @@
 module BlinkyLights where
 import qualified Data.Vector.Unboxed as U
 
-type Board = U.Vector Int
+type Board = U.Vector Double
 type Index = Int
 
-tenK = 10 -- ^3
-halfZeros = take (div tenK 2) $ repeat 0
-initState = U.fromList $ halfZeros ++ [1::Int] ++ halfZeros
+tenK = 10^2
+halfZeros = take tenK $ repeat 0
+initState = U.fromList $ [1::Double] ++ halfZeros
 
 rule neigh = case neigh of
   [0,0,0] -> 0
@@ -18,7 +18,7 @@ rule neigh = case neigh of
   [1,1,0] -> 1
   [1,1,1] -> 0
 
-neighbors :: Board -> Index -> [Int]
+neighbors :: Board -> Index -> [Double]
 neighbors b i = map ((U.!) b)[mod (i-1) tenK, i, mod (i+1) tenK]
 
 update :: Board -> Board
