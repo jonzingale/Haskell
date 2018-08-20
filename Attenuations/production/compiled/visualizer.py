@@ -51,7 +51,7 @@ def renderImage(filename):
     # px[t % size, t // size] = renderBlackWhite(ary[t], mm)
 
   resized = img.resize(window)
-  # resized.save(imagePath)
+  resized.save(imagePath)
   resized.show()
 
 
