@@ -1,6 +1,4 @@
-module Wave (unpack, pack, makeWavFile, Frequency,
-             SamplesPerSec, DurationSecs, Volume) where
-
+module Wave where
 import qualified Data.Vector.Unboxed as U
 import Data.Int (Int32)
 import Data.WAVE

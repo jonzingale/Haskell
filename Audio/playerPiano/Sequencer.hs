@@ -5,7 +5,6 @@ import Data.WAVE
 import Wave
 
 type Performance = (Rhythm, WAVE)
-type VectSamples = U.Vector Int32
 data Signature = Time Int Int
 type Rhythm = String
 type BPM = Float
