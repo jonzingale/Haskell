@@ -32,8 +32,8 @@ def norm(x1,y1,x2,y2):
 
 def circleToRGB(t):
   tt = 8*np.pi*t/5
-  (c, d) = (np.sqrt(3)/2, -0.5)
-  (x, y) = (np.sin(tt)/5.5, np.cos(tt)/5.5)
+  (c, d) = (np.sqrt(3)/2, -1/2)
+  (x, y) = (np.sin(tt)/5, np.cos(tt)/5)
   r = 255 * (1.5 - norm(x,y, 0,1))
   g = 255 * (1.5 - norm(x,y, c,d))
   b = 255 * (1.5 - norm(x,y,-c,d))
