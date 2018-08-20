@@ -1,15 +1,7 @@
 module PlayerPiano where
 import qualified Data.Vector.Unboxed as U
-import Data.Int (Int32)
 import Sequencer
-import Samples
 import Wave
-
-type Frequency = Double
-type SamplesPerSec = Int
-type DurationSecs = Double
-type Sample = [Int32]
-type Volume = Int32
 
 sine :: Frequency -> SamplesPerSec -> DurationSecs -> Volume -> VectSamples
 sine freq samples len volume =
