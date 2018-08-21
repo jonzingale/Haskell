@@ -11,7 +11,7 @@ initState = U.fromList $ [1::Double] ++ halfZeros
 
 randos :: Board
 randos = U.fromList $ map fromIntegral $ take tenK $
-            randomRs(0,1::Int) $ mkStdGen 23
+            randomRs(0,1::Int) $ mkStdGen 19
 
 toBin :: Int -> [Double]
 toBin n = take 8 $ (f n) ++ repeat 0.0

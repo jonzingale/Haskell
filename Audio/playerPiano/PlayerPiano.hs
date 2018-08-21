@@ -9,9 +9,9 @@ freqPerSample freq = freq * 2 * pi / 44100
 
 ff :: Board -> Double -> Double
 ff board t =
-  let harms = U.map (\x -> sin (t * x)) $ U.fromList [1..10] in
+  let harms = U.map (\x -> sin (t * x)) $ U.fromList [1..12] in
   let tots = U.zipWith (*) board harms in
-  U.sum tots / U.sum board
+  U.sum tots / 20 -- U.sum board
 
 gg :: Board -> Double -> Double
 gg board t =
@@ -25,6 +25,6 @@ s1 freq len volume bb =
   U.fromList.duration.setVol $ sine
 
 main =
-  let bs = take 30 $ iterate update initState in -- too slow
-  let them = map (s1 50 1 (maxBound `div` 2)) bs in
+  let bs = take 60 $ iterate update randos in -- too slow
+  let them = map (s1 27.5 2 (maxBound `div` 2)) bs in
   makeWavFile $ U.concat them
