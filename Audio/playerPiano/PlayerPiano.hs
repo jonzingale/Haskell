@@ -2,6 +2,7 @@ module PlayerPiano where
 import qualified Data.Vector.Unboxed as U
 import BlinkyLights
 import Sequencer
+import Mobius
 import Wave
 
 freqPerSample :: Double -> Double
@@ -27,4 +28,7 @@ s1 freq len volume bb =
 main =
   let bs = take 60 $ iterate update randos in -- too slow
   let them = map (s1 27.5 2 (maxBound `div` 2)) bs in
-  makeWavFile $ U.concat them
+  let cs = take 240 $ paddedMobius in
+  let us = map (s1 220 0.5 (maxBound `div` 8)) cs in
+  -- makeWavFile $ U.concat us
+  makeWavFile $ U.zipWith (+) (U.concat them) (U.concat us)

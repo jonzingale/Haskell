@@ -17,5 +17,8 @@ unpack = (map head).waveSamples
 pack :: VectSamples -> WAVE
 pack xs = WAVE header $ map (:[]) $ U.toList xs
 
+-- stereopack :: VectSamples -> VectSamples -> WAVE
+-- stereopack xs ys = WAVE header $ map (:[]) $ U.toList $ U.zip xs ys
+
 makeWavFile :: VectSamples -> IO ()
 makeWavFile wav = putWAVEFile "temp.wav" $ pack wav
