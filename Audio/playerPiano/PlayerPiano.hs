@@ -28,7 +28,7 @@ s1 freq len volume bb =
 main =
   let bs = take 60 $ iterate update randos in -- too slow
   let them = map (s1 27.5 2 (maxBound `div` 2)) bs in
-  let cs = take 240 $ paddedMobius in
-  let us = map (s1 220 0.5 (maxBound `div` 8)) cs in
-  -- makeWavFile $ U.concat us
-  makeWavFile $ U.zipWith (+) (U.concat them) (U.concat us)
+  let cs = take 480 $ paddedMobius in
+  let us = map (s1 220 0.25 (maxBound `div` 4)) cs in
+  makeStereoWavFile (U.concat them) (U.concat us) -- stereo
+  -- makeWavFile $ U.zipWith (+) (U.concat them) (U.concat us) -- mono
