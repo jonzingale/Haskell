@@ -42,12 +42,15 @@ standardNonStandard = do
                    (".x", opHiHat),("x.", kick)]
   let stopBass = [("x.xx..", bass)]
 
-  let m1 = buildMeasure 125 (Time 5 4) ensemble1
-  let m2 = buildMeasure 125 (Time 4 4) ensemble2
-  let m3 = buildMeasure 125 (Time 3 4) ensemble3
-  let m4 = buildMeasure 125 (Time 6 4) stopBass
+  let m1 = buildMeasure 120 (Time 5 4) ensemble1
+  let m2 = buildMeasure 120 (Time 4 4) ensemble2
+  let m3 = buildMeasure 120 (Time 3 4) ensemble3
+  let m4 = buildMeasure 120 (Time 6 4) stopBass
 
   let rhythm = U.concat [m2,m2,m2,m2,m1,m3,m1,m3,
+                         m2,m2,m2,m2,m4,m4,
+                         m2,m2,m2,m2,m1,m3,m1,m3,
+                         m2,m2,m2,m2,m4,m4,
+                         m2,m2,m2,m2,m1,m3,m1,m3,
                          m2,m2,m2,m2,m4,m4]
-
   makeWavFile rhythm
