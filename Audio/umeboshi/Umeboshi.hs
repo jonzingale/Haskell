@@ -56,7 +56,5 @@ standardNonStandard = do
                          m2,m2,m2,m2,m1,m3,m1,m3,
                          m2,m2,m2,m2,m4,m4,
                          m2,m2,m2,m2,m1,m3,m1,m3,
-                         m2,m2,m2,m2,m4,m4,
-                         m2,m2,m2,m2,m1,m3,m1,m3,
-                         m2,m2,m2,m2,m4,m4]
+                         m2,m2,m2,m2,m4,m4,m4,m4]
   makeWavFile rhythm

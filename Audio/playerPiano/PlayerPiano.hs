@@ -20,10 +20,10 @@ gg board t =
 
 s1 :: Frequency -> DurationSecs -> Volume -> Board -> VectSamples
 s1 freq len volume bb =
-  let setVol = map (round . (* fromIntegral volume)) in
+  let setVol = U.map (round . (* fromIntegral volume)) in
   let sine = map (ff bb) [0.0, freqPerSample freq..] in
   let duration = take.round $ len * 44100 in
-  U.fromList.duration.setVol $ sine
+  setVol $ U.fromList $ duration sine
 
 main =
   let bs = take 120 $ iterate update randos in -- too slow

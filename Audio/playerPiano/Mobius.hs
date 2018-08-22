@@ -30,4 +30,4 @@ mobius n = f.factorise' $ n
 mobiusV :: [[Double]]
 mobiusV = [map (fromIntegral.mobius) $ listDivisors k | k<-[1..]]
 
-paddedMobius = map ((U.fromList).(take 12).(flip (++) $ repeat 0)) mobiusV
+paddedMobius = map ((U.fromList).(take 24).(flip (++) $ repeat 0)) mobiusV

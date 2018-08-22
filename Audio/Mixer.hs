@@ -5,7 +5,6 @@ import Wave
 
 type WavFile = String
 
--- TODO: Needs non truncation protections
 mixAudio :: WavFile -> WavFile -> IO()
 mixAudio f1 f2 = do
   w1 <- getWAVEFile f1
@@ -20,10 +19,3 @@ mixAudio f1 f2 = do
   let right = U.zipWith (+) sl tr
 
   makeStereoWavFile left right
-
-  -- print ""
-  -- let [ss, ts] = map stereoUnpack [w1, w2]
-  -- makeStereoWavFile ss tt
-
-
-
