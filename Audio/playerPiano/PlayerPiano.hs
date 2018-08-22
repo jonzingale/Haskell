@@ -26,9 +26,9 @@ s1 freq len volume bb =
   U.fromList.duration.setVol $ sine
 
 main =
-  let bs = take 60 $ iterate update randos in -- too slow
+  let bs = take 120 $ iterate update randos in -- too slow
   let them = map (s1 27.5 2 (maxBound `div` 2)) bs in
-  let cs = take 480 $ paddedMobius in
-  let us = map (s1 220 0.25 (maxBound `div` 4)) cs in
+  let cs = take 960 $ paddedMobius in
+  let us = map (s1 220 0.25 (maxBound `div` 5)) cs in
   makeStereoWavFile (U.concat them) (U.concat us) -- stereo
   -- makeWavFile $ U.zipWith (+) (U.concat them) (U.concat us) -- mono

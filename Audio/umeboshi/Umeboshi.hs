@@ -35,7 +35,7 @@ standardNonStandard = do
    hiTom, kick, bass, maracas, opHiHat, rimshot, snare, tom] <- roland808
 
   let ensemble1 = [(".xx", hiTom),("xxxxxxxxxx", maracas),
-                   ("x", opHiHat),(".x", snare)]
+                   ("x", opHiHat),(".x", snare),("x.", bass)]
   let ensemble2 = [("..x", hiTom),(".xxx.xxx", maracas),("...x", snare),
                    (".x..", rimshot),(".x", opHiHat),("x...", bass)]
   let ensemble3 = [(".x..x.", maracas),("x.x", rimshot),
@@ -48,6 +48,12 @@ standardNonStandard = do
   let m4 = buildMeasure 120 (Time 6 4) stopBass
 
   let rhythm = U.concat [m2,m2,m2,m2,m1,m3,m1,m3,
+                         m2,m2,m2,m2,m4,m4,
+                         m2,m2,m2,m2,m1,m3,m1,m3,
+                         m2,m2,m2,m2,m4,m4,
+                         m2,m2,m2,m2,m1,m3,m1,m3,
+                         m2,m2,m2,m2,m4,m4,
+                         m2,m2,m2,m2,m1,m3,m1,m3,
                          m2,m2,m2,m2,m4,m4,
                          m2,m2,m2,m2,m1,m3,m1,m3,
                          m2,m2,m2,m2,m4,m4,
