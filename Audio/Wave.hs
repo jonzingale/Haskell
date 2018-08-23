@@ -43,6 +43,5 @@ stereopack xs ys =
 main = do
     w <- getWAVEFile "blow.wav"
     let wav = unpack w
-    putStr $ show $ U.toList $ U.take 8 $ U.drop 100 $ U.zipWith (-) wav (lowPass wav)
-
+    -- putStr $ show $ U.toList $ U.take 8 $ U.drop 100 $ U.zipWith (-) wav (lowPass wav)
     makeWavFile $ lowPass $  unpack w

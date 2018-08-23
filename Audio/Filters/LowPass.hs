@@ -80,8 +80,8 @@ lowPass samples =
   where
     f x y h j | j == U.length x = y
               | otherwise = 
-                -- let ups = [(j, (U.!) x (j-i) * (U.!) h i) | i<-[0..100]] in
-                let ups = [(j, (U.!) y j + (U.!) x (j-i) * (U.!) h i) | i<-[0..100]] in
+                let ups = [(j, 100*(U.!) x (j-i) * (U.!) h i) | i<-[0..100]] in
+                -- let ups = [(j, (U.!) y j + (U.!) x (j-i) * (U.!) h i) | i<-[0..100]] in
                 f x ((U.//) y ups) h (j+1)
 
     --           | otherwise = f x (g x y h j 0) h (j+1)
