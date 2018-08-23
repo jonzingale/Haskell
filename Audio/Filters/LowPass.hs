@@ -49,7 +49,11 @@ http://www.dspguide.com/filtexam.htm
 390 '
 400 END
 --}
-fc = 500 -- cutoff frequency
+
+-- U.take 8 $ U.drop 100 $ U.zipWith (-) randos (lowPass randos)
+
+-- fc = 0.1 -- cutoff frequency (0.1 of the sampling rate)
+fc = 0.001
 
 hh = U.replicate 100 (0::Double) -- empty filter kernel
 
@@ -59,23 +63,29 @@ fKernel hs = f hs (0::Int) (0::Double)
     g v j = v *  (0.54 - 0.46*cos(2*pi*j/100))
     f h 100 _ = h
 
-    f h 50 j = 
-      let val = 2*pi*fc in
-      f ((U.//) h [(50, g val j)]) 51 51
-
     f h i j =
-      let val = sin(2*pi*fc * (j-50)) / (j-50) in
-      f ((U.//) h [(i, g val j)]) (i+1) (j+1)
+      let val = if i == 50 
+                then 2*pi*fc
+                else sin(2*pi*fc * (j-50)) / (j-50) in
+
+      f (U.map (g val) h) (i+1) (j+1)
 
 lowPass :: VectSamples -> VectSamples
 lowPass samples = -- 7000 0.01
   let xx = (U.map fromIntegral samples)::SamplesR in
   let yy = xx in -- output vector
 
-  U.map floor (f xx yy (fKernel hh) 100)
+  U.map floor (f xx yy (fKernel hh) 100) -- j starts at 100
   where
     f x y h j | j == U.length x = y
-              | otherwise =
-                (U.//) y [ (j, ((U.!) y j) + ((U.!) x (j-i)) * ((U.!) h i)) | i <-[0..99]]
+              | otherwise = 
+                let ups = [(j, (U.!) y j + (U.!) x (j-i) * (U.!) h i) | i<-[0..99]] in
+                f x ((U.//) y ups) h (j+1)
 
+              -- | otherwise = f x (g x y h 0 j) h (j+1)
+
+    -- g x y h j 99 = y
+    -- g x y h j i =
+    --   let val = [(j, (U.!) y j + (U.!) x (j-i) * (U.!) h i)] in
+    --   g x ((U.//) y val) h j (i+1)
 
