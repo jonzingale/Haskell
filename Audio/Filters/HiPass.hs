@@ -57,9 +57,9 @@ randos :: VectSamples
 randos = (U.fromList).(take 44100) $ rs
   where rs = randomRs (minBound, maxBound::Int32) $ mkStdGen 23
 
-fs = 44100; -- /* sample rate in samples per second */
-f0 = 7000 -- /* cut-off (or center) frequency in Hz */
-q = 0.01  -- /* filter Q */
+fs = 44100 -- /* sample rate in samples per second */
+f0 = 1100 -- /* cut-off (or center) frequency in Hz */
+q = 0.001  -- /* filter Q */
 w0 = 2 * pi * f0 / fs
 alpha = (sin w0) / (2 * q)
 a0 = 1 + alpha
@@ -69,8 +69,10 @@ b0 = (1 + cos w0) / 2
 b1 = -(1 + cos w0)
 b2 = (1 + cos w0) / 2
 
--- Eventually parallelize, 1024 say. bucket brigade threes.
--- Is this form a linear recurrence? f n = a*f(n-1) + b*f(n-2)
+{--
+Eventually parallelize, 1024 say. bucket brigade threes.
+Is this form a linear recurrence? f n = a*f(n-1) + b*f(n-2)
+--}
 hiPass :: VectSamples -> VectSamples
 hiPass samples = 
   let ss = (U.map fromIntegral samples)::SamplesR in
@@ -79,6 +81,6 @@ hiPass samples =
     f s i | i == U.length s - 2 = s
           | otherwise = 
       let [p0, p1, p2] = [(U.!)] <*> [s] <*> [i, i-1, i-2] in
-      let t = (b0 / a0 * p0) + (b1 / a0 * p1) + (b2 / a0 * p2) -
-              (a1 / a0 * p1) - (a2 / a0 * p2) in
+      let t = (b0 / a0)*p0 + (b1 / a0)*p1 + (b2 / a0)* p2 -
+              (a1 / a0)*p1 - (a2 / a0)*p2 in
       f ((U.//) s [(i, t)]) (i+1)
