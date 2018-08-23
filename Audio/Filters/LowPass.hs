@@ -53,12 +53,12 @@ http://www.dspguide.com/filtexam.htm
 -- U.take 8 $ U.drop 100 $ U.zipWith (-) randos (lowPass randos)
 
 -- fc = 0.1 -- cutoff frequency (0.1 of the sampling rate)
-fc = 0.01
-(mm, mm') = (100, 100::Double)
+fc = 0.4
+(mm, mm') = (100::Int, 100::Double)
 hh = U.replicate (mm+1) (0::Double) -- empty filter kernel
 
 fKernel :: SamplesR -> SamplesR
-fKernel hs = f hs (0::Int) (0::Double)
+fKernel hs = normalize $ f hs (0::Int) (0::Double)
   where
     normalize h = U.map (/ (U.sum h)) h
     g v j = v *  (0.54 - 0.46*cos(2*pi*j/mm')) -- Hamming Window
