@@ -50,10 +50,10 @@ samplingRate = 44100; -- /* sample rate in samples per second */
 -- %        center frequency fc in Hz,
 -- %        bandwidth bw in Hz (default = fs/10), and
 -- %        sampling rate fs in Hz (default = 1).
-g = 2
-fc = 0.25
-bw = 0.1 --  samplingRate / 10 -- 1/10
-fs = 1 -- samplingRate -- 1
+g = 20
+fc = 700
+bw = 0.01 --  samplingRate / 10 -- 1/10
+fs = 44100 -- samplingRate -- 1
 
 bandPass :: VectSamples -> VectSamples
 bandPass samples = -- 7000 0.01
