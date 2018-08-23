@@ -55,22 +55,22 @@ http://www.dspguide.com/filtexam.htm
 -- fc = 0.1 -- cutoff frequency (0.1 of the sampling rate)
 fc = 0.5
 
-hh = U.replicate 21 (0::Double) -- empty filter kernel
+hh = U.replicate 101 (0::Double) -- empty filter kernel
 
 fKernel :: SamplesR -> SamplesR
 fKernel hs = normalize $ f hs (0::Int) (0::Double)
   where
     normalize h = U.map (/ (U.sum h)) h
-    -- g v j = v *  (0.54 - 0.46*cos(2*pi*j/200)) -- Hamming Window
-    g v j = v *  (0.42 - 0.5*cos(2*pi*j/20) + 0.08*cos(4*pi*j/20)) -- Blackman Window
-    f h 20 _ = h
+    g v j = v *  (0.54 - 0.46*cos(2*pi*j/100)) -- Hamming Window
+    -- g v j = v *  (0.42 - 0.5*cos(2*pi*j/100) + 0.08*cos(4*pi*j/100)) -- Blackman Window
+    f h 100 _ = h
 
     f h i j =
       let val = if i == 10
                 then 2*pi*fc
-                else sin(2*pi*fc * (j-10)) / (j-10) in
+                else sin(2*pi*fc * (j-50)) / (j-50) in
 
-      f (U.map (g (100*val)) h) (i+1) (j+1)
+      f (U.map (g val) h) (i+1) (j+1)
 
 lowPass :: VectSamples -> VectSamples
 lowPass samples = -- 7000 0.01
@@ -81,7 +81,7 @@ lowPass samples = -- 7000 0.01
   where
     f x y h j | j == U.length x = y
               | otherwise = 
-                let ups = [(j,  (U.!) x (j-i) * (U.!) h i) | i<-[0..20]] in
+                let ups = [(j, (U.!) x (j-i) * (U.!) h i) | i<-[0..20]] in
 
                 -- let ups = [(j, (U.!) y j + (U.!) x (j-i) * (U.!) h i) | i<-[0..20]] in
                 f x ((U.//) y ups) h (j+1)
