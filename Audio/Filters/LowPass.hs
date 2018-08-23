@@ -53,22 +53,21 @@ http://www.dspguide.com/filtexam.htm
 -- U.take 8 $ U.drop 100 $ U.zipWith (-) randos (lowPass randos)
 
 -- fc = 0.1 -- cutoff frequency (0.1 of the sampling rate)
-fc = 0.5
-
-hh = U.replicate 101 (0::Double) -- empty filter kernel
+fc = 0.01
+(mm, mm') = (100, 100::Double)
+hh = U.replicate (mm+1) (0::Double) -- empty filter kernel
 
 fKernel :: SamplesR -> SamplesR
-fKernel hs = normalize $ f hs (0::Int) (0::Double)
+fKernel hs = f hs (0::Int) (0::Double)
   where
     normalize h = U.map (/ (U.sum h)) h
-    g v j = v *  (0.54 - 0.46*cos(2*pi*j/100)) -- Hamming Window
-    -- g v j = v *  (0.42 - 0.5*cos(2*pi*j/100) + 0.08*cos(4*pi*j/100)) -- Blackman Window
-    f h 100 _ = h
-
-    f h i j =
-      let val = if i == 10
+    g v j = v *  (0.54 - 0.46*cos(2*pi*j/mm')) -- Hamming Window
+    -- g v j = v *  (0.42 - 0.5*cos(2*pi*j/mm') + 0.08*cos(4*pi*j/mm')) -- Blackman Window
+    f h i j | i == mm = h
+            | otherwise =
+      let val = if i == div mm 2
                 then 2*pi*fc
-                else sin(2*pi*fc * (j-50)) / (j-50) in
+                else sin(2*pi*fc * (j-mm'/2)) / (j-mm'/2) in
 
       f (U.map (g val) h) (i+1) (j+1)
 
@@ -77,13 +76,12 @@ lowPass samples = -- 7000 0.01
   let xx = (U.map fromIntegral samples)::SamplesR in
   let yy = xx in -- output vector
 
-  U.map floor (f xx yy (fKernel hh) 20) -- j starts at 100
+  U.map floor (f xx yy (fKernel hh) mm) -- j starts at 100
   where
     f x y h j | j == U.length x = y
               | otherwise = 
-                let ups = [(j, (U.!) x (j-i) * (U.!) h i) | i<-[0..20]] in
-
-                -- let ups = [(j, (U.!) y j + (U.!) x (j-i) * (U.!) h i) | i<-[0..20]] in
+                let ups = [(j, (U.!) x (j-i) * (U.!) h i) | i<-[0..100]] in
+                -- let ups = [(j, (U.!) y j + (U.!) x (j-i) * (U.!) h i) | i<-[0..100]] in
                 f x ((U.//) y ups) h (j+1)
 
     --           | otherwise = f x (g x y h j 0) h (j+1)
