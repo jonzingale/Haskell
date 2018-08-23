@@ -55,7 +55,7 @@ http://www.dspguide.com/filtexam.htm
 -- fc = 0.1 -- cutoff frequency (0.1 of the sampling rate)
 fc = 0.001
 
-hh = U.replicate 100 (0::Double) -- empty filter kernel
+hh = U.replicate 101 (0::Double) -- empty filter kernel
 
 fKernel :: SamplesR -> SamplesR
 fKernel hs = f hs (0::Int) (0::Double)
@@ -79,7 +79,7 @@ lowPass samples = -- 7000 0.01
   where
     f x y h j | j == U.length x = y
               | otherwise = 
-                let ups = [(j, (U.!) y j + (U.!) x (j-i) * (U.!) h i) | i<-[0..99]] in
+                let ups = [(j, (U.!) y j + (U.!) x (j-i) * (U.!) h i) | i<-[0..100]] in
                 f x ((U.//) y ups) h (j+1)
 
               -- | otherwise = f x (g x y h 0 j) h (j+1)

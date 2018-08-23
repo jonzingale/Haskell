@@ -15,8 +15,11 @@ type Volume = Int32
 header = WAVEHeader 1 44100 16 Nothing
 header2 = WAVEHeader 2 44100 16 Nothing
 
-unpack :: WAVE -> [Int32]
-unpack = (map head).waveSamples
+-- unpack :: WAVE -> [Int32]
+-- unpack = (map head).waveSamples
+
+unpack :: WAVE -> VectSamples
+unpack = (U.fromList).(map head).waveSamples
 
 pack :: VectSamples -> WAVE
 pack xs = WAVE header $ map (:[]) $ U.toList xs
@@ -33,6 +36,10 @@ stereopack xs ys =
   where mix ls rs = [[a,b] | (a,b) <- zip ls rs]
 
 -- viewSamples :: String -> []
-viewSamples file = do
-  wav <- getWAVEFile file
-  print $ take 10 $ waveSamples wav
+-- viewSamples file = do
+--   wav <- getWAVEFile file
+--   print $ take 10 $ waveSamples wav
+
+main = do
+    w <- getWAVEFile "blow.wav"
+    makeWavFile $ lowPass $ unpack w
