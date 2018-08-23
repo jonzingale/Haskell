@@ -53,7 +53,7 @@ http://www.dspguide.com/filtexam.htm
 -- U.take 8 $ U.drop 100 $ U.zipWith (-) randos (lowPass randos)
 
 -- fc = 0.1 -- cutoff frequency (0.1 of the sampling rate)
-fc = 0.1
+fc = 0.001
 (mm, mm') = (100::Int, 100::Double)
 hh = U.replicate (mm+1) (0::Double) -- empty filter kernel
 
