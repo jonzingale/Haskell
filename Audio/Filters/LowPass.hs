@@ -57,37 +57,35 @@ http://www.dspguide.com/filtexam.htm
 470 END
 --}
 
--- U.take 8 $ U.drop 100 $ U.zipWith (-) randos (lowPass randos)
-
 -- fc = 0.1 -- cutoff frequency (0.1 of the sampling rate)
-fc = 0.01
-(mm, mm') = (5000::Int, 5000::Double)
+-- fc = 0.5
+fc = 0.5
+(mm, mm') = (100::Int, 100::Double)
 
-fKernel :: SamplesR
-fKernel =
-  let hh = U.replicate (mm+1) (0::Double) in
-  normalize $ f hh (0::Int) (0::Double)
+blackman v j m = (* v) $ 0.42 - 0.5*cos(2*pi*j/m) + 0.08*cos(4*pi*j/m)
+hamming v j m = (* v) $ 0.54 - 0.46*cos(2*pi*j/m)
+
+kerh :: SamplesR
+kerh =
+  normalize $ U.generate (mm+1) g
   where
     normalize h = U.map (/ (U.sum h)) h
-    g v j = v *  (0.54 - 0.46*cos(2*pi*j/mm')) -- Hamming Window
-    -- g v j = v *  (0.42 - 0.5*cos(2*pi*j/mm') + 0.08*cos(4*pi*j/mm')) -- Blackman Window
-    f h i j | i == mm = h
-            | otherwise =
-      let val = if i == div mm 2
-                then 2*pi*fc
+    g i = 
+      let j = (fromIntegral i)::Double in
+      let val = if i == div mm 2 then 2*pi*fc
                 else sin(2*pi*fc * (j-mm'/2)) / (j-mm'/2) in
-
-      f (U.map (g val) h) (i+1) (j+1)
+      blackman val j mm'
+      -- hamming val j mm'
 
 lowPass :: VectSamples -> VectSamples
 lowPass samples =
   let xx = (U.map fromIntegral samples)::SamplesR in
-  let yy = xx in -- output vector
+  let yy = U.replicate (U.length xx) (0::Double) in
 
-  U.map floor (f xx yy fKernel mm) -- j starts at 100
+  U.map floor $ f xx kerh yy mm -- j starts at 100
   where
-    f x y h j | j == U.length x = y
-              | otherwise =
-                let ups = [(j, 70*(U.!) x (j-i) * (U.!) h i) | i<-[0..mm]] in
-                f x ((U.//) y ups) h (j+1)
+    f x h y j | j == U.length x = y
+              | otherwise = -- write with generator
+                let jth = 1 * sum [(U.!) x (j-i) * (U.!) h i | i<-[0..mm]] in
+                f x h ((U.//) y [(j,jth)]) (j+1)
 

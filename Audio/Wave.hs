@@ -2,7 +2,7 @@ module Wave where
 import qualified Data.Vector.Unboxed as U
 import Filters.HiPass (hiPass, randos)
 import Filters.BandPass (bandPass)
-import Filters.LowPass (lowPass, fKernel)
+import Filters.LowPass (lowPass)
 import Data.Int (Int32)
 import Data.WAVE
 
