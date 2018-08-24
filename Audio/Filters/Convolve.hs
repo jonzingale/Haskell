@@ -1,3 +1,4 @@
+-- https://www.blaenkdenum.com/posts/naive-convolution-in-haskell/
 module Convolve where
 import qualified Data.Vector.Unboxed as U
 import Data.Int (Int32)
