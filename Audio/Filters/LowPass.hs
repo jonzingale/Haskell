@@ -17,37 +17,44 @@ samplingRate = 44100; -- /* sample rate in samples per second */
 {--
 http://www.dspguide.com/filtexam.htm
 
-100 'LOW-PASS WINDOWED-SINC FILTER 
-110 'This program filters 5000 samples with a 101 point windowed-sinc  
-120 'filter, resulting in 4900 samples of filtered data.
+100 'LOW-PASS WINDOWED-SINC FILTER
+110 'This program filters 5000 samples with a 101 point windowed-sinc filter,
+120 'resulting in 4900 samples of filtered data.
 130 '
-140 '                      'INITIALIZE AND DEFINE THE ARRAYS USED
-150 DIM X[4999]            'X[ ] holds the input signal
-160 DIM Y[4999]            'Y[ ] holds the output signal
-170 DIM H[100]             'H[ ] holds the filter kernel
-180 '
-190 PI = 3.14159265
-200 FC = 0.1               'The cutoff frequency (0.1 of the sampling rate)
-210 M% = 100               'The filter kernel length 
-220 '
-230 GOSUB XXXX             'Subroutine to load X[ ] with the input signal
-240 '
-250 '                      'CALCULATE THE FILTER KERNEL
-260 FOR I% = 0 TO 100
-270    IF (I%-50) = 0 THEN H[I%] = 2*PI*FC
-280    IF (I%-50) <> 0  THEN H[I%] = SIN(2*PI*FC * (I%-50)) / (I%-50)
-290    H[I%] = H[I%] * (0.54 - 0.46*COS(2*PI*I%/100) )
-300 NEXT I%
-310 '               
-320                        'FILTER THE SIGNAL BY CONVOLUTION
-330 FOR J% = 100 TO 4999      
-340    Y[J%] = 0                   
-350    FOR I% = 0 TO 100
-360       Y[J%] = Y[J%] + X[J%-I%] * H[I%]
-370    NEXT I%
-380 NEXT J%
+140 DIM X[4999] 'X[ ] holds the input signal
+150 DIM Y[4999] 'Y[ ] holds the output signal
+160 DIM H[100] 'H[ ] holds the filter kernel
+170 '
+180 PI = 3.14159265
+190 FC = .14 'Set the cutoff frequency (between 0 and 0.5)
+200 M% = 100 'Set filter length (101 points)
+210 '
+220 GOSUB XXXX 'Mythical subroutine to load X[ ]
+230 '
+240 ' 'Calculate the low-pass filter kernel via Eq. 16-4
+250 FOR I% = 0 TO 100
+260 IF (I%-M%/2) = 0 THEN H[I%] = 2*PI*FC
+270 IF (I%-M%/2) <> 0 THEN H[I%] = SIN(2*PI*FC * (I%-M%/2)) / (I%-M%/2)
+280 H[I%] = H[I%] * (0.54 - 0.46*COS(2*PI*I%/M%) )
+290 NEXT I%
+300 '
+310 SUM = 0 'Normalize the low-pass filter kernel for
+320 FOR I% = 0 TO 100 'unity gain at DC
+330 SUM = SUM + H[I%]
+340 NEXT I%
+350 '
+360 FOR I% = 0 TO 100
+370 H[I%] = H[I%] / SUM
+380 NEXT I%
 390 '
-400 END
+400 FOR J% = 100 TO 4999 'Convolve the input signal & filter kernel
+410 Y[J%] = 0
+420 FOR I% = 0 TO 100
+430 Y[J%] = Y[J%] + X[J%-I%] * H[I%]
+440 NEXT I%
+450 NEXT J%
+460 '
+470 END
 --}
 
 -- U.take 8 $ U.drop 100 $ U.zipWith (-) randos (lowPass randos)
