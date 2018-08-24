@@ -1,18 +1,6 @@
 module Filters.LowPass where
 import qualified Data.Vector.Unboxed as U
 import Data.Int (Int32)
-import System.Random
-
-type SamplesR = U.Vector Double
-type VectSamples = U.Vector Int32
-type Frequency = Double
-type Q = Double
-
-randos :: VectSamples
-randos = (U.fromList).(take 44100) $ rs
-  where rs = randomRs (minBound, maxBound::Int32) $ mkStdGen 23
-
-samplingRate = 44100; -- /* sample rate in samples per second */
 
 {--
 http://www.dspguide.com/filtexam.htm
@@ -57,35 +45,30 @@ http://www.dspguide.com/filtexam.htm
 470 END
 --}
 
--- fc = 0.1 -- cutoff frequency (0.1 of the sampling rate)
--- fc = 0.5
-fc = 0.5
-(mm, mm') = (100::Int, 100::Double)
+type SamplesR = U.Vector Double
+type VectSamples = U.Vector Int32
+
+fc = 0.01 -- cutoff frequency (0.1 of the sampling rate)
+(mm, mm') = (300::Int, 300::Double)
 
 blackman v j m = (* v) $ 0.42 - 0.5*cos(2*pi*j/m) + 0.08*cos(4*pi*j/m)
 hamming v j m = (* v) $ 0.54 - 0.46*cos(2*pi*j/m)
 
 kerh :: SamplesR
-kerh =
-  normalize $ U.generate (mm+1) g
+kerh = normalize $ U.generate (mm+1) (g.fromIntegral)
   where
     normalize h = U.map (/ (U.sum h)) h
-    g i = 
-      let j = (fromIntegral i)::Double in
-      let val = if i == div mm 2 then 2*pi*fc
-                else sin(2*pi*fc * (j-mm'/2)) / (j-mm'/2) in
-      blackman val j mm'
-      -- hamming val j mm'
+
+    g j | j == mm'/ 2 = blackman (2*pi*fc) j mm'
+        | otherwise =
+          let val = sin(2*pi*fc * (j-mm'/2)) / (j-mm'/2) in
+          -- blackman val j mm'
+          hamming val j mm'
 
 lowPass :: VectSamples -> VectSamples
 lowPass samples =
   let xx = (U.map fromIntegral samples)::SamplesR in
-  let yy = U.replicate (U.length xx) (0::Double) in
-
-  U.map floor $ f xx kerh yy mm -- j starts at 100
+  let padded = (U.++) (U.replicate mm (0::Double)) xx in
+  U.map floor $ U.drop mm $ U.generate (U.length xx) (f padded kerh)
   where
-    f x h y j | j == U.length x = y
-              | otherwise = -- write with generator
-                let jth = 1 * sum [(U.!) x (j-i) * (U.!) h i | i<-[0..mm]] in
-                f x h ((U.//) y [(j,jth)]) (j+1)
-
+    f x h j = sum [(U.!) x (j+mm-i) * (U.!) h i | i<-[0..mm]]

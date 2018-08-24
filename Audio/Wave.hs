@@ -32,10 +32,10 @@ stereopack xs ys =
   WAVE header2 $ mix (U.toList xs) (U.toList ys)
   where mix ls rs = [[a,b] | (a,b) <- zip ls rs]
 
--- viewSamples :: String -> []
--- viewSamples file = do
---   wav <- getWAVEFile file
---   print $ take 10 $ waveSamples wav
+viewSamples :: String -> IO()
+viewSamples file = do
+  wav <- getWAVEFile file
+  print $ take 10 $ waveSamples wav
 
 main = do
     w <- getWAVEFile "blow.wav"
