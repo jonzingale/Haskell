@@ -2,7 +2,7 @@ module Wave where
 import qualified Data.Vector.Unboxed as U
 import Filters.HiPass (hiPass, randos)
 import Filters.BandPass (bandPass)
-import Filters.LowPass (lowPass, fKernel, hh)
+import Filters.LowPass (lowPass, fKernel)
 import Data.Int (Int32)
 import Data.WAVE
 
@@ -14,9 +14,6 @@ type Volume = Int32
 
 header = WAVEHeader 1 44100 16 Nothing
 header2 = WAVEHeader 2 44100 16 Nothing
-
--- unpack :: WAVE -> [Int32]
--- unpack = (map head).waveSamples
 
 unpack :: WAVE -> VectSamples
 unpack = (U.fromList).(map head).waveSamples
@@ -43,5 +40,4 @@ stereopack xs ys =
 main = do
     w <- getWAVEFile "blow.wav"
     let wav = unpack w
-    -- putStr $ show $ U.toList $ U.take 8 $ U.drop 100 $ U.zipWith (-) wav (lowPass wav)
     makeWavFile $ lowPass $  unpack w
