@@ -1,10 +1,9 @@
-module Filters.LowPass where
-import qualified Data.Vector.Unboxed as U
-import Data.Int (Int32)
-
 {--
 http://www.analog.com/media/en/technical-documentation/dsp-book/dsp_book_Ch16.pdf
 --}
+module Filters.LowPass where
+import qualified Data.Vector.Unboxed as U
+import Data.Int (Int32)
 
 type SamplesR = U.Vector Double
 type VectSamples = U.Vector Int32
