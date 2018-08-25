@@ -49,7 +49,7 @@ type SamplesR = U.Vector Double
 type VectSamples = U.Vector Int32
 
 fc = 0.01 -- cutoff frequency (0.1 of the sampling rate)
-(mm, mm') = (300::Int, 300::Double)
+(mm, mm') = (100::Int, 100::Double)
 
 blackman v j m = (* v) $ 0.42 - 0.5*cos(2*pi*j/m) + 0.08*cos(4*pi*j/m)
 hamming v j m = (* v) $ 0.54 - 0.46*cos(2*pi*j/m)
@@ -62,13 +62,13 @@ kerh = normalize $ U.generate (mm+1) (g.fromIntegral)
     g j | j == mm'/ 2 = blackman (2*pi*fc) j mm'
         | otherwise =
           let val = sin(2*pi*fc * (j-mm'/2)) / (j-mm'/2) in
-          -- blackman val j mm'
-          hamming val j mm'
+          blackman val j mm'
+          -- hamming val j mm'
 
 lowPass :: VectSamples -> VectSamples
 lowPass samples =
   let xx = (U.map fromIntegral samples)::SamplesR in
-  let padded = (U.++) (U.replicate mm (0::Double)) xx in
-  U.map floor $ U.drop mm $ U.generate (U.length xx) (f padded kerh)
+  let padx = (U.++) (U.replicate mm (0::Double)) xx in
+  U.map floor $ U.drop mm $ U.generate (U.length xx) (f padx kerh)
   where
     f x h j = sum [(U.!) x (j+mm-i) * (U.!) h i | i<-[0..mm]]
