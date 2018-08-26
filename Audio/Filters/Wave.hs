@@ -1,4 +1,4 @@
-module Wave (unpack, makeWavFile, makeStereoWavFile) where
+module Filters.Wave where
 import qualified Data.Vector.Unboxed as U
 import Data.Int (Int32)
 import Data.WAVE
