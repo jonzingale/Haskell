@@ -5,8 +5,8 @@ module Filters.LowPass where
 import qualified Data.Vector.Unboxed as U
 import Data.Int (Int32)
 
-type SamplesR = U.Vector Double
 type VectSamples = U.Vector Int32
+type SamplesR = U.Vector Double
 type CutOffFreq = Double
 
 (mm, mm') = (100::Int, 100::Double)
@@ -26,6 +26,7 @@ lowPass :: CutOffFreq -> VectSamples -> VectSamples
 lowPass fc samples = -- Convolve the input signal & filter kernel
   let xx = (U.map fromIntegral samples)::SamplesR in
   let padx = (U.++) (U.replicate mm (0::Double)) xx in
-  U.map floor $ U.drop mm $ U.generate (U.length xx) (f padx (hh fc))
+  let convolved = U.generate (U.length xx) (f padx (hh fc)) in
+  U.map floor $ U.drop mm $ convolved
   where
     f x h j = sum [(U.!) x (j+mm-i) * (U.!) h i | i<-[0..mm]]
