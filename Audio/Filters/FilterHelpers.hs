@@ -2,6 +2,7 @@ module Filters.FilterHelpers where
 import qualified Data.Vector.Unboxed as U
 import Filters.ConvolutionFilters (bandPass, lowPass, highPass)
 import Filters.HiPass (hiPass)
+import Filters.FFTFilters (fftFilter)
 import Data.Int (Int32)
 import System.Random
 import Filters.Wave
@@ -20,3 +21,7 @@ testLow =
 randos :: VectSamples
 randos = (U.fromList).(take 22050) $ rs -- 1/2 second white noise
   where rs = randomRs (minBound, maxBound::Int32) $ mkStdGen 23
+
+testFFT =
+  let rs = U.take (2^14) $ randos in
+  makeWavFile $ fftFilter rs
