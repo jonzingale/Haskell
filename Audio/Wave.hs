@@ -1,8 +1,8 @@
 module Wave where
 import qualified Data.Vector.Unboxed as U
+import Filters.LowPass (lowPass, highPass)
 import Filters.HiPass (hiPass, randos)
 import Filters.BandPass (bandPass)
-import Filters.LowPass (lowPass)
 import Data.Int (Int32)
 import Data.WAVE
 
@@ -40,4 +40,4 @@ viewSamples file = do
 main = do
     w <- getWAVEFile "blow.wav"
     let wav = unpack w
-    makeWavFile $ lowPass $  unpack w
+    makeWavFile $ lowPass 300 $  unpack w
