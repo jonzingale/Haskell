@@ -1,8 +1,7 @@
 -- http://hackage.haskell.org/package/pure-fft-0.2.0/docs/Numeric-FFT.html
 module Filters.FFTFilters where
-import qualified Data.Array.CArray.Base as C
 import qualified Data.Vector.Unboxed as U
-import Numeric.FFT (dft, idft, fft, ifft)
+import Numeric.FFT (fft, ifft)
 import Data.Int (Int32)
 import Data.Complex
 
@@ -30,12 +29,10 @@ hh fc = normalize $ U.generate (floor mm) (g.fromIntegral)
     normalize h = U.map (/ (U.sum h)) h
     g j = (sinc fc j mm) * blackman j mm
 
-fftFilter :: VectSamples -> VectSamples
-fftFilter ss =
+fftFilter :: CutOffFreq -> VectSamples -> VectSamples
+fftFilter fc ss =
   let xx = (U.map fromIntegral ss)::SamplesR
-      h = fft $ map (:+ 0) $ U.toList (hh 440)
+      h = fft $ map (:+ 0) $ U.toList (hh fc)
       x = fft $ map (:+ 0) $ U.toList xx
       cc = ifft $ zipWith (*) h x
   in U.map floor $ U.fromList $ map realPart cc
-
-
