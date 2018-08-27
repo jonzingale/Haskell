@@ -22,6 +22,8 @@ randos :: VectSamples
 randos = (U.fromList).(take 22050) $ rs -- 1/2 second white noise
   where rs = randomRs (minBound, maxBound::Int32) $ mkStdGen 23
 
-testFFT =
-  let rs = U.take (2^14) $ randos in
-  makeWavFile $ fftFilter rs
+randTwos :: VectSamples
+randTwos = (U.fromList).(take (2^18)) $ rs -- 1/2 second white noise
+  where rs = randomRs (minBound, maxBound::Int32) $ mkStdGen 23
+
+testFFT = makeWavFile $ fftFilter randTwos -- 20 secs for 6 secs audio

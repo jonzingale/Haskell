@@ -11,7 +11,7 @@ type SamplesR = U.Vector Double
 type CutOffFreq = Double
 type Q = Double
 
-(mm, mm') = (2^14::Int, 2^14::Double) -- power of 2
+mm = 2^18::Double -- power of 2
 
 blackman j m = 0.42 - 0.50*cos(2*pi*j/m) + 0.08*cos(4*pi*j/m)
 hamming j m  = 0.54 - 0.46*cos(2*pi*j/m)
@@ -25,10 +25,10 @@ convolved inputs. Note that Length of lists must be 2^a.
 --}
 
 hh :: CutOffFreq -> SamplesR -- kernel
-hh fc = normalize $ U.generate mm (g.fromIntegral)
+hh fc = normalize $ U.generate (floor mm) (g.fromIntegral)
   where
     normalize h = U.map (/ (U.sum h)) h
-    g j = (sinc fc j mm') * blackman j mm'
+    g j = (sinc fc j mm) * blackman j mm
 
 fftFilter :: VectSamples -> VectSamples
 fftFilter ss =
