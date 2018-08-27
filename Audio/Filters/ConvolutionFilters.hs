@@ -1,13 +1,14 @@
 {--
 http://www.analog.com/media/en/technical-documentation/dsp-book/dsp_book_Ch16.pdf
 --}
-module Filters.LowPass where
+module Filters.ConvolutionFilters where
 import qualified Data.Vector.Unboxed as U
 import Data.Int (Int32)
 
 type VectSamples = U.Vector Int32
 type SamplesR = U.Vector Double
 type CutOffFreq = Double
+type Q = Double
 
 (mm, mm') = (100::Int, 100::Double)
 
@@ -27,6 +28,20 @@ lowPass fc samples = -- Convolve the input signal & filter kernel
 
 highPass :: CutOffFreq -> VectSamples -> VectSamples
 highPass fc ss = U.map negate $ lowPass fc ss
+
+bandPass :: Q -> CutOffFreq -> VectSamples -> VectSamples
+bandPass q freq samples =
+  let (low, hi) = (freq - q/2, freq + q/2)
+      xx = (U.map fromIntegral samples)::SamplesR
+      padx = (U.++) (U.replicate mm (0::Double)) xx
+      lp = U.generate (U.length xx) (f padx (hh low))
+      hp = specInv $ U.generate (U.length xx) (f padx (hh hi))
+  in U.map floor $ U.drop mm $ specInv.mixBands lp $ hp
+  where
+    f x h j = sum [(U.!) x (j+mm-i) * (U.!) h i | i<-[0..mm]]
+
+mixBands :: SamplesR -> SamplesR -> SamplesR
+mixBands ss tt = U.zipWith (+) ss tt -- may need normalized
 
 specInv :: SamplesR -> SamplesR
 specInv ss = U.map negate ss
