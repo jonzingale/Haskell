@@ -24,8 +24,14 @@ convolved inputs. Note that Length of lists must be 2^a.
 --}
 
 fftHighPass :: CutOffFreq -> VectSamples -> VectSamples
-fftHighPass fc ss = specInv $ fftLowPass fc ss
+fftHighPass fc ss =
+  let xx = (U.map fromIntegral ss)::SamplesR
+      h = fft $ map (:+ 0) $ U.toList $ specInv (hh fc)
+      x = fft $ map (:+ 0) $ U.toList xx
+      cc = ifft $ zipWith (*) h x
+  in U.map floor $ U.fromList $ map realPart cc
 
+-- not quite right. spectral inversions on H[n]
 fftBandPass :: Q -> CutOffFreq -> VectSamples -> VectSamples
 fftBandPass q freq ss =
   let (low, hi) = (freq - q/2, freq + q/2)
@@ -42,7 +48,7 @@ fftLowPass fc ss =
       cc = ifft $ zipWith (*) h x
   in U.map floor $ U.fromList $ map realPart cc
 
-specInv :: VectSamples -> VectSamples
+specInv :: (U.Unbox b, Num b) => U.Vector b -> U.Vector b
 specInv ss = U.map negate ss
 
 hh :: CutOffFreq -> SamplesR -- kernel

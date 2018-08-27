@@ -27,7 +27,7 @@ lowPass fc samples = -- Convolve the input signal & filter kernel
     f x h j = sum [(U.!) x (j+mm-i) * (U.!) h i | i<-[0..mm]]
 
 highPass :: CutOffFreq -> VectSamples -> VectSamples
-highPass fc ss = U.map negate $ lowPass fc ss
+highPass fc ss = U.map negate $ lowPass fc ss -- Fix: inversion should be on H[n]
 
 bandPass :: Q -> CutOffFreq -> VectSamples -> VectSamples
 bandPass q freq samples =
