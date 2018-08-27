@@ -10,6 +10,7 @@ type VectSamples = U.Vector Int32
 type CutOffFreq = Double
 type Q = Double
 
+-- Todo: Q ought be a function of mm where mm = 4/BW
 (mm, mm') = (100::Int, 100::Double)
 
 blackman j m = 0.42 - 0.5*cos(2*pi*j/m) + 0.08*cos(4*pi*j/m)
@@ -29,7 +30,6 @@ specInv ss = U.map negate ss
 mixBands :: SamplesR -> SamplesR -> SamplesR
 mixBands ss tt = U.zipWith (+) ss tt -- may need normalized
 
--- Todo: Q ought be a function of mm where mm = 4/BW
 bandPass :: Q -> CutOffFreq -> VectSamples -> VectSamples
 bandPass q freq samples =
   let (low, hi) = (freq - q/2, freq + q/2)
