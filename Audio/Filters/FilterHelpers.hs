@@ -1,7 +1,6 @@
 module Filters.FilterHelpers where
 import qualified Data.Vector.Unboxed as U
-import Filters.BandPass (bandPass)
-import Filters.LowPass (lowPass)
+import Filters.ConvolutionFilters (bandPass, lowPass, highPass)
 import Filters.HiPass (hiPass)
 import Data.Int (Int32)
 import System.Random
