@@ -2,7 +2,7 @@ module Filters.FilterHelpers where
 import qualified Data.Vector.Unboxed as U
 import Filters.ConvolutionFilters (bandPass, lowPass, highPass)
 import Filters.HiPass (hiPass)
-import Filters.FFTFilters (fftFilter)
+import Filters.FFTFilters (fftLowPass)
 import Data.Int (Int32)
 import System.Random
 import Filters.Wave
@@ -26,4 +26,4 @@ randTwos :: VectSamples -- power of 2 necessary for FFT
 randTwos = (U.fromList).(take (2^18)) $ rs -- ~6 seconds white noise
   where rs = randomRs (minBound, maxBound::Int32) $ mkStdGen 23
 
-testFFT = makeWavFile $ fftFilter 440 randTwos -- 20 secs for 6 secs audio
+testFFT = makeWavFile $ fftLowPass 440 randTwos -- 20 secs for 6 secs audio

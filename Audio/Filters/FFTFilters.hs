@@ -22,8 +22,8 @@ Multiply the two transforms. Invert FFT to derive the
 convolved inputs. Note that Length of lists must be 2^a.
 --}
 
-fftFilter :: CutOffFreq -> VectSamples -> VectSamples
-fftFilter fc ss =
+fftLowPass :: CutOffFreq -> VectSamples -> VectSamples
+fftLowPass fc ss =
   let xx = (U.map fromIntegral ss)::SamplesR
       h = fft $ map (:+ 0) $ U.toList (hh fc)
       x = fft $ map (:+ 0) $ U.toList xx
