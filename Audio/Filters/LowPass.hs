@@ -16,12 +16,6 @@ hamming j m  = 0.54 - 0.46*cos(2*pi*j/m)
 sinc f j m | j == m/2 = 2*pi*f/44100
            | otherwise = sin(2*pi*f/44100 * (j-m/2)) / (j-m/2)
 
-hh :: CutOffFreq -> SamplesR -- kernel
-hh fc = normalize $ U.generate (mm+1) (g.fromIntegral)
-  where
-    normalize h = U.map (/ (U.sum h)) h
-    g j = (sinc fc j mm') * blackman j mm'
-
 lowPass :: CutOffFreq -> VectSamples -> VectSamples
 lowPass fc samples = -- Convolve the input signal & filter kernel
   let xx = (U.map fromIntegral samples)::SamplesR
@@ -36,3 +30,9 @@ highPass fc ss = U.map negate $ lowPass fc ss
 
 specInv :: SamplesR -> SamplesR
 specInv ss = U.map negate ss
+
+hh :: CutOffFreq -> SamplesR -- kernel
+hh fc = normalize $ U.generate (mm+1) (g.fromIntegral)
+  where
+    normalize h = U.map (/ (U.sum h)) h
+    g j = (sinc fc j mm') * blackman j mm'
