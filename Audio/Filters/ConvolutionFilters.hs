@@ -2,16 +2,16 @@
 http://www.analog.com/media/en/technical-documentation/dsp-book/dsp_book_Ch16.pdf
 --}
 module Filters.ConvolutionFilters where
-import qualified Data.Vector.Unboxed as U
+import Prelude hiding (map, length, replicate, drop, sum, zipWith, (++))
+import Data.Vector.Unboxed hiding (foldr)
 import Data.Int (Int32)
 
-type VectSamples = U.Vector Int32
-type FilterKernel = U.Vector Double
+type VectSamples = Vector Int32
+type FilterKernel = Vector Double
 type CutOffFreq = Double
 type Q = Double
 
-(mm, mm') = (100::Int, 100::Double)
-
+mm = 100::Int -- really ought to be 4/bw for vals 0..0.5
 blackman j m = 0.42 - 0.50*cos(2*pi*j/m) + 0.08*cos(4*pi*j/m)
 hamming j m  = 0.54 - 0.46*cos(2*pi*j/m)
 sinc f j m | j == m/2 = 2*pi*f/44100
@@ -28,28 +28,24 @@ bandPass q freq vs =
   let 
     lp = hh $ freq - q/2
     hp = specInv.hh $ freq + q/2
-    bp = specInv $ U.zipWith (+) lp hp
+    bp = specInv $ zipWith (+) lp hp
   in convolve vs bp
 
 convolve :: VectSamples -> FilterKernel -> VectSamples
 convolve xs hs = 
   let padx = padInput xs
-      lenx = U.length padx
-      convolved = U.generate lenx (conKer padx hs)
-  in U.map floor $ U.drop mm $ convolved
+  in cc (length padx) (conKer padx hs)
   where
-    conKer x h j = sum [(U.!) x (j+mm-i) * (U.!) h i | i<-[0..mm]]
-    padInput vs = let xx = U.map fromIntegral vs in
-      (U.++) (U.replicate mm (0::Double)) xx
+    cc l v = map floor $ drop mm $ generate l v
+    conKer x h j = foldr (+) 0 [(!) x (j+mm-i) * (!) h i | i<-[0..mm]]
+    padInput vs = (++) (replicate mm (0::Double)) (map fromIntegral vs)
 
 specInv :: FilterKernel -> FilterKernel
-specInv h =
-  let m = div mm 2
-      ih = U.map negate h
-  in (U.//) ih [(m, (U.!) ih m + 1)]
+specInv h = let (m, ih) = (div mm 2, map negate h) in
+  (//) ih [(m, (!) ih m + 1)]
 
 hh :: CutOffFreq -> FilterKernel
-hh fc = normalize $ U.generate (mm+1) (g.fromIntegral)
+hh fc = normalize $ generate (mm+1) (g.fromIntegral)
   where
-    normalize h = U.map (/ (U.sum h)) h
-    g j = (sinc fc j mm') * blackman j mm'
+    normalize h = map (/ (sum h)) h
+    g j = (sinc fc j (fromIntegral mm)) * blackman j (fromIntegral mm)
