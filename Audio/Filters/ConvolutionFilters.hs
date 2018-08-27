@@ -6,7 +6,7 @@ import qualified Data.Vector.Unboxed as U
 import Data.Int (Int32)
 
 type VectSamples = U.Vector Int32
-type SamplesR = U.Vector Double
+type FilterKernel = U.Vector Double
 type CutOffFreq = Double
 type Q = Double
 
@@ -18,35 +18,37 @@ sinc f j m | j == m/2 = 2*pi*f/44100
            | otherwise = sin(2*pi*f/44100 * (j-m/2)) / (j-m/2)
 
 lowPass :: CutOffFreq -> VectSamples -> VectSamples
-lowPass fc samples = -- Convolve the input signal & filter kernel
-  let xx = (U.map fromIntegral samples)::SamplesR
-      padx = (U.++) (U.replicate mm (0::Double)) xx
-      convolved = U.generate (U.length xx) (f padx (hh fc))
-  in U.map floor $ U.drop mm $ convolved
-  where
-    f x h j = sum [(U.!) x (j+mm-i) * (U.!) h i | i<-[0..mm]]
+lowPass fc vs = convolve vs (hh fc)
 
 highPass :: CutOffFreq -> VectSamples -> VectSamples
-highPass fc ss = U.map negate $ lowPass fc ss -- Fix: inversion should be on H[n]
+highPass fc vs = convolve vs (specInv.hh $ fc)
 
 bandPass :: Q -> CutOffFreq -> VectSamples -> VectSamples
-bandPass q freq samples =
-  let (low, hi) = (freq - q/2, freq + q/2)
-      xx = (U.map fromIntegral samples)::SamplesR
-      padx = (U.++) (U.replicate mm (0::Double)) xx
-      lp = U.generate (U.length xx) (f padx (hh low))
-      hp = specInv $ U.generate (U.length xx) (f padx (hh hi))
-  in U.map floor $ U.drop mm $ specInv.mixBands lp $ hp
+bandPass q freq vs =
+  let 
+    lp = hh $ freq - q/2
+    hp = specInv.hh $ freq + q/2
+    bp = specInv $ U.zipWith (+) lp hp
+  in convolve vs bp
+
+convolve :: VectSamples -> FilterKernel -> VectSamples
+convolve xs hs = 
+  let padx = padInput xs
+      lenx = U.length padx
+      convolved = U.generate lenx (conKer padx hs)
+  in U.map floor $ U.drop mm $ convolved
   where
-    f x h j = sum [(U.!) x (j+mm-i) * (U.!) h i | i<-[0..mm]]
+    conKer x h j = sum [(U.!) x (j+mm-i) * (U.!) h i | i<-[0..mm]]
+    padInput vs = let xx = U.map fromIntegral vs in
+      (U.++) (U.replicate mm (0::Double)) xx
 
-mixBands :: SamplesR -> SamplesR -> SamplesR
-mixBands ss tt = U.zipWith (+) ss tt -- may need normalized
+specInv :: FilterKernel -> FilterKernel
+specInv h =
+  let m = div mm 2
+      ih = U.map negate h
+  in (U.//) ih [(m, (U.!) ih m + 1)]
 
-specInv :: SamplesR -> SamplesR
-specInv ss = U.map negate ss
-
-hh :: CutOffFreq -> SamplesR -- kernel
+hh :: CutOffFreq -> FilterKernel
 hh fc = normalize $ U.generate (mm+1) (g.fromIntegral)
   where
     normalize h = U.map (/ (U.sum h)) h
