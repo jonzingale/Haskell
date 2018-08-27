@@ -6,11 +6,11 @@ import Data.Int (Int32)
 import Data.Complex
 
 type VectSamples = U.Vector Int32
-type SamplesR = U.Vector Double
-type CutOffFreq = Double
-type Q = Double
+type SamplesC = U.Vector (Complex Double)
+type CutOffFreq = Complex Double
+type Q = Complex Double
 
-mm = 2^18::Double -- power of 2
+mm = 2^18::Complex Double -- power of 2
 
 blackman j m = 0.42 - 0.50*cos(2*pi*j/m) + 0.08*cos(4*pi*j/m)
 hamming j m  = 0.54 - 0.46*cos(2*pi*j/m)
@@ -25,9 +25,9 @@ convolved inputs. Note that Length of lists must be 2^a.
 
 fftHighPass :: CutOffFreq -> VectSamples -> VectSamples
 fftHighPass fc ss =
-  let xx = (U.map fromIntegral ss)::SamplesR
-      h = fft $ map (:+ 0) $ U.toList $ specInv (hh fc)
-      x = fft $ map (:+ 0) $ U.toList xx
+  let xx = (U.map fromIntegral ss)::SamplesC
+      h = fft $ U.toList $ specInv (hh fc)
+      x = fft $ U.toList xx
       cc = ifft $ zipWith (*) h x
   in U.map floor $ U.fromList $ map realPart cc
 
@@ -42,17 +42,17 @@ fftBandPass q freq ss =
 
 fftLowPass :: CutOffFreq -> VectSamples -> VectSamples
 fftLowPass fc ss =
-  let xx = (U.map fromIntegral ss)::SamplesR
-      h = fft $ map (:+ 0) $ U.toList (hh fc)
-      x = fft $ map (:+ 0) $ U.toList xx
+  let xx = (U.map fromIntegral ss)::SamplesC
+      h = fft $ U.toList (hh fc)
+      x = fft $ U.toList xx
       cc = ifft $ zipWith (*) h x
   in U.map floor $ U.fromList $ map realPart cc
 
 specInv :: (U.Unbox b, Num b) => U.Vector b -> U.Vector b
 specInv ss = U.map negate ss
 
-hh :: CutOffFreq -> SamplesR -- kernel
-hh fc = normalize $ U.generate (floor mm) (g.fromIntegral)
+hh :: CutOffFreq -> SamplesC -- kernel
+hh fc = normalize $ U.generate (floor.realPart $ mm) (g.fromIntegral)
   where
     normalize h = U.map (/ (U.sum h)) h
     g j = (sinc fc j mm) * blackman j mm
