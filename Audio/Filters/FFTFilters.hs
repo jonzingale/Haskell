@@ -8,6 +8,7 @@ import Data.Complex
 type VectSamples = U.Vector Int32
 type SamplesR = U.Vector Double
 type CutOffFreq = Double
+type Q = Double
 
 mm = 2^18::Double -- power of 2
 
@@ -22,6 +23,17 @@ Multiply the two transforms. Invert FFT to derive the
 convolved inputs. Note that Length of lists must be 2^a.
 --}
 
+fftHighPass :: CutOffFreq -> VectSamples -> VectSamples
+fftHighPass fc ss = specInv $ fftLowPass fc ss
+
+fftBandPass :: Q -> CutOffFreq -> VectSamples -> VectSamples
+fftBandPass q freq ss =
+  let (low, hi) = (freq - q/2, freq + q/2)
+      lp = fftLowPass low ss
+      hp = fftHighPass hi ss
+      bandBlock = U.zipWith (+) lp hp
+  in specInv bandBlock
+
 fftLowPass :: CutOffFreq -> VectSamples -> VectSamples
 fftLowPass fc ss =
   let xx = (U.map fromIntegral ss)::SamplesR
@@ -29,6 +41,9 @@ fftLowPass fc ss =
       x = fft $ map (:+ 0) $ U.toList xx
       cc = ifft $ zipWith (*) h x
   in U.map floor $ U.fromList $ map realPart cc
+
+specInv :: VectSamples -> VectSamples
+specInv ss = U.map negate ss
 
 hh :: CutOffFreq -> SamplesR -- kernel
 hh fc = normalize $ U.generate (floor mm) (g.fromIntegral)
