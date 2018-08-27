@@ -32,11 +32,11 @@ mixBands ss tt = U.zipWith (+) ss tt -- may need normalized
 -- Todo: Q ought be a function of mm where mm = 4/BW
 bandPass :: Q -> CutOffFreq -> VectSamples -> VectSamples
 bandPass q freq samples =
-  let (low, hi) = (freq - q/2, freq + q/2) in
-  let xx = (U.map fromIntegral samples)::SamplesR in
-  let padx = (U.++) (U.replicate mm (0::Double)) xx in
-  let lp = U.generate (U.length xx) (f padx (hh low)) in
-  let hp = specInv $ U.generate (U.length xx) (f padx (hh hi)) in
-  U.map floor $ U.drop mm $ specInv.mixBands lp $ hp
+  let (low, hi) = (freq - q/2, freq + q/2)
+      xx = (U.map fromIntegral samples)::SamplesR
+      padx = (U.++) (U.replicate mm (0::Double)) xx
+      lp = U.generate (U.length xx) (f padx (hh low))
+      hp = specInv $ U.generate (U.length xx) (f padx (hh hi))
+  in U.map floor $ U.drop mm $ specInv.mixBands lp $ hp
   where
     f x h j = sum [(U.!) x (j+mm-i) * (U.!) h i | i<-[0..mm]]
