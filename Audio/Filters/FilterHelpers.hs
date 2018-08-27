@@ -12,9 +12,10 @@ testHigh = testFilter highPass
 testBand = testFilter (bandPass 50)
 testLow  = testFilter lowPass
 
-testFFTHigh = makeWavFile $ fftHighPass 440 randTwos -- 20 secs for 6 secs audio
-testFFTBand = makeWavFile $ fftBandPass 50 440 randTwos -- 40 secs for 6 secs
-testFFTLow  = makeWavFile $ fftLowPass 440 randTwos -- 20 secs for 6 secs audio
+ -- 20 secs for 6 secs audio
+testFFTHigh = makeWavFile $ fftHighPass 440 randTwos
+testFFTBand = makeWavFile $ fftBandPass 50 440 randTwos
+testFFTLow  = makeWavFile $ fftLowPass 440 randTwos
 
 testFilter filter =
   let qs = [200, 400, 600, 4000, 6000, 8000] in
