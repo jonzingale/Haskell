@@ -30,3 +30,9 @@ lowPass fc samples = -- Convolve the input signal & filter kernel
   in U.map floor $ U.drop mm $ convolved
   where
     f x h j = sum [(U.!) x (j+mm-i) * (U.!) h i | i<-[0..mm]]
+
+highPass :: CutOffFreq -> VectSamples -> VectSamples
+highPass fc ss = U.map negate $ lowPass fc ss
+
+specInv :: SamplesR -> SamplesR
+specInv ss = U.map negate ss
