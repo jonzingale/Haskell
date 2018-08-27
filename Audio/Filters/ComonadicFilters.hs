@@ -37,7 +37,7 @@ hh fc = normalize $ [ g.fromIntegral $ j | j<-[0..mm+1] ]
 data U x = U x [x]
 
 right (U b []) = U b []
-right (U b (c:cs)) = U c cs -- rewrite for empty to extend to U.Vector
+right (U b (c:cs)) = U c cs
 
 instance Functor U where
   fmap f (U b c) = U (f b) (map f c)
