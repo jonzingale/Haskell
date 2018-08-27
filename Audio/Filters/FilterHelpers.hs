@@ -9,7 +9,7 @@ import Filters.Wave
 import Data.WAVE
 
 testHigh = testFilter highPass
-testBand = testFilter (bandPass 50)
+testBand = testFilter (bandPass 100)
 testLow  = testFilter lowPass
 
  -- 20 secs for 6 secs audio
@@ -22,10 +22,13 @@ testFilter filter =
   let them = [filter] <*> (qs ++ reverse qs) <*> [randos] in
   makeWavFile $ U.concat them
 
+dynRange :: (Int32, Int32)
+dynRange = (minBound, maxBound)
+
 randos :: VectSamples
-randos = (U.fromList).(take 22050) $ rs -- 1/2 second white noise
-  where rs = randomRs (minBound, maxBound::Int32) $ mkStdGen 23
+randos = (U.fromList).(take (2^14)) $ rs -- power of 2 under 22050 white noise
+  where rs = randomRs dynRange $ mkStdGen 23
 
 randTwos :: VectSamples -- power of 2 necessary for FFT
 randTwos = (U.fromList).(take (2^18)) $ rs -- ~6 seconds white noise
-  where rs = randomRs (minBound, maxBound::Int32) $ mkStdGen 23
+  where rs = randomRs dynRange $ mkStdGen 23

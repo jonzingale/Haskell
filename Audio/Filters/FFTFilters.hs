@@ -20,6 +20,7 @@ mm = 2^18::Complex Double -- power of 2
 
 blackman j m = 0.42 - 0.50*cos(2*pi*j/m) + 0.08*cos(4*pi*j/m)
 hamming j m  = 0.54 - 0.46*cos(2*pi*j/m)
+
 sinc f j m | j == m/2 = 2*pi*f/44100
            | otherwise = sin(2*pi*f/44100 * (j-m/2)) / (j-m/2)
 
