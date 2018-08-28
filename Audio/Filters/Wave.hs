@@ -33,8 +33,3 @@ viewSamples :: String -> IO()
 viewSamples file = do
   wav <- getWAVEFile file
   print $ take 10 $ waveSamples wav
-
--- main = do
---     w <- getWAVEFile "blow.wav"
---     let wav = unpack w
---     makeWavFile $ lowPass $  unpack w
