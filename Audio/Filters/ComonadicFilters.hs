@@ -28,10 +28,18 @@ hh :: CutOffFreq -> FilterKernel
 hh fc = normalize $ [ g.fromIntegral $ j | j<-[0..mm+1] ]
   where
     normalize h = map (/ (1 + sum h)) h
+    -- g j = (fejer fc j (fromIntegral mm)) * blackman j (fromIntegral mm)
     g j = (sinc fc j (fromIntegral mm)) * blackman j (fromIntegral mm)
     blackman j m = 0.42 - 0.50*cos(2*pi*j/m) + 0.08*cos(4*pi*j/m)
-    sinc f j m | j == m/2 = 2*pi*f/44100
+
+    sinc f j m | j == m/2 = 2*pi*f/44100 -- Dirichlet
                | otherwise = sin(2*pi*f/44100 * (j-m/2)) / (j-m/2)
+
+    fejer f j m | j == m/2 = 2*pi*f/44100-- Fejér
+                | otherwise = let (n, x) = (2*pi*f/44100, j - m/2) in
+                  (1/n) * ((1- cos(n*x)) / (1 - cos x))
+
+
 
 -- Comonad section
 data U x = U x [x]
