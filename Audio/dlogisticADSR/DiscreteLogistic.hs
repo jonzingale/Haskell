@@ -13,9 +13,9 @@ type Rate = Double -- 0 < r < 4
 x(n+1) = r * xn * (1-xn)
 --}
 
-main r =
-  let xs = take 2000 $ map (* 5000) $ runLogistic r in -- scale populations
-  let samples = map (s1 0.2 (maxBound `div` 2)) xs in
+main r = -- main 3.77
+  let xs = take 500 $ map (* 300) $ runLogistic r in -- scale populations
+  let samples = map (s1 0.15 (maxBound `div` 2)) xs in
   makeWavFile $ U.concat samples
 
 runLogistic :: Rate -> Trajectory
