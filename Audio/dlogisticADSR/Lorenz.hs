@@ -9,10 +9,10 @@ type Coords = (Double, Double, Double)
 type Trajectory = [Coords]
 
 {--
-dx = σ (y - x)
-dy = x (ρ - z) - y
-dz = xy - βz
+This synthesizer is designed to represent
+Lorenz equation time series as a tone.
 --}
+
 eBall = 0.002 -- both accuracy and center frequency
 maxVal = (2^31-1)/3::Double -- averages 3 signals
 
