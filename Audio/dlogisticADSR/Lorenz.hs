@@ -1,10 +1,10 @@
 module Lorenz where
 import qualified Data.Vector.Unboxed as U
 import Data.Int (Int32)
-import System.Random
 import Data.WAVE
 import Wave
 
+type ODE = Coords -> Coords
 type Coords = (Double, Double, Double)
 type Trajectory = [Coords]
 
@@ -16,17 +16,15 @@ Lorenz equation time series as a tone.
 eBall = 0.002 -- both accuracy and center frequency
 maxVal = (2^31-1)/3::Double -- averages 3 signals
 
--- main (1,3,1)
-main cs = makeWavFile $ xyzWav cs
+main = makeWavFile xyzWav
   where
-    xyzWav cs = U.fromList $ map (round.tot) $ runLorenz cs
-      where
-        tot (x,y,z) = x * maxVal * 0.04 +
-                      y * maxVal * 0.03 +
-                      z * maxVal * 0.02
+    xyzWav = U.fromList $ map (round.tot) $ runLorenz (1,1,1)
+    tot (x,y,z) = x * maxVal * 0.04 +
+                  y * maxVal * 0.03 +
+                  z * maxVal * 0.02
 
-improvedEuler :: (Coords -> Coords) -> Coords -> Coords
-improvedEuler f (x,y,z) =
+euler :: ODE -> Coords -> Coords
+euler f (x,y,z) =
     let (s,t,r) = f (x,y,z)
         dx = x + s * eBall
         dy = y + t * eBall
@@ -38,7 +36,8 @@ improvedEuler f (x,y,z) =
     in ((dx + ddx) /2.0, (dy + ddy) /2.0,  (dz + ddz) /2.0)
 
 runLorenz :: Coords -> Trajectory
-runLorenz cs = take (120*44100) $ iterate (improvedEuler lorenz) cs
+runLorenz cs = take (120*44100) $ -- take 120 gives 2 mins
+  iterate (euler lorenz) cs
 
 lorenz :: Coords -> Coords
 lorenz (x,y,z) =
@@ -46,14 +45,4 @@ lorenz (x,y,z) =
       dx = σ * (y - x)
       dy = x * (ρ - z) - y
       dz = x*y - β*z
-  in (dx, dy, dz)
-
-----
-
-euler :: (Coords -> Coords) -> Coords -> Coords
-euler f (x,y,z) =
-  let (s,t,r) = f (x,y,z)
-      dx = x + s * eBall
-      dy = y + t * eBall
-      dz = z + r * eBall
   in (dx, dy, dz)
