@@ -32,4 +32,5 @@ stereopack xs ys =
 viewSamples :: String -> IO()
 viewSamples file = do
   wav <- getWAVEFile file
-  print $ take 10 $ waveSamples wav
+  print $ take 1000 $ waveSamples wav
+
