@@ -23,8 +23,8 @@ runLorenz :: Duration -> Coords -> Trajectory
 runLorenz sec cs = take (sec*44100) $
   iterate (euler lorenz) cs
 
-x_val :: Coords -> Double
-x_val (x,_,_) = x
+pr1 :: Coords -> Double
+pr1 (x,_,_) = x
 
 lorenz :: Coords -> Coords
 lorenz (x,y,z) =
