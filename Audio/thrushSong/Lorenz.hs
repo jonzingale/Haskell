@@ -6,7 +6,6 @@ type Trajectory = [Coords]
 type Duration = Int
 
 eBall = 0.003 -- both accuracy and center frequency
-maxVal = (2^31-1)/3::Double -- averages 3 signals
 
 euler :: ODE -> Coords -> Coords
 euler f (x,y,z) =
@@ -23,6 +22,9 @@ euler f (x,y,z) =
 runLorenz :: Duration -> Coords -> Trajectory
 runLorenz sec cs = take (sec*44100) $
   iterate (euler lorenz) cs
+
+x_val :: Coords -> Double
+x_val (x,_,_) = x
 
 lorenz :: Coords -> Coords
 lorenz (x,y,z) =
