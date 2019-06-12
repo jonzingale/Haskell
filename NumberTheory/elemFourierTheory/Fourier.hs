@@ -1,4 +1,5 @@
 {-# OPTIONS_GHC -Wno-missing-methods #-}
+
 module Fourier where
 import qualified Data.Vector.Unboxed as U
 import Data.Complex
@@ -17,3 +18,8 @@ instance (Show x, Integral x) => Show (Cyclic x) where
 
 instance (Num x, Integral x) => Num (Cyclic x) where
   (+) (Z k m) (Z l n) = Z (mod (k+l) m) m
+
+
+{--
+The homomorphism taking cyclic groups to roots of unity.
+--}
