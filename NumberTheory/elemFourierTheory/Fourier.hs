@@ -9,17 +9,17 @@ num :: Complex Float
 num = 2 :+ 3
 
 sumNum = num + num
-congru = Z 2 3
+congru = Zn 2 3
 
-data Cyclic x = Z x x deriving (Eq) -- k + mZ
+data Cyclic x = Zn x x deriving (Eq) -- k + mZ
 
 -- todo: write Eq instance
 
 instance (Show x, Integral x) => Show (Cyclic x) where
-  show  (Z k m) = show (k `mod` m) ++ " + " ++ show m ++ "Z" 
+  show  (Zn k m) = show (k `mod` m) ++ " + " ++ show m ++ "Z" 
 
 instance (Num x, Integral x) => Num (Cyclic x) where
-  (+) (Z k m) (Z l n) = Z (mod (k+l) m) m
+  (+) (Zn k m) (Zn l n) = Zn (mod (k+l) m) m
 
 
 {--
@@ -29,7 +29,7 @@ chi(0) = 1, chi(x)*chi(y) = chi(x+y)
 --}
 
 chi :: Integral x => Cyclic x -> Complex Float
-chi (Z x m) =
+chi (Zn x m) =
   let ratio = fromIntegral x / fromIntegral m in
   exp $ 2 * pi * ratio * (0 :+ (-1))
 
