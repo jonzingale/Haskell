@@ -12,18 +12,15 @@ num = 2 :+ 3
 sumNum = num + num
 elemG = Zn 2 3
 
-data Cyclic = Zn Int Int deriving (Eq) -- k + mZ
-
--- TODO: how can I display a function type?
--- data Chi = Chi (Cyclic -> Cyclic -> C)
--- instance Show Chi where
---   show (Chi a b) = 'χ' : show a ++ "()"
+data Cyclic = Zn Int Int | Chi ( Cyclic -> C ) -- k + mZ
 
 instance Show Cyclic where
-  show  (Zn k m) = show (k `mod` m) ++ " + " ++ show m ++ "Z"
+  show (Zn k m) = show (k `mod` m) ++ " + " ++ show m ++ "Z"
+  show (Chi f) = "χ()"-- work this out
 
 instance Num Cyclic where
   (+) (Zn k m) (Zn l n) = Zn (mod (k+l) m) m
+  -- (+) (Chi f) (Chi g) = 
   (negate) (Zn k m) = Zn (mod (-k) m) m
 
 class Num a => Abelian a where
@@ -36,10 +33,10 @@ class Num a => Abelian a where
   idG :: a -> a
   gen :: a -> a
 
-  inv a = negate a
   elems a = take (ord a) $ iterate (+ (gen a)) $ idG a
   chars a = map char (elems a)
   char i = \j -> eval (i+j)
+  inv a = negate a
   idG a = a - a
 
 instance Abelian Cyclic where
