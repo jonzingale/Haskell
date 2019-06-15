@@ -20,8 +20,9 @@ instance Show Cyclic where
 
 instance Num Cyclic where
   (+) (Zn k m) (Zn l n) = Zn (mod (k+l) m) m
-  -- (+) (Chi f) (Chi g) = 
+  (+) (Chi f) (Chi g) = Chi (\a -> (f a) * (g a))
   (negate) (Zn k m) = Zn (mod (-k) m) m
+
 
 class Num a => Abelian a where
   chars :: a -> [a -> C]
@@ -45,16 +46,6 @@ instance Abelian Cyclic where
     exp $ 2 * pi * ratio * (0 :+ (-1))
   gen (Zn a m) = Zn 1 m
   ord (Zn x m) = m
-
--- instance Show (Abelian a) where
---   show char a = ""
-
-{-- TODO: can I extend char to Num?
-instance Num Abelian a where
-  (+) a b = elemG
---}
-
-
 
 
 
