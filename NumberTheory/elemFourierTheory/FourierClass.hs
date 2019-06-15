@@ -1,5 +1,5 @@
 {-# OPTIONS_GHC -Wno-missing-methods #-}
-{-# LANGUAGE MultiParamTypeClasses #-}
+-- {-# LANGUAGE MultiParamTypeClasses #-}
 
 module Fourier where
 import qualified Data.Vector.Unboxed as U
@@ -11,6 +11,14 @@ num = 2 :+ 3
 
 sumNum = num + num
 elemG = Zn 2 3
+chi0 = Chi (\a -> eval a)
+chi1 = Chi (\a -> eval $ a + (gen a) )
+
+(<|>) :: Cyclic -> Cyclic -> C
+(<|>) (Zn k m) (Chi f) = f (Zn k m)
+(<|>) (Chi f) (Zn k m) = f (Zn k m)
+test_inner1 = chi0 <|> elemG
+test_inner2 = chi1 <|> elemG
 
 data Cyclic = Zn Int Int | Chi ( Cyclic -> C ) -- k + mZ
 
@@ -21,8 +29,8 @@ instance Show Cyclic where
 instance Num Cyclic where
   (+) (Zn k m) (Zn l n) = Zn (mod (k+l) m) m
   (+) (Chi f) (Chi g) = Chi (\a -> (f a) * (g a))
-  (negate) (Zn k m) = Zn (mod (-k) m) m
-
+  negate (Zn k m) = Zn (-k) m
+  negate (Chi f) = Chi $ f . negate
 
 class Num a => Abelian a where
   chars :: a -> [a -> C]
