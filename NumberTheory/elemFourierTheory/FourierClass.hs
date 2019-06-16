@@ -15,10 +15,9 @@ chi0 = Chi (\a -> eval a)
 chi1 = Chi (\a -> eval $ a + (gen a) )
 
 (<|>) :: Cyclic -> Cyclic -> C
-(<|>) (Zn k m) (Chi f) = f (Zn k m)
 (<|>) (Chi f) (Zn k m) = f (Zn k m)
 test_inner1 = chi0 <|> elemG
-test_inner2 = chi1 <|> elemG
+test_inner2 = chi1 <|> (idG elemG)
 
 data Cyclic = Zn Int Int | Chi ( Cyclic -> C ) -- k + mZ
 
