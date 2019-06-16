@@ -33,7 +33,7 @@ instance Num Cyclic where
   negate (Chi f) = Chi $ f . negate
 
 class Num a => Abelian a where
-  chars :: a -> [a -> C]
+  chars :: a -> [a]
   char :: a -> a -> C
   dual :: a -> a
   elems :: a -> [a]
@@ -44,21 +44,22 @@ class Num a => Abelian a where
   gen :: a -> a
 
   elems a = take (ord a) $ iterate (+ (gen a)) $ idG a
-  chars a = map char (elems a)
   char i = \j -> eval (i+j)
   inv a = negate a
   idG a = a - a
 
 instance Abelian Cyclic where
+  chars j = map (Chi . (\x a -> eval(x + a))) $ elems j
+
   eval (Zn x m) =
     let ratio = fromIntegral x / fromIntegral m in
     exp $ 2 * pi * ratio * (0 :+ (-1))
+
   gen (Zn a m) = Zn 1 m
   ord (Zn x m) = m
 
--- 
-  dual a = Chi (\j -> eval (a+j))
-  -- dual a = Chi (\j -> eval (inv a + j))
+-- returns rootsUnity
+test_chars = zipWith (<|>) (chars elemG) (elems elemG)
 
 
 
