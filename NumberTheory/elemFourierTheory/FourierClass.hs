@@ -35,6 +35,7 @@ instance Num Cyclic where
 class Num a => Abelian a where
   chars :: a -> [a -> C]
   char :: a -> a -> C
+  dual :: a -> a
   elems :: a -> [a]
   ord :: a -> Int
   eval :: a -> C
@@ -55,6 +56,9 @@ instance Abelian Cyclic where
   gen (Zn a m) = Zn 1 m
   ord (Zn x m) = m
 
+-- 
+  dual a = Chi (\j -> eval (a+j))
+  -- dual a = Chi (\j -> eval (inv a + j))
 
 
 
