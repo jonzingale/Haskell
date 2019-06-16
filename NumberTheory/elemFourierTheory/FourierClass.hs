@@ -1,5 +1,4 @@
 {-# OPTIONS_GHC -Wno-missing-methods #-}
--- {-# LANGUAGE MultiParamTypeClasses #-}
 
 module Fourier where
 import qualified Data.Vector.Unboxed as U
