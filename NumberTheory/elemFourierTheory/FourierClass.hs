@@ -64,7 +64,8 @@ instance Abelian Cyclic where
 
   -- this could be written better.
   -- perhaps just in terms of multiplication of Chi
-  (<|>) (Chi f) (Chi h) g = approx $ sum [(conjugate.f) gi * h gi | gi <- elems g]
+  (<|>) (Chi f) (Chi h) g = approx.sum $ 
+    [(conjugate.f) gi * h gi | gi <- elems g]
 
   eval (Zn x m) = -- alternatively chi0 <||> (Zn x m)
     let ratio = fromIntegral x / fromIntegral m in
@@ -84,6 +85,13 @@ verify_orthogonality_of_chars = [( chi2 <|> chi1) zn | zn <- elems em1] --  1 if
 
 table elem = do
   let rows = [x <||> e | e<- elems elem, x <- chars elem]
+  putStr.unlines $ f rows
+  where
+    f [] = []
+    f rs = ((++ "\n").show.(take 6) $ rs) : f (drop 6 rs)
+
+orthoTable = do
+  let rows = [(x1 <|> x2) em1 | x1<-chars em1, x2 <- chars em1]
   putStr.unlines $ f rows
   where
     f [] = []
