@@ -5,14 +5,11 @@ import qualified Data.Vector.Unboxed as U
 import Data.Complex
 
 type C = Complex Float
-num :: Complex Float
-num = 2 :+ 11
 
-sumNum = num + num
-em1 = Zn 2 11
-chi0 = Chi (\a -> eval $ a + Zn 0 (ord a))
-chi1 = Chi (\a -> eval $ a + gen a )
-chi2 = Chi (\a -> eval $ a + gen a + gen a)
+em1 = Zn 2 6
+chi0 = Chi (\a -> eval $ Zn 0 (ord a)) -- evaluates to 1 for all g
+chi1 = Chi (\a -> eval a)
+chi2 = Chi (\a -> eval $ a + (gen a) + (gen a))
 
 data Cyclic = Zn Int Int | Chi ( Cyclic -> C ) -- k + mZ
 
@@ -31,10 +28,10 @@ class Num a => Abelian a where
   (<|>) :: a -> a -> a -> C
   chars :: a -> [a]
   char :: a -> a -> C
-  dual :: a -> a
   elems :: a -> [a]
   ord :: a -> Int
   eval :: a -> C
+  dual :: a -> a
   inv :: a -> a
   idG :: a -> a
   gen :: a -> a
@@ -45,15 +42,19 @@ class Num a => Abelian a where
   idG a = a - a
 
 instance Abelian Cyclic where
-  chars j = map (Chi . (\x a -> eval(x + a))) $ elems j
+  chars j = map (Chi . (\(Zn e n) (Zn a m) -> eval(Zn (e*a) m) )) $ elems j
+
   (<||>) (Chi f) (Zn k m) = f (Zn k m) -- verify not conjugate
   -- (<||>) (Chi f) (Chi h) | f == h = ord domain
-                         -- | otherwise = 0 -- intended othogonality
+  --                        | otherwise = 0 -- intended othogonality
 
   (<|>) (Chi f) (Chi h) g = sum [(conjugate.f) gi * h gi | gi <- elems g]
-  eval (Zn x m) =
+  eval (Zn x m) = -- alternatively chi0 <||> (Zn x m)
     let ratio = fromIntegral x / fromIntegral m in
-    exp $ 2 * pi * (0 :+ 1) * ratio
+    f $ exp $ 2 * pi * (0 :+ 1) * ratio
+    where
+      f n | abs(imagPart n) < 0.01 = realPart n :+ 0
+          | otherwise = n
 
   gen (Zn a m) = Zn 1 m
   ord (Zn x m) = m
@@ -62,13 +63,17 @@ instance Abelian Cyclic where
 tt f h g = [(conjugate (f <||> gi)) * (h <||> gi) | gi <- elems g]
 
 -- test functions
-test_chars = zipWith (<||>) (chars em1) (elems em1)
-test_inner1 = chi0 <|> em1
-test_inner2 = chi1 <|> (idG em1)
-test_unity = foldr (+) ((!!0).chars $ em1)(chars em1) <|> (idG em1)
-test_sum_of_nontrivial_char = sum [ chi1 <||> g | g <- elems em1]
-test_conj_inv = [(conjugate $ x <||> em1) * (x <||> em1) | x <- chars em1]
+test_chars = zipWith (<||>) (chars em1) (elems em1) -- roots unity
+test_inner1 = [chi0 <||> e | e <- elems em1] -- all 1s
 
--- verify_orthogonality_of_chars = ( chi2 <|> chi1) (Zn 3 6)
+test_sum_of_nontrivial_char = sum [ chi1 <||> g | g <- elems em1] -- should be ZERO
+test_conj_inv = [(conjugate $ x <||> em1) * (x <||> em1) | x <- chars em1] -- all 1s
 
+verify_orthogonality_of_chars = [( chi2 <|> chi1) zn | zn <- elems em1] --  1 if the same, 0 otherwise
 
+table elem = do
+  let rows = [x <||> e | e<- elems elem, x <- chars elem]
+  putStr.unlines $ f rows
+  where
+    f [] = []
+    f rs = ((++ "\n").show.(take 6) $ rs) : f (drop 6 rs)
