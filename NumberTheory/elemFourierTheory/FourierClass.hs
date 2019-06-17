@@ -7,9 +7,9 @@ import Data.Complex
 type C = Complex Float
 
 em1 = Zn 2 6
-chi0 = Chi (\a -> eval $ Zn 0 (ord a)) -- evaluates to 1 for all g
-chi1 = Chi (\a -> eval a)
-chi2 = Chi (\a -> eval $ a + (gen a) + (gen a))
+chi0 = Chi (\a -> eval $ a * Zn 0 (ord a)) -- evaluates to 1 for all g
+chi1 = Chi (\a -> eval $ a * Zn 1 (ord a))
+chi2 = Chi (\a -> eval $ a * Zn 2 (ord a))
 
 data Cyclic = Zn Int Int | Chi ( Cyclic -> C ) -- k + mZ
 
@@ -17,9 +17,15 @@ instance Show Cyclic where
   show (Zn k m) = show (k `mod` m) ++ " + " ++ show m ++ "Z"
   show (Chi f) = "χ()"-- work this out
 
+instance Eq Cyclic where
+  (==) (Zn k m) (Zn l n) = k == l && m == n
+  -- (==) (Chi f) (Chi g) = -- needs group element to define against.
+
 instance Num Cyclic where
   (+) (Zn k m) (Zn l n) = Zn (mod (k+l) m) m
   (+) (Chi f) (Chi g) = Chi (\a -> (f a) * (g a))
+  (*) (Zn k m) (Zn l n) = Zn (mod (k*l) m) m
+
   negate (Zn k m) = Zn (-k) m
   negate (Chi f) = Chi $ f . negate
 
@@ -41,30 +47,35 @@ class Num a => Abelian a where
   inv a = negate a
   idG a = a - a
 
+approx :: C -> C
+approx n | abs(imagPart n) < eball && abs(realPart n) < eball = 0 :+ 0
+         | abs(imagPart n) > eball && abs(realPart n) < eball = 0 :+ imagPart n
+         | abs(imagPart n) < eball = realPart n :+ 0
+         | otherwise = n
+  where eball = 0.0001
+
 instance Abelian Cyclic where
-  chars j = map (Chi . (\(Zn e n) (Zn a m) -> eval(Zn (e*a) m) )) $ elems j
+  chars a = [Chi (\g -> eval $ g * i) | i <- elems a]
 
   (<||>) (Chi f) (Zn k m) = f (Zn k m) -- verify not conjugate
+  -- (<||>) (Chi f) (Chi g) = inv (Chi f) * (Chi g)
   -- (<||>) (Chi f) (Chi h) | f == h = ord domain
-  --                        | otherwise = 0 -- intended othogonality
+                         -- | otherwise = 0 -- intended othogonality
 
-  (<|>) (Chi f) (Chi h) g = sum [(conjugate.f) gi * h gi | gi <- elems g]
+  -- this could be written better.
+  -- perhaps just in terms of multiplication of Chi
+  (<|>) (Chi f) (Chi h) g = approx $ sum [(conjugate.f) gi * h gi | gi <- elems g]
+
   eval (Zn x m) = -- alternatively chi0 <||> (Zn x m)
     let ratio = fromIntegral x / fromIntegral m in
-    f $ exp $ 2 * pi * (0 :+ 1) * ratio
-    where
-      f n | abs(imagPart n) < 0.01 = realPart n :+ 0
-          | otherwise = n
+    approx $ exp $ 2 * pi * (0 :+ 1) * ratio
 
   gen (Zn a m) = Zn 1 m
   ord (Zn x m) = m
 
-
-tt f h g = [(conjugate (f <||> gi)) * (h <||> gi) | gi <- elems g]
-
 -- test functions
 test_chars = zipWith (<||>) (chars em1) (elems em1) -- roots unity
-test_inner1 = [chi0 <||> e | e <- elems em1] -- all 1s
+test_principle = [chi0 <||> e | e <- elems em1] -- all 1s
 
 test_sum_of_nontrivial_char = sum [ chi1 <||> g | g <- elems em1] -- should be ZERO
 test_conj_inv = [(conjugate $ x <||> em1) * (x <||> em1) | x <- chars em1] -- all 1s
