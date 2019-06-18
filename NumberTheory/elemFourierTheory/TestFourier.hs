@@ -23,7 +23,7 @@ table elem = do -- the character table
     f [] = []
     f rs = ((++ "\n").show.(take 6) $ rs) : f (drop 6 rs)
 
-verify_orthogonality_of_chars = do -- diagonals are ord em1, 0 otherwise
+test_orthogonality_of_chars = do -- diagonals are ord em1, 0 otherwise
   let rows = [(x1 <|> x2) em1 | x1<- chars em1, x2 <- chars em1]
   putStr.unlines $ f rows
   where

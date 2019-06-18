@@ -15,7 +15,7 @@ instance Eq Cyclic where
 
 instance Num Cyclic where
   (+) (Zn k m) (Zn l n) = Zn (mod (k+l) m) m
-  (+) (Chi f) (Chi g) = Chi (\a -> (f a) * (g a))
+  (+) (Chi f) (Chi g) = Chi (\a -> f a * g a)
   (*) (Zn k m) (Zn l n) = Zn (mod (k*l) m) m
 
   negate (Zn k m) = Zn (-k) m
