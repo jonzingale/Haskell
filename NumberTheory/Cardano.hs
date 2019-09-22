@@ -1,6 +1,8 @@
 module Cardano where
+import Data.Complex
 
 data Cubic = C Float Float Float Float deriving (Show, Eq)
+-- data CCubic = CC Complex Complex Complex Complex deriving (Show, Eq)
 
 -- type Args = Float -> Float -> Float -> Float
 
@@ -28,3 +30,14 @@ transform cubic = t.monic $ cubic
     monic (C a b c d) = C (a/a) (b/a) (c/a) (d/a)
     q _ a b c = 2/27 * a^3 - 1/3 * a*b + c
     p _ a b c = -1/3 * a^2 + b
+
+example = cardano (C 1 0 (-1) 0)
+
+cardano :: Cubic -> String
+cardano cubic =
+  let (C t t' p q) = transform cubic in
+  -- let fstComp = "(-(q/2) + sqrt((q/2)^2 + (p/3)^3 )^1/3" in
+  let fstComp = "(" ++ show (-q/2) ++ " + sqrt(" ++ show ((q/2)^2) ++ " + " ++ show((p/3)^3) ++ "))^1/3" in
+  -- let sndComp = "(-(q/2) - sqrt((q/2)^2 + (p/3)^3 )^1/3" in
+  let sndComp = "(" ++ show (-q/2) ++ " - sqrt(" ++ show ((q/2)^2) ++ " + " ++ show((p/3)^3) ++ "))^1/3" in
+  fstComp ++ " + " ++ sndComp
