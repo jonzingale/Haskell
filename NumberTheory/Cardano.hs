@@ -37,7 +37,9 @@ cardano :: Cubic -> String
 cardano cubic =
   let (C t t' p q) = transform cubic in
   -- let fstComp = "(-(q/2) + sqrt((q/2)^2 + (p/3)^3 )^1/3" in
-  let fstComp = "(" ++ show (-q/2) ++ " + sqrt(" ++ show ((q/2)^2) ++ " + " ++ show((p/3)^3) ++ "))^1/3" in
+  let fstComp = "(" ++ show (-q/2) ++ " + sqrt(" ++ show ((q/2)^2) ++
+                " + " ++ show((p/3)^3) ++ "))^1/3" in
   -- let sndComp = "(-(q/2) - sqrt((q/2)^2 + (p/3)^3 )^1/3" in
-  let sndComp = "(" ++ show (-q/2) ++ " - sqrt(" ++ show ((q/2)^2) ++ " + " ++ show((p/3)^3) ++ "))^1/3" in
+  let sndComp = "(" ++ show (-q/2) ++ " - sqrt(" ++ show ((q/2)^2) ++
+                " + " ++ show((p/3)^3) ++ "))^1/3" in
   fstComp ++ " + " ++ sndComp
