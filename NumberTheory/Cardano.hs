@@ -2,14 +2,12 @@ module Cardano where
 import Data.Complex
 
 data Cubic = C Float Float Float Float deriving (Show, Eq)
--- data CCubic = CC Complex Complex Complex Complex deriving (Show, Eq)
 
--- type Args = Float -> Float -> Float -> Float
+discrim :: Cubic -> Float
+discrim (C a b c d) = 18*a*b*c*d - 4*b^3*d + b^2*c^2 - 4*a*c^3 -27*a^2*d^2
 
-discrim :: Float -> Float -> Float -> Float -> Float
-discrim a b c d = 18*a*b*c*d - 4*b^3*d + b^2*c^2 - 4*a*c^3 -27*a^2*d^2
-
--- discrim 2 3 (-5) (-7) == 469
+p1 = (C 1 0 (-1) 0) -- x^3 - x = 0
+p2 = (C 1 0 (-3) 1) -- x^3 - 3x + 1 = 0
 
 
 {--
@@ -30,8 +28,6 @@ transform cubic = t.monic $ cubic
     monic (C a b c d) = C (a/a) (b/a) (c/a) (d/a)
     q _ a b c = 2/27 * a^3 - 1/3 * a*b + c
     p _ a b c = -1/3 * a^2 + b
-
-example = cardano (C 1 0 (-1) 0)
 
 cardano :: Cubic -> String
 cardano cubic =
