@@ -89,8 +89,9 @@ stirling d c = sum[(-1)^k*(comb c k)*(c-k)^d | k<-[0..c]]`div`(fact c)
   where comb n k = div (fact n) (fact k * fact (n-k))
 
 epis :: Domain-> Codomain -> Z
-epis d c = sum [((-1)^k * (comb c (c-k)) * (c-k)^d) | k <- [0..c] ] 
+epis d c = sum [(-1)^k * (comb c k) * (c-k)^d | k <- [0..c]]
   where comb n k = div (fact n) (fact k * fact (n-k))
+
 ---------
 fourin :: (N->N)->(N->N)->N->N->([N],[N])
 fourin f g n m = (map f [0..n] ,map g [0..m] ) 
