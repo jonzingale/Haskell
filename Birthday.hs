@@ -15,10 +15,9 @@ katie = (fromGregorian 1987 6 27)
 daysold :: Day -> IO ()
 daysold name =
   do  (y, m, d) <- fmap gregorianLocal getZonedTime
-      putStr $ format_birthday (y, m, d) name
-
-gregorianLocal :: ZonedTime -> (Integer, Int, Int)
-gregorianLocal = toGregorian.localDay.zonedTimeToLocalTime
+      putStr.format_birthday (y, m, d) $ name
+  where
+    gregorianLocal = toGregorian.localDay.zonedTimeToLocalTime
 
 format_birthday :: (Integer, Int, Int) -> Day -> String
 format_birthday (y, m, d) name =
@@ -37,4 +36,3 @@ namedPrimes name =
      let diffs x = diffDays (addDays x z) name
      let primes = [(addDays d z, diffs d) |d<-[0..364], (isPrime.diffs) d]
      (putStr.unlines.map show) primes
-
