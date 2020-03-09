@@ -6,11 +6,9 @@ type Currency = Float
 
 data Date = Date { year :: Int, month :: Int, day :: Int } deriving (Show, Eq)
 
-date = "07/18/2016"
-
 toDate :: String -> Date
 toDate dt = let [y, m, d] = parseDate dt in Date y m d
-  where parseDate str = map read $ splitRegex (mkRegex "/") date
+  where parseDate dt' = map read $ splitRegex (mkRegex "/") dt'
 
 toCurrency :: String -> Currency
 toCurrency val = read $ subRegex (mkRegex "\\$") val ""
