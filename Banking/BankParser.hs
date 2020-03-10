@@ -23,6 +23,11 @@ instance FromRecord BankRecord
 bankRecords = toList.(fromRight empty).parseCsv
   where parseCsv csv = decode NoHeader csv :: EitherBank
 
+{-- 
+  TODO:
+  Write function which concatenates statements correctly via dates
+--}
+
 example header = do
   oneYear <- BL.readFile "./one_year.csv"
   let statements = bankRecords oneYear

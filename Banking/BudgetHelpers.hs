@@ -14,4 +14,4 @@ toCurrency :: String -> Currency
 toCurrency val = read $ subRegex (mkRegex "\\$") val ""
 
 isDebit :: Currency -> Bool
-isDebit val = val >= 0
+isDebit val = val < 0
