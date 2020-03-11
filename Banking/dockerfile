@@ -2,4 +2,7 @@ FROM haskell:8
 WORKDIR /Banking
 ADD . /Banking
 RUN cabal update
+
+RUN cabal install csv
+RUN cabal install vector
 RUN cabal install scotty
