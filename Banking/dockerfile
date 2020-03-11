@@ -1,0 +1,5 @@
+FROM haskell:8
+WORKDIR /Banking
+ADD . /Banking
+RUN cabal update
+RUN cabal install scotty
