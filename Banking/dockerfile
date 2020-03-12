@@ -6,5 +6,3 @@ ADD . /Banking
 
 COPY *.cabal ./
 RUN cabal update
-
-
