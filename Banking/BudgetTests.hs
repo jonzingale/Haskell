@@ -1,4 +1,3 @@
--- http://hackage.haskell.org/package/HTF-0.13.2.4/docs/Test-Framework-Tutorial.html
 
 {-# OPTIONS_GHC -F -pgmF htfpp #-}
 
@@ -18,4 +17,7 @@ Running tests:
 Starting from BudgetTests.hs root directory
 $ ghci BudgetTests.hs
 𝜆> main
+
+http://hackage.haskell.org/package/HTF-0.13.2.4/docs/Test-Framework-Tutorial.html
+
 --}
