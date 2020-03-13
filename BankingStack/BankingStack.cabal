@@ -4,16 +4,16 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 895a6bf0e6645bdbd2d4dd3afe3efd64f6bed848aade9bebecfe859c0ca488a7
+-- hash: 29b4d7782b68d236716cc2238fac66b6dda5cea925a3bf0b6ba81890521a3c28
 
 name:           BankingStack
 version:        0.1.0.0
-description:    Please see the README on GitHub at <https://github.com/githubuser/BankingStack#readme>
-homepage:       https://github.com/githubuser/BankingStack#readme
-bug-reports:    https://github.com/githubuser/BankingStack/issues
-author:         Author name here
-maintainer:     example@example.com
-copyright:      2020 Author name here
+description:    Please see the README on GitHub at <https://github.com/jonzingale/Banking#readme>
+homepage:       https://github.com/jonzingale/Banking#readme
+bug-reports:    https://github.com/jonzingale/Banking/issues
+author:         Jonathan Zingale
+maintainer:     jonzingale@gmail.com
+copyright:      2020 Jonathan Zingale
 license:        BSD3
 license-file:   LICENSE
 build-type:     Simple
@@ -23,7 +23,7 @@ extra-source-files:
 
 source-repository head
   type: git
-  location: https://github.com/githubuser/BankingStack
+  location: https://github.com/jonzingale/Banking
 
 library
   exposed-modules:
