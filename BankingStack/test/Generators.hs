@@ -1,6 +1,6 @@
 {-# OPTIONS_GHC -F -pgmF htfpp #-}
 
-module Test.Generators where
+module Generators where
 import Test.QuickCheck.Monadic
 import Test.Framework
 import Data.Time.Calendar

@@ -1,6 +1,6 @@
 {-# OPTIONS_GHC -F -pgmF htfpp #-}
 
-module Test.BudgetHelpersTest where
+module BudgetHelpersTest where
 import qualified Data.ByteString.Lazy as BL
 import BudgetHelpers
 import BankParser
@@ -8,7 +8,7 @@ import BankParser
 import Test.QuickCheck.Monadic
 import Test.Framework
 import qualified Test.HUnit as HU -- no examples yet
-import Test.Generators
+import Generators
 import Text.Printf
 
 oneYear = do

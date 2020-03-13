@@ -4,13 +4,13 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: ac3a1b8670f2df9ca47daf3bbf58b198d813527520a7245d6e7b23fa5380ac3b
+-- hash: 338c7f098a3ad62c264870e4f8969f59870bbb16bfb0cc599b1fafab04278194
 
 name:           BankingStack
 version:        0.1.0.0
-description:    Please see the README on GitHub at <https://github.com/githubuser/BankingStack#readme>
-homepage:       https://github.com/githubuser/BankingStack#readme
-bug-reports:    https://github.com/githubuser/BankingStack/issues
+description:    Please see the README on GitHub at <https://github.com/jonzingale/BankingStack#readme>
+homepage:       https://github.com/jonzingale/BankingStack#readme
+bug-reports:    https://github.com/jonzingale/BankingStack/issues
 author:         Author name here
 maintainer:     example@example.com
 copyright:      2020 Author name here
@@ -23,9 +23,16 @@ extra-source-files:
 
 source-repository head
   type: git
-  location: https://github.com/githubuser/BankingStack
+  location: https://github.com/jonzingale/BankingStack
 
 library
+  exposed-modules:
+      BankParser
+      Budget
+      BudgetHelpers
+      Lib
+  other-modules:
+      Paths_BankingStack
   hs-source-dirs:
       src
   build-depends:
@@ -40,13 +47,6 @@ library
     , scotty
     , time
     , vector
-  exposed-modules:
-      BankParser
-      Budget
-      BudgetHelpers
-      Lib
-  other-modules:
-      Paths_BankingStack
   default-language: Haskell2010
 
 executable BankingStack-exe
@@ -80,7 +80,7 @@ test-suite BankingStack-test
       Paths_BankingStack
   hs-source-dirs:
       test
-  ghc-options: -threaded -rtsopts -with-rtsopts=-N
+  ghc-options: -threaded -rtsopts -with-rtsopts=-N -F -pgmF htfpp
   build-depends:
       BankingStack
     , HTF
