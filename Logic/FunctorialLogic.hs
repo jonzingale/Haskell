@@ -1,34 +1,37 @@
 module FunctorialLogic where
-{--
-  Really forAll and exists should be defined for parts of dom(f)
-  ie. P(S) in P(X). Perhaps begin by specifying Poset with connectives
-  or at least a powerset method.
---}
+import Prelude hiding (map, filter)
+import Data.Set
 
-class Eq s => Logical s where
-  exists :: (s -> b) -> [s] -> [b]
-  exists f as = map f as
+import Data.Char (ord, chr) -- for examples
 
-  forAll ::Eq b => (s -> b) -> [s] -> [b]
-  forAll f as = [ f x | x <- invImg f (map f as), elem x as ]
+type PowerSet s = Set (Set s)
+type SetMap s b = Set s -> Set b
 
-  domain :: [s]
+class Ord s => Logical s where
+  domain :: PowerSet s
 
-  invImg :: Eq b => (s -> b) -> [b] -> [s]
-  invImg f bs = [ a | a <- domain,  b <- bs, f a == b ]
+  exists :: Ord b => SetMap s b -> PowerSet s -> PowerSet b
+  exists f = map f
+
+  forAll :: Ord b => SetMap s b -> PowerSet s -> PowerSet b
+  forAll f as = let invF = invImg f (map f as) in
+    map f $ filter (\x -> member x as) invF
+
+  invImg :: Ord b => SetMap s b -> PowerSet b -> PowerSet s
+  invImg f setB = filter (\a -> member (f a) setB) domain
+
+  incl :: [s] -> PowerSet s
+  incl = powerSet.fromList
 
 instance Logical Char where
-  domain = ['a'..]
+  domain = incl ['a'..'c'] -- keep this small
 
 instance Logical Int where
-  domain = [0..] ++ map negate [0..]
+  domain = incl [97..100] -- keep this small
 
-intEx :: [Int]
-intEx = invImg (\ z -> z `mod` 10^5) [2]
+-- Examples
+invCharEx, existsCharEx, allCharEx :: PowerSet Char
+invCharEx = invImg ( \i -> map ord i ) $ incl [97, 99]
+existsCharEx = exists ( \c -> map chr c ) $ incl [97, 99, 102] -- acf
+allCharEx = forAll ( \c -> map chr c ) $ incl [97, 99, 102] -- acf
 
-invCharEx :: [Char]
-invCharEx = invImg (\ c -> c:"hars") ["ahars"]
-
-allCharEx, existsCharEx :: [[Char]]
-allCharEx = forAll (\ c -> if c == 'c' then "sbc" else "xx") "abcs"
-existsCharEx = exists (\ c -> c:"hars") "abcs"
