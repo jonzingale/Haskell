@@ -13,7 +13,7 @@ class Ord s => LogicalPoset s where
 
   forAll :: Ord b => SetMap s b -> PowerSet s -> PowerSet b
   forAll f as = let invF = invImg f (map f as) in
-    map f $ filter (\x -> member x as) as
+    map f $ filter (\x -> member x as) invF
 
   invImg :: Ord b => SetMap s b -> PowerSet b -> PowerSet s
   invImg f setB = filter (\a -> member (f a) setB) $ domain
@@ -22,11 +22,10 @@ class Ord s => LogicalPoset s where
   incl = powerSet.fromList
 
 instance LogicalPoset Char where
-  domain = incl ['a'..]
+  domain = incl ['a'..'c'] -- keep this small
 
 -- Examples
-invCharEx :: PowerSet Char -- times out hard
+existsCharEx, invCharEx, allCharEx :: PowerSet Char
+existsCharEx = exists (\ c -> intersection c (fromList "bhars")) $ incl "abc"
 invCharEx = invImg (\ c -> union c (fromList "abc")) $ incl "ab"
-
--- allCharEx = forAll (\ c -> "s") "abcs"
--- existsCharEx = exists (\ c -> c:"hars") "abcs"
+allCharEx = forAll (\ c -> fromList "sa") $ incl "ab"
