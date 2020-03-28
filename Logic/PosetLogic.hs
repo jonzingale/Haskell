@@ -5,17 +5,17 @@ import Data.Set
 type PowerSet s = Set (Set s)
 type SetMap s b = Set s -> Set b
 
-class (Eq s, Ord s) => LogicalPoset s where
+class Ord s => LogicalPoset s where
   domain :: PowerSet s
 
   exists :: Ord b => SetMap s b -> PowerSet s -> PowerSet b
   exists f = map f
 
-  forAll ::(Eq b, Ord b) => SetMap s b -> PowerSet s -> PowerSet b
+  forAll :: Ord b => SetMap s b -> PowerSet s -> PowerSet b
   forAll f as = let invF = invImg f (map f as) in
     map f $ filter (\x -> member x as) as
 
-  invImg :: (Eq b, Ord b) => SetMap s b -> PowerSet b -> PowerSet s
+  invImg :: Ord b => SetMap s b -> PowerSet b -> PowerSet s
   invImg f setB = filter (\a -> member (f a) setB) $ domain
 
   incl :: [s] -> PowerSet s
