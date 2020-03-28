@@ -29,6 +29,6 @@ intEx = invImg (\ z -> z `mod` 10^5) [2]
 invCharEx :: [Char]
 invCharEx = invImg (\ c -> c:"hars") ["ahars"]
 
-allCharEx, existsCharEx :: [[Char]] -- is this correct?
+allCharEx, existsCharEx :: [[Char]]
 allCharEx = forAll (\ c -> if c == 'c' then "sbc" else "xx") "abcs"
 existsCharEx = exists (\ c -> c:"hars") "abcs"
