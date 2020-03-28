@@ -12,10 +12,10 @@ class Eq s => Logical s where
   forAll ::Eq b => (s -> b) -> [s] -> [b]
   forAll f as = [ f x | x <- invImg f (map f as), elem x as ]
 
+  domain :: [s]
+
   invImg :: Eq b => (s -> b) -> [b] -> [s]
   invImg f bs = [ a | a <- domain,  b <- bs, f a == b ]
-
-  domain :: [s]
 
 instance Logical Char where
   domain = ['a'..]
