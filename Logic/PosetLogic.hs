@@ -3,7 +3,7 @@ import Prelude hiding (map, filter)
 import Data.Set
 
 type PowerSet s = Set (Set s)
-type SetMap s b = (Set s -> Set b)
+type SetMap s b = Set s -> Set b
 
 class (Eq s, Ord s) => LogicalPoset s where
   domain :: PowerSet s
@@ -26,7 +26,7 @@ instance LogicalPoset Char where
 
 -- Examples
 invCharEx :: PowerSet Char -- times out hard
-invCharEx = invImg (\ c -> union c (fromList "hars")) $ incl "ab"
+invCharEx = invImg (\ c -> union c (fromList "abc")) $ incl "ab"
 
 -- allCharEx = forAll (\ c -> "s") "abcs"
 -- existsCharEx = exists (\ c -> c:"hars") "abcs"
