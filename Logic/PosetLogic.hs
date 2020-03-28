@@ -5,7 +5,7 @@ import Data.Set
 type PowerSet s = Set (Set s)
 type SetMap s b = (Set s -> Set b)
 
-class (Eq s, Ord s) => Logical s where
+class (Eq s, Ord s) => LogicalPoset s where
   domain :: PowerSet s
 
   exists :: Ord b => SetMap s b -> PowerSet s -> PowerSet b
@@ -21,7 +21,7 @@ class (Eq s, Ord s) => Logical s where
   incl :: [s] -> PowerSet s
   incl = powerSet.fromList
 
-instance Logical Char where
+instance LogicalPoset Char where
   domain = incl ['a'..]
 
 -- Examples
