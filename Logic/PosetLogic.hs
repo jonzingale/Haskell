@@ -3,21 +3,19 @@ import Prelude hiding (map, filter)
 import Data.Set
 
 type PowerSet s = Set (Set s)
+type SetMap s b = (Set s -> Set b)
 
 class (Eq s, Ord s) => Logical s where
   domain :: PowerSet s
 
-  exists :: Ord b => (Set s -> Set b) -> PowerSet s -> PowerSet b
+  exists :: Ord b => SetMap s b -> PowerSet s -> PowerSet b
   exists f = map f
 
-  -- A GUIDE:
-  -- forAll ::Eq b => (s -> b) -> [s] -> [b]
-  -- forAll f as = [ f x | x <- invImg f (map f as), elem x as ]
+  forAll ::(Eq b, Ord b) => SetMap s b -> PowerSet s -> PowerSet b
+  forAll f as = let invF = invImg f (map f as) in
+    map f $ filter (\x -> member x as) as
 
-  -- forAll ::Eq b => (s -> b) -> Set s -> Set b
-  -- forAll f as = [ DA.map f x | x <- invImg f (DA.map f as), elem x as ]
-
-  invImg :: (Eq b, Ord b) => (Set s -> Set b) -> PowerSet b -> PowerSet s
+  invImg :: (Eq b, Ord b) => SetMap s b -> PowerSet b -> PowerSet s
   invImg f setB = filter (\a -> member (f a) setB) $ domain
 
   incl :: [s] -> PowerSet s
