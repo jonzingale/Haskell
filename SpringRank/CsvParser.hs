@@ -12,15 +12,19 @@ import Data.Csv
 type Graph = [Edge]
 type EitherData = Either String (Vector Edge)
 
-data Edge = Edge { source :: !Int,  target :: !Int, value :: !Double }
+data Edge = BadEdge | Edge { source :: !Int,  target :: !Int, value :: !Double }
   deriving (Generic, Show)
 
 instance Eq Edge where
   (Edge s t _) == (Edge s' t' _) = s == s' && t == t'
 
 instance Monoid Edge where
-  mappend (Edge a b v) (Edge _ _ w) = Edge a b (v + w) -- Dangerous
   mempty = Edge 0 0 0
+  mappend (Edge a b v) (Edge c d w)
+    | (Edge a b v) == mempty = (Edge c d w)
+    | (Edge c d w) == mempty = (Edge a b v)
+    | a == c && b == d = Edge a b (v + w)
+    | otherwise = BadEdge
 
 instance FromRecord Edge
 
