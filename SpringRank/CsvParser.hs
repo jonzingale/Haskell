@@ -6,6 +6,7 @@ import qualified Data.ByteString.Lazy as BL
 import Data.Vector (Vector, empty, toList)
 import Data.Either.Extra (fromRight)
 import GHC.Generics (Generic)
+import Control.Monad (liftM)
 import Data.Char (ord)
 import Data.Csv
 
@@ -32,6 +33,9 @@ records = toList.(fromRight empty).parseCsv
   where
     options = defaultDecodeOptions { decDelimiter = fromIntegral $ ord ' ' }
     parseCsv csv = decodeWith options NoHeader csv :: EitherData
+
+getGraph :: FilePath -> IO(Graph)
+getGraph file = liftM records $ BL.readFile file
 
 kirchoff = do
   file <- BL.readFile "data/kirchoff.dat"

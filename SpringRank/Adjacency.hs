@@ -1,10 +1,13 @@
 module Adjacency where
-import Data.Sparse.SpMatrix
+import Data.Sparse.SpMatrix (SpMatrix, fromListSM)
 import Data.List (elemIndex)
 import Data.List.Unique (sortUniq)
 import Data.Maybe (fromJust)
 
+import Numeric.LinearAlgebra.Sparse (prd, prd0)
 import CsvParser
+
+type Rankings = [(Int, Double)]
 
 mkAdjacency :: Graph -> SpMatrix Double
 mkAdjacency = toAdjacency.tokenize.cleanMultiEdges
@@ -25,8 +28,9 @@ tokenize graph = let totals = nodes graph in
   where
     justIndex s = fromJust.elemIndex s
 
+detokenize :: Graph -> Rankings -> Rankings
+detokenize edges ranks = zip (nodes edges) (map snd ranks)
+
 toAdjacency :: Graph -> SpMatrix Double
-toAdjacency graph =
-  let num = length.nodes $ graph in
-  let triples = [(s, t, v) | (Edge s t v) <- graph] in
-  fromListSM (num, num) triples
+toAdjacency graph = let num = length.nodes $ graph in
+  fromListSM (num, num) [(s, t, v) | (Edge s t v) <- graph, v /= 0]
