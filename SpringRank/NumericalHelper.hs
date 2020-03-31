@@ -2,7 +2,7 @@
 
 module NumericalHelper where
 
-import Numeric.LinearAlgebra.Class (AdditiveGroup, (^+^), (^-^))
+import Numeric.LinearAlgebra.Class (AdditiveGroup, (^+^), (^-^), (.*))
 import Data.Sparse.SpMatrix (SpMatrix)
 import Data.Sparse.SpVector (SpVector)
 
