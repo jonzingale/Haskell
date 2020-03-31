@@ -36,7 +36,3 @@ records = toList.(fromRight empty).parseCsv
 
 getGraph :: FilePath -> IO(Graph)
 getGraph file = liftM records $ BL.readFile file
-
-kirchoff = do
-  file <- BL.readFile "data/kirchoff.dat"
-  return $ records file
