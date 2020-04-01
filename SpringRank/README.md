@@ -5,6 +5,8 @@ developed by researchers at the Santa Fe Institute. The original python
 code base and preprints can be found [HERE](https://github.com/cdebacco/SpringRank).
 
 ### To compile, run and cleanup:
+`cabal install <necessary packages>`
+
 `ghc -O2 -o springrank Main.hs`
 
 `time ./springrank`
