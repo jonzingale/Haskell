@@ -21,3 +21,4 @@ code base and preprints can be found [HERE](https://github.com/cdebacco/SpringRa
 - Optimize with unboxed vectors rather than lists.
 - Extend to accept `alpha`, `l0` and `l1` params like the original.
 - Extend to accept non-`Int` tokens.
+- QuickCheck algorithms properties: exactness properties, network properties.
