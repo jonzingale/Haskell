@@ -10,7 +10,7 @@ import CsvParser
 type Rankings = [(Int, Double)]
 
 mkAdjacency :: Graph -> SpMatrix Double
-mkAdjacency = toAdjacency.tokenize.cleanMultiEdges
+mkAdjacency = toAdjacency.detokenize.cleanMultiEdges
 
 nodes :: Graph -> [Int]
 nodes g = sortUniq $ map source g ++ map target g
@@ -22,14 +22,14 @@ cleanMultiEdges (e:es) =
   let diff = filter (/= e) es in
   (foldr mappend mempty same) : cleanMultiEdges diff
 
-tokenize :: Graph -> Graph
-tokenize graph = let totals = nodes graph in
+detokenize :: Graph -> Graph
+detokenize graph = let totals = nodes graph in
   [ Edge (justIndex s totals) (justIndex t totals) v | Edge s t v <- graph ]
   where
     justIndex s = fromJust.elemIndex s
 
-detokenize :: Graph -> Rankings -> Rankings
-detokenize edges ranks = zip (nodes edges) (map snd ranks)
+tokenize :: Graph -> Rankings -> Rankings
+tokenize edges ranks = zip (nodes edges) (map snd ranks)
 
 toAdjacency :: Graph -> SpMatrix Double
 toAdjacency graph = let num = length.nodes $ graph in

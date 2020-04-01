@@ -30,7 +30,7 @@ springRank file = do
 
   solution <- a <\> b -- Vector
   let ranks = shiftRank solution
-  return $ detokenize graph (toListSV ranks)
+  return $ tokenize graph (toListSV ranks)
 
 shiftRank :: SpVector Double -> SpVector Double
 shiftRank v = let minV = constv (length v) (minimum v) in v - minV
