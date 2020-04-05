@@ -2,7 +2,7 @@
 
 __To run:__
 - fire up a local server: `python -m http.server`
-- pass the summarize.sh `number of clusterings` and `filename`:
+- pass `number of clusterings` and `filename` to `summarize.sh`:
 
   `./summarize.sh 5 tetris.jpg`
 
