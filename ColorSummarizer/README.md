@@ -8,6 +8,7 @@ __To run:__
 
 
 #### Todo:
-- better summarize script
+- clean up summarize script
 - color densities
 - pass directory full of images
+- image reconstruction from summary
