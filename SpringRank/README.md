@@ -13,13 +13,6 @@ code base and preprints can be found [HERE](https://github.com/cdebacco/SpringRa
 
 `rm *.hi *.o`
 
-### Benefits:
+### Potential Benefits:
 - Amenable to compilation and compiler optimization.
 - Extendable to Cuda via `accelerate`.
-
-### TODO:
-- Optimize with unboxed vectors rather than lists.
-- Extend to accept `alpha`, `l0` and `l1` params.
-Here the default values are: `𝛼 = 1, l1 = 1, l0 = 0`.
-- Extend to accept non `Int`-type tokens.
-- QuickCheck algorithms properties: exactness properties, network properties.
