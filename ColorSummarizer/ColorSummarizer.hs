@@ -16,7 +16,7 @@ import PrismaMatcher (closestPrisma)
   - calculate densities
 --}
 
-filenameStub = "/colorSummaries/Haskell/images/"
+filenameStub = "/images/"
 defaultImage  = "californiaPoppy.jpg"
 
 arguments = do

@@ -1,6 +1,5 @@
-const stub = "/colorSummaries/Haskell/"
-d3.json(stub+"prismas.json", function(error, prismas){
-  d3.json(stub+"sushiopolis.json", function(error, sushi){
+d3.json("prismas.json", function(error, prismas){
+  d3.json("sushiopolis.json", function(error, sushi){
 
     prismaDict = {}
     prismas.forEach(function(color) {

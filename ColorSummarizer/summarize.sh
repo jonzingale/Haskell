@@ -20,7 +20,8 @@ time ./ColorSummarizer $clusters $file
 rm ColorSummarizer.hi ColorSummarizer.o
 rm PrismaJSON.hi PrismaJSON.o PrismaMatcher.hi PrismaMatcher.o
 
-open "http://localhost:8000/colorSummaries/Haskell/prisma.html"
+# open "http://localhost:8000/colorSummaries/Haskell/prisma.html"
+open "http://localhost:8000/prisma.html"
 
 
 # seems to work, needs a refresh to reuse.
