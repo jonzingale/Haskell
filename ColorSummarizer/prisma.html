@@ -65,12 +65,12 @@
         .attr('class', 'circle')
         .attr('cx', function(d,i) {return rasterX(i) })
         .attr('cy', function(d,i) {return rasterY(i) })
-        .attr('fill', function(d) {
+        .attr('fill', function(d, i) {
           let rgb = `rgb( ${d.color} )`
           let hsl = d3.hsl(rgb)
           // hsl.s += 0.2 // TODO: make these sliders
           // hsl.l += 0.2
-          console.log([d.name, hsl.hex()])
+          console.log(`--global-color-v${i} : ${hsl.hex()}\; /*${d.name}*/`)
           return hsl
         })
         .attr("r", radius)
