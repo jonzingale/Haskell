@@ -12,3 +12,4 @@ __To run:__
 - color densities
 - pass directory full of images
 - image reconstruction from summary
+- handle png to jpg conversion when necessary
