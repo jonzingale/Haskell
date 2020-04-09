@@ -69,7 +69,7 @@
           let rgb = `rgb( ${d.color} )`
           let hsl = d3.hsl(rgb)
           // hsl.s += 0.2 // TODO: make these sliders
-          // hsl.l += 0.2
+          hsl.l += 0.2
           console.log(`--global-color-v${i} : ${hsl.hex()}\; /*${d.name}*/`)
           return hsl
         })

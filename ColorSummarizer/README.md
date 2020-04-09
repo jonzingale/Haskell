@@ -13,3 +13,5 @@ __To run:__
 - pass directory full of images
 - image reconstruction from summary
 - handle png to jpg conversion when necessary
+- order colors by shade/saturation
+- output css theme files
