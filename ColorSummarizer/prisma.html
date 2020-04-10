@@ -52,27 +52,44 @@
         .attr('height', 500)
     })
 
-    d3.json(summaryJson).then(function(data){
+    function rgbToHex(data) {
+      hexData = data.map(function(d, i) {
+        hsl = d3.hsl(`rgb( ${d.color} )`)
+         // TODO: make these sliders
+        // hsl.s += 0.2
+        hsl.l += 0.1
+        return { "name": d.name, "color": hsl.hex() }
+      })
+      return hexData
+    }
 
+    function writeCss(data) {
+      var tmp, rgb, hsl;
+      let rows = []
+      data.forEach(function(d, i) {
+        rows.push(`  --global-color-v${i} : ${d.color}\; /*${d.name}*/`)
+      })
+      css = `:root{\n${rows.join('\n')}\n}`
+      console.log(css)
+    }
+
+    d3.json(summaryJson).then(function(data){
       var container = d3.selectAll('.swatches')
         .append('svg').attr('width', 750)
         .attr('height', 130 * (1+data.length / 5))
 
       var colorContainer = container.append('g').selectAll('.color')
 
+      // These two methods prepare data for adjustment and .css
+      hexData = rgbToHex(data)
+      writeCss(hexData)
+
       var prismas = colorContainer
-        .data(data).enter().append('circle')
+        .data(hexData).enter().append('circle')
         .attr('class', 'circle')
-        .attr('cx', function(d,i) {return rasterX(i) })
-        .attr('cy', function(d,i) {return rasterY(i) })
-        .attr('fill', function(d, i) {
-          let rgb = `rgb( ${d.color} )`
-          let hsl = d3.hsl(rgb)
-          // hsl.s += 0.2 // TODO: make these sliders
-          hsl.l += 0.2
-          console.log(`--global-color-v${i} : ${hsl.hex()}\; /*${d.name}*/`)
-          return hsl
-        })
+        .attr('cx', function(d,i) { return rasterX(i) })
+        .attr('cy', function(d,i) { return rasterY(i) })
+        .attr('fill', function(d) { return d.color })
         .attr("r", radius)
 
       var colorNames1 = colorContainer
