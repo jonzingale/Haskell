@@ -14,6 +14,10 @@ import PrismaMatcher (closestPrisma)
 
   TODO:
   - calculate densities
+  - order by saturation or lightness
+  - output css
+  - PNG time blowup see: kPixelMeans below
+  - write getImage with proper monadic chaining
 --}
 
 filenameStub = "/images/"
@@ -28,12 +32,25 @@ p2d :: Pixel8 -> Double
 p2d color = fromIntegral (convert color::Integer)
 getRGB (PixelRGB8 r g b) = U.fromList [p2d r, p2d g, p2d b]
 
+-- WARNING: Because of the PNG memory leak, see kPixelMeans below,
+-- DO NOT rely on PNG conversion, use only proper JPGs.
+-- attempts to produce jpeg then tries to produce png
+getImage :: FilePath -> IO DynamicImage
+getImage filepath = do
+  image <- readJpeg filepath
+  case image of
+    Right chet -> return chet
+    Left chet -> do
+      Right chet <- readPng filepath
+      return chet
+
 main :: IO ()
 main = do
   directory <- getCurrentDirectory
   [clusters, filename] <- arguments
   let k = (read clusters)::Int
-  Right image <- readImage (directory++"/images/"++filename)
+
+  image <- getImage (directory ++ "/images/" ++ filename)
   ps <- prismas
 
   let img = convertRGB8 image
@@ -42,7 +59,7 @@ main = do
   let listC = map (U.toList) cents
   let formattedC = (closestPrisma ps).(U.toList)
   writeJson.map formattedC $ cents
-  writeFilename (filenameStub++filename)
+  writeFilename (filenameStub ++ filename)
 
 kPixelMeans :: Int -> Image PixelRGB8 -> Clusters (U.Vector Double)
 kPixelMeans k img =
@@ -50,7 +67,7 @@ kPixelMeans k img =
    -- pxs :: [U.Vector Double]
   let pxs = [ getRGB $ pixelAt img (𝜆*w) (𝜆*h) | w <- width, h <- height] in
   -- kmeans :: (a -> U.Vector Double) -> Distance -> Int -> [a] -> Clusters a
-  kmeans id euclidSq k pxs
+  kmeans id euclidSq k pxs -- WARNING: PNGs memory leak here!!!
 
 unWrapAll :: G.Vector (Cluster (U.Vector Double)) -> [U.Vector Double]
 unWrapAll = G.toList . G.map (centroid.elements)
