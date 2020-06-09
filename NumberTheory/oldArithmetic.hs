@@ -217,19 +217,11 @@ onesN 0 = 0
 onesN n = 10^(lminus 1 n)+(onesN.div n) 10 
 
 -----------------------Pollard Method
-pollard = (head.polliod)
+--different poly's (u^2+1) give different results
+pollard n = head $ dropWhile (== 1) [ gcd (j-i `mod` n) n | (i, j) <- por n ]
+por m = [ ( 2^n `mod` m,  2^(2*n) `mod` m)| n <- [1..m]]
 
-polliod n = (dropWhile (== 1)) [gcd (j-i`mod`n) n|(i,j)<-per n]
-  where 
-   per m= [((poly 1 m)!!u,(poly 1 m)!!(2*u))|
-              v<-[1..m], let u = fromIntegral v]
-     where poly u m = u:(poly (( u^3+1)`mod`m) m)
-           --different poly's (u^2+1) for instance give differing results!!!
+pollardFactors 1 = []
+pollardFactors n = pollard n : pollardFactors (n `div` pollard n)
 
-pollaria 1 = [] --a first attempt at a pollard factoria
-pollaria n =qsort$ pollard n:pollaria (n`div`pollard n)
---ridiculously fast if m is very composite
-
----alternative to per in polliod
-por m = [ ( 2^n`mod`m,  2^(2*n)`mod`m)|n<-[1..m]]
 
