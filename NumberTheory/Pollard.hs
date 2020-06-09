@@ -2,10 +2,11 @@
 
 module Pollard where
 
---different poly's (u^2+1) give different results
--- pollard = (head.polliod)
-pollard n = head $ dropWhile (== 1) [ gcd (j-i `mod` n) n | (i, j) <- por n ]
-por m = [ ( 2^n `mod` m,  2^(2*n) `mod` m)| n <- [1..m]]
+number = 300^300-1
 
-pollardFactors 1 = []
-pollardFactors n = pollard n : pollardFactors (n `div` pollard n)
+pollard n = f 2 2 1 n
+  where
+    epGcd x y n = gcd n $ abs $ g x - (g.g) y
+    f x y 1 n = f (g x) (g.g $ y) (epGcd x y n) n
+    f x y d n = d
+    g t = t^2 + 1
