@@ -1,6 +1,11 @@
 module Arithmetic (pollard, pollaria)where
 import System.Random
+import SortsShuffles
+
 import Primes
+
+-- mkBlanket :: Int -> StdGen
+-- mkBlanket cozy = mkStdGen cozy
 
 type N = Integer
 cls = putStr "\ESC[2J"
@@ -71,8 +76,8 @@ mu2 n| (not.sqfree) n = 0
      | (odd.length.pfactors) n = -1
      | otherwise = 1
 
-sqfree :: N->Bool --a bit faster than sqrfree
-sqfree n = and[fpsinnum n p==1|p<-pfactors n]
+-- sqfree :: N->Bool --a bit faster than sqrfree
+-- sqfree n = and[fpsinnum n p==1|p<-pfactors n]
 --
 
 totient :: N->N
@@ -153,7 +158,7 @@ dgnl a = (a,a)
 rootn :: N->N
 rootn n = root n+1
 boredoms :: Int -> [N]
-boredoms zola = take zola (((map toInteger).randomRs (0,2^30)) (mkBlanket zola))
+boredoms zola = take zola (((map toInteger).randomRs (0,2^30::Int)) (mkBlanket zola))
 shuffle :: Ord a => [a]->[a]
 shuffle xs = (snd.unzip.qsort)(zip ((boredoms.length) xs) xs)
 tryagain :: Int -> [Int] --Random sorted listing of [1..n]
