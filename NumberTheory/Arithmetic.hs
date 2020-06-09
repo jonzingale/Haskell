@@ -26,7 +26,7 @@ sumkdivisors :: N->N->N
 sumkdivisors n k = sum [i^k|i<-ffactors n]
 
 distinctp :: N->N
-distinctp n = sum[1|f<-ffactors n,prime f]
+distinctp n = sum [ 1 | f <-ffactors n,prime f]
 
 omegap ::N->N
 omegap n = sum [fpsinnum n p|p<-(takeWhile (<= rootn n) fprimes)]
