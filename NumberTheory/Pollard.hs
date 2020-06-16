@@ -1,5 +1,4 @@
 -- https://en.wikipedia.org/wiki/Pollard%27s_rho_algorithm
-
 module Pollard where
 
 pollard n = f 1 (g 1) n
