@@ -17,7 +17,7 @@ soberSort :: IO [Color]
 soberSort = do -- builds from KeySortable class and shapes
   let blocks = [Circle, Square, Triangle, Square, Circle, Triangle, Square]
   let isomorph = map ((rmap f).diag) $ blocks
-  let colors = (map pr2).sort $ (isomorph :: [Pair Shape Color])
+  let colors = map pr2 $ sort (isomorph :: [Pair Shape Color])
   return colors
   where
     f Circle = Red
