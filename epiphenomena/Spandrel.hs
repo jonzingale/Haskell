@@ -13,6 +13,7 @@ instance Ord Shape where
            | otherwise = compare x y == LT
   (>) x y = not (x <= y)
 
+soberSort :: IO [Color]
 soberSort = do -- builds from KeySortable class and shapes
   let blocks = [Circle, Square, Triangle, Square, Circle, Triangle, Square]
   let isomorph = map ((rmap f).diag) $ blocks
@@ -23,10 +24,11 @@ soberSort = do -- builds from KeySortable class and shapes
     f Square = Yellow
     f Triangle = Blue
 
+keyShuffle :: IO [Color]
 keyShuffle = do -- builds from KeySortable class and Sober sorted colors
   sober <- soberSort
   let colors = map pr2 $ (shuffle sober :: [Pair Int Color])
-  print colors
+  return colors
 
 {-- Todo:
 Build out number theory example with composites mapped to divisibility
