@@ -15,8 +15,9 @@ instance Ord Shape where
 
 soberSort = do -- builds from KeySortable class and shapes
   let blocks = [Circle, Square, Triangle, Square, Circle, Triangle, Square]
-  let isomorph = map (rmap f) $ map diag blocks ::[Pair Shape Color]
-  return $ (map pr2).sort $ isomorph
+  let isomorph = map ((rmap f).diag) $ blocks
+  let colors = (map pr2).sort $ (isomorph :: [Pair Shape Color])
+  return colors
   where
     f Circle = Red
     f Square = Yellow
