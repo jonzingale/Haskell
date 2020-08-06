@@ -17,8 +17,8 @@ instance Ord Shape where
 soberSort :: IO [Color]
 soberSort = do -- builds from KeySortable class and shapes
   let shapes = [Circle, Square, Triangle, Square, Circle, Triangle, Square]
-  let isomorph = [second f $ diag shape | shape <- shapes]
-  let sortedColors = sort (isomorph :: [Pair Shape Color])
+  let blocks = [second f $ diag shape | shape <- shapes] :: [Pair Shape Color]
+  let sortedColors = sort blocks
   return $ map pr2 sortedColors
   where
     f Circle = Red
@@ -28,5 +28,5 @@ soberSort = do -- builds from KeySortable class and shapes
 keyShuffle :: IO [Color]
 keyShuffle = do -- builds from KeySortable class and Sober sorted colors
   sober <- soberSort
-  let shuffledColors = (shuffle sober :: [Pair Int Color])
+  let shuffledColors = shuffle sober :: [Pair Int Color]
   return $ map pr2 shuffledColors
