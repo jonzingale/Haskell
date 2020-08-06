@@ -15,10 +15,10 @@ instance Ord Shape where
 
 soberSort :: IO [Color]
 soberSort = do -- builds from KeySortable class and shapes
-  let blocks = [Circle, Square, Triangle, Square, Circle, Triangle, Square]
-  let isomorph = map ((rmap f).diag) $ blocks
-  let colors = map pr2 $ sort (isomorph :: [Pair Shape Color])
-  return colors
+  let shapes = [Circle, Square, Triangle, Square, Circle, Triangle, Square]
+  let isomorph = [rmap f $ diag shape | shape <- shapes]
+  let sortedColors = sort (isomorph :: [Pair Shape Color])
+  return $ map pr2 sortedColors
   where
     f Circle = Red
     f Square = Yellow
@@ -27,10 +27,5 @@ soberSort = do -- builds from KeySortable class and shapes
 keyShuffle :: IO [Color]
 keyShuffle = do -- builds from KeySortable class and Sober sorted colors
   sober <- soberSort
-  let colors = map pr2 $ (shuffle sober :: [Pair Int Color])
-  return colors
-
-{-- Todo:
-Build out number theory example with composites mapped to divisibility
-restricted shapes. How should the fibers be constructed?
---}
+  let shuffledColors = (shuffle sober :: [Pair Int Color])
+  return $ map pr2 shuffledColors
