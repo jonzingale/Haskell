@@ -3,7 +3,7 @@ import Math.NumberTheory.Primes.Factorisation
 import Data.Bifunctor (second)
 import System.Random
 import Sortable
-import Spandrel
+import Spandrel hiding (buildBlocks)
 
 {--
 The idea: Assign to each block of shape type a 'key' prime, 2 say.
@@ -34,7 +34,7 @@ buildBlocks shapes = [incl shape seed | (shape, seed) <- zip shapes randos]
 
 compositeSort :: IO [Integer]
 compositeSort = do
-  let shapes = take 300 $ cycle [Circle, Square, Triangle, Square, Circle]
+  let shapes = take 300 $ cycle [Circle, Square, Triangle, Triangle, Circle]
   let blocks = buildBlocks shapes
   let sortedBlocks = sort blocks
   return $ map pr2 sortedBlocks
