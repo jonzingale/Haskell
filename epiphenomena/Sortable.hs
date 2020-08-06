@@ -1,6 +1,6 @@
-module Sortable where
-import System.Random
+module Sortable (Pair, second, diag, pr2, sort, shuffle) where
 import Data.Bifunctor
+import System.Random
 
 data Pair a b = P a b deriving (Show, Eq)
 

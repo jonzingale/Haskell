@@ -1,5 +1,4 @@
 module Spandrel where
-import Data.Bifunctor (second)
 import Sortable
 import Shape
 
@@ -13,13 +12,13 @@ buildBlocks shapes = [second f $ diag shape | shape <- shapes]
 
 soberSort :: IO [Color]
 soberSort = do
-  let shapes = [Circle, Square, Triangle, Square, Circle, Triangle, Square]
+  let shapes = take 50 shapeGen
   let blocks = buildBlocks shapes
   let sortedColors = sort blocks
   return $ map pr2 sortedColors
 
 keyShuffle :: IO [Color]
 keyShuffle = do
-  sober <- soberSort
+  sober <- soberSort -- begin with ordered blocks
   let shuffledColors = shuffle sober :: [Pair Int Color]
   return $ map pr2 shuffledColors
