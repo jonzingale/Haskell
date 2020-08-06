@@ -1,5 +1,6 @@
 module MixedSpandrel where
 import Math.NumberTheory.Primes.Factorisation
+import Data.Bifunctor (second)
 import System.Random
 import Sortable
 import Spandrel
@@ -28,7 +29,7 @@ buildBlocks :: [Shape] -> [Pair Shape Integer]
 buildBlocks shapes = [incl shape seed | (shape, seed) <- zip shapes randos]
   where
     randos = randoms (mkStdGen 42) :: [Int]
-    incl shape s = rmap (shapeToInteger s) $ diag shape
+    incl shape s = second (shapeToInteger s) $ diag shape
 
 compositeSort :: IO [Integer]
 compositeSort = do -- builds from KeySortable class and shapes

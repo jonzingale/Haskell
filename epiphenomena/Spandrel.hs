@@ -1,4 +1,5 @@
 module Spandrel where
+import Data.Bifunctor (second)
 import Sortable
 
 data Color = Red | Yellow | Blue deriving (Show, Eq)
@@ -16,7 +17,7 @@ instance Ord Shape where
 soberSort :: IO [Color]
 soberSort = do -- builds from KeySortable class and shapes
   let shapes = [Circle, Square, Triangle, Square, Circle, Triangle, Square]
-  let isomorph = [rmap f $ diag shape | shape <- shapes]
+  let isomorph = [second f $ diag shape | shape <- shapes]
   let sortedColors = sort (isomorph :: [Pair Shape Color])
   return $ map pr2 sortedColors
   where
