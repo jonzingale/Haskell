@@ -4,6 +4,8 @@ import System.Random
 data Color = Red | Yellow | Blue deriving (Show, Eq)
 data Shape = Circle | Square | Triangle deriving (Show, Eq)
 
+type Shapes = [Shape]
+
 instance Ord Shape where
   compare Circle _ = LT
   compare _ Circle = GT

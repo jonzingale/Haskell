@@ -14,6 +14,9 @@ by multiplication (a square free inclusion). Assignments to blocks of a given
 shape type are effectively sections of this projection.
 --}
 
+type CompositeBlocks = [Pair Shape Integer]
+type Composites = [Integer]
+
 shapeToInteger :: Int -> Shape -> Integer
 shapeToInteger seed shape =
   case shape of
@@ -25,13 +28,13 @@ shapeToInteger seed shape =
     rep n s = (* n).fst.randomR (1, 100) $ mkStdGen s
 
  -- builds from KeySortable class and shapes
-buildBlocks :: [Shape] -> [Pair Shape Integer]
+buildBlocks :: Shapes -> CompositeBlocks
 buildBlocks shapes = zipWith incl shapes randos
   where
     incl shape s = second (shapeToInteger s) $ diag shape
     randos = randoms (mkStdGen 42) :: [Int]
 
-compositeSort :: IO [Integer]
+compositeSort :: IO Composites
 compositeSort = do
   let shapes = take 300 shapeGen
   let blocks = buildBlocks shapes
