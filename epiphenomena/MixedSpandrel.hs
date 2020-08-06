@@ -14,15 +14,8 @@ by multiplication (except a square free inclusion). Assignments to blocks of a
 given shape type are effectively given by sections of this projection.
 --}
 
-randomSection :: [Integer] -> [Integer]
-randomSection ns = zipWith choice randos ns
-  where
-    distinctPrimes = (map fst).factorise
-    randos = randoms (mkStdGen 42) :: [Int]
-    choice seed n = 
-      let dp = distinctPrimes n in
-      let rand = seed `mod` length dp in
-      dp!!rand
+distinctPrimes :: Integer -> [Integer]
+distinctPrimes = (map fst).factorise
 
 shapeToInteger :: Int -> Shape -> Integer
 shapeToInteger seed shape =
