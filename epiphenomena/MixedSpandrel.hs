@@ -22,9 +22,10 @@ shapeToInteger seed shape =
   Triangle -> rep 11 seed
   Square -> rep 13 seed
   where
-    -- range is choosen small for readability
+    -- range is restricted for readability
     rep n s = (* n).fst.randomR (1, 100) $ mkStdGen s
 
+ -- builds from KeySortable class and shapes
 buildBlocks :: [Shape] -> [Pair Shape Integer]
 buildBlocks shapes = [incl shape seed | (shape, seed) <- zip shapes randos]
   where
@@ -32,7 +33,7 @@ buildBlocks shapes = [incl shape seed | (shape, seed) <- zip shapes randos]
     incl shape s = second (shapeToInteger s) $ diag shape
 
 compositeSort :: IO [Integer]
-compositeSort = do -- builds from KeySortable class and shapes
+compositeSort = do
   let shapes = take 300 $ cycle [Circle, Square, Triangle, Square, Circle]
   let blocks = buildBlocks shapes
   let sortedBlocks = sort blocks

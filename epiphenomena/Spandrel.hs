@@ -14,19 +14,23 @@ instance Ord Shape where
            | otherwise = compare x y == LT
   (>) x y = not (x <= y)
 
-soberSort :: IO [Color]
-soberSort = do -- builds from KeySortable class and shapes
-  let shapes = [Circle, Square, Triangle, Square, Circle, Triangle, Square]
-  let blocks = [second f $ diag shape | shape <- shapes] :: [Pair Shape Color]
-  let sortedColors = sort blocks
-  return $ map pr2 sortedColors
+-- builds from KeySortable class and shapes
+buildBlocks :: [Shape] -> [Pair Shape Color]
+buildBlocks shapes = [second f $ diag shape | shape <- shapes]
   where
     f Circle = Red
     f Square = Yellow
     f Triangle = Blue
 
+soberSort :: IO [Color]
+soberSort = do
+  let shapes = [Circle, Square, Triangle, Square, Circle, Triangle, Square]
+  let blocks = buildBlocks shapes
+  let sortedColors = sort blocks
+  return $ map pr2 sortedColors
+
 keyShuffle :: IO [Color]
-keyShuffle = do -- builds from KeySortable class and Sober sorted colors
+keyShuffle = do
   sober <- soberSort
   let shuffledColors = shuffle sober :: [Pair Int Color]
   return $ map pr2 shuffledColors

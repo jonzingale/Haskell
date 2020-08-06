@@ -32,9 +32,6 @@ class Bifunctor p => KeySortable p where
       rKeys ys = [first (\y -> x) $ diag y | (x, y) <- zip randos ys]
       randos = randoms (mkStdGen 42) :: [Int]
 
-  twist :: p x y -> p y x
-  twist p = second (\x -> pr1 p) $ diag (pr2 p)
-
   diag :: x -> p x x
   pr1 :: p x y -> x
   pr2 :: p x y -> y
