@@ -3,7 +3,7 @@ import Math.NumberTheory.Primes.Factorisation
 import Data.Bifunctor (second)
 import System.Random
 import Sortable
-import Spandrel hiding (buildBlocks)
+import Shape
 
 {--
 The idea: Assign to each block of shape type a 'key' prime, 2 say.

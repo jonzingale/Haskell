@@ -1,18 +1,7 @@
 module Spandrel where
 import Data.Bifunctor (second)
 import Sortable
-
-data Color = Red | Yellow | Blue deriving (Show, Eq)
-data Shape = Circle | Square | Triangle deriving (Show, Eq)
-
-instance Ord Shape where
-  compare Circle _ = LT
-  compare _ Circle = GT
-  compare Triangle _ = LT
-  compare _ Triangle = GT
-  (<=) x y | x == y = True
-           | otherwise = compare x y == LT
-  (>) x y = not (x <= y)
+import Shape
 
 -- builds from KeySortable class and shapes
 buildBlocks :: [Shape] -> [Pair Shape Color]
