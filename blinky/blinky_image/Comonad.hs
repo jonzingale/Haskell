@@ -1,19 +1,14 @@
 module Comonad where
 import BaseType
 
-zs :: U Int
-zs = U (map (\x -> -x) $ [1..]) 0 [1..]
-
 blink :: Comonad w => (w a -> b) -> w a -> w b
 blink rule board = board =>> rule
 
 data U x = U [x] x [x]
 
-instance (Monoid a, Eq a) => Show (U a) where
-  show (U a b c) = show $ (reverse.f.gg $ a) ++ gg [b] ++ (f.gg) c
-    where
-      gg = map (\a -> if a == mempty then ' ' else '.')
-      f x = take 25 x
+instance (Monoid a, Eq a, Show a) => Show (U a) where
+  show (U a b c) = show $ (reverse.f) a ++ [b] ++ f c
+    where f x = take 10 x
 
 instance Functor U where
   fmap f (U a b c) = U (map f a) (f b) (map f c)
@@ -35,3 +30,36 @@ class Functor w => Comonad w where
   x =>> f = fmap f (cojoin x)
   coreturn :: w a -> a
   cojoin   :: w a -> w (w a)
+
+{-- 2D --}
+data V x = V [U x] (U x) [U x]
+
+instance (Monoid a, Eq a, Show a) => Show (V a) where
+  show (V as b cs) = unlines.map show $ (reverse.f) as ++ [b] ++ f cs
+    where f x = take 10 x
+
+instance Functor V where
+  fmap f (V a b c) = V (map (fmap f) a) (fmap f b) (map (fmap f) c)
+
+instance Zipper V where
+  left (V a b c) = V (map left a) (left b) (map left c)
+  right (V a b c) = V (map right a) (right b) (map right c)
+
+instance Comonad V where
+  coreturn (V _ b _) = coreturn b
+  cojoin v =
+    let u = U (tilV v) v (tirV v) in
+    V (tilU u) u (tirU u)
+    where
+      tilV = tail.iterate left
+      tirV = tail.iterate right
+      tilU = tail.iterate (fmap up)
+      tirU = tail.iterate (fmap dn)
+
+instance Connection V where
+  up (V a b (c:cs)) = V (b:a) c cs
+  dn (V (a:as) b c) = V as a (b:c)
+
+class Connection z where
+  up :: z a -> z a
+  dn :: z a -> z a

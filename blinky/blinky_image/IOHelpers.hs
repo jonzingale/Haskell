@@ -1,9 +1,9 @@
 module IOHelpers where
-import Comonad
+import OneDimensional
 import TwoDimensional
+import Comonad
 
-run2d' = life rboard conway
-
+-- IO
 seqn :: [IO a]-> IO()
 seqn[] =return()
 seqn (a:as) = do
@@ -24,3 +24,11 @@ life b rule = do
   putStr $ show b
   wait $ 109060 * 10
   life (blink rule b) rule
+
+-- Helpers
+ruleToNumber :: [Int] -> Int
+ruleToNumber as = foldr (\x y -> 2^x * y) 1 as - 1
+
+numberToRule :: Int -> [Int]
+numberToRule 0 = []
+numberToRule n = numberToRule (div n 2) ++ [mod n 2]
