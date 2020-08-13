@@ -7,4 +7,4 @@ The data type `V x` is thought of as a bundle with a connection:
 ### Todo: ###
 - tease out into separate folders: 1d-toy, 2d-toy, production
 - optimize production code via parallelization and vector types
-- blinky images: CA and convolution
+- blinky images: CA, DLA and convolution
