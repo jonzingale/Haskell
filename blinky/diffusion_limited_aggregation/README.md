@@ -1,7 +1,5 @@
-module DLA where
+## Diffusion Limited Aggregation ##
 
-{--
-Diffusion limited aggregation
 https://en.wikipedia.org/wiki/Diffusion-limited_aggregation
 
 To one perceptual approximation, one may model the dependence on histories
@@ -17,4 +15,3 @@ preservation.
 
 Here I plan to flesh this idea out with a combination of a Cellular Automata
 comonad and Maybe monad.
---}
