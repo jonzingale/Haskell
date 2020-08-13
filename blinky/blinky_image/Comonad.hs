@@ -4,6 +4,7 @@ import BaseType
 blink :: Comonad w => (w a -> b) -> w a -> w b
 blink rule board = board =>> rule
 
+{-- 1D --}
 data U x = U [x] x [x]
 
 instance (Monoid a, Eq a, Show a) => Show (U a) where
