@@ -18,7 +18,7 @@ cls = putStr "\ESC[2J"
 wait :: Int -> IO()
 wait n = seqn [return () | _ <- [1..n]]
 
-life :: V Int -> Rule -> IO()
+life :: V Int -> (V Int -> Int) -> IO()
 life b rule = do
   cls
   putStr $ show b

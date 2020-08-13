@@ -18,3 +18,5 @@ preservation.
 Here I plan to flesh this idea out with a combination of a Cellular Automata
 comonad and Maybe monad.
 --}
+
+-- randomwalk: look in a patch, if 1 then select random neighbor.
