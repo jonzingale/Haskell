@@ -49,13 +49,11 @@ instance Zipper V where
 instance Comonad V where
   coreturn (V _ b _) = coreturn b
   cojoin v =
-    let u = U (tilV v) v (tirV v) in
-    V (tilU u) u (tirU u)
+    let u = U (tiV left v) v (tiV right v) in
+    V (tiU (fmap up) u) u (tiU (fmap dn) u)
     where
-      tilV = tail.iterate left
-      tirV = tail.iterate right
-      tilU = tail.iterate (fmap up)
-      tirU = tail.iterate (fmap dn)
+      tiV f = tail.iterate f
+      tiU f = tail.iterate f
 
 instance Connection V where
   up (V a b (c:cs)) = V (b:a) c cs
