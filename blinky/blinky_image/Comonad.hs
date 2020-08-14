@@ -43,7 +43,7 @@ instance Functor V where
   fmap f (V a b c) = V (map (fmap f) a) (fmap f b) (map (fmap f) c)
 
 instance Zipper V where
-  left (V a b c) = V (map left a) (left b) (map left c)
+  left  (V a b c) = V (map left a) (left b) (map left c)
   right (V a b c) = V (map right a) (right b) (map right c)
 
 instance Comonad V where
