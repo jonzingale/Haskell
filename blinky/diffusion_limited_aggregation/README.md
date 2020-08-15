@@ -14,7 +14,12 @@ on the space, with the aggregates mapping to aggregates as 'basepoint'
 preservation.
 
 Here I plan to flesh this idea out with a combination of a Cellular Automata
-comonad and Maybe (perhaps State or Writer) monad.
+comonad and perhaps State (or Writer) monad.
+
+### The idea ###
+The board is divided into free and bound particles. Free particles
+randomly walk until they enter the neighborhood of a bound particle,
+at which point they themselves become bound.
 
 
 - backward state monad: https://kseo.github.io/posts/2017-01-21-writer-monad.html
