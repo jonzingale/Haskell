@@ -1,22 +1,65 @@
 module DLA where
+import System.Random
 
-{--
-Diffusion limited aggregation
-https://en.wikipedia.org/wiki/Diffusion-limited_aggregation
+{-- Diffusion limited aggregation --}
+data Point = P Int Int deriving (Show, Eq)
+type Bound = Point
+type Free = Point
+type Seed = Int 
 
-To one perceptual approximation, one may model the dependence on histories
-relative to the path of individual particles. From another perspective, the
-dependence on histories may be interpreted in terms of overall 'board state',
-leading to a fairly natural poset interpretation.
+-- rewrite in record syntax
+data Board = B [Free] [Bound] deriving (Show)
+pr1 (B f b) = f
+pr2 (B f b) = b
 
-Algebraically, it seems to me that DLAs can be nicely characterized as a
-comonad on a category of pointed spaces[.], the aggregate acting as the
-adjoined 'point'. Then under actions of the coalgebra we get transitions
-on the space, with the aggregates mapping to aggregates as 'basepoint'
-preservation.
+genFrees :: Seed -> [Free]
+genFrees s =
+  let ns = randomRs (0, 9) $ mkStdGen (s+1)
+      ms = randomRs (0, 9) $ mkStdGen s in
+  [P a b | (a, b) <- zip ns ms]
 
-Here I plan to flesh this idea out with a combination of a Cellular Automata
-comonad and Maybe (possibly State or Writer) monad.
---}
+randomStep :: Seed -> Point -> Point
+randomStep s (P p q) =
+  let (n, g) = randomR (-1, 1) $ mkStdGen s
+      (m, _) = randomR (-1, 1) g in
+  P (p + n) (q + m)
 
--- randomwalk: look in a patch, if 1 then select random neighbor.
+nearBound :: [Bound] -> Free -> Bool
+nearBound bs fr = any (\b -> euclMet b fr <= 1) bs
+  where
+    euclMet (P b1 b2) (P f1 f2) =
+      let f = \x -> fromIntegral x in
+      sqrt $ (f b1-f f1)^2 + abs (f b2-f f2)^2 
+
+blink :: Seed -> Board -> Board
+blink seed (B fs bs) =
+  let fs' = map (randomStep seed) fs in
+  let (bs', fs'') = partition (\x -> nearBound bs x) fs' in
+  B fs'' (bs' ++ bs)
+
+partition :: (a -> Bool) -> [a] -> ([a], [a])
+partition f as = rr f as ([],[])
+  where
+    rr f [] accum = accum
+    rr f (l:ls) (as, bs)| f l = rr f ls (l:as, bs)
+                        | otherwise = rr f ls (as, l:bs)
+
+-- TODO: incorporate state or writer monad, produce running example
+example :: Seed -> IO ()
+example seed = do
+  let fs = take 40 $ genFrees seed
+  let bs = [P 5 5]
+  let bd = blink seed $ B fs bs
+  print $ pr2 bd
+
+board :: [[Int]]
+board = f.(take 100) $ map g randos
+  where
+    f [] = []
+    f ls = take 10 ls : (f.drop 10 $ ls) 
+    randos = randoms $ mkStdGen 99 :: [Int]
+    g x = case (x `mod` 20) of
+      0 -> 1
+      _ -> 0
+
+
