@@ -45,11 +45,15 @@ partition f as = rr f as ([],[])
                         | otherwise = rr f ls (as, l:bs)
 
 -- TODO: incorporate state or writer monad, produce running example
+-- work through the reasoning for prefilter etc...
 example :: Seed -> IO ()
 example seed = do
   let fs = take 40 $ genFrees seed
   let bs = [P 5 5]
-  let bd = blink seed $ B fs bs
+  -- reckons by getting initial near bounds before blink
+  let (bs', fs') = partition (\x -> nearBound bs x) fs
+  -- perform blink on reckoned board
+  let bd = blink seed $ B fs' (bs ++ bs')
   print $ pr2 bd
 
 board :: [[Int]]
