@@ -32,7 +32,12 @@ blink :: Seed -> Board -> Board
 blink seed (B fs bs) =
   let fs' = map (randomStep seed) fs in
   let (bs', fs'') = partition (\x -> nearBound bs x) fs' in
-  B fs'' (bs' ++ bs)
+  let bs'' = remdups (bs' ++ bs) [] in -- remove dups, todo add to partition
+  B fs'' bs''
+  where
+    remdups [] ls = ls
+    remdups (x:xs) ls | elem x ls = remdups xs ls
+                      | otherwise = remdups xs (x:ls)
 
 -- TODO: incorporate state or writer monad, produce running example
 -- work through the reasoning for prefilter etc...

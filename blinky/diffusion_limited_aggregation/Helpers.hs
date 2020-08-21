@@ -1,5 +1,5 @@
 module Helpers where
-import Control.Monad.Writer
+import Control.Monad.State
 import System.Random
 import DLA
 
@@ -15,11 +15,18 @@ listboard = f.(take 100) $ map g randos
 
 -- Writer Monad
 
-output :: Int -> Board -> Writer [Free] Board
-output n bd
-  | n == 0 = do
-    tell $ bounds bd
-    return bd
-  | otherwise = do
-    tell $ bounds bd
-    output (n-1) (blink 12 bd)
+output :: Int -> Board -> State [Bound] Board
+output n bd = do
+  put.bounds $ bd
+  case n of
+    0 -> return bd
+    _ -> output (n-1) (blink 12 bd)
+
+-- returnState :: [Bound]
+-- returnState =
+  -- let (n, state) = runState $ output 12 board in state
+
+{--
+Are we getting any closer?
+runState (output 12 board) [P 0 0]
+--}
