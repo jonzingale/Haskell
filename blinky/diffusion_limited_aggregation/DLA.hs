@@ -1,5 +1,4 @@
 module DLA where
-import Data.List (partition)
 import System.Random
 
 {-- Diffusion limited aggregation --}
@@ -22,30 +21,29 @@ randomStep s (P p q) =
   P (p + n) (q + m)
 
 nearBound :: [Bound] -> Free -> Bool
-nearBound bs fr = any (\b -> euclMet b fr <= 1) bs
+nearBound bs fr = any (\b -> euclMet b fr <= sqrt 2) bs
   where
-    euclMet (P b1 b2) (P f1 f2) =
-      let f = \x -> fromIntegral x in
+    euclMet (P b1 b2) (P f1 f2) = let f = fromIntegral in
       sqrt $ (f b1 - f f1)^2 + (f b2 - f f2)^2 
 
 blink :: Seed -> Board -> Board
 blink seed (B fs bs) =
-  let fs' = map (randomStep seed) fs in
-  let (bs', fs'') = partition (\x -> nearBound bs x) fs' in
-  let bs'' = remdups (bs' ++ bs) [] in -- remove dups, todo add to partition
-  B fs'' bs''
-  where
-    remdups [] ls = ls
-    remdups (x:xs) ls | elem x ls = remdups xs ls
-                      | otherwise = remdups xs (x:ls)
+  -- absorb new bounds and then blink
+  let B fs' bs' = absorb fs bs [] in
+  B (map (randomStep seed) fs') bs'
+    where
+      absorb [] bs fs' = B fs' bs
+      absorb (f:fs) bs fs'
+        | nearBound bs f && elem f bs = absorb fs bs fs'
+        | nearBound bs f = absorb fs (f:bs) fs'
+        | otherwise = absorb fs bs (f:fs')
 
 -- TODO: incorporate state or writer monad, produce running example
 -- work through the reasoning for prefilter etc...
-example :: Seed -> IO ()
-example seed = do
-  let fs = take 40 $ genFrees seed
-  let bd = blink seed $ B fs [P 5 5]
-  print $ bounds bd
-
 board :: Board
 board = B (take 40 $ genFrees 42) [P 4 5]
+
+example :: Seed -> IO ()
+example seed = do
+  let bd = blink seed board
+  print $ bounds bd
