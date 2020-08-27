@@ -45,6 +45,7 @@ example :: IO ()
 example = do
   directory <- getCurrentDirectory
   image <- getImage (directory ++ "/images/" ++ defaultImage
+  let img = convertRGB8 image
 
 main :: IO ()
 main = do
