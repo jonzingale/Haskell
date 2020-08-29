@@ -1,7 +1,7 @@
 module Helpers where
 import Control.Monad.State
+import Data.Bifunctor -- first
 import System.Random
-import Data.Bifunctor
 import DLA
 
 -- State Monad: accumulate state within monad
@@ -17,16 +17,6 @@ threeCoins = do
 
 ex1 = runState threeCoins (mkStdGen 33)
 
-blinkState :: State Board Board
-blinkState = do
-  tal <- boardSt
-  ual <- boardSt
-  val <- boardSt
-  return val
-  where boardSt = state $ \b -> (b, blink 12 b)
-
-ex2 = runState blinkState board
-
 {--
 It may be best to use iterate and allow the state
 to accumulate in random gens. Maybe bifunctor so that
@@ -35,27 +25,23 @@ randStep :: g -> (Board, g), which becomes new State.
 
 blinkStates :: State StdGen Board
 blinkStates = do
-  tal <- randomSt
-  ual <- randomSt
-  val <- randomSt
-  let b1 = blink tal board
-  let b2 = blink ual b1
-  let b3 = blink val b2
-  return b3
+  b1 <- boardSt board
+  bn <- boardSt b1
+  return bn
   where
-    randomSt = state random
-    -- rBoard :: RandomGen g => g -> (Board, g)
-    rBoard g = (blink (fst.random $ g) board, g)
-    bRoard g = \b -> first (flip blink b) $ random g
+    boardSt bd = state $ rBoard bd
+    rBoard = \b g -> first (flip blink b) $ random g -- consumes b first
 
 ex3 n = fst $ runState blinkStates (mkStdGen n)
 
 blinkStates' :: State StdGen Board
 blinkStates' = do
-  val <- boardSt board
+  let bs = iterate ((=<<) boardSt) $ return board
+  val <- bs !! 10
   return val
   where
-    boardSt bd = state $ rBoard bd
     rBoard = \b g -> first (flip blink b) $ random g -- consumes b first
+    boardSt bd = state $ rBoard bd
 
--- ex4 = fst $ runState blinkStates' (mkStdGen 12)
+-- pass blinkStates' an initial seed and get 10th board state
+ex4 = runState blinkStates' (mkStdGen 12)
