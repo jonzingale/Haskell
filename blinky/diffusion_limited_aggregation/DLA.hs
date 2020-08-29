@@ -55,3 +55,5 @@ blinkStates n b = do
     rBoard :: RandomGen c => Board -> c -> (Board, c)
     rBoard = \b g -> first (flip blink b) $ random g
     boardSt bd = state $ rBoard bd
+
+ex1 n = runState (blinkStates n board) (mkStdGen 12)
