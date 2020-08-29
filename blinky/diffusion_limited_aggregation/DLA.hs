@@ -46,9 +46,9 @@ blink seed (B fs bs) =
 -- State Monad: accumulate state within monad
 -- random :: (RandomGen g, Random a) => g -> (a, g)
 
-blinkStates :: Int -> State StdGen Board
-blinkStates n = do
-  let vals = iterate ((=<<) boardSt) $ return board
+blinkStates :: Int -> Board -> State StdGen Board
+blinkStates n b = do
+  let vals = iterate ((=<<) boardSt) $ return b
   val <- vals !! n
   return val
   where
