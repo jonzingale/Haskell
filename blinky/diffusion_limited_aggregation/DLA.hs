@@ -1,4 +1,6 @@
 module DLA where
+import Data.Bifunctor (first)
+import Control.Monad.State
 import System.Random
 
 {-- Diffusion limited aggregation --}
@@ -7,6 +9,9 @@ data Point = P Int Int deriving (Show, Eq)
 type Bound = Point
 type Free = Point
 type Seed = Int 
+
+board :: Board
+board = B (take 40 $ genFrees 42) [P 4 5]
 
 genFrees :: Seed -> [Free]
 genFrees s =
@@ -38,12 +43,15 @@ blink seed (B fs bs) =
         | nearBound bs f = absorb fs (f:bs) fs'
         | otherwise = absorb fs bs (f:fs')
 
--- TODO: incorporate state or writer monad, produce running example
--- work through the reasoning for prefilter etc...
-board :: Board
-board = B (take 40 $ genFrees 42) [P 4 5]
+-- State Monad: accumulate state within monad
+-- random :: (RandomGen g, Random a) => g -> (a, g)
 
-example :: Seed -> IO ()
-example seed = do
-  let bd = blink seed board
-  print $ bounds bd
+blinkStates :: Int -> State StdGen Board
+blinkStates n = do
+  let vals = iterate ((=<<) boardSt) $ return board
+  val <- vals !! n
+  return val
+  where
+    rBoard :: RandomGen c => Board -> c -> (Board, c)
+    rBoard = \b g -> first (flip blink b) $ random g
+    boardSt bd = state $ rBoard bd
