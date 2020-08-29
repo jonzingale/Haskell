@@ -25,17 +25,6 @@ randStep :: g -> (Board, g), which becomes new State.
 
 blinkStates :: State StdGen Board
 blinkStates = do
-  b1 <- boardSt board
-  bn <- boardSt b1
-  return bn
-  where
-    boardSt bd = state $ rBoard bd
-    rBoard = \b g -> first (flip blink b) $ random g -- consumes b first
-
-ex3 n = fst $ runState blinkStates (mkStdGen n)
-
-blinkStates' :: State StdGen Board
-blinkStates' = do
   let bs = iterate ((=<<) boardSt) $ return board
   val <- bs !! 10
   return val
@@ -43,5 +32,5 @@ blinkStates' = do
     rBoard = \b g -> first (flip blink b) $ random g -- consumes b first
     boardSt bd = state $ rBoard bd
 
--- pass blinkStates' an initial seed and get 10th board state
-ex4 = runState blinkStates' (mkStdGen 12)
+-- pass blinkStates an initial seed and get 10th board state
+ex2 = runState blinkStates (mkStdGen 12)
