@@ -56,4 +56,5 @@ blinkStates n b = do
     rBoard = \b g -> first (flip blink b) $ random g
     boardSt bd = state $ rBoard bd
 
+-- Pass (blinkStates n board) an initial seed and get nth board state.
 ex1 n = runState (blinkStates n board) (mkStdGen 12)
