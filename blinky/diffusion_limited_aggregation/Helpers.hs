@@ -17,19 +17,14 @@ threeCoins = do
 
 ex1 = runState threeCoins (mkStdGen 33)
 
-{--
-It may be best to use iterate and allow the state
-to accumulate in random gens. Maybe bifunctor so that
-randStep :: g -> (Board, g), which becomes new State.
---}
-
 blinkStates :: State StdGen Board
 blinkStates = do
-  let bs = iterate ((=<<) boardSt) $ return board
-  val <- bs !! 10
+  let vals = iterate ((=<<) boardSt) $ return board
+  val <- vals !! 10
   return val
   where
-    rBoard = \b g -> first (flip blink b) $ random g -- consumes b first
+    rBoard :: RandomGen c => Board -> c -> (Board, c)
+    rBoard = \b g -> first (flip blink b) $ random g
     boardSt bd = state $ rBoard bd
 
 -- pass blinkStates an initial seed and get 10th board state
