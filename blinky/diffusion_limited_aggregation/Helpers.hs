@@ -6,26 +6,16 @@ import DLA
 
 -- State Monad: accumulate state within monad
 -- random :: (RandomGen g, Random a) => g -> (a, g)
--- state random :: (RandomGen s, Random a, MonadState s m) => m a
-threeCoins :: State StdGen (Bool,Bool,Bool)
-threeCoins = do
-  a <- randomSt
-  b <- randomSt
-  c <- randomSt
-  return (a,b,c)
-  where randomSt = state random
 
-ex1 = runState threeCoins (mkStdGen 33)
-
-blinkStates :: State StdGen Board
-blinkStates = do
+blinkStates :: Int -> State StdGen Board
+blinkStates n = do
   let vals = iterate ((=<<) boardSt) $ return board
-  val <- vals !! 10
+  val <- vals !! n
   return val
   where
     rBoard :: RandomGen c => Board -> c -> (Board, c)
     rBoard = \b g -> first (flip blink b) $ random g
     boardSt bd = state $ rBoard bd
 
--- pass blinkStates an initial seed and get 10th board state
-ex2 = runState blinkStates (mkStdGen 12)
+-- pass (blinkStates n) an initial seed and get nth board state
+ex1 n = runState (blinkStates n) (mkStdGen 12)
