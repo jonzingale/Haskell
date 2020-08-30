@@ -31,6 +31,7 @@ nearBound bs fr = any (\b -> euclMet b fr <= sqrt 2) bs
     euclMet (P b1 b2) (P f1 f2) = let f = fromIntegral in
       sqrt $ (f b1 - f f1)^2 + (f b2 - f f2)^2 
 
+-- TODO: map (randomStep seed) causes drift
 blink :: Seed -> Board -> Board
 blink seed (B fs bs) =
   -- absorb new bounds and then blink
