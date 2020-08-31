@@ -14,11 +14,11 @@ type Free = (Int, Int)
 type Seed = Int 
 
 board :: Board
-board = B (U.take 40 $ genFrees 42) (U.singleton (1, 2))
+board = B (U.take 40 $ genFrees 42) (U.singleton (4, 4))
 
 -- todo: write monadically and use U.generate
 genFrees :: Seed -> U.Vector Free
 genFrees s =
-  let ns = randomRs (0, 9) $ mkStdGen (s+1)
-      ms = randomRs (0, 9) $ mkStdGen s in
-  U.fromList $ zip ns ms
+  let ns = U.fromList $ randomRs (0, 9) $ mkStdGen (s+1)
+      ms = U.fromList $ randomRs (0, 9) $ mkStdGen s in
+  U.zip ns ms
