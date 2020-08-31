@@ -1,35 +1,35 @@
 module DLA where
-import Data.Bifunctor (first)
+import Data.Bifunctor (first, bimap)
 import Control.Monad.State
 import System.Random
 
 {-- Diffusion limited aggregation --}
 data Board = B { frees :: [Free], bounds :: [Bound] } deriving (Show)
-data Point = P Int Int deriving (Show, Eq)
-type Bound = Point
-type Free = Point
+type Bound = (Int, Int)
+type Free = (Int, Int)
 type Seed = Int 
 
 board :: Board
-board = B (take 40 $ genFrees 42) [P 4 5]
+board = B (take 40 $ genFrees 42) [(5, 5)]
 
 genFrees :: Seed -> [Free]
-genFrees s =
-  let ns = randomRs (0, 9) $ mkStdGen (s+1)
-      ms = randomRs (0, 9) $ mkStdGen s in
-  [P a b | (a, b) <- zip ns ms]
+genFrees seed =
+  let (g1, g2) = split.mkStdGen $ seed
+      rs = randomRs (0, 9) in
+  zip (rs g1) (rs g2)
 
-randomStep :: Seed -> Point -> Point
-randomStep s (P p q) =
-  let (n, g) = randomR (-1, 1) $ mkStdGen s
-      (m, _) = randomR (-1, 1) g in
-  P (p + n) (q + m)
+randomStep :: Seed -> Free -> Free
+randomStep seed (p, q) =
+  let (g1, g2) = split $ mkStdGen seed in
+  let (n, _) = randomR (-1, 1) g1
+      (m, _) = randomR (-1, 1) g2 in
+  (p + n, q + m)
 
 nearBound :: [Bound] -> Free -> Bool
-nearBound bs fr = any (\b -> euclMet b fr <= sqrt 2) bs
+nearBound bs fr = any (\b -> dist b fr) bs
   where
-    euclMet (P b1 b2) (P f1 f2) = let f = fromIntegral in
-      sqrt $ (f b1 - f f1)^2 + (f b2 - f f2)^2 
+    dist (b1, b2) (f1, f2) = (eball b1 f1) && (eball b2 f2)
+    eball a b = abs (a - b) <= 1
 
 -- TODO: map (randomStep seed) causes drift
 blink :: Seed -> Board -> Board
