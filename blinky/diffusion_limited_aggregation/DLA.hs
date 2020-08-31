@@ -31,11 +31,11 @@ nearBound bs fr = any (\b -> dist b fr) bs
     dist (b1, b2) (f1, f2) = (eball b1 f1) && (eball b2 f2)
     eball a b = abs (a - b) <= 1
 
--- TODO: map (randomStep seed) causes drift
+-- Absorb new bounds and then blink
 blink :: Seed -> Board -> Board
 blink seed (B fs bs) =
-  -- absorb new bounds and then blink
   let B fs' bs' = absorb fs bs [] in
+  -- TODO: map (randomStep seed) causes drift
   B (map (randomStep seed) fs') bs'
     where
       absorb [] bs fs' = B fs' bs
