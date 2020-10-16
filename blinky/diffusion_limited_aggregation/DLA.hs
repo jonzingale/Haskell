@@ -7,7 +7,10 @@ import System.Random
 data Board = B { frees :: [Free], bounds :: [Bound] } deriving (Show)
 type Bound = (Int, Int)
 type Free = (Int, Int)
-type Seed = Int 
+type Seed = Int
+
+diag :: (a -> b) -> (a, a) -> (b, b)
+diag f (a, b) = (f a, f b)
 
 board :: Board
 board = B (take 40 $ genFrees 42) [(5, 5)]
@@ -18,12 +21,15 @@ genFrees seed =
       rs = randomRs (0, 9) in
   zip (rs g1) (rs g2)
 
+-- avoid mapping, be rigorous with passed generators.
+-- seed once, pass generators.
 randomStep :: Seed -> Free -> Free
 randomStep seed (p, q) =
-  let (g1, g2) = split $ mkStdGen seed in
-  let (n, _) = randomR (-1, 1) g1
-      (m, _) = randomR (-1, 1) g2 in
+  let (g1, g2) = split.mkStdGen $ seed in
+  let n = rr g1
+      m = rr g2 in
   (p + n, q + m)
+  where rr = fst.randomR (-1, 1)
 
 nearBound :: [Bound] -> Free -> Bool
 nearBound bs fr = any (\b -> dist b fr) bs
