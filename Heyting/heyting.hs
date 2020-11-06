@@ -1,30 +1,38 @@
 module Heyting where
 import Math.NumberTheory.Primes.Factorisation (factorise)
-import Data.Numbers.Primes
+import Data.Numbers.Primes (primeFactors)
 
--- data IntLat = H Int | Infinity
+{--
+Let a∗ = max { b ∈ L : b ∧ a = 0 } be the pseudocomplement of a.
+Alternatively, a* is the union of all propositions y which have
+nothing in common with a.
 
-class Arithmetic a where
-  divs :: a -> a -> Bool
+We see from the definition that a → b = V { c ∈ H : a ∧ c ≤ b }.
+As arbitrary joins of elements need not exist in a lattice,
+the existence of an implication is not automatic.
 
-instance Arithmetic Int where
-  divs a b = mod b a == 0
+Hmm, how should I represent:
+1. bounded lattices?
+2. lack of arbitrary joins, wedge sums?
+--}
 
 class Heyting h where
   hmeet, hjoin, himplies :: h -> h -> h
+  hcomplement :: h -> h
   top, bottom :: h
-  hneg :: h -> h
 
+-- arbitrary joins here.
 instance Heyting Int where
   top = undefined
   bottom = 1
   hmeet a b = gcd a b
   hjoin a b = lcm a b
+  hcomplement a = foldr hjoin bottom [ z | z <- [1..10], hmeet a z <= bottom]
+  -- hcomplement a = himplies a bottom -- first fix himplies
   himplies a b = -- todo: think about the bounds here
-    foldr hjoin 1 [ z | z <- [1..b], hmeet z a <= b]
-  hneg = undefined
+    foldr hjoin bottom [ z | z <- [1..b], hmeet z a <= b]
 
-testImplies = foldr hjoin 1 [1..5::Int]
+testImplies = himplies 3 (5::Int)
 
 {--
 todo:
@@ -32,4 +40,3 @@ todo:
 * generalize to any poset?
 * causal sets, boolean sub-algebra, ...
 --}
-
