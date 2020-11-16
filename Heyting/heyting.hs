@@ -1,6 +1,5 @@
 module Heyting where
 
-
 {--
 The goal is to stub out Heyting so that it behaves like Bool.
 Rather than just True and False, graded truth.
