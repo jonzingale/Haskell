@@ -1,6 +1,4 @@
-module HeytingLattice where
-import Math.NumberTheory.Primes.Factorisation (factorise)
-import Data.Numbers.Primes (primeFactors)
+module HeytingInterval where
 
 data Interval = Zero | Half | One
 
