@@ -1,7 +1,4 @@
 module HeytingFactors where
-import Math.NumberTheory.Primes.Factorisation (factorise)
-import Data.Numbers.Primes (primeFactors)
-
 -- REF: https://www.wikiwand.com/en/Heyting_algebra
 
 -- todo: Parameterize this type
