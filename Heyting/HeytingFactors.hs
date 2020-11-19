@@ -5,12 +5,12 @@ module HeytingFactors where
 data NumLattice = NL Int Int | Fail deriving (Show, Eq)
 
 factors :: Int -> [Int]
-factors n = [ x | x <- [1..n], mod n x == 0]
+factors n = [ x | x <- [1..n], mod n x == 0 ]
 
 class Heyting h where
+  implies :: h -> h -> h
   hAnd :: h -> h -> h
   hOr :: h -> h -> h
-  implies :: h -> h -> h
   hNot :: h -> h
 
 -- todo: write this monadically and build into NumLattice error handling
