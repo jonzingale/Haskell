@@ -13,7 +13,6 @@ class Heyting h where
   hOr :: h -> h -> h
   hNot :: h -> h
 
--- todo: write this monadically and build into NumLattice error handling
 instance Heyting NumLattice where
   hAnd (NL n a) (NL m b)
     | n == m = NL n (gcd a b)
@@ -24,7 +23,7 @@ instance Heyting NumLattice where
     | otherwise = Fail
 
   implies (NL n a) (NL m b)
-    | n == m = NL n $ foldr lcm 1 [ z | z <- factors n, mod b (gcd z a) == 0]
+    | n == m = NL n $ foldr lcm 1 [ z | z <- factors n, mod b (gcd z a) == 0 ]
     | otherwise = Fail
 
   hNot (NL n a) = implies (NL n a) (NL n 1)
