@@ -2,10 +2,10 @@ module Codon where
 
 data Codon =
   UAA | UAG | UGA | -- Stop
+  AUG | -- Methionine, start
   UUU | UUC | -- Phenylalanine
   UUA | UUG | CUU | CUC | CUA | CUG | -- Leucine
   AUU | AUC | AUA | -- Isoleucine
-  AUG | -- Methionine, start
   GUU | GUC | GUA | GUG | -- Valine
   UCU | UCC | UCA | UCG | AGU | AGC | -- Serine
   CCU | CCC | CCA | CCG | -- Proline
