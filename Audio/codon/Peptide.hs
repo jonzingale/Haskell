@@ -1,4 +1,4 @@
-module PeptideRegex where
+module Peptide where
 import Data.List.Split (splitOn)
 
 type RNA = String
