@@ -4,12 +4,14 @@ import Data.List.Split (splitOn)
 type RNA = String
 type Peptide = String
 
+-- :set +s
+
 cdna = do
   datum <- readFile "covid_cdna.txt"
   let dna = concat.words $ datum
   return dna
 
-parseDNA = do
+peptides = do
   datum <- readFile "covid_cdna.txt"
   let dna = concat.words $ datum
   return $ extractPeptides dna
@@ -34,4 +36,4 @@ extractPeptides :: RNA -> [Peptide]
 extractPeptides [] = []
 extractPeptides rna
   | extractPeptide rna == [] = []
-  | otherwise = extractPeptide rna : (extractPeptides $ remainingText rna)
+  | otherwise = extractPeptide rna : (extractPeptides.remainingText $ rna)
