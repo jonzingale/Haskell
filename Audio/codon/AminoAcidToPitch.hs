@@ -2,13 +2,23 @@ module AminoAcidToPitch where
 import qualified Data.Set as S
 import AminoAcid
 
+-- Helpers
+pp :: Show a => [a] -> IO()
+pp = putStr.unlines.(map show)
+
+-- AminoAcidToPitch
 type Freq = Double
 data Pitch = P Int Freq | Rest deriving (Show, Eq, Ord)
 
-pitches = [ P i fq | (i, fq) <- zip [0..] aPitches ]
+interval :: Pitch -> Int
+interval Rest = 0
+interval (P i _) = i
 
-pp :: Show a => [a] -> IO()
-pp = putStr.unlines.(map show)
+frequency :: Pitch -> Freq
+frequency Rest = 0
+frequency (P _ f) = f
+
+pitches = [ P i fq | (i, fq) <- zip [0..] aPitches ]
 
 freq = \n -> 2.0 ** (n/20)
 intervals = [ freq i | i <- [0..20.0] ]

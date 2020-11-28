@@ -92,7 +92,3 @@ toCodonAcid (a:b:c:[]) =
     "ggc" -> (GGC,Glycine)
     "gga" -> (GGA,Glycine)
     "ggg" -> (GGG,Glycine)
-
-
--- sss = ["taa","tag","tga","atg","ttt","ttc","tta","ttg","ctt","ctc","cta","ctg","att","atc","ata","gtt","gtc","gta","gtg","tct","tcc","tca","tcg","agt","agc","cct","ccc","cca","ccg","act","acc","aca","acg","gct","gcc","gca","gcg","tat","tac","cat","cac","caa","cag","aat","aac","aaa","aag","gat","gac","gaa","gag","tgt","tgc","tgg","cgt","cgc","cga","cgg","aga","agg","ggt","ggc","gga","ggg"]
--- ccc = [TAA,TAG,TGA, ATG, TTT,TTC, TTA,TTG,CTT,CTC,CTA,CTG, ATT,ATC,ATA, GTT,GTC,GTA,GTG, TCT,TCC,TCA,TCG,AGT,AGC, CCT,CCC,CCA,CCG, ACT,ACC,ACA,ACG, GCT,GCC,GCA,GCG, TAT,TAC, CAT,CAC, CAA,CAG, AAT,AAC, AAA,AAG, GAT,GAC, GAA,GAG, TGT,TGC, TGG, CGT,CGC,CGA,CGG,AGA,AGG, GGT, GGC, GGA, GGG]
