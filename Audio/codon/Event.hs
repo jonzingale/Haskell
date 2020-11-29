@@ -33,6 +33,10 @@ data Duration = Eighth | Quarter | Half | Whole deriving (Show)
 data HarmonicDistribution = Harmonics [Double] deriving (Show)-- oboe, clarinet, ...
 data ADSR = Hmm -- strings, piano, ...
 
+-- consider Nonpolar|Polar|Basic|Acidic for coarser typing than AminoAcid
+-- maybe for detemining rest durations? Polar -> "x." versus NonPolar -> "xx"
+-- https://en.wikipedia.org/wiki/Genetic_code
+
 --
 
 peptideToEvents :: Peptide -> [ChemEvent]
