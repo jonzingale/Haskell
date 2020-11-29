@@ -4,9 +4,11 @@ import AminoAcid
 import Peptide
 import Codon
 
-data Duration = Eighth | Quarter | Half | Whole deriving (Show)
+data Duration = Eighth | Quarter | Half | Whole deriving (Show, Eq, Ord)
 data HarmonicDistribution = Harmonics [Double] deriving (Show)-- oboe, clarinet, ...
 data ADSR = Hmm -- strings, piano, ...
+
+type Epoch = Duration
 
 -- consider Nonpolar|Polar|Basic|Acidic for coarser typing than AminoAcid
 -- maybe for detemining rest durations? Polar -> "x." versus NonPolar -> "xx"
@@ -44,8 +46,6 @@ data ChemEvent = Event {
   aminoAcid :: AminoAcid
 } deriving (Show, Eq)
 
---
-
 peptideToEvents :: Peptide -> [ChemEvent]
 peptideToEvents ps = f.triples $ ps
   where
@@ -54,6 +54,6 @@ peptideToEvents ps = f.triples $ ps
     triples (a:b:c:cs) = (a:b:c:[]) : triples cs
     triples [] = []
 
-notesDuration :: [(Freq, Duration, Duration)] -- pitch, duration, epoch
+notesDuration :: [(Freq, Duration, Duration)] -- pitch, epoch, duration
 notesDuration = [(frequency.pitch $ c, epoch c, duration c) |
   c <- peptideToEvents $ "atgcttagtgcactcacgcagtataattaa"]
