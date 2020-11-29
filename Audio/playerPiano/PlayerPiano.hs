@@ -8,6 +8,8 @@ import Wave
 freqPerSample :: Double -> Double
 freqPerSample freq = freq * 2 * pi / 44100
 
+-- zip binaryList with list of harmonics and returns
+-- the value at point on a complex waveform.
 ff :: Board -> Double -> Double
 ff board t =
   let harms = U.map (\x -> sin (t * x)) $ U.fromList [1..12] in
@@ -16,6 +18,7 @@ ff board t =
 
 gg :: Board -> Double -> Double
 gg board t =
+  -- harmonics summed and then normalized by (/ n)
   (/ 5) $ sin (t/4) + sin (t/2) + sin (t) + sin (t*2) + sin (t/3)
 
 s1 :: Frequency -> DurationSecs -> Volume -> Board -> VectSamples
