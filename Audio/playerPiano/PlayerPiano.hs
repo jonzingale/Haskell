@@ -1,7 +1,7 @@
 module PlayerPiano where
 import qualified Data.Vector.Unboxed as U
 import BlinkyLights
-import Sequencer
+-- import Sequencer -- not used!
 import Mobius
 import Wave
 
