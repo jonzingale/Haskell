@@ -21,14 +21,16 @@ mkEmptyMeasure bpm (Time b _) =
   let samplesPerMeasure = beats * 60 * 44100 / bpm in
   U.replicate (ceiling samplesPerMeasure) (0::Int32)
 
+-- TODO: the use of the token empty here is (mis)leading.
+-- mixinBank takes allocated space and mixes in a performance.
 mixinBank :: VectSamples -> Performance -> [(Int, Int32)]
 mixinBank empty (mstr, ss) =
   let subDiv = div (U.length empty) (length mstr) in
   f mstr 0 subDiv (unpack ss)
   where
-    getPairs ss i d = [(j + i*d, div v 5) | (j, v) <- zip [0..] ss]
-
     f [] _ _ _ = []
     f (x:xs) i d ss
       | x == 'x' = getPairs ss i d ++ f xs (i+1) d ss
       | otherwise = f xs (i+1) d ss
+
+    getPairs ss i d = [(j + i*d, div v 5) | (j, v) <- zip [0..] ss]
