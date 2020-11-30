@@ -11,9 +11,6 @@ import Filters (highPass, lowPass)
 
 type Sound = (Freq, Epoch, Duration)
 
-ev :: Sound
-ev = head notesDuration
-
 -- 
 freqPerSample :: Double -> Double
 freqPerSample freq = freq * 2 * pi / 44100
