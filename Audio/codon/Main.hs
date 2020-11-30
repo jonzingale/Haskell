@@ -1,4 +1,4 @@
-module PeptideMusic where
+module Main where
 import qualified Data.Vector.Unboxed as U
 import AminoAcidToPitch (frequency)
 import AminoAcidToPitch (Freq)
@@ -6,6 +6,8 @@ import Data.Int (Int32)
 import Peptide
 import Event
 import Wave
+
+import Filters (highPass, lowPass)
 
 type Sound = (Freq, Epoch, Duration)
 
@@ -42,11 +44,8 @@ peptideToSound peptide =
   [(frequency.pitch $ c, epoch c, duration c) | c <- peptideToEvents peptide]
 
 main = do
-  datum <- readFile "covid_cdna.txt"
+  datum <- readFile "./covid_cdna.txt"
   let dna = concat.words $ datum
-  let peptide = (!! 2) $ extractPeptides dna
+  let peptide = (!! 5) $ extractPeptides dna
   let sound =  map toSound $ peptideToSound peptide
-  makeWavFile $ U.concat sound
-
-
-
+  makeWavFile $ lowPass 880 $ U.concat sound
