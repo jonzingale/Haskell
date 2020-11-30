@@ -1,8 +1,8 @@
 module Abundance where
 import Event (peptideToEvents, aminoAcid)
-import Peptide (Peptide, peptides)
 import Data.List (sortBy, partition)
 import Data.Function (on)
+import Peptide (peptides)
 import AminoAcid
 
 {--
