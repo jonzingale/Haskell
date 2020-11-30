@@ -1,5 +1,6 @@
 module AminoAcidToPitch where
 import qualified Data.Set as S
+import Data.List (findIndex)
 import AminoAcid
 
 tonic :: Double
@@ -53,39 +54,19 @@ freqToPitch f = g (quantize f) pitches
       | f == fq = P i fq 
       | otherwise = g f as
 
+-- TODO: make this infinite list
 -- accumulate pitches until set is complete
 harmonics :: [Pitch]
 harmonics = g [freqToPitch (tonic * i) | i <- [0..]] S.empty []
   where
     incl a bs = S.union (S.singleton a) bs
-    g (h:hs) acc ps
-      | S.size acc == 20 = ps
-      | S.size acc < S.size (incl h acc) =
-        g hs (incl h acc) (ps++[h])
-      | otherwise = g hs (incl h acc) ps
+    g (h:hs) set pitches
+      | S.size set == 20 = pitches
+      | S.size set < S.size (incl h set) =
+        g hs (incl h set) (pitches++[h])
+      | otherwise = g hs (incl h set) pitches
 
--- The correlation here ought to be by abundance of Acid.
 acidToPitch :: AminoAcid -> Pitch
+acidToPitch Stop = Rest
 acidToPitch acid =
-  case acid of
-  Stop -> Rest
-  Phenylalanine -> harmonics!!0
-  Leucine -> harmonics!!1
-  Isoleucine -> harmonics!!2
-  Methionine -> harmonics!!3 -- Start
-  Valine -> harmonics!!4
-  Serine -> harmonics!!5
-  Proline -> harmonics!!6
-  Threonine -> harmonics!!7
-  Alanine -> harmonics!!8
-  Tyrosine -> harmonics!!9
-  Histidine -> harmonics!!10
-  Glutamine -> harmonics!!11
-  Asparagine -> harmonics!!12
-  Lysine -> harmonics!!13
-  Aspartic -> harmonics!!14
-  Glutamic -> harmonics!!15
-  Cysteine -> harmonics!!16
-  Tryptophan -> harmonics!!17
-  Arginine -> harmonics!!18
-  Glycine -> harmonics!!19
+  let Just idx = findIndex (== acid) aminoAcids in harmonics!!idx
