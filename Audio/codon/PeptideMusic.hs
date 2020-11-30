@@ -33,19 +33,19 @@ toSound (freq, epoch, dur) =
   let setVol = U.map (round . (* fromIntegral vol)) in
   let (eSec, dSec) = soundToTime epoch dur in
   let sine = map sin [0.0, freqPerSample freq..] in
-  let noteTime = take.round $ eSec * 44100 in
+  let noteTime = take.round $ eSec * 44100 in -- convolve with inv exp
   let restTime = take (round $ dSec * 44100) (repeat 0) in
   setVol $ U.fromList $ noteTime sine ++ restTime
 
-peptideToSound :: Peptide -> [(Freq, Epoch, Duration)]
-peptideToSound peptide = map toSound
+peptideToSound :: Peptide -> [Sound]
+peptideToSound peptide =
   [(frequency.pitch $ c, epoch c, duration c) | c <- peptideToEvents peptide]
 
 main = do
   datum <- readFile "covid_cdna.txt"
   let dna = concat.words $ datum
-  let peptide = (!! 0) $ extractPeptides dna
-  let sound = peptideToSound peptide
+  let peptide = (!! 2) $ extractPeptides dna
+  let sound =  map toSound $ peptideToSound peptide
   makeWavFile $ U.concat sound
 
 

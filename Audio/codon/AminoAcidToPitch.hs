@@ -2,6 +2,9 @@ module AminoAcidToPitch where
 import qualified Data.Set as S
 import AminoAcid
 
+tonic :: Double
+tonic = 110 * 4
+
 -- Helpers
 pp :: Show a => [a] -> IO()
 pp = putStr.unlines.(map show)
@@ -22,8 +25,8 @@ pitches = [ P i fq | (i, fq) <- zip [0..] aPitches ]
 
 freq = \n -> 2.0 ** (n/20)
 intervals = [ freq i | i <- [0..20.0] ]
-aPitches = map (* 110) intervals -- octave of 20Tone @ 110hz
-aHarm = [110 * i | i <- [0..50.0]] -- linear all day
+aPitches = map (* tonic) intervals -- octave of 20Tone @ tonic frequency
+aHarm = [tonic * i | i <- [0..50.0]] -- linear all day
 
 {--
 Quanitizing is effecively a partition function with
@@ -40,7 +43,7 @@ quantize f = snd.minimum $
     del f pf = abs (f - pf)
     -- divide by 2 until within range
     scope f
-      | f < 220 = f
+      | f < 2*tonic = f
       | otherwise = scope (f/2)
 
 freqToPitch :: Freq -> Pitch
@@ -52,7 +55,7 @@ freqToPitch f = g (quantize f) pitches
 
 -- accumulate pitches until set is complete
 harmonics :: [Pitch]
-harmonics = g [freqToPitch (110.0 * i) | i <- [0..]] S.empty []
+harmonics = g [freqToPitch (tonic * i) | i <- [0..]] S.empty []
   where
     incl a bs = S.union (S.singleton a) bs
     g (h:hs) acc ps
