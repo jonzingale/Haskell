@@ -46,6 +46,6 @@ peptideToSound peptide =
 main = do
   datum <- readFile "./covid_cdna.txt"
   let dna = concat.words $ datum
-  let peptide = (!! 5) $ extractPeptides dna
+  let peptide = (!! 7) $ extractPeptides dna
   let sound =  map toSound $ peptideToSound peptide
   makeWavFile $ lowPass 880 $ U.concat sound
