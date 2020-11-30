@@ -2,27 +2,27 @@ module AminoAcid where
 
  -- ordered by abundance
 data AminoAcid =
-  Phenylalanine |
-  Methionine | -- Start
-  Proline |
+  Leucine |
   Valine |
   Threonine |
-  Arginine |
-  Asparagine |
-  Glutamine |
-  Leucine |
-  Lysine |
-  Alanine |
-  Aspartic |
   Serine |
+  Alanine |
+  Glycine |
+  Lysine |
+  Asparagine |
+  Isoleucine |
+  Aspartic |
+  Phenylalanine |
+  Tyrosine |
+  Glutamic |
+  Proline |
+  Glutamine |
+  Arginine |
+  Cysteine |
+  Methionine |
   Histidine |
   Tryptophan |
-  Glutamic |
-  Isoleucine |
-  Tyrosine |
-  Cysteine |
-  Glycine |
   Stop
   deriving (Show, Eq, Ord, Enum)
 
-aminoAcids = enumFromTo Phenylalanine Glycine -- ordered by abundance
+aminoAcids = enumFromTo Leucine Tryptophan
