@@ -4,7 +4,7 @@ import Data.List (findIndex)
 import AminoAcid
 
 tonic :: Double
-tonic = 110 * 2
+tonic = 110 * 4
 
 -- Helpers
 pp :: Show a => [a] -> IO()
