@@ -23,16 +23,23 @@ sortAcids = do
       let (s, r) = partition (== a) (a:as) in
       (a, length s) : f r
 
+-- TODO: preserve peptide index
 sortPeptides :: IO [([AminoAcid], Int)]
 sortPeptides = do
-    ps <- peptides
-    let pepAcids = map (map aminoAcid) $ map peptideToEvents ps
-    let psWithLens = [(pep, length pep) | pep <- pepAcids]
-    let sorted = sortBy (flip compare `on` snd) psWithLens
-    return $ sorted
+  ps <- peptides
+  let pepAcids = map (map aminoAcid) $ map peptideToEvents ps
+  let psWithLens = [(pep, length pep) | pep <- pepAcids]
+  let sorted = sortBy (flip compare `on` snd) psWithLens
+  return $ sorted
 
 -- [4406,2596,1274,420,276,223,122,122,62,25,21,19,17,14,12,11,10,4,2]
 peptideCounts = do
   ps <- sortPeptides
   return $ map snd ps
 
+-- [10,4406,14,4,25,2596,1274,276,17,223,62,122,21,122,420,11,19,12,2]
+peptideLens = do
+  ps <- peptides
+  let pepAcids = map (map aminoAcid) $ map peptideToEvents ps
+  let psWithLens = [(pep, length pep) | pep <- pepAcids]
+  return $ map snd psWithLens
