@@ -6,7 +6,6 @@ import Codon
 
 data Duration = Eighth | Quarter | Half | Whole deriving (Show, Eq, Ord)
 data HarmonicDistribution = Harmonics [Double] deriving (Show)-- oboe, clarinet, ...
-data ADSR = Hmm -- strings, piano, ...
 
 type Epoch = Duration
 
@@ -19,7 +18,6 @@ class SoundEvent a where
   duration :: a -> Duration -- time that event is experienced
   epoch :: a -> Duration -- time before next monophonic event
   harmonics :: a -> HarmonicDistribution
-  adsr :: a -> ADSR
 
 instance SoundEvent ChemEvent where
   pitch = acidToPitch.aminoAcid
@@ -36,7 +34,6 @@ instance SoundEvent ChemEvent where
       'g' -> Half
       'c' -> Whole
   harmonics = undefined -- based on 'a'
-  adsr = undefined
 
 --
 
