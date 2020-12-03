@@ -5,6 +5,7 @@ import Data.Int (Int32)
 import Peptide
 import Event
 import Prelude hiding (Left, Right)
+import Filters (highPass, lowPass)
 import Data.WAVE
 import Main
 import Wave
@@ -54,8 +55,8 @@ simpleShortFile n tone oct = do
   datum <- readFile "./covid_cdna.txt"
   let dna = concat.words $ datum
   let peptide = (!! n) $ extractPeptides dna
-  let sound = U.concat $ map (tone (scale peptide) 1 oct) $ peptideToSound peptide
-  putWAVEFile ("tracks/temp"++show n++".wav") $ pack sound
+  let sound = U.concat $ map (tone (scale peptide) 2 oct) $ peptideToSound peptide
+  putWAVEFile ("tracks/temp"++show n++".wav") $ pack $ lowPass 3000 sound
 
 generateFiles =
   sequence [ simpleShortFile n t o | (n, (t, o)) <- zip [0..18] (zip ts os) ]
