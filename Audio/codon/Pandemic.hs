@@ -1,10 +1,13 @@
 module Pandemic where
 import qualified Data.Vector.Unboxed as U
-import Wave (VectSamples)
+-- import Wave (VectSamples)
 import Data.Int (Int32)
 import Peptide
 import Event
--- import Main
+import Prelude hiding (Left, Right)
+import Data.WAVE
+import Main
+import Wave
 
 {--
 Here is where the artistic choices for composition live.
@@ -27,31 +30,38 @@ Possible Peptide partition
 25,21,19,17,14,12,11,10,4,2 -- sparse short tones
 --}
 
-type Scalar = Double
+data Pan = Left | LeftCenter | Center | RightCenter | Right deriving (Show, Eq)
 
--- peptide length used as origin
-center :: Double
-center = 420.0
+compileStereoSound :: VectSamples -> Pan -> (VectSamples, VectSamples)
+compileStereoSound samples pan =
+  let volume r = round.(* r).fromIntegral in
+  let (volL, volR) = case pan of
+                      Left -> (volume 1, \x -> 0)
+                      LeftCenter -> (volume 0.25, volume 0.75)
+                      Center -> (volume 0.5, volume 0.5)
+                      RightCenter -> (volume 0.25, volume 0.75)
+                      Right -> (\x -> 0, volume 0.5) in
+  let left = U.map volL samples in
+  let right = U.map volR samples in
+  (left, right)
 
-scale :: Peptide -> Scalar
-scale p = (fromIntegral.length.peptideToSound $ p) / center
 
-longTones :: Sound -> Scalar -> VectSamples
-longTones (freq, epoch, dur) k =
-  let vol = maxBound `div` 1 :: Int32 in
-  let setVol = U.map (round . (* fromIntegral vol)) in
-  let (eSec, dSec) = durations epoch dur in
-  let sine = map sin [0.0, freqPerSample freq..] in
-  let noteTime = take.round $ eSec * 44100 * k in -- convolve with inv exp
-  let restTime = take (round $ dSec * 44100 * k) (repeat 0) in
-  setVol $ U.fromList $ noteTime sine ++ restTime
+-- Simple Files
+type Tone = (Scalar -> Volume -> Octave -> Sound -> VectSamples)
 
--- toSound :: Sound -> VectSamples
--- toSound (freq, epoch, dur) =
---   let vol = maxBound `div` 1 :: Int32 in
---   let setVol = U.map (round . (* fromIntegral vol)) in
---   let (eSec, dSec) = durations epoch dur in
---   let sine = map sin [0.0, freqPerSample freq..] in
---   let noteTime = take.round $ eSec * 44100 in -- convolve with inv exp
---   let restTime = take (round $ dSec * 44100) (repeat 0) in
---   setVol $ U.fromList $ noteTime sine ++ restTime
+simpleShortFile :: Int -> Tone -> Double -> IO ()
+simpleShortFile n tone oct = do
+  datum <- readFile "./covid_cdna.txt"
+  let dna = concat.words $ datum
+  let peptide = (!! n) $ extractPeptides dna
+  let sound = U.concat $ map (tone (scale peptide) 1 oct) $ peptideToSound peptide
+  putWAVEFile ("tracks/temp"++show n++".wav") $ pack sound
+
+generateFiles =
+  sequence [ simpleShortFile n t o | (n, (t, o)) <- zip [0..18] (zip ts os) ]
+  where
+    os = [2,5,3,3,1,5,3,0,1,0,3,1,1,1,0,3,2,0,3]
+    ts = [shortTones, shortTones, shortTones, shortTones, longTones,
+          shortTones, longTones, longTones, longTones, longTones, shortTones,
+          shortTones, shortTones, shortTones, longTones, shortTones, longTones,
+          shortTones, shortTones]
