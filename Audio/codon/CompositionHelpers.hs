@@ -1,16 +1,16 @@
 module CompositionHelpers where
 import qualified Data.Vector.Unboxed as U
 import AminoAcidToPitch (frequency)
+import Filters (highPass, lowPass)
 import AminoAcidToPitch (Freq)
 import Data.Int (Int32)
+import Data.WAVE
 import Peptide
 import Event
 import Wave
-import Data.WAVE
-import Filters (highPass, lowPass)
 
 type Sound = (Freq, Epoch, Duration)
-
+type Tone = (Scalar -> Volume -> Octave -> Sound -> VectSamples)
 -- 
 freqPerSample :: Double -> Double
 freqPerSample freq = freq * 2 * pi / 44100
@@ -38,13 +38,6 @@ toSound (freq, epoch, dur) =
 peptideToSound :: Peptide -> [Sound]
 peptideToSound peptide =
   [(frequency.pitch $ c, epoch c, duration c) | c <- peptideToEvents peptide]
-
--- main = do
---   datum <- readFile "./covid_cdna.txt"
---   let dna = concat.words $ datum
---   let peptide = (!! 12) $ extractPeptides dna
---   let sound =  map toSound $ peptideToSound peptide
---   makeWavFile $ lowPass 880 $ U.concat sound
 
 --------
 type Scalar = Double
@@ -91,14 +84,12 @@ shortTones k vol oct (freq, epoch, dur) =
     durations e d k
       | e < d = (toTime e, toTime e)
       | otherwise = (toTime d, k * toTime e - toTime d)
-----
 
-type Tone = (Scalar -> Volume -> Octave -> Sound -> VectSamples)
-
+-- Note: high octaves strongly attenuated by lowPass above 1500
 simpleShortFile :: Int -> Tone -> Double -> IO ()
 simpleShortFile n tone oct = do
   datum <- readFile "./covid_cdna.txt"
   let dna = concat.words $ datum
   let peptide = (!! n) $ extractPeptides dna
   let sound = U.concat $ map (tone (scale peptide) 2 oct) $ peptideToSound peptide
-  putWAVEFile ("tracks/temp"++show n++".wav") $ pack $ lowPass 3000 sound
+  putWAVEFile ("tracks/temp"++show n++".wav") $ pack $ lowPass 1500 sound

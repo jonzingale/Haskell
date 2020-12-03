@@ -1,18 +1,17 @@
 module Main where
 import qualified Data.Vector.Unboxed as U
 import Filters (highPass, lowPass)
-import Peptide
 import CompositionHelpers
+import Peptide
 import Wave
 
 {--
 Here is where the artistic choices for composition live.
 --}
 
--- create files
-main' =
-  sequence [ simpleShortFile 1 longTones 5, simpleShortFile 5 longTones 5]
-  -- sequence [ simpleShortFile n t o | (n, (t, o)) <- zip [0..18] (zip ts os) ]
+main' = -- create files
+  sequence [ simpleShortFile n t o | (n, (t, o)) <- zip [0..18] (zip ts os) ]
+  -- sequence [ simpleShortFile 1 longTones 5, simpleShortFile 5 longTones 5]
   where
     os = [2,5,3,3,1,5,3,0,1,0,3,1,1,1,0,3,2,0,3]
     ts = [shortTones, shortTones, shortTones, shortTones, longTones,
@@ -20,8 +19,7 @@ main' =
           shortTones, shortTones, shortTones, longTones, shortTones, longTones,
           shortTones, shortTones]
 
--- creates composition
-main = do
+main = do -- creates composition
   datum <- readFile "./covid_cdna.txt"
   let dna = concat.words $ datum
 
@@ -96,4 +94,3 @@ main = do
 
   -- mix
   makeStereoWavFile (lowPass 3000 sl) (lowPass 3000 sr)
-
