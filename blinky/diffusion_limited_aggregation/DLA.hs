@@ -9,21 +9,22 @@ type Bound = (Int, Int)
 type Free = (Int, Int)
 type Seed = Int
 
-size = 400
+bsize = 400 -- board size
+pcount = 4000 -- number of particles
 
 board :: Board
 board = B (genFrees 42) [(5, 5)]
   where
     genFrees seed =
       let (g1, g2) = split.mkStdGen $ seed in
-      let rs = randomRs (0, size) in
-      take 4000 $ zip (rs g1) (rs g2)
+      let rs = randomRs (0, bsize) in
+      take pcount $ zip (rs g1) (rs g2)
 
 randomStep :: Seed -> Free -> Free
 randomStep seed (p, q) =
   let (g1, g2) = split.mkStdGen $ seed in
   let (n, m) = bimap rr rr (g1, g2) in
-  ((p + n) `mod` size, (q + m) `mod` size)
+  ((p + n) `mod` bsize, (q + m) `mod` bsize)
   where rr = fst.randomR (-1, 1)
 
 nearBound :: [Bound] -> Free -> Bool
