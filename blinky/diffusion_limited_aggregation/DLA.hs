@@ -9,26 +9,21 @@ type Bound = (Int, Int)
 type Free = (Int, Int)
 type Seed = Int
 
-diag :: (a -> b) -> (a, a) -> (b, b)
-diag f (a, b) = (f a, f b)
+size = 400
 
 board :: Board
-board = B (take 40 $ genFrees 42) [(5, 5)]
+board = B (genFrees 42) [(5, 5)]
+  where
+    genFrees seed =
+      let (g1, g2) = split.mkStdGen $ seed in
+      let rs = randomRs (0, size) in
+      take 4000 $ zip (rs g1) (rs g2)
 
-genFrees :: Seed -> [Free]
-genFrees seed =
-  let (g1, g2) = split.mkStdGen $ seed
-      rs = randomRs (0, 9) in
-  zip (rs g1) (rs g2)
-
--- avoid mapping, be rigorous with passed generators.
--- seed once, pass generators.
 randomStep :: Seed -> Free -> Free
 randomStep seed (p, q) =
   let (g1, g2) = split.mkStdGen $ seed in
-  let n = rr g1
-      m = rr g2 in
-  (p + n, q + m)
+  let (n, m) = bimap rr rr (g1, g2) in
+  ((p + n) `mod` size, (q + m) `mod` size)
   where rr = fst.randomR (-1, 1)
 
 nearBound :: [Bound] -> Free -> Bool
@@ -41,8 +36,9 @@ nearBound bs fr = any (\b -> dist b fr) bs
 blink :: Seed -> Board -> Board
 blink seed (B fs bs) =
   let B fs' bs' = absorb fs bs [] in
-  -- TODO: map (randomStep seed) causes drift
-  B (map (randomStep seed) fs') bs'
+  let rands = randoms (mkStdGen seed) :: [Int] in
+  let blinkFrees = zipWith randomStep rands fs' in
+  B blinkFrees bs'
     where
       absorb [] bs fs' = B fs' bs
       absorb (f:fs) bs fs'
@@ -51,16 +47,15 @@ blink seed (B fs bs) =
         | otherwise = absorb fs bs (f:fs')
 
 -- State Monad: accumulate state within monad
--- random :: (RandomGen g, Random a) => g -> (a, g)
 blinkStates :: Int -> Board -> State StdGen Board
-blinkStates n b = do
-  let vals = iterate ((=<<) boardSt) $ return b
-  val <- vals !! n
-  return val
+blinkStates n b = iterateN n (return b)
   where
+    iterateN 0 v = v
+    iterateN k v = iterateN (k-1) (boardSt =<< v)
+    -- random :: (RandomGen g, Random a) => g -> (a, g)
     rBoard :: RandomGen c => Board -> c -> (Board, c)
     rBoard = \b g -> first (flip blink b) $ random g
-    boardSt bd = state $ rBoard bd
+    boardSt = state.rBoard
 
 -- Pass (blinkStates n board) an initial seed and get nth board state.
 ex1 n = runState (blinkStates n board) (mkStdGen 12)
