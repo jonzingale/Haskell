@@ -30,7 +30,8 @@ such as octave, long tones, volume, panning, et cetera. The "sounds" are stored
 as 32 bit integer arrays, mixed and saved as WAVE files.
 
 I would like to thank Ken Prokuski and Ed Angel for their camaraderie and
-support in making this project possible.
+support in making this project possible. Thank you also to Joe Moon and Toshia
+Myers for the helpful discussions about genomics.
 
 The final piece can be listened to here:
 [Pandemic: A peptide symphony in A Major](https://soundcloud.com/jeejaws-for-jawaas/pandemic-peptide-symphony-in-a-maj)
