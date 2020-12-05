@@ -1,9 +1,15 @@
 module Constants where
 
-bsize = 700 :: Int -- board size
+bsize = 800 :: Int -- board size
 pcount = 50000 :: Int -- number of particles
-blinks = 10000 :: Int -- number of iterations
+blinks = 20000 :: Int -- number of iterations
 hsize = div bsize 2 -- half a board size
+
+-- 85m52.939s
+-- bsize = 700 :: Int -- board size
+-- pcount = 50000 :: Int -- number of particles
+-- blinks = 10000 :: Int -- number of iterations
+-- hsize = div bsize 2 -- half a board size
 
 -- 0m23.250s
 -- bsize = 300 :: Int -- board size
