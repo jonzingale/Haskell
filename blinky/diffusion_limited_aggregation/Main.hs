@@ -31,5 +31,6 @@ genImage = runST $ do
          dlaToImage ps mi
 
 -- TODO: Animated Gif
+-- https://hackage.haskell.org/package/JuicyPixels-3.2.7/docs/Codec-Picture.html
 -- writeGifAnimation :: FilePath -> GifDelay -> GifLooping -> [Image PixelRGB8] -> Either String (IO ())
 -- let gif = writeGifAnimation "tmp.gif" 10 LoopingForever [img, lmg]
