@@ -29,7 +29,7 @@ randomStep seed (p, q) =
   where rr = fst.randomR (-1, 1)
 
 nearBound :: [Bound] -> Free -> Bool
-nearBound bs fr = any (\b -> dist b fr) bs
+nearBound bs fr = any (dist fr) bs
   where
     dist (b1, b2) (f1, f2) = (eball b1 f1) && (eball b2 f2)
     eball a b = abs (a - b) <= 1
