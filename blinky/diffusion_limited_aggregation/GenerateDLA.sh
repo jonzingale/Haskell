@@ -4,7 +4,7 @@
 # . GenerateDLA.sh
 
 # parallel
-# echo 'compiling Main'
+# echo 'compiling parallel Main'
 # ghc -O2 --make Main.hs -threaded -rtsopts -fforce-recomp
 # echo 'removing files'
 # rm *.o *.hi
@@ -12,9 +12,18 @@
 # time ./Main +RTS -N8
 
 # classic
-echo 'compiling Main'
+echo 'compiling classic Main'
 ghc -O2 --make Main.hs
 echo 'removing files'
 rm *.o *.hi
 echo 'generating diffusion limited aggregate'
 time ./Main
+
+# profiler
+# https://downloads.haskell.org/~ghc/latest/docs/html/users_guide/profiling.html
+# echo 'compiling profiler Main'
+# ghc -O2 --make Main.hs -prof -fprof-auto -fprof-cafs -rtsopts
+# echo 'removing files'
+# rm *.o *.hi
+# echo 'generating diffusion limited aggregate'
+# time ./Main +RTS -p
