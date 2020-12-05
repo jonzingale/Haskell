@@ -1,5 +1,6 @@
 module DLAVector where
-import qualified Data.Vector.Unboxed as U
+import qualified Data.Vector as U
+-- import Data.Vector.Strategies (using, parVector)
 import Data.Bifunctor (first, bimap)
 import Control.Monad.State
 import System.Random
@@ -15,10 +16,10 @@ type Free = (Int, Int)
 type Seed = Int
 
 bsize = 400 :: Int -- board size
-pcount = 4000 :: Int -- number of particles
+pcount = 12000 :: Int -- number of particles
 
 board :: Board
-board = B (genFrees 42) (U.singleton (5, 5))
+board = B (genFrees 42) (U.singleton (div bsize 2, div bsize 2))
   where
     genFrees seed =
       let (g1, g2) = split.mkStdGen $ seed in
@@ -43,7 +44,7 @@ blink :: Seed -> Board -> Board
 blink seed (B fs bs) =
   let B fs' bs' = absorb fs bs in
   let len = U.length fs' in
-  let rands = U.fromList.(take len).randoms $ (mkStdGen seed) in
+  let rands = U.fromList.(take len).randoms $ mkStdGen seed in
   let fss = U.zipWith randomStep rands fs' in
   B fss bs'
     where
