@@ -2,15 +2,15 @@
 
 ![alt text](images/diffusionLimitedAggregate.png "diffusion limited aggregate")
 
-Let us call a computation dual to *purely functional*, *maximally-stateful*.
 A maximally stateful process is one whose side-effects dominate the computation,
-with little else analytically calculable. The image is that of clouds,
-cellular automata, or the geological history of a mountain. Consider computations
-where: the term process is more apt than function, computations whose
-specification may be trivial and yet depend crucially on their initial
-conditions, the evolving process manifests in bouts of combinatorial explosions,
-the intension matters more than the extension, and any particular run is
-unambiguously path-dependent.
+with little else analytically calculable. Let us call computations like these,
+in a sense dual to *purely functional computations*, *maximally-stateful*.
+The image is that of clouds, cellular automata, or the geological history of a
+mountain, Darwin's tree of life. Consider computations where *process* is more
+apt a term than *function*, computations whose specification may be trivial and
+yet depend crucially on initial conditions. The evolving process manifests in bouts
+of combinatorial explosions, the intension matters more than the extension, and
+any particular run is unambiguously path-dependent.
 
 Some time ago, my friend, Glen mentioned diffusion-limited aggregation
 (DLA) in the context of our on-going discussions centered around modal
