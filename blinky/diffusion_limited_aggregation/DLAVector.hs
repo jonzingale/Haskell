@@ -1,6 +1,5 @@
 module DLAVector where
-import qualified Data.Vector as U
--- import Data.Vector.Strategies (using, parVector)
+import qualified Data.Vector.Unboxed as U
 import Data.Bifunctor (first, bimap)
 import Control.Monad.State
 import System.Random

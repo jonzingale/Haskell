@@ -1,9 +1,7 @@
 module Main where
 import DLAVector (bsize, blinkStates, board, bounds)
--- import DLA (bsize, blinkStates, board, bounds)
-import Control.Parallel.Strategies (rdeepseq, parListChunk, using)
--- import Data.Vector.Strategies (using, parVector)
-import qualified Data.Vector as U
+-- import Control.Parallel.Strategies (rdeepseq, parListChunk, using)
+import qualified Data.Vector.Unboxed as U
 import qualified Codec.Picture.Types as M
 import Codec.Picture -- JuicyPixel
 import Control.Monad.State
@@ -24,9 +22,8 @@ genImage :: Image PixelRGB8
 genImage = runST $ do
   let dla = runState (blinkStates 9000 board) (mkStdGen 42)
   let points = U.toList.bounds.fst $ dla
-  let pPoints = points `using` (parListChunk 1024 rdeepseq)
   mimg <- M.newMutableImage bsize bsize
-  dlaToImage pPoints mimg
+  dlaToImage points mimg
   where
     dlaToImage [] mi = M.unsafeFreezeImage mi
     dlaToImage ((x,y):ps) mi =
