@@ -1,6 +1,7 @@
 module DLAVector where
 import qualified Data.Vector.Unboxed as U
 import Data.Bifunctor (first, bimap)
+import Constants (bsize, pcount, hsize)
 import Control.Monad.State
 import System.Random
 
@@ -14,16 +15,13 @@ type Bound = (Int, Int)
 type Free = (Int, Int)
 type Seed = Int
 
-bsize = 400 :: Int -- board size
-pcount = 12000 :: Int -- number of particles
-
 board :: Board
-board = B (genFrees 42) (U.singleton (div bsize 2, div bsize 2))
+board = B (genFrees 42) (U.singleton (hsize, hsize))
   where
     genFrees seed =
       let (g1, g2) = split.mkStdGen $ seed in
-      let rs g = U.fromList.(take pcount).randomRs (0, bsize) $ g in
-      U.zip (rs g1) (rs g2)
+      let rs g = randomRs (0, bsize) $ g in
+      U.fromList $ take pcount $ zip (rs g1) (rs g2)
 
 randomStep :: Seed -> Free -> Free
 randomStep seed (p, q) =
@@ -33,9 +31,10 @@ randomStep seed (p, q) =
   where rr = fst.randomR (-1, 1)
 
 nearBound :: U.Vector Bound -> Free -> Bool
-nearBound bs fr = U.any (\b -> dist b fr) bs
+nearBound bs fr =
+  U.any (dist fr) bs
   where
-    dist (b1, b2) (f1, f2) = (eball b1 f1) && (eball b2 f2)
+    dist (f1, f2) (b1, b2) = (eball b1 f1) && (eball b2 f2)
     eball a b = abs (a - b) <= 1
 
 -- Absorb new bounds and then blink

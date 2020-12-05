@@ -1,5 +1,6 @@
 module DLA where
 import Data.Bifunctor (first, bimap)
+import Constants (bsize, pcount)
 import Data.List (partition)
 import Control.Monad.State
 import System.Random
@@ -9,9 +10,6 @@ data Board = B { frees :: [Free], bounds :: [Bound] } deriving (Show)
 type Bound = (Int, Int)
 type Free = (Int, Int)
 type Seed = Int
-
-bsize = 400 -- board size
-pcount = 4000 -- number of particles
 
 board :: Board
 board = B (genFrees 42) [(5, 5)]
@@ -31,12 +29,12 @@ randomStep seed (p, q) =
 nearBound :: [Bound] -> Free -> Bool
 nearBound bs fr = any (dist fr) bs
   where
-    dist (b1, b2) (f1, f2) = (eball b1 f1) && (eball b2 f2)
+    dist (f1, f2) (b1, b2) = (eball b1 f1) && (eball b2 f2)
     eball a b = abs (a - b) <= 1
 
 -- Absorb new bounds and then blink
-blink :: Seed -> Board -> Board
-blink seed (B fs bs) =
+blink :: Board -> Seed -> Board
+blink (B fs bs) seed =
   let (fs', bs') = absorb fs bs in
   let rands = randoms (mkStdGen seed) in
   let fss = zipWith randomStep rands fs' in
@@ -56,7 +54,7 @@ blinkStates n b = iterateN n (return b)
     iterateN k v = iterateN (k-1) (boardSt =<< v)
     -- random :: (RandomGen g, Random a) => g -> (a, g)
     rBoard :: RandomGen c => Board -> c -> (Board, c)
-    rBoard = \b g -> first (flip blink b) $ random g
+    rBoard = \b g -> first (blink b) $ random g
     boardSt = state.rBoard
 
 -- Pass (blinkStates n board) an initial seed and get nth board state.
