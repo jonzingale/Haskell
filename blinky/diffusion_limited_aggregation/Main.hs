@@ -17,9 +17,10 @@ import System.Random
 main :: IO ()
 main = do savePngImage "images/tmp.png" $ ImageRGB8 genImage
 
+-- 5000 steps, 12000 particles, 400x400 in 3m48. no parallel
 genImage :: Image PixelRGB8
 genImage = runST $ do
-  let dla = runState (blinkStates 5000 board) (mkStdGen 42)
+  let dla = runState (blinkStates 9000 board) (mkStdGen 42)
   let points = U.toList.bounds.fst $ dla
   mimg <- M.newMutableImage bsize bsize
   dlaToImage points mimg
