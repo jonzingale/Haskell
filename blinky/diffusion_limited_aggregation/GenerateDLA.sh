@@ -9,7 +9,7 @@
 # echo 'removing files'
 # rm *.o *.hi
 # echo 'generating diffusion limited aggregate'
-# time ./Main +RTS -N8
+# time ./Main +RTS -N6
 
 # classic
 echo 'compiling classic Main'

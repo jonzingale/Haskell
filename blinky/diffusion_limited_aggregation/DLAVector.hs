@@ -23,19 +23,17 @@ board = B (genFrees 42) (U.singleton (hsize, hsize))
   where
     genFrees seed =
       let (g1, g2) = split.mkStdGen $ seed in
-      let rs g = randomRs (0, bsize) $ g in
+      let rs = randomRs (0, bsize) in
       U.fromList $ take pcount $ zip (rs g1) (rs g2)
 
 randomStep :: Seed -> Free -> Free
 randomStep seed (p, q) =
   let (g1, g2) = split.mkStdGen $ seed in
-  let (n, m) = (rr g1, rr g2) in
-  (mod (p + n) bsize, mod (q + m) bsize)
-  where rr = fst.randomR (-1, 1)
+  let rr = fst.randomR (-1, 1) in
+  (mod (p + rr g1) bsize, mod (q + rr g2) bsize)
 
 nearBound :: U.Vector Bound -> Free -> Bool
-nearBound bs fr =
-  U.any (dist fr) bs
+nearBound bs fr = U.any (dist fr) bs
   where
     dist (f1, f2) (b1, b2) = (eball b1 f1) && (eball b2 f2)
     eball a b = abs (a - b) <= 1
