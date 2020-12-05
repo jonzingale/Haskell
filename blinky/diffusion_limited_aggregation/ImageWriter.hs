@@ -14,7 +14,7 @@ TODO:
 --}
 
 filenameStub = "/images/"
-defaultImage  = "insideACell.jpg"
+defaultImage  = "baller.png"
 
 imageCreator :: String -> IO ()
 imageCreator path = writePng path $ generateImage pixelRenderer 250 300
@@ -25,7 +25,7 @@ imageCreator path = writePng path $ generateImage pixelRenderer 250 300
 -- attempts to produce jpeg then tries to produce png
 getImage :: FilePath -> IO DynamicImage
 getImage filepath = do
-  image <- readJpeg filepath
+  image <- readPng filepath
   case image of
     Right chet -> return chet
     Left chet -> do

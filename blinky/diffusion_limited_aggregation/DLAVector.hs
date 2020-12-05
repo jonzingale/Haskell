@@ -30,7 +30,7 @@ randomStep :: Seed -> Free -> Free
 randomStep seed (p, q) =
   let (g1, g2) = split.mkStdGen $ seed in
   let (n, m) = (rr g1, rr g2) in
-  ((p + n) `mod` bsize, (q + m) `mod` bsize)
+  (mod (p + n) bsize, mod (q + m) bsize)
   where rr = fst.randomR (-1, 1)
 
 nearBound :: U.Vector Bound -> Free -> Bool
