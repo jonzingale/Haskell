@@ -14,10 +14,10 @@
 # classic
 echo 'compiling classic Main'
 ghc -O2 --make Main.hs
-echo 'removing files'
-rm *.o *.hi
 echo 'generating diffusion limited aggregate'
 time ./Main
+echo 'removing files'
+rm *.o *.hi
 
 # profiler
 # https://downloads.haskell.org/~ghc/latest/docs/html/users_guide/profiling.html
