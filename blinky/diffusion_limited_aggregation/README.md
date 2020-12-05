@@ -73,9 +73,6 @@ tempting but possibly exogenous interpretation. How does one know when
 they have accurately characterized the content of a theory? How does one
 know that there is nothing more to be gleaned?
 
-Cheers,
-Jon
-
 [*] It is worth noting that to reach an analytically amenable form, I
 was initially tempted to replace probability distributions by growth
 rates over bound particles. Unfortunately, models of this type fail to
