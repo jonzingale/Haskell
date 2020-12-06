@@ -14,6 +14,12 @@ pcount = 30000 :: Int -- number of particles
 blinks = 20000 :: Int -- number of iterations
 hsize = div bsize 2 -- half a board size
 
+-- 13m33.503s
+-- bsize = 700 :: Int -- board size
+-- pcount = 30000 :: Int -- number of particles
+-- blinks = 10000 :: Int -- number of iterations
+-- hsize = div bsize 2 -- half a board size
+
 -- 180m48.976s, 24k
 -- bsize = 800 :: Int -- board size
 -- pcount = 50000 :: Int -- number of particles
@@ -23,12 +29,6 @@ hsize = div bsize 2 -- half a board size
 -- 85m52.939s, 27k
 -- bsize = 700 :: Int -- board size
 -- pcount = 50000 :: Int -- number of particles
--- blinks = 10000 :: Int -- number of iterations
--- hsize = div bsize 2 -- half a board size
-
--- 13m33.503s
--- bsize = 700 :: Int -- board size
--- pcount = 30000 :: Int -- number of particles
 -- blinks = 10000 :: Int -- number of iterations
 -- hsize = div bsize 2 -- half a board size
 
