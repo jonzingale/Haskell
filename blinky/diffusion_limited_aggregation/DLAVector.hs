@@ -5,9 +5,6 @@ import Constants (bsize, pcount, hsize)
 import Control.Monad.State
 import System.Random
 
--- TODO: Consider GPU
--- http://hackage.haskell.org/package/accelerate-1.2.0.1/docs/Data-Array-Accelerate.html
-
 {-- Diffusion limited aggregation --}
 data Board = B {
   frees :: U.Vector Free,

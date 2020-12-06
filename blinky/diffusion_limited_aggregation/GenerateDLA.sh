@@ -6,10 +6,18 @@
 # parallel
 # echo 'compiling parallel Main'
 # ghc -O2 --make Main.hs -threaded -rtsopts -fforce-recomp
-# echo 'removing files'
-# rm *.o *.hi
 # echo 'generating diffusion limited aggregate'
 # time ./Main +RTS -N6
+# echo 'removing files'
+# rm *.o *.hi
+
+# accelerate
+# echo 'compiling parallel Main'
+# ghc -O2 --make Main.hs
+# echo 'generating diffusion limited aggregate'
+# time ./Main +RTS -A64M -n2M -RTS
+# echo 'removing files'
+# rm *.o *.hi
 
 # classic
 echo 'compiling classic Main'
