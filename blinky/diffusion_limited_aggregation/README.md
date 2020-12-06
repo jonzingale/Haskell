@@ -8,9 +8,10 @@ cellular automata, the phylogenetic tree of life, or the geological history of
 a mountain. They are computations where *process* is more apt a term than
 *function*, computations whose specification may be trivial and yet depend
 crucially on initial conditions, historicity, and context. The evolving process
-manifests in bouts of combinatorial explosions, the intension matters more than
-the extension, and any particular run is unambiguously path-dependent, i.e.,
-computations that are as far from *purely functional* as one can possibly hope for.
+manifests in bouts of combinatorial explosions, the *intension* matters more
+than the *extension*, and any particular run is unambiguously path-dependent,
+i.e., computations that are as far from *purely functional* as one can possibly
+hope for.
 
 Some time ago, my friend, Glen mentioned diffusion-limited aggregation
 (DLA) in the context of our on-going discussions centered around modal
