@@ -1,5 +1,5 @@
 module DLA where
-import Data.Bifunctor (first, bimap)
+import Data.Bifunctor (first)
 import Constants (bsize, pcount)
 import Data.List (partition)
 import Control.Monad.State
@@ -22,9 +22,8 @@ board = B (genFrees 42) [(5, 5)]
 randomStep :: Seed -> Free -> Free
 randomStep seed (p, q) =
   let (g1, g2) = split.mkStdGen $ seed in
-  let (n, m) = bimap rr rr (g1, g2) in
-  ((p + n) `mod` bsize, (q + m) `mod` bsize)
-  where rr = fst.randomR (-1, 1)
+  let rr = fst.randomR (-1, 1) in
+  (mod (p + rr g1) bsize, mod (q + rr g2) bsize)
 
 nearBound :: [Bound] -> Free -> Bool
 nearBound bs fr = any (dist fr) bs
