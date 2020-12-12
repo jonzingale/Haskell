@@ -7,6 +7,7 @@ import Types
 -- 2. sum fidelity while under nyquist limit
 -- 3. modulate from timbre1 to timbre2 over melody
 -- 4. fully unbox Timbres
+-- 5. normalize timbres
 
 fidelity = 100
 
