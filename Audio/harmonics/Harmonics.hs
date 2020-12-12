@@ -55,5 +55,5 @@ sawTimbre :: Timbre
 sawTimbre freq =
   let ss n = map sin [0.0, freqPerSample (n*freq)..] in -- sin(nx)
   let tt n = map (\t -> 0.5 - t * ((-1)**n) * (1/n)) in -- (+/-) 1/n
-  let vv = map (/ 3) in -- volume
+  let vv = map (/ 1) in -- volume, TRIVIAL
   foldr (zipWith (+)) (repeat 0) [ vv.tt n $ ss n | n <- [1..20]]
