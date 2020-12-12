@@ -7,6 +7,11 @@ import Wave (makeStereoWavFile)
 import Data.Int (Int32)
 import Types
 
+solar = do
+  let s1 = U.concat $ map (toSound sawTimbre) melody
+  let s2 = U.concat $ map (toSound evenTimbre) melody
+  makeStereoWavFile "solar.wav" s1 s2
+
 melody =
   [
     ("r", Eighth),
@@ -26,11 +31,6 @@ melody =
     ("c1", Eighth),
     ("a'0", Whole)
   ]
-
-solar = do
-  let s1 = U.concat $ map (toSound evenTimbre) melody
-  let s2 = U.concat $ map (toSound evenTimbre) melody
-  makeStereoWavFile "solar.wav" s1 s2
 
 toPitch :: Int -> Freq 
 toPitch (-1) = 0.0
