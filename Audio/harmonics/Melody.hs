@@ -16,12 +16,12 @@ toMelody filename mel = do
   let s2 = U.concat $ map (toSound evenTimbre) sol
   makeStereoWavFile filename s1 s2
 
-toPitch :: Int -> Freq 
+toPitch :: Int -> Frequency
 toPitch (-1) = 0.0 -- rest
 toPitch int = 110.0 * freq (fromIntegral int)
   where freq = \n -> 2.0 ** (n/12)
 
-fromNote :: String -> Freq
+fromNote :: String -> Frequency
 fromNote = toPitch.note2Iint
 
 note2Iint :: String -> Int
@@ -77,10 +77,10 @@ toTime Whole = 1
 toTime WholeD = 1.5
 
 toSound :: Timbre -> Sound -> VectSamples
-toSound timbre (note, epoch) =
+toSound timbre (note, duration) =
   let freq = fromNote note in
   let vol = maxBound `div` 2 :: Int32 in
   let setVol = U.map (round . (* fromIntegral vol)) in
-  let noteTime = take.round $ toTime epoch * 44100 in
+  let noteTime = take.round $ toTime duration * 44100 in
   let harmonicSine = timbre freq :: [Double] in
   setVol $ U.fromList $ noteTime harmonicSine
