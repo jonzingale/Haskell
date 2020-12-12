@@ -2,6 +2,10 @@ module Harmonics where
 import System.Random
 import Types
 
+-- TODO:
+-- 1. end sample on 0.0
+-- 2. sum while under nyquist limit
+
 freqPerSample :: Double -> Double
 freqPerSample freq = freq * 2 * pi / 44100
 
