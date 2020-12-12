@@ -17,17 +17,17 @@ toMelody filename mel = do
   makeStereoWavFile filename s1 s2
 
 toPitch :: Int -> Freq 
-toPitch (-1) = 0.0
+toPitch (-1) = 0.0 -- rest
 toPitch int = 110.0 * freq (fromIntegral int)
   where freq = \n -> 2.0 ** (n/12)
 
 fromNote :: String -> Freq
-fromNote n = toPitch.note2Iint $ n
+fromNote = toPitch.note2Iint
 
 note2Iint :: String -> Int
 note2Iint interval =
   case interval of
-    "r" -> negate 1
+    "r" -> -1
     "c0" -> 0
     "c'0" -> 1
     "d0" -> 2
@@ -79,14 +79,8 @@ toTime WholeD = 1.5
 toSound :: Timbre -> Sound -> VectSamples
 toSound timbre (note, epoch) =
   let freq = fromNote note in
-  let vol = maxBound `div` 4 :: Int32 in
+  let vol = maxBound `div` 2 :: Int32 in
   let setVol = U.map (round . (* fromIntegral vol)) in
-  let (eSec, dSec) = durations' epoch epoch in
-  let noteTime = take.round $ eSec * 44100 in
-  let restTime = take (round $ dSec * 44100) $ repeat 0 in
+  let noteTime = take.round $ toTime epoch * 44100 in
   let harmonicSine = timbre freq :: [Double] in
-  setVol $ U.fromList $ noteTime harmonicSine ++ restTime
-  where
-    durations' e d
-      | e < d = (toTime e, toTime e)
-      | otherwise = (toTime d, toTime e - toTime d)
+  setVol $ U.fromList $ noteTime harmonicSine
