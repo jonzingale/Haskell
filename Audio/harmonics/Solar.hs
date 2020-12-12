@@ -85,24 +85,24 @@ toSound timbre (note, epoch) =
 melody =
   [
     ("r", Eighth),
-    ("c2", QuarterD),
-    ("b1", Quarter),
-    ("d2", Eighth),
+    ("c1", QuarterD),
+    ("b0", Quarter),
+    ("d1", Eighth),
     ("c1", Eighth),
 
     ("r", Eighth),
-    ("g1", Whole),
-    ("a1", Eighth),
+    ("g0", Whole),
+    ("a0", Eighth),
 
-    ("a'1", Quarter),
-    ("a'1", Eighth),
-    ("a'1", Eighth),
-    ("a1", Quarter),
-    ("c2", Eighth),
-    ("a'1", Whole)
+    ("a'0", Quarter),
+    ("a'0", Eighth),
+    ("a'0", Eighth),
+    ("a0", Quarter),
+    ("c1", Eighth),
+    ("a'0", Whole)
   ]
 
 solar = do
   let s1 = U.concat $ map (toSound toEvenTimbre) melody
-  let s2 = U.concat $ map (toSound toOddTimbre) melody
+  let s2 = U.concat $ map (toSound toEvenTimbre) melody
   putWAVEFile "solar.wav" $ stereopack s1 s2
