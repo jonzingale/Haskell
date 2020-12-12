@@ -1,5 +1,7 @@
 module Solar where
-import Harmonics (toNoiseTimbreEven, toNoiseTimbreOdd, toEvenTimbre, toOddTimbre)
+import Harmonics(
+  noiseTimbreEven, noiseTimbreOdd, evenTimbre,
+  oddTimbre, squareTimbre, nonSquareTimbre, sawTimbre)
 import qualified Data.Vector.Unboxed as U
 import Wave (makeStereoWavFile)
 import Data.Int (Int32)
@@ -26,8 +28,8 @@ melody =
   ]
 
 solar = do
-  let s1 = U.concat $ map (toSound toEvenTimbre) melody
-  let s2 = U.concat $ map (toSound toEvenTimbre) melody
+  let s1 = U.concat $ map (toSound evenTimbre) melody
+  let s2 = U.concat $ map (toSound evenTimbre) melody
   makeStereoWavFile "solar.wav" s1 s2
 
 toPitch :: Int -> Freq 
