@@ -9,7 +9,7 @@ import Types
 -- 4. fully unbox Timbres
 -- 5. normalize timbres
 
-fidelity = 100
+fidelity = 20
 
 freqPerSample :: Double -> Double
 freqPerSample freq = freq * 2 * pi / 44100
@@ -34,24 +34,24 @@ evenTimbre :: Timbre
 evenTimbre freq =
   let vol x = (* (exp (-0.8*x))) in
   let ss x = map ((vol x).sin) [0.0, freqPerSample (2*x*freq)..] in
-  foldr (zipWith (+)) (repeat 0) [ss t | t <- [1..fidelity]] -- Note: must be finite
+  foldr (zipWith (+)) (repeat 0) [ss t | t <- [1..fidelity]]
 
 oddTimbre :: Timbre
 oddTimbre freq =
   let vol x = (* (exp (-0.8*x))) in
   let ss x = map ((vol x).sin) [0.0, freqPerSample ((2*x+1)*freq)..] in
-  foldr (zipWith (+)) (repeat 0) [ss t | t <- [1..fidelity]] -- Note: must be finite
+  foldr (zipWith (+)) (repeat 0) [ss t | t <- [1..fidelity]]
 
 -- sin(x) + 1⁄3sin(3x) + 1⁄5sin(5x) + ...
 squareTimbre :: Timbre
 squareTimbre freq = -- NOTE: const 6 is for overall attenuation
   let ss x = map ((/ (6*x)).sin) [0.0, freqPerSample ((2*x+1)*freq)..] in
-  foldr (zipWith (+)) (repeat 0) [ss t | t <- [1..fidelity]] -- Note: must be finite
+  foldr (zipWith (+)) (repeat 0) [ss t | t <- [1..fidelity]]
 
 nonSquareTimbre :: Timbre
 nonSquareTimbre freq =
   let ss x = map ((/ (6*x)).sin) [0.0, freqPerSample (2*x*freq)..] in
-  foldr (zipWith (+)) (repeat 0) [ss t | t <- [1..fidelity]] -- Note: must be finite
+  foldr (zipWith (+)) (repeat 0) [ss t | t <- [1..fidelity]]
 
 -- sin(x) - 1⁄2sin(2x) + 1⁄3sin(3x) - 1⁄4sin(4x) + 1⁄5sin(5x) - ...
 sawTimbre :: Timbre
