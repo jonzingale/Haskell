@@ -1,10 +1,9 @@
 module Solar where
-import qualified Data.Vector.Unboxed as U
-import CompositionHelpers hiding (toSound, Sound, toTime)
-import Wave (Frequency, stereopack)
-import Data.Int (Int32)
-import Data.WAVE
 import Harmonics (toNoiseTimbreEven, toNoiseTimbreOdd, toEvenTimbre, toOddTimbre)
+import qualified Data.Vector.Unboxed as U
+import Wave (Frequency, stereopack)
+import Data.WAVE (putWAVEFile)
+import Data.Int (Int32)
 
 type VectSamples = U.Vector Int32
 type Sound = (String, Duration)
