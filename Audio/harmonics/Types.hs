@@ -6,6 +6,7 @@ type VectSamples = U.Vector Int32
 type Sound = (String, Duration)
 type Timbre = Double -> [Double]
 type DurationSecs = Double
+type Frequency = Double
 type Epoch = Duration
 type Freq = Double
 

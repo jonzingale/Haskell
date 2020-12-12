@@ -21,8 +21,8 @@ pack xs = WAVE header $ map (:[]) $ U.toList xs
 makeWavFile :: VectSamples -> IO ()
 makeWavFile wav = putWAVEFile "temp.wav" $ pack wav
 
-makeStereoWavFile :: VectSamples -> VectSamples -> IO()
-makeStereoWavFile w1 w2 = putWAVEFile "temp.wav" $ stereopack w1 w2
+makeStereoWavFile :: String -> VectSamples -> VectSamples -> IO()
+makeStereoWavFile filename w1 w2 = putWAVEFile filename $ stereopack w1 w2
 
 stereopack :: VectSamples -> VectSamples -> WAVE
 stereopack xs ys =

@@ -1,9 +1,5 @@
 module Harmonics where
-import qualified Data.Vector.Unboxed as U
-import Wave (Frequency, stereopack)
-import Data.Int (Int32)
 import System.Random
-import Data.WAVE
 import Types
 
 freqPerSample :: Double -> Double

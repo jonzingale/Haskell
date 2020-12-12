@@ -1,16 +1,39 @@
 module Solar where
 import Harmonics (toNoiseTimbreEven, toNoiseTimbreOdd, toEvenTimbre, toOddTimbre)
 import qualified Data.Vector.Unboxed as U
-import Wave (Frequency, stereopack)
-import Data.WAVE (putWAVEFile)
+import Wave (makeStereoWavFile)
 import Data.Int (Int32)
 import Types
 
-freq = \n -> 2.0 ** (n/12)
+melody =
+  [
+    ("r", Eighth),
+    ("c1", QuarterD),
+    ("b0", Quarter),
+    ("d1", Eighth),
+    ("c1", Eighth),
+
+    ("r", Eighth),
+    ("g0", Whole),
+    ("a0", Eighth),
+
+    ("a'0", Quarter),
+    ("a'0", Eighth),
+    ("a'0", Eighth),
+    ("a0", Quarter),
+    ("c1", Eighth),
+    ("a'0", Whole)
+  ]
+
+solar = do
+  let s1 = U.concat $ map (toSound toEvenTimbre) melody
+  let s2 = U.concat $ map (toSound toEvenTimbre) melody
+  makeStereoWavFile "solar.wav" s1 s2
 
 toPitch :: Int -> Freq 
 toPitch (-1) = 0.0
 toPitch int = 110.0 * freq (fromIntegral int)
+  where freq = \n -> 2.0 ** (n/12)
 
 fromNote :: String -> Freq
 fromNote n = toPitch.note2Iint $ n
@@ -81,28 +104,3 @@ toSound timbre (note, epoch) =
     durations' e d
       | e < d = (toTime e, toTime e)
       | otherwise = (toTime d, toTime e - toTime d)
-
-melody =
-  [
-    ("r", Eighth),
-    ("c1", QuarterD),
-    ("b0", Quarter),
-    ("d1", Eighth),
-    ("c1", Eighth),
-
-    ("r", Eighth),
-    ("g0", Whole),
-    ("a0", Eighth),
-
-    ("a'0", Quarter),
-    ("a'0", Eighth),
-    ("a'0", Eighth),
-    ("a0", Quarter),
-    ("c1", Eighth),
-    ("a'0", Whole)
-  ]
-
-solar = do
-  let s1 = U.concat $ map (toSound toEvenTimbre) melody
-  let s2 = U.concat $ map (toSound toEvenTimbre) melody
-  putWAVEFile "solar.wav" $ stereopack s1 s2
