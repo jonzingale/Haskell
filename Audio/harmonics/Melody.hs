@@ -10,15 +10,20 @@ import Types
 
 mkSolar = toMelody "solar.wav" solar
 
-toMelody filename mel = do
-  let sol = solar ++ solar
-  let s1 = U.concat $ map (toSound sawTimbre) sol
-  let s2 = U.concat $ map (toSound evenTimbre) sol
-  makeStereoWavFile filename s1 s2
+toMelody filename melody = do
+  let sol = melody ++ melody
+  let sqr = U.concat $ map (toSound squareTimbre) sol
+  let saw = U.concat $ map (toSound sawTimbre) sol
+  let se = U.concat $ map (toSound evenTimbre) sol
+  let so = U.concat $ map (toSound nonSquareTimbre) sol
+  makeStereoWavFile filename (mix sqr se) (mix saw saw)
+
+mix :: VectSamples -> VectSamples -> VectSamples
+mix s1 s2 = U.map (flip div 2) $ U.zipWith (+) s1 s2
 
 toPitch :: Int -> Frequency
 toPitch (-1) = 0.0 -- rest
-toPitch int = 110.0 * freq (fromIntegral int)
+toPitch int = 130.815 * freq (fromIntegral int)
   where freq = \n -> 2.0 ** (n/12)
 
 fromNote :: String -> Frequency
