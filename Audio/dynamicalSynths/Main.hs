@@ -24,7 +24,8 @@ toMelody filename melody = do
   let saw = U.concat $ map (toSoundZ sawTimbre) mel -- toSoundZ
   let se = U.concat $ map (toSoundX evenTimbre) mel -- toSoundX
   let so = U.concat $ map (toSoundX nonSquareTimbre) mel
-  makeStereoWavFile filename (mix sqr saw) (mix saw se)
+  makeStereoWavFile filename (mix sqr sine) (mix saw sine)
+  -- makeStereoWavFile filename (mix sqr saw) (mix saw se)
   -- makeStereoWavFile filename sine sine
 
 mix :: VectSamples -> VectSamples -> VectSamples
