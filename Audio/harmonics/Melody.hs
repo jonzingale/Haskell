@@ -6,7 +6,7 @@ import qualified Data.Vector.Unboxed as U
 import Wave (makeStereoWavFile)
 import Data.Int (Int32)
 import Solar (solar)
-import Lorenz (example, example2)
+import Lorenz (trajectory, trajectory2)
 import Types
 
 mkSolar = toMelody "solar.wav" solar
@@ -31,7 +31,7 @@ toSound timbre (note, duration) =
   let setVol = U.map (round . (* fromIntegral vol)) in
   let noteTime = take.round $ toTime duration * 44100 in
   let harmonicSine = timbre freq :: [Double] in
-  let convolve = zipWith (*) example in -- TESTING: convolutions with lorenz
+  let convolve = zipWith (*) trajectory in -- TESTING: convolutions with lorenz
   setVol $ U.fromList $ convolve.noteTime $ harmonicSine
 
 toSound' :: Timbre -> Sound -> VectSamples
@@ -41,7 +41,7 @@ toSound' timbre (note, duration) =
   let setVol = U.map (round . (* fromIntegral vol)) in
   let noteTime = take.round $ toTime duration * 44100 in
   let harmonicSine = timbre freq :: [Double] in
-  let convolve = zipWith (*) example2 in -- TESTING: convolutions with lorenz
+  let convolve = zipWith (*) trajectory2 in -- TESTING: convolutions with lorenz
   setVol $ U.fromList $ convolve.noteTime $ harmonicSine
 
 toPitch :: Int -> Frequency

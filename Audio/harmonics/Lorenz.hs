@@ -11,11 +11,11 @@ freqPerSample :: Double -> Double
 freqPerSample freq = freq * 2 * pi / 44100
 
 -- normalized x coordinate
-example =
+trajectory =
   let ls = map ((/ 22).pr1) $ iterate (euler lorenz) (10, 10, 10) in
     concat [take 50 $ repeat x | x <- ls]
 
-example2 =
+trajectory2 =
   let ls = map ((/ 22).pr1) $ iterate (euler lorenz) (10, 11, 10) in
     concat [take 50 $ repeat x | x <- ls]
 
