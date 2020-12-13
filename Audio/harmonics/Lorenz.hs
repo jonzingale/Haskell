@@ -5,7 +5,7 @@ type Coords = (Double, Double, Double)
 type Trajectory = [Coords]
 type Duration = Int
 
-eBall = 0.003 -- both accuracy and center frequency
+eBall = 0.0003 -- both accuracy and center frequency
 
 freqPerSample :: Double -> Double
 freqPerSample freq = freq * 2 * pi / 44100
@@ -13,11 +13,11 @@ freqPerSample freq = freq * 2 * pi / 44100
 -- normalized x coordinate
 example =
   let ls = map ((/ 22).pr1) $ iterate (euler lorenz) (10, 10, 10) in
-    concat [take 100 $ repeat x | x <- ls]
+    concat [take 50 $ repeat x | x <- ls]
 
 example2 =
   let ls = map ((/ 22).pr1) $ iterate (euler lorenz) (10, 11, 10) in
-    concat [take 100 $ repeat x | x <- ls]
+    concat [take 50 $ repeat x | x <- ls]
 
 runLorenz :: Duration -> Coords -> Trajectory
 runLorenz sec cs = take (sec*44100) $
