@@ -25,8 +25,8 @@ lightStencil =
 
 gaussStencil :: Stencil DIM2 Double
 gaussStencil =
-  [stencil2| 2 4 5 4 2
-             4 9 12 9 4
+  [stencil2| 2  4  5  4 2
+             4  9 12  9 4
              5 12 15 12 5
-             4 9 12 9 4
-             2 4 5 4 2 |]
+             4  9 12  9 4
+             2  4  5  4 2 |]
