@@ -6,7 +6,6 @@ import qualified Data.Vector.Unboxed as U
 import Wave (makeStereoWavFile)
 import Data.Int (Int32)
 import Solar (solar)
-import Lorenz (trajectory, trajectory2)
 import Types
 
 mkSolar = toMelody "solar.wav" solar
@@ -14,8 +13,8 @@ mkSolar = toMelody "solar.wav" solar
 toMelody filename melody = do
   let sol = melody ++ melody
   let sine = U.concat $ map (toSound emptyTimbre) sol
-  let sqr = U.concat $ map (toSound' squareTimbre) sol -- toSound'
-  let saw = U.concat $ map (toSound' sawTimbre) sol -- toSound'
+  let sqr = U.concat $ map (toSound squareTimbre) sol
+  let saw = U.concat $ map (toSound sawTimbre) sol
   let se = U.concat $ map (toSound evenTimbre) sol
   let so = U.concat $ map (toSound nonSquareTimbre) sol
   makeStereoWavFile filename (mix sqr saw) (mix saw se)
@@ -31,18 +30,7 @@ toSound timbre (note, duration) =
   let setVol = U.map (round . (* fromIntegral vol)) in
   let noteTime = take.round $ toTime duration * 44100 in
   let harmonicSine = timbre freq :: [Double] in
-  let convolve = zipWith (*) trajectory in -- TESTING: convolutions with lorenz
-  setVol $ U.fromList $ convolve.noteTime $ harmonicSine
-
-toSound' :: Timbre -> Sound -> VectSamples
-toSound' timbre (note, duration) =
-  let freq = fromNote note in
-  let vol = maxBound `div` 2 :: Int32 in
-  let setVol = U.map (round . (* fromIntegral vol)) in
-  let noteTime = take.round $ toTime duration * 44100 in
-  let harmonicSine = timbre freq :: [Double] in
-  let convolve = zipWith (*) trajectory2 in -- TESTING: convolutions with lorenz
-  setVol $ U.fromList $ convolve.noteTime $ harmonicSine
+  setVol $ U.fromList $ noteTime harmonicSine
 
 toPitch :: Int -> Frequency
 toPitch (-1) = 0.0 -- rest
