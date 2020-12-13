@@ -16,14 +16,14 @@ toMelody filename melody = do
   let saw = U.concat $ map (toSound sawTimbre) sol
   let se = U.concat $ map (toSound evenTimbre) sol
   let so = U.concat $ map (toSound nonSquareTimbre) sol
-  makeStereoWavFile filename (mix sqr se) saw
+  makeStereoWavFile filename (mix sqr saw) (mix saw se)
 
 mix :: VectSamples -> VectSamples -> VectSamples
 mix s1 s2 = U.map (flip div 2) $ U.zipWith (+) s1 s2
 
 toPitch :: Int -> Frequency
 toPitch (-1) = 0.0 -- rest
-toPitch int = 130.815 * freq (fromIntegral int)
+toPitch int = 65.4075 * freq (fromIntegral int)
   where freq = \n -> 2.0 ** (n/12)
 
 fromNote :: String -> Frequency
