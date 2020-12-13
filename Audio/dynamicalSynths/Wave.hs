@@ -12,8 +12,8 @@ type Volume = Int32
 header = WAVEHeader 1 44100 16 Nothing
 header2 = WAVEHeader 2 44100 16 Nothing
 
-unpack :: WAVE -> VectSamples
-unpack = (U.fromList).(map head).waveSamples
+unpack :: WAVE -> [Int32]
+unpack = (map head).waveSamples
 
 pack :: VectSamples -> WAVE
 pack xs = WAVE header $ map (:[]) $ U.toList xs
@@ -21,15 +21,15 @@ pack xs = WAVE header $ map (:[]) $ U.toList xs
 makeWavFile :: VectSamples -> IO ()
 makeWavFile wav = putWAVEFile "temp.wav" $ pack wav
 
-makeStereoWavFile :: VectSamples -> VectSamples -> IO()
-makeStereoWavFile w1 w2 = putWAVEFile "temp.wav" $ stereopack w1 w2
+makeStereoWavFile :: String -> VectSamples -> VectSamples -> IO()
+makeStereoWavFile filename w1 w2 = putWAVEFile filename $ stereopack w1 w2
 
 stereopack :: VectSamples -> VectSamples -> WAVE
 stereopack xs ys =
   WAVE header2 $ mix (U.toList xs) (U.toList ys)
   where mix ls rs = [[a,b] | (a,b) <- zip ls rs]
 
-viewSamples :: String -> IO()
+-- viewSamples :: String -> []
 viewSamples file = do
   wav <- getWAVEFile file
   print $ take 10 $ waveSamples wav
