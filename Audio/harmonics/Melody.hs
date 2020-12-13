@@ -1,25 +1,38 @@
 module Melody where
 import Harmonics(
-  noiseTimbreEven, noiseTimbreOdd, evenTimbre,
+  noiseTimbreEven, noiseTimbreOdd, evenTimbre, emptyTimbre,
   oddTimbre, squareTimbre, nonSquareTimbre, sawTimbre)
 import qualified Data.Vector.Unboxed as U
 import Wave (makeStereoWavFile)
 import Data.Int (Int32)
 import Solar (solar)
+import Lorenz (example)
 import Types
 
 mkSolar = toMelody "solar.wav" solar
 
 toMelody filename melody = do
   let sol = melody ++ melody
+  let sine = U.concat $ map (toSound emptyTimbre) sol
   let sqr = U.concat $ map (toSound squareTimbre) sol
   let saw = U.concat $ map (toSound sawTimbre) sol
   let se = U.concat $ map (toSound evenTimbre) sol
   let so = U.concat $ map (toSound nonSquareTimbre) sol
   makeStereoWavFile filename (mix sqr saw) (mix saw se)
+  -- makeStereoWavFile filename sine sine
 
 mix :: VectSamples -> VectSamples -> VectSamples
 mix s1 s2 = U.map (flip div 2) $ U.zipWith (+) s1 s2
+
+toSound :: Timbre -> Sound -> VectSamples
+toSound timbre (note, duration) =
+  let freq = fromNote note in
+  let vol = maxBound `div` 2 :: Int32 in
+  let setVol = U.map (round . (* fromIntegral vol)) in
+  let noteTime = take.round $ toTime duration * 44100 in
+  let harmonicSine = timbre freq :: [Double] in
+  let convolve = zipWith (*) example in -- TESTING: convolutions with lorenz
+  setVol $ U.fromList $ convolve.noteTime $ harmonicSine
 
 toPitch :: Int -> Frequency
 toPitch (-1) = 0.0 -- rest
@@ -80,12 +93,3 @@ toTime Half = 0.5
 toTime HalfD = 0.75
 toTime Whole = 1
 toTime WholeD = 1.5
-
-toSound :: Timbre -> Sound -> VectSamples
-toSound timbre (note, duration) =
-  let freq = fromNote note in
-  let vol = maxBound `div` 2 :: Int32 in
-  let setVol = U.map (round . (* fromIntegral vol)) in
-  let noteTime = take.round $ toTime duration * 44100 in
-  let harmonicSine = timbre freq :: [Double] in
-  setVol $ U.fromList $ noteTime harmonicSine

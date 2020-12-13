@@ -2,6 +2,10 @@ module Harmonics where
 import System.Random
 import Types
 
+{--
+Note: Sounds are expected to be normalized on the interval [-1, 1].
+--}
+
 -- TODO:
 -- 1. end sample on 0.0
 -- 2. sum fidelity while under nyquist limit
@@ -13,6 +17,9 @@ fidelity = 20
 
 freqPerSample :: Double -> Double
 freqPerSample freq = freq * 2 * pi / 44100
+
+emptyTimbre :: Timbre
+emptyTimbre freq = map sin [0.0, freqPerSample freq..]
 
 noiseTimbreEven :: Timbre
 noiseTimbreEven freq =
