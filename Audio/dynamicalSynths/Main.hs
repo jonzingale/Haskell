@@ -24,18 +24,29 @@ toMelody filename melody = do
   let saw = U.concat $ map (toSoundZ sawTimbre) mel -- toSoundZ
   let se = U.concat $ map (toSoundX evenTimbre) mel -- toSoundX
   let so = U.concat $ map (toSoundX nonSquareTimbre) mel
-  makeStereoWavFile filename (mix sqr sine) (mix saw sine)
+  makeStereoWavFile filename (mixList [sqr, sine]) (mixList [saw, sine])
+  -- makeStereoWavFile filename (mix sqr sine) (mix saw sine)
   -- makeStereoWavFile filename (mix sqr saw) (mix saw se)
   -- makeStereoWavFile filename sine sine
 
 mix :: VectSamples -> VectSamples -> VectSamples
-mix s1 s2 = U.map (flip div 2) $ U.zipWith (+) s1 s2
+mix s1 s2 = normalize $ U.map (flip div 2) $ U.zipWith (+) s1 s2
 
--- TODO: rewrite for post Int32
-normalize :: U.Vector Double -> U.Vector Double
+-- generalized mix
+mixList :: [VectSamples] -> VectSamples
+mixList (s1:ss) =
+  let len = fromIntegral $ length [s1:ss] in
+  let attenuate = U.map (flip div len) in
+  let combined = foldr ((U.zipWith (+)).attenuate) s1 ss in
+  normalize combined
+
+-- TODO: write this in some cleaner way.
+normalize :: VectSamples -> VectSamples
 normalize sound =
-  let maxS = max (U.maximum sound) (abs $ U.minimum sound) in
-  U.map (/ maxS) sound
+  let maxS = fromIntegral $ U.maximum (U.map abs sound) :: Int in
+  let maxB = fromIntegral (maxBound :: Int32) :: Int in
+  let normed = fromIntegral.(flip div maxS).(* maxB).fromIntegral in
+  U.map normed sound
 
 -- duration a whole note expresses in seconds
 stretch = 7
@@ -48,7 +59,7 @@ toSoundX timbre (note, duration) =
   let noteTime = take.round $ toTime duration * 44100 * stretch in
   let harmonicSine = timbre freq :: [Double] in
   let convolve = zipWith (*) trajX in -- TESTING: psuedo-convolutions w/ lorenz
-  setVol.normalize $ U.fromList $ convolve.noteTime $ harmonicSine -- Normalized
+  setVol $ U.fromList $ convolve.noteTime $ harmonicSine
 
 toSoundY :: Timbre -> Sound -> VectSamples
 toSoundY timbre (note, duration) =
