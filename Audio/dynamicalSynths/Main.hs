@@ -1,8 +1,8 @@
 module Main where
 import qualified Data.Vector.Unboxed as U
 import Harmonics(
-  noiseTimbreEven, noiseTimbreOdd, evenTimbre, emptyTimbre,
-  oddTimbre, squareTimbre, nonSquareTimbre, sawTimbre)
+  evenTimbre, emptyTimbre, oddTimbre, squareTimbre,
+  nonSquareTimbre, sawTimbre)
 import LongTones (longTones1, longTones2, longTones3)
 import Lorenz (trajX , trajY, trajZ)
 import Wave (makeStereoWavFile)
@@ -31,8 +31,10 @@ toMelody filename melody = do
 mix :: VectSamples -> VectSamples -> VectSamples
 mix s1 s2 = U.map (flip div 2) $ U.zipWith (+) s1 s2
 
+-- TODO: rewrite for post Int32
 normalize :: U.Vector Double -> U.Vector Double
-normalize sound = let maxS = max (U.maximum sound) (abs $ U.minimum sound) in
+normalize sound =
+  let maxS = max (U.maximum sound) (abs $ U.minimum sound) in
   U.map (/ maxS) sound
 
 -- duration a whole note expresses in seconds
@@ -46,7 +48,7 @@ toSoundX timbre (note, duration) =
   let noteTime = take.round $ toTime duration * 44100 * stretch in
   let harmonicSine = timbre freq :: [Double] in
   let convolve = zipWith (*) trajX in -- TESTING: psuedo-convolutions w/ lorenz
-  setVol $ normalize $ U.fromList $ convolve.noteTime $ harmonicSine
+  setVol.normalize $ U.fromList $ convolve.noteTime $ harmonicSine -- Normalized
 
 toSoundY :: Timbre -> Sound -> VectSamples
 toSoundY timbre (note, duration) =
@@ -56,7 +58,7 @@ toSoundY timbre (note, duration) =
   let noteTime = take.round $ toTime duration * 44100 * stretch in
   let harmonicSine = timbre freq :: [Double] in
   let convolve = zipWith (*) trajY in -- TESTING: psuedo-convolutions w/ lorenz
-  setVol $ normalize $ U.fromList $ convolve.noteTime $ harmonicSine
+  setVol $ U.fromList $ convolve.noteTime $ harmonicSine
 
 toSoundZ :: Timbre -> Sound -> VectSamples
 toSoundZ timbre (note, duration) =
@@ -66,7 +68,7 @@ toSoundZ timbre (note, duration) =
   let noteTime = take.round $ toTime duration * 44100 * stretch in
   let harmonicSine = timbre freq :: [Double] in
   let convolve = zipWith (*) trajZ in -- TESTING: convolutions with lorenz
-  setVol $ normalize $ U.fromList $ convolve.noteTime $ harmonicSine
+  setVol $ U.fromList $ convolve.noteTime $ harmonicSine
 
 toPitch :: Int -> Frequency
 toPitch (-1) = 0.0 -- rest

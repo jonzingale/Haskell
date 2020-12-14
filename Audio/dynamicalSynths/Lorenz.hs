@@ -23,6 +23,11 @@ trajZ = --
   let ls = map ((/ 50).prZ) $ iterate (euler lorenz) (10, 10, 10) in
     concat [take 70 $ repeat x | x <- ls]
 
+prX, prY, prZ :: Coords -> Double
+prX (x,_,_) = x
+prY (_,y,_) = y
+prZ (_,_,z) = z
+
 runLorenz :: Duration -> Coords -> Trajectory
 runLorenz sec cs = take (sec*44100) $
   iterate (euler lorenz) cs
@@ -38,11 +43,6 @@ euler f (x,y,z) =
       ddy = dy + t' * eBall
       ddz = dz + r' * eBall
   in ((dx + ddx) /2.0, (dy + ddy) /2.0,  (dz + ddz) /2.0)
-
-prX, prY, prZ :: Coords -> Double
-prX (x,_,_) = x
-prY (_,y,_) = y
-prZ (_,_,z) = z
 
 lorenz :: Coords -> Coords
 lorenz (x,y,z) =

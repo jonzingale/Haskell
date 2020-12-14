@@ -1,5 +1,4 @@
 module Harmonics where
-import System.Random
 import Types
 
 {--
@@ -13,29 +12,16 @@ Note: Sounds are expected to be normalized on the interval [-1, 1].
 -- 4. fully unbox Timbres
 -- 5. normalize timbres
 
+fidelity :: Double
 fidelity = 20
 
 freqPerSample :: Double -> Double
 freqPerSample freq = freq * 2 * pi / 44100
 
+-- Timbres.
+
 emptyTimbre :: Timbre
 emptyTimbre freq = map sin [0.0, freqPerSample freq..]
-
-noiseTimbreEven :: Timbre
-noiseTimbreEven freq =
-  let vol x = (* (exp (-0.8*x))) in
-  let nn x = map (vol x) (randomRs (0, 1::Double) $ mkStdGen 32) in
-  let ss x = map ((vol x).sin) [0.0, freqPerSample (2*x*freq)..] in
-  let sound = foldr (zipWith (+)) (repeat 0) [ss t | t <- [1..fidelity]] in
-  zipWith (+) sound (nn 2)
-
-noiseTimbreOdd :: Timbre
-noiseTimbreOdd freq =
-  let vol x = (* (exp (-0.8*x))) in
-  let nn x = map (vol x) (randomRs (0, 1::Double) $ mkStdGen 32) in
-  let ss x = map ((vol x).sin) [0.0, freqPerSample ((2*x+1)*freq)..] in
-  let sound = foldr (zipWith (+)) (repeat 0) [ss t | t <- [1..fidelity]] in
-  zipWith (+) sound (nn 2)
 
 evenTimbre :: Timbre
 evenTimbre freq =
