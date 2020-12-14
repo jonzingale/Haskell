@@ -19,7 +19,7 @@ main = toMelody "longTones.wav" longTones1
 
 toMelody filename melody = do
   let mel = melody ++ reverse melody ++ melody
-  let sine = U.concat $ map (toSoundX emptyTimbre) mel
+  let sine = U.concat $ map (toSoundX emptyTimbre) mel -- toSoundX
   let sqr = U.concat $ map (toSoundY squareTimbre) mel -- toSoundY
   let saw = U.concat $ map (toSoundZ sawTimbre) mel -- toSoundZ
   let se = U.concat $ map (toSoundX evenTimbre) mel -- toSoundX
@@ -41,7 +41,7 @@ toSoundX timbre (note, duration) =
   let setVol = U.map (round . (* fromIntegral vol)) in
   let noteTime = take.round $ toTime duration * 44100 * stretch in
   let harmonicSine = timbre freq :: [Double] in
-  let convolve = zipWith (*) trajX in -- TESTING: convolutions with lorenz
+  let convolve = zipWith (*) trajX in -- TESTING: psuedo-convolutions w/ lorenz
   setVol $ U.fromList $ convolve.noteTime $ harmonicSine
 
 toSoundY :: Timbre -> Sound -> VectSamples
@@ -51,7 +51,7 @@ toSoundY timbre (note, duration) =
   let setVol = U.map (round . (* fromIntegral vol)) in
   let noteTime = take.round $ toTime duration * 44100 * stretch in
   let harmonicSine = timbre freq :: [Double] in
-  let convolve = zipWith (*) trajY in -- TESTING: convolutions with lorenz
+  let convolve = zipWith (*) trajY in -- TESTING: psuedo-convolutions w/ lorenz
   setVol $ U.fromList $ convolve.noteTime $ harmonicSine
 
 toSoundZ :: Timbre -> Sound -> VectSamples
