@@ -37,7 +37,7 @@ mixList :: [VectSamples] -> VectSamples
 mixList (s1:ss) =
   let len = fromIntegral $ length [s1:ss] in
   let attenuate = U.map (flip div len) in
-  let combined = foldr ((U.zipWith (+)).attenuate) s1 ss in
+  let combined = foldr ((U.zipWith (+)).attenuate) (attenuate s1) ss in
   normalize combined
 
 -- TODO: write this in some cleaner way.
