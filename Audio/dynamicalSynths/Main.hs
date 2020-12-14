@@ -31,8 +31,12 @@ toMelody filename melody = do
 mix :: VectSamples -> VectSamples -> VectSamples
 mix s1 s2 = U.map (flip div 2) $ U.zipWith (+) s1 s2
 
+normalize :: U.Vector Double -> U.Vector Double
+normalize sound = let maxS = max (U.maximum sound) (abs $ U.minimum sound) in
+  U.map (/ maxS) sound
+
 -- duration a whole note expresses in seconds
-stretch = 6
+stretch = 7
 
 toSoundX :: Timbre -> Sound -> VectSamples
 toSoundX timbre (note, duration) =
@@ -42,7 +46,7 @@ toSoundX timbre (note, duration) =
   let noteTime = take.round $ toTime duration * 44100 * stretch in
   let harmonicSine = timbre freq :: [Double] in
   let convolve = zipWith (*) trajX in -- TESTING: psuedo-convolutions w/ lorenz
-  setVol $ U.fromList $ convolve.noteTime $ harmonicSine
+  setVol $ normalize $ U.fromList $ convolve.noteTime $ harmonicSine
 
 toSoundY :: Timbre -> Sound -> VectSamples
 toSoundY timbre (note, duration) =
@@ -52,7 +56,7 @@ toSoundY timbre (note, duration) =
   let noteTime = take.round $ toTime duration * 44100 * stretch in
   let harmonicSine = timbre freq :: [Double] in
   let convolve = zipWith (*) trajY in -- TESTING: psuedo-convolutions w/ lorenz
-  setVol $ U.fromList $ convolve.noteTime $ harmonicSine
+  setVol $ normalize $ U.fromList $ convolve.noteTime $ harmonicSine
 
 toSoundZ :: Timbre -> Sound -> VectSamples
 toSoundZ timbre (note, duration) =
@@ -62,7 +66,7 @@ toSoundZ timbre (note, duration) =
   let noteTime = take.round $ toTime duration * 44100 * stretch in
   let harmonicSine = timbre freq :: [Double] in
   let convolve = zipWith (*) trajZ in -- TESTING: convolutions with lorenz
-  setVol $ U.fromList $ convolve.noteTime $ harmonicSine
+  setVol $ normalize $ U.fromList $ convolve.noteTime $ harmonicSine
 
 toPitch :: Int -> Frequency
 toPitch (-1) = 0.0 -- rest
