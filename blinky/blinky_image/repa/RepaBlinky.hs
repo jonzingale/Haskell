@@ -18,13 +18,6 @@ https://wiki.haskell.org/Numeric_Haskell:_A_Repa_Tutorial
 
 type Board = Array U DIM2 Int
 
-show2D :: Int -> Board -> IO ()
-show2D n b = putStrLn.unlines $ f 6 $ R.toList b
-  where
-  f n [] = []
-  f n ls = (show.take n $ ls) : f n (drop n ls)
-
--- What is program? show2D?
 gameOfLife :: Board -> IO ()
 gameOfLife world = do
   show2D 6 world
@@ -33,6 +26,12 @@ gameOfLife world = do
   case input of
     "q" -> return ()
     _ -> gameOfLife nextWorld
+
+show2D :: Int -> Board -> IO ()
+show2D n b = putStrLn.unlines $ f 6 $ R.toList b
+  where
+  f n [] = []
+  f n ls = (show.take n $ ls) : f n (drop n ls)
 
 tick :: Array U DIM2 Int -> IO (Array U DIM2 Int)
 tick world = R.computeP $ R.zipWith transit world neighbors
