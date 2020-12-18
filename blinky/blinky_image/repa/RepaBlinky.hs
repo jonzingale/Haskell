@@ -8,10 +8,15 @@ import Data.Array.Repa.Stencil -- Stencil
 import Data.Array.Repa.Stencil.Dim2 -- stencil2
 -- import Data.Array.Repa.Algorithms.Convolve as C
 
--- cabal install repa-3.4.1.4
+{--
+version: repa-3.4.1.4
+
+Useful links:
+https://www.slideshare.net/kizzx2/repagolpdf
+https://wiki.haskell.org/Numeric_Haskell:_A_Repa_Tutorial
+--}
 
 -- What is program? show2D?
--- https://www.slideshare.net/kizzx2/repagolpdf
 gameOfLife :: p -> IO ()
 gameOfLife world = do
 --   show2D 6 world
