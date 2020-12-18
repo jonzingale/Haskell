@@ -11,6 +11,7 @@ import Data.Array.Repa.Stencil.Dim2 -- stencil2
 -- cabal install repa-3.4.1.4
 
 -- What is program? show2D?
+-- https://www.slideshare.net/kizzx2/repagolpdf
 gameOfLife :: p -> IO ()
 gameOfLife world = do
 --   show2D 6 world
