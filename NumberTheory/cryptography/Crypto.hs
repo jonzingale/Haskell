@@ -18,7 +18,7 @@ readText file = do
 
 ceasar :: Int -> BS.ByteString -> BS.ByteString
 ceasar n str =
-  let word = fromIntegral n in
+  let word = fromIntegral n in -- Word8
   BS.map (+ word) str
 
 testCeasarInv :: IO Bool
