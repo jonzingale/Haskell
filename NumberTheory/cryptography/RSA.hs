@@ -2,10 +2,12 @@ module RSA where
 import Data.Numbers.Primes (isPrime, primeFactors, primes, wheelSieve)
 import Math.NumberTheory.Primes.Factorisation (sieveTotient, sieveFactor,
   stepFactorisation, factorise, smallFactors, curveFactorisation)
--- import Data.List (find)
 
 {--
-TODO: write RSA protocol
+TODO:
+* select functions should choose at random
+* keep this file as example and build out
+* optimize for larger numbers
 --}
 
 -- text
