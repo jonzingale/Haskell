@@ -30,7 +30,7 @@ phi p q = (p - 1) * (q - 1)
 enc t = (t^ee) `mod` (p1 * p2)
 
 -- decipher enciphered text, s, by s^β mod pq.
-dec t = (t^dd) `mod` (p1 * p2)
+dec s = (s^dd) `mod` (p1 * p2)
 
 -- test encode and then decode.
 test = yes == (dec.enc) yes
