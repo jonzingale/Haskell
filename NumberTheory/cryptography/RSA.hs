@@ -17,6 +17,9 @@ yes = 24*26^2 + 4*26 + 18
 p1 = 167
 p2 = 281
 
+-- calculate φ for primes p, q.
+phi p q = (p - 1) * (q - 1)
+
 -- select 𝛼 relatively prime to φ(pq).
 ee = let bb a = gcd a (phi p1 p2) == 1 in
   head $ filter bb [2..phi p1 p2]
@@ -24,9 +27,6 @@ ee = let bb a = gcd a (phi p1 p2) == 1 in
 -- find multiplicative inverse, β, β = inv(𝛼) mod φ(pq).
 dd = let bb a = mod (a * ee) (phi p1 p2) == 1 in
   head $ filter bb [2..phi p1 p2]
-
--- calculate φ for primes p, q.
-phi p q = (p - 1) * (q - 1)
 
 -- encipher text, t, by t^𝛼 mod pq.
 enc t = t^ee `mod` (p1 * p2)
