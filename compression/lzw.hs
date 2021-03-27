@@ -1,46 +1,42 @@
 module LZW where
-import Data.List (elemIndex)
-import Data.Char (ord)
-
-{-- Todo:
-0. write any version
-1. Write slick version
-2. Write stateful monadic version
-3. Write light weight version
---}
 
 {--
   Notes:
   Here, chars prepend to registers, registers append to dictionaries.
   example from https://www2.cs.duke.edu/csed/curious/compression/lzw.html
+
+  If last character is unique to message, how is it recovered in decoding?
 --}
 
 msg1 = "banana_bandana"
 msg2 = "bandana_banana"
 
-testMsg = lzwEncode msg1 == [1,0,3,6,0,4,5,3,2]
+test = lzwEncode msg1 == reverse [1,0,3,6,0,4,5,3,2]
 
 baseDict = map (\c -> [c]) ['a'..'z']
 specDict = ["a","b","d","n","_"]
 
 type Dictionary = [Register]
 type Register = String
-type Byte = Int
 
 hasIndex :: Register -> Dictionary -> Bool
-hasIndex sym dd = length [ n | (d, n) <- zip dd [0..], sym == d] > 0
+hasIndex reg dict = f reg dict
+  where
+    f r (d:ds) = if d == r then True else f r ds
+    f r [] = False
 
-encode :: Register -> Dictionary -> Byte
-encode reg dict = head [ n | (d, n) <- zip dict [0..], reg == d]
+encode :: Register -> Dictionary -> Int
+encode reg dict = f reg dict 0
+  where
+    f r (d:ds) n = if d == r then n else f r ds (n+1)
 
-lzwEncode :: String -> [Byte]
-lzwEncode (s:str) = reverse $ f str specDict [s] [] -- NOTE which Dictionary
+lzwEncode :: String -> [Int]
+lzwEncode (s:str) = f str specDict [s] [] -- NOTE specified Dictionary
   where
     f [] _ _ code = code
-    f [m] _ _ code = code -- what if the last char is unique to the message?
+    f [m] _ _ code = code
     f (m:msg) dict reg code
       -- extend register and try again
       | hasIndex (m:reg) dict = f msg dict (m:reg) code
       -- extend dictionary, swap register, extend code, and try again
       | otherwise = f msg (dict ++ [m:reg]) [m] (encode reg dict : code)
-
