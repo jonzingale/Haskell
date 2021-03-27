@@ -14,7 +14,7 @@ msg2 = "bandana_banana"
 test = lzwEncode msg1 == reverse [1,0,3,6,0,4,5,3,2]
 
 baseDict = map (\c -> [c]) ['a'..'z']
-specDict = ["a","b","d","n","_"]
+specialDict = ["a","b","d","n","_"]
 
 type Dictionary = [Register]
 type Register = String
@@ -31,7 +31,7 @@ encode reg dict = f reg dict 0
     f r (d:ds) n = if d == r then n else f r ds (n+1)
 
 lzwEncode :: String -> [Int]
-lzwEncode (s:str) = f str specDict [s] [] -- NOTE specified Dictionary
+lzwEncode (s:str) = f str specialDict [s] [] -- NOTE specified Dictionary
   where
     f [] _ _ code = code
     f [m] _ _ code = code
