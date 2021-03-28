@@ -1,0 +1,1 @@
+Burrows-Wheeler: An invertible function designed to sort statistically.
