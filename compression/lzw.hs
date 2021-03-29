@@ -28,10 +28,10 @@ encode reg dict = f reg dict 0
 lzwEncode :: String -> [Int]
 lzwEncode (s:str) = f str dictionary [s] []
   where
-    dictionary = ["a","b","d","n","_"]  -- NOTE: specialized Dictionary
     f [] _ _ code = code
     f (m:msg) dict reg code
       -- extend register and try again
       | hasIndex (m:reg) dict = f msg dict (m:reg) code
       -- extend dictionary, swap register, extend endcoded string, and try again
       | otherwise = f msg (dict ++ [m:reg]) [m] (encode reg dict : code)
+    dictionary = ["a","b","d","n","_"]  -- NOTE: specialized Dictionary
