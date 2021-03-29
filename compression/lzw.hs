@@ -2,22 +2,18 @@ module LZW where
 
 {--
   Notes:
-  Here, chars prepend to registers, registers append to dictionaries.
-  example from https://www2.cs.duke.edu/csed/curious/compression/lzw.html
-
-  If last character is unique to message, how is it recovered in decoding?
+  - Example from https://www2.cs.duke.edu/csed/curious/compression/lzw.html
+  - Here, chars prepend to registers, registers append to dictionaries.
+  - If last character is unique to message, how is it recovered in decoding?
 --}
 
 msg1 = "banana_bandana"
-msg2 = "bandana_banana"
+dictionary = ["a","b","d","n","_"]
 
-test = lzwEncode msg1 == reverse [1,0,3,6,0,4,5,3,2]
+test = lzwEncode msg1 == [2,3,5,4,0,6,3,0,1]
 
-baseDict = map (\c -> [c]) ['a'..'z']
-specialDict = ["a","b","d","n","_"]
-
-type Dictionary = [Register]
 type Register = String
+type Dictionary = [Register]
 
 hasIndex :: Register -> Dictionary -> Bool
 hasIndex reg dict = f reg dict
@@ -31,12 +27,11 @@ encode reg dict = f reg dict 0
     f r (d:ds) n = if d == r then n else f r ds (n+1)
 
 lzwEncode :: String -> [Int]
-lzwEncode (s:str) = f str specialDict [s] [] -- NOTE specified Dictionary
+lzwEncode (s:str) = f str dictionary [s] [] -- NOTE: specialized Dictionary
   where
     f [] _ _ code = code
-    f [m] _ _ code = code
     f (m:msg) dict reg code
       -- extend register and try again
       | hasIndex (m:reg) dict = f msg dict (m:reg) code
-      -- extend dictionary, swap register, extend code, and try again
+      -- extend dictionary, swap register, extend endcoded string, and try again
       | otherwise = f msg (dict ++ [m:reg]) [m] (encode reg dict : code)
