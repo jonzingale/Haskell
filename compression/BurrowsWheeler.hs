@@ -24,7 +24,7 @@ block :: Ord a => [a] -> [[a]] -> [[a]]
 block xs [] = block xs [xs]
 block xs xss
   | length xs == length xss = trans xss
-	| otherwise = block xs $ xs : ((trans.sort.trans) xss)
+  | otherwise = block xs $ xs : ((trans.sort.trans) xss)
 
 --- this exists in Data.List but was fun to write anyway
 trans :: [[a]] -> [[a]]
