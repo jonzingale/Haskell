@@ -1,1 +1,1 @@
-Burrows-Wheeler: An invertible function designed to sort statistically.
+Burrows-Wheeler: Data compression via an invertible function designed to sort statistically.
