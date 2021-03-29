@@ -1,5 +1,4 @@
 module LZW where
-
 {--
   Notes:
   - Example from https://www2.cs.duke.edu/csed/curious/compression/lzw.html
@@ -10,7 +9,7 @@ module LZW where
 msg1 = "banana_bandana"
 dictionary = ["a","b","d","n","_"]
 
-test = lzwEncode msg1 == [2,3,5,4,0,6,3,0,1]
+test = lzwEncode msg == [2,3,5,4,0,6,3,0,1]
 
 type Register = String
 type Dictionary = [Register]
