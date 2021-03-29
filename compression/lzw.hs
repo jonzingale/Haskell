@@ -8,7 +8,6 @@ module LZW where
 --}
 
 msg1 = "banana_bandana"
-dictionary = ["a","b","d","n","_"]
 
 test = lzwEncode msg1 == [2,3,5,4,0,6,3,0,1]
 
@@ -27,8 +26,9 @@ encode reg dict = f reg dict 0
     f r (d:ds) n = if d == r then n else f r ds (n+1)
 
 lzwEncode :: String -> [Int]
-lzwEncode (s:str) = f str dictionary [s] [] -- NOTE: specialized Dictionary
+lzwEncode (s:str) = f str dictionary [s] []
   where
+    dictionary = ["a","b","d","n","_"]  -- NOTE: specialized Dictionary
     f [] _ _ code = code
     f (m:msg) dict reg code
       -- extend register and try again
