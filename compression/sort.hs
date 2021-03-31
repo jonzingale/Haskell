@@ -1,4 +1,4 @@
-module Sort (msort, rsort) where
+module Sort (msort, rsort, shuffle) where
 import System.Random
 
 qsort :: Ord a => [a] -> [a]
@@ -9,7 +9,7 @@ qsort (x:xs) = qsort (less x xs) ++ [x] ++ qsort (more x xs)
   more a bs = filter (> a) bs
 
 rsort :: [String] -> String
-rsort = modSort.knuffle
+rsort = modSort.shuffle
 
 -- optimization for Burrows-Wheeler
 modSort :: [String] -> String
@@ -20,13 +20,13 @@ modSort (x:xs) = modSort (less x xs) ++ [last x] ++ modSort (more x xs)
   less a bs = filter (<= a) bs
   more a bs = filter (> a) bs
 
--- key shuffle based on birthday problem
-knuffle :: Ord a => [a] -> [a]
-knuffle xs = (snd.unzip.qsort.zip ((pmonicrandos.length) xs)) xs
+-- probabilistic key shuffle based on birthday problem
+shuffle :: Ord a => [a] -> [a]
+shuffle xs = (snd.unzip.msort.zip ((pmonicrandos.length) xs)) xs
   where
-    pmonicrandos bs = take bs ((spitRandos.thrufloat yearbirth) bs)
-    yearbirth r = (r-r^2)/(2*log(0.5)) 
-    spitRandos n = randomRs (0,n) (mkStdGen 42) 
+    pmonicrandos bs = take bs $ (spitRandos.thrufloat pred_tol) bs
+    pred_tol r = (r - r^2) / (2 * log 0.5) -- predicted tolerance
+    spitRandos n = randomRs (0, n) $ mkStdGen 42
 
 thrufloat :: (RealFrac a, Integral b) => (a -> a) -> b -> b
 thrufloat f = floor.f.fromIntegral
