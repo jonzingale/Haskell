@@ -4,6 +4,8 @@ import Data.List (sort) -- merge sort
 
 {--
 An attempt to unpack the details of an optimized Burrow-Wheeler transform.
+
+TODO: write sort with specifiable lexigraphical tolerance.
 --}
 
 test = burrows_wheeler tome
