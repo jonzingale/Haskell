@@ -28,7 +28,7 @@ knuffle xs = (snd.unzip.qsort.zip ((pmonicrandos.length) xs)) xs
     yearbirth r = (r-r^2)/(2*log(0.5)) 
     spitRandos n = randomRs (0,n) (mkStdGen 42) 
 
-thrufloat :: (RealFrac a, Integral b) => (a->a) -> b -> b
+thrufloat :: (RealFrac a, Integral b) => (a -> a) -> b -> b
 thrufloat f n = (floor.f.fromIntegral) n
 
 -- sort implementation from Data.List
