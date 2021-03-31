@@ -1,6 +1,5 @@
 module BurrowsWheeler (bwt, inv_bwt, julia) where
 import Data.List (sort)
-import Data.Char (ord)
 
 -- given a string without a '|', return the burrows-wheeler transform
 -- NOTE: sort is true lexigraphical order, not just the first character!
@@ -18,7 +17,7 @@ rotate (x:xs) = (x:xs) : rotate (xs ++ [x])
 --------------inverse method below
 inv_bwt :: String -> String
 inv_bwt [] = []
-inv_bwt zs = head [ b | b <- block zs [], (ord.head.reverse) b == 124 ]
+inv_bwt zs = head [ b | b <- block zs [], (head.reverse) b == '|' ]
 
 block :: Ord a => [a] -> [[a]] -> [[a]]
 block xs [] = block xs [xs]
