@@ -26,9 +26,9 @@ rsort = modSort.knuffle
 knuffle :: Ord a => [a] -> [a]
 knuffle xs = (snd.unzip.sort.zip ((pmonicrandos.length) xs)) xs
   where
-    pmonicrandos bs = take bs ((spitRandos.thrufloat yearbirth) bs)
-    spitRandos n = randomRs (0,n) (mkStdGen 42)
-    yearbirth r = (r - r^2) / (2 * log 0.5) 
+    pmonicrandos bs = take bs $ (spitRandos.thrufloat pred_tol) bs
+    spitRandos n = randomRs (0, n) $ mkStdGen 42
+    pred_tol r = (r - r^2) / (2 * log 0.5) -- predicted tolerance
 
 thrufloat :: (RealFrac a, Integral b) => (a -> a) -> b -> b
-thrufloat f n = (floor.f.fromIntegral) n
+thrufloat f = floor.f.fromIntegral
