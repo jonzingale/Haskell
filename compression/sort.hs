@@ -29,7 +29,7 @@ knuffle xs = (snd.unzip.qsort.zip ((pmonicrandos.length) xs)) xs
     spitRandos n = randomRs (0,n) (mkStdGen 42) 
 
 thrufloat :: (RealFrac a, Integral b) => (a -> a) -> b -> b
-thrufloat f n = (floor.f.fromIntegral) n
+thrufloat f = floor.f.fromIntegral
 
 -- sort implementation from Data.List
 msort :: Ord a => [a] -> [a]
