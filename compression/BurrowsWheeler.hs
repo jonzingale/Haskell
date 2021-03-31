@@ -10,7 +10,7 @@ banana = "^BANANA"
 
 --------------forward method below
 bwt :: String -> String
-bwt xs = last.trans.sort.(take $ length xs+1).rotate $ "|" ++ xs
+bwt xs = last.trans.sort.(take $ length xs+1).rotate $ '|' : xs
 
 rotate :: [a] ->[[a]]
 rotate (x:xs) = (x:xs) : rotate (xs ++ [x])
@@ -29,5 +29,5 @@ block xs xss
 --- this exists in Data.List but was fun to write anyway
 trans :: [[a]] -> [[a]]
 trans [] = []
-trans ([]:xss) = trans xss -- the curious case?
+trans ([]:xss) = trans xss
 trans xs = (map head xs) : trans (map tail xs)
