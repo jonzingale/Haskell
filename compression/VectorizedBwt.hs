@@ -11,11 +11,8 @@ Todo:
 - write sort with specifiable lexigraphical tolerance.
 --}
 
--- Note: so far no more time efficient than UnpackedBwt, but worse on space
 test = burrows_wheeler tome
-
-tome :: String -- infinite
-tome = foldr (++) "" $ repeat "banana_bandana"
+tome = foldr (++) "" $ repeat "banana_bandana" -- infinite
 
 -- efficiently generate tome of length 1024.
 sized_tome :: String -> V.Vector Char
