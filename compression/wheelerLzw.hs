@@ -1,6 +1,6 @@
 module WheelerLZW where
 import BurrowsWheeler
-import Qsort
+import Sort
 
 msg1 = "banana_bandana"
 msg2 = "TOBEORNOTTOBEORTOBEORNOT#"
@@ -8,7 +8,7 @@ msg3 = foldr (++) "" $ take 100 $ repeat msg1
 dictionary = map (\x -> [x]) ('_':'#':'|':['a'..'z']++['A'..'Z'])
 
 -- presorting compresses better
-test1 = ((f.qsort) msg3 < f msg3) == True
+test1 = ((f.msort) msg3 < f msg3) == True
   where f = length.lzwEncode dictionary
 
 -- burrows-wheelering before hand compresses better
