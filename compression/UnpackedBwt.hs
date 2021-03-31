@@ -6,7 +6,10 @@ import Data.List (sort) -- merge sort
 An attempt to unpack the details of an optimized Burrow-Wheeler transform.
 --}
 
+test = burrows_wheeler tome
+
 text = "banana_bandana"
+tome = take 1000 $ foldr (++) "" $ repeat text
 
 burrows_wheeler :: String -> String
 burrows_wheeler xs = rsort.(take $ length xs+1).rotate $ '|' : xs
