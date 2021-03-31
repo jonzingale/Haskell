@@ -1,7 +1,7 @@
 module Sort (msort, rsort) where
 import System.Random
 
-qsort :: (Ord a) => [a]->[a]
+qsort :: Ord a => [a] -> [a]
 qsort [] = []
 qsort (x:xs) = qsort (less x xs) ++ [x] ++ qsort (more x xs)
  where
@@ -21,7 +21,7 @@ modSort (x:xs) = modSort (less x xs) ++ [last x] ++ modSort (more x xs)
   more a bs = filter (> a) bs
 
 -- key shuffle based on birthday problem
-knuffle :: (Ord a) =>[a]->[a]
+knuffle :: Ord a => [a] -> [a]
 knuffle xs = (snd.unzip.qsort.zip ((pmonicrandos.length) xs)) xs
   where
     pmonicrandos bs = take bs ((spitRandos.thrufloat yearbirth) bs)
