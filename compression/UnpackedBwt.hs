@@ -1,6 +1,6 @@
 module UnpackedBwt (burrows_wheeler) where
+import System.Random (mkStdGen, randomRs)
 import Data.List (sort) -- merge sort
-import System.Random
 
 {--
 An attempt to unpack the details of an optimized Burrow-Wheeler transform.
@@ -14,7 +14,7 @@ burrows_wheeler xs = rsort.(take $ length xs+1).rotate $ '|' : xs
 
 -- modified qsort with randomized input
 rsort :: [String] -> String
-rsort = modSort.knuffle
+rsort = modSort.shuffle
   where
     modSort [] = []
     modSort [x] = [last x]
@@ -22,13 +22,13 @@ rsort = modSort.knuffle
     less a bs = filter (<= a) bs
     more a bs = filter (> a) bs
 
--- key shuffle based on birthday problem
-knuffle :: Ord a => [a] -> [a]
-knuffle xs = (snd.unzip.sort.zip ((pmonicrandos.length) xs)) xs
+-- probabilistic key shuffle based on birthday problem
+shuffle :: Ord a => [a] -> [a]
+shuffle xs = (snd.unzip.sort.zip ((pmonicrandos.length) xs)) xs
   where
     pmonicrandos bs = take bs $ (spitRandos.thrufloat pred_tol) bs
-    spitRandos n = randomRs (0, n) $ mkStdGen 42
     pred_tol r = (r - r^2) / (2 * log 0.5) -- predicted tolerance
+    spitRandos n = randomRs (0, n) $ mkStdGen 42
 
 thrufloat :: (RealFrac a, Integral b) => (a -> a) -> b -> b
 thrufloat f = floor.f.fromIntegral
