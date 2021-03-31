@@ -8,6 +8,10 @@ Notes:
 - msort is the same efficient implementation from Data.List
 - rsort is a modified qsort with randomized input optimized for the BWT, nearly
   as fast as msort, much better on space.
+
+TODO:
+- Additional optimizations exist when only sorting for the first few letters of
+  a given string. Most tomes will not have long range ordering.
 --}
 
 julia = "julia"
