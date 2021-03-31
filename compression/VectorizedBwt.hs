@@ -1,5 +1,3 @@
-{-# LANGUAGE BangPatterns #-}
-
 module VectorizedBwt where
 import qualified Data.Vector.Unboxed as V
 import Sort (shuffle)
@@ -11,7 +9,6 @@ Note:
 
 Todo:
 - write sort with specifiable lexigraphical tolerance.
-- chunk initial tome
 --}
 
 -- Note: so far no more time efficient than UnpackedBwt, but worse on space
