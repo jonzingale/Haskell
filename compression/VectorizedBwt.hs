@@ -6,9 +6,6 @@ import Sort (shuffle)
 Note:
 - An attempt to unpack the details of an optimized Burrow-Wheeler transform.
 - So far no more time efficient than UnpackedBwt, but worse on space.
-
-Todo:
-- write sort with specifiable lexigraphical tolerance.
 --}
 
 test = burrows_wheeler tome
