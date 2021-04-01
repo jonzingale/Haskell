@@ -8,7 +8,10 @@ Notes:
 - Better time and space savings with nearly the same properties.
 - Great performance with only a depth of 4, len 5000 => (0.67 s, 10^9 b)
 - Depth of 4 succeeds, depth of 3 fails
+
+Questions:
 - How can one measure necessary depth?
+- Must I construct the rotations? Should I calculate of indices alone?
 --}
 
 test1 = lex_tol_bwt 4 tome
@@ -36,6 +39,6 @@ rsort = sort.shuffle
   where
     sort [] = []
     sort [(s,i)] = [i]
-    sort ((s,i):xs) = sort (less (s,i) xs) ++ [i] ++ sort (more (s,i) xs)
-    less a bs = filter (<= a) bs
-    more a bs = filter (> a) bs
+    sort ((s,i):xs) = (less (s,i) xs) ++ [i] ++ (more (s,i) xs)
+    less a bs = sort $ filter (<= a) bs
+    more a bs = sort $ filter (> a) bs
