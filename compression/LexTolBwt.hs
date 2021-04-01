@@ -23,15 +23,15 @@ tome = take 100 $ foldr (++) "" $ repeat "banana_bandana"
 -- original tome. 
 lex_tol_bwt :: Int -> String -> String
 lex_tol_bwt i xs =
-  let len = length xs + 1 in
   let xss = '|' : xs in
+  let len = length xss in
   let idxsLs = zip (truncRotate i xss) [0..] in
-  let idxs = rsort.(take len) $ idxsLs in
+  let idxs = rsort.take len $ idxsLs in
   -- grabs the last char in the cycle by translation of index
   map (\i -> xss!!(mod (i-1) len)) idxs
 
 truncRotate :: Int -> String -> [String]
-truncRotate i (x:xs) = (take i (x:xs)) : truncRotate i (xs ++ [x])
+truncRotate i (x:xs) = take i (x:xs) : truncRotate i (xs ++ [x])
 
 -- modified qsort with randomized input, returns indexes for tome
 rsort :: [(String, Int)] -> [Int]
@@ -39,6 +39,6 @@ rsort = sort.shuffle
   where
     sort [] = []
     sort [(s,i)] = [i]
-    sort ((s,i):xs) = (less (s,i) xs) ++ [i] ++ (more (s,i) xs)
+    sort ((s,i):xs) = less (s,i) xs ++ [i] ++ more (s,i) xs
     less a bs = sort $ filter (<= a) bs
     more a bs = sort $ filter (> a) bs
