@@ -4,7 +4,7 @@ import Sort (shuffle)
 
 {--
 Notes:
-- Specifiable lexigraphic depth and optimized sort.
+- Specifiable lexicographical depth and optimized sort.
 - Better time and space savings with nearly the same properties.
 - Great performance with only a depth of 4, len 5000 => (0.67 s, 10^9 b)
 - Depth of 4 succeeds, depth of 3 fails
