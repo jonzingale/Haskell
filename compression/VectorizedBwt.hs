@@ -5,7 +5,7 @@ import Sort (shuffle)
 {--
 Note:
 - An attempt to unpack the details of an optimized Burrow-Wheeler transform.
-- So far no more time efficient than UnpackedBwt, but worse on space.
+- So far no more time efficient than UnpackedBwt, worse on space.
 --}
 
 test = burrows_wheeler tome
