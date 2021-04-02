@@ -11,7 +11,7 @@ Notes:
 - Approximately 9 for many actual English tomes
 
 Questions:
-- How can one measure necessary depth?
+- How can one measure necessary depth? Fourier spectrum?
 - Must I construct the rotations? Should I calculate of indices alone?
 --}
 
