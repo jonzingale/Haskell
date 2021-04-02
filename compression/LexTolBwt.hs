@@ -20,7 +20,7 @@ test1 i = tome ++ "|" == (inv_bwt.lex_tol_bwt i) tome
 test2 i = tome2 ++ "|" == (inv_bwt.lex_tol_bwt i) tome2
 
 tome = take 300 $ foldr (++) "" $ repeat "banana_bandana"
-tome2 = "Of course true to form in such dreams the more important a willful act"
+tome2 = "of course true to form in such dreams the more important a willful act"
 
 -- construct indexed list of rotated and truncated tomes, apply indices to
 -- original tome. 
