@@ -12,6 +12,7 @@ Notes:
 
 Questions:
 - How can one measure necessary depth? Fourier spectrum?
+  Related to halting problem via Kolmogorov complexity.
 - Must I construct the rotations? Should I calculate of indices alone?
 --}
 

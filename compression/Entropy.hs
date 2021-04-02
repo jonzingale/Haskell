@@ -9,7 +9,6 @@ Notes:
 - Metric Entropy
 
 Todo:
-- Find reasonable estimation of Kolmogorov complexity
 - For large tomes, use standard language specific letter frequencies.
 --}
 
