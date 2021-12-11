@@ -12,6 +12,7 @@ type Volume = Int32
 header = WAVEHeader 1 44100 16 Nothing
 header2 = WAVEHeader 2 44100 16 Nothing
 
+-- MONO unpack?
 unpack :: WAVE -> VectSamples
 unpack = (U.fromList).(map head).waveSamples
 
