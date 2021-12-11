@@ -20,14 +20,16 @@ Make a Takens visualizer for bird song.
 - write autoscaling based on params: max, min
 - principle components of syrinx?
 
-- Tomorrow: Scale Int32 better to the page!!!
+- Tomorrow:
+1. Scale Int32 better to the page!!!
+2. Test will be to produce timeseries of lorenz and validate.
+Check one and combined two dimensional inputs
 --}
-
 
 -- Constants & Types
 type File = String
 bsize = 10000 :: Int -- image size
-maxVal = (2^31-1) :: Int -- averages 3 signals
+maxVal = (2^31-1) :: Int
 hsize = fromIntegral $ div bsize 2
 zsize = div bsize 2
 -- delay = 120 -- heuristically found for Lorenz
@@ -35,6 +37,7 @@ delay = 12 -- heuristically found.
 time = 20
 
 thrush = "HermitThrush.wav" -- monophonic
+random = "random.wav"
 --
 
 main :: IO ()
@@ -85,12 +88,13 @@ preprocess file = do
   wav <- getWAVEFile file
   return $ map (rescale.toInt.(!!0)) $ waveSamples wav
   where
-    rescale x = zsize + div x (div maxVal bsize)
+    rescale x = zsize + div x (div maxVal 5000)
     toInt x = (fromIntegral x)::Int
 
 takensThrush :: IO [(Int, Int)]
 takensThrush = do
-  bird <- preprocess thrush
+  -- bird <- preprocess thrush
+  bird <- preprocess "temp.wav"
   let ys = drop delay bird
   let zs = drop delay ys
   return $ zip bird zs

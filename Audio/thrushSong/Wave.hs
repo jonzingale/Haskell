@@ -35,3 +35,7 @@ viewSamples file = do
   wav <- getWAVEFile file
   print $ take 1000 $ waveSamples wav
 
+verifyMono :: String -> IO()
+verifyMono file = do
+  wav <- getWAVEFile file
+  print.waveNumChannels.waveHeader $ wav
