@@ -24,10 +24,12 @@ lorenzPair :: U.Vector Int32
 lorenzPair =
   U.map prj $ U.fromList $ runLorenz time (1,1,1)
   where
-    λ = fromIntegral maxVal / maxLorax
+    λ = fromIntegral maxVal / maxLoraz
     t x = fromIntegral.floor $ λ * x
+    -- prj (x,y,z) = t y
     -- does this do what i think it does?
     prj (x,y,_) = div (t x) 2 + div (t y) 2
+    -- prj (x,y,z) = div (t x) 3 + div (t y) 3 + div (t z) 3
 
 singleLorenz = makeWavFile lorenzSingle
 doubleLorenz = makeWavFile lorenzPair

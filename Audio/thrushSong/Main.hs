@@ -7,6 +7,7 @@ import Control.Monad.ST
 import System.Random
 
 import Lorenz
+import LorenzWave (doubleLorenz, singleLorenz)
 import Wave
 
 import Data.Int (Int32) -- 2,147,483,647
@@ -32,8 +33,8 @@ bsize = 10000 :: Int -- image size
 maxVal = (2^31-1) :: Int
 hsize = fromIntegral $ div bsize 2
 zsize = div bsize 2
--- delay = 120 -- heuristically found for Lorenz
-delay = 12 -- heuristically found.
+delay = 120 -- heuristically found for Lorenz
+-- delay = 12 -- heuristically found.
 time = 20
 
 thrush = "HermitThrush.wav" -- monophonic
