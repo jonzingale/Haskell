@@ -5,7 +5,7 @@ type Coords = (Double, Double, Double)
 type Trajectory = [Coords]
 type Duration = Int
 
-eBall = 0.003 -- both accuracy and center frequency
+eBall = 0.0003 -- both accuracy and center frequency
 
 euler :: ODE -> Coords -> Coords
 euler f (x,y,z) =
