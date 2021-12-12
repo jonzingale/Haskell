@@ -27,7 +27,6 @@ lorenzPair =
     λ = fromIntegral maxVal / maxLoraz
     t x = fromIntegral.floor $ λ * x
     -- prj (x,y,z) = t y
-    -- does this do what i think it does?
     prj (x,y,_) = div (t x) 2 + div (t y) 2
     -- prj (x,y,z) = div (t x) 3 + div (t y) 3 + div (t z) 3
 

@@ -11,7 +11,7 @@ import Lorenz
 import LorenzWave (doubleLorenz, singleLorenz)
 import Wave
 
-import Data.Int (Int32) -- 2,147,483,647
+import Data.Int (Int32) -- 2^31-1
 import Data.WAVE
 
 {--
@@ -75,10 +75,9 @@ genImage = runST $ do
 preprocess :: File -> IO [Int]
 preprocess file = do
   wav <- getWAVEFile file
-  return $ map (rescale.toInt.(!!0)) $ waveSamples wav
+  return $ map (rescale.fromIntegral.(!!0)) $ waveSamples wav
   where
     rescale x = zsize + div x (div maxVal zsize)
-    toInt x = (fromIntegral x)::Int
 
 takensFromWave :: IO [(Int, Int)]
 takensFromWave = do
