@@ -33,6 +33,27 @@ thrush = "HermitThrush.wav" -- monophonic
 main :: IO ()
 main = do savePngImage "images/tmp.png" $ ImageRGB8 genImage
 
+genImage :: Image PixelRGB8
+genImage = runST $ do
+  mimg <- M.newMutableImage bsize bsize
+
+  -- original Lorenz
+  -- toImage lorenzXZ mimg
+
+  -- Takens reconstructed Lorenz
+  -- toImage takensLorenz mimg
+
+  -- thrush song or other audio file
+  -- let wav = unsafePerformIO.takensFromWave $ "temp.wav"
+  let wav = unsafePerformIO.takensFromWave $ thrush
+  toImage wav mimg
+
+  where
+    toImage [] mi = M.unsafeFreezeImage mi
+    toImage ((x,y):ps) mi =
+      do writePixel mi x y (PixelRGB8 128 200 150)
+         toImage ps mi
+
 lorenzXZ :: [(Int, Int)]
 lorenzXZ =
   map (discrete.prj) $ runLorenz time (1,1,1)
@@ -51,40 +72,15 @@ takensLorenz =
     resize (x, y) = (hsize + x * 200, hsize + y * 100)
     discrete (x, y) = (floor x, floor y)
 
-genImage :: Image PixelRGB8
-genImage = runST $ do
-  mimg <- M.newMutableImage bsize bsize
-
-  -- original Lorenz
-  -- toImage lorenzXZ mimg
-
-  -- Takens reconstructed Lorenz
-  -- toImage takensLorenz mimg
-
-  -- thrush song
-  let bird = unsafePerformIO takensFromWave
-  toImage bird mimg
-
-  where
-    toImage [] mi = M.unsafeFreezeImage mi
-    toImage ((x,y):ps) mi =
-      do writePixel mi x y (PixelRGB8 128 200 150)
-         toImage ps mi
-
--- prepares timeseries for display
-preprocess :: File -> IO [Int]
-preprocess file = do
+takensFromWave :: File -> IO [(Int, Int)]
+takensFromWave file = do
   wav <- getWAVEFile file
-  return $ map (rescale.fromIntegral.(!!0)) $ waveSamples wav
-  where
-    rescale x = zsize + div x (div maxVal zsize)
-
-takensFromWave :: IO [(Int, Int)]
-takensFromWave = do
-  bird <- preprocess thrush
-  -- bird <- preprocess "temp.wav" -- doubleLorenz to make this
-  let ys = drop delay bird
+  let xs = preprocess wav
+  let ys = drop delay xs
   let zs = drop delay ys
-  return $ zip bird zs
+  return $ zip xs zs
   where
+    preprocess wav =
+      map (rescale.fromIntegral.(!!0)) $ waveSamples wav
+    rescale x = zsize + div x (div maxVal zsize)
     xcoord (x,_,_) = x
