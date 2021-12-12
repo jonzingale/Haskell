@@ -26,7 +26,7 @@ zsize = div bsize 2
 delay = 120 -- heuristically found for Lorenz
 time = 20
 
-whale1 = "whale.wav" -- humpback whale call
+whale1 = "audio/whale.wav" -- humpback whale call
 --
 
 main :: IO ()
@@ -50,10 +50,14 @@ takensFromWave file = do
   let xs = preprocess wav
   let ys = drop delay xs
   let zs = drop delay ys
-  return $ zip xs ys
+
+  let as = drop delay zs
+  return $ zip xs as
   where
+    drop1 smps = drop (div (length smps) 3) smps
+    take1 smps = take (div (length smps) 5) smps
     preprocess wav =
-      map (rescale.fromIntegral.(!!0)) $ waveSamples wav
+      map (rescale.fromIntegral.(!!0)).take1.drop1 $ waveSamples wav
     rescale x = zsize + div x (div maxVal zsize)
     xcoord (x,_,_) = x
 

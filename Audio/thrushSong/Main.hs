@@ -27,7 +27,7 @@ zsize = div bsize 2
 delay = 120 -- heuristically found for Lorenz
 time = 20
 
-thrush = "HermitThrush.wav" -- monophonic
+thrush = "audio/HermitThrush.wav" -- monophonic
 --
 
 main :: IO ()
