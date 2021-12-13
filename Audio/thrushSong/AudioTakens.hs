@@ -18,17 +18,18 @@ This module constructs phase space manifolds from wave files.
 -- Constants & Types
 type File = String
 bsize = 5000 :: Int -- image size
-maxVal = 2^31-1 :: Int
+maxVal = (2^31-1) :: Int
 hsize = div bsize 2
 delay = 120 -- heuristically found for Lorenz
-density = 10
+density = 30
 
 -- wav1 = "audio/peptideSymphony.wav" -- codon
-wav1 = "audio/umeboshi1.wav"
--- wav1 = "audio/whistle.wav"
+-- wav1 = "audio/umeboshi1.wav"
+wav1 = "audio/whistle.wav"
 -- wav1 = "audio/umeboshi_with_mobius.wav"
 -- wav1 = "audio/rebab.wav"
 -- wav1 = "audio/whale.wav"
+-- wav1 = "audio/HermitThrush.wav"
 --
 
 main :: IO ()
@@ -55,7 +56,7 @@ takensFromWave file = do
   let zs = drop delay ys
 
   let as = drop delay zs
-  return $ drawLine density $ zip xs ys
+  return $ drawLine density $ zip ys zs
   where
     preprocess wav = map (rescale.fromIntegral.(!!0)) $ waveSamples wav
     rescale x = hsize + div x (div maxVal hsize)
