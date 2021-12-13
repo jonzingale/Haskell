@@ -21,11 +21,11 @@ bsize = 5000 :: Int -- image size
 maxVal = (2^31-1) :: Int
 hsize = div bsize 2
 delay = 120 -- heuristically found for Lorenz
-density = 30
+density = 20
 
--- wav1 = "audio/peptideSymphony.wav" -- codon
+wav1 = "audio/peptideSymphony.wav" -- codon
 -- wav1 = "audio/umeboshi1.wav"
-wav1 = "audio/whistle.wav"
+-- wav1 = "audio/whistle.wav"
 -- wav1 = "audio/umeboshi_with_mobius.wav"
 -- wav1 = "audio/rebab.wav"
 -- wav1 = "audio/whale.wav"
@@ -44,8 +44,8 @@ genImage = runST $ do
   where
     toImage [] mi = M.unsafeFreezeImage mi
     toImage ((x,y):ps) mi =
-      -- do writePixel mi x y (PixelRGB8 128 200 150)
-      do writePixel mi x y (PixelRGB8 255 255 255)
+      do writePixel mi x y (PixelRGB8 128 200 150)
+      -- do writePixel mi x y (PixelRGB8 255 255 255)
          toImage ps mi
 
 takensFromWave :: File -> IO [(Int, Int)]
@@ -56,7 +56,7 @@ takensFromWave file = do
   let zs = drop delay ys
 
   let as = drop delay zs
-  return $ drawLine density $ zip ys zs
+  return $ drawLine density $ zip xs ys
   where
     preprocess wav = map (rescale.fromIntegral.(!!0)) $ waveSamples wav
     rescale x = hsize + div x (div maxVal hsize)
