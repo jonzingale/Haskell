@@ -21,19 +21,15 @@ type File = String
 type Density = Int
 bsize = 5000 :: Int -- image size
 hsize = fromIntegral bsize / 2.1 :: Float
-delay = 120 -- heuristically found for Lorenz
--- density = 1
+delay = 80 -- 120 heuristically found for Lorenz
 
--- time ./Main "audio/HermitThrush.wav" 10
+-- time ./Main "audio/HermitThrush.wav" 40
 -- time ./Main "audio/peptideSymphony.wav" 1
--- time ./Main "audio/umeboshi1.wav"
--- time ./Main "audio/whistle.wav"
+-- time ./Main "audio/umeboshi1.wav" 2
+-- time ./Main "audio/whistle.wav" 20
 -- time ./Main "audio/umeboshi_with_mobius.wav"
--- time ./Main "audio/rebab.wav"
--- time ./Main "audio/whale.wav"
-
-
--- args : file density
+-- time ./Main "audio/rebab.wav" 30
+-- time ./Main "audio/whale.wav" 20
 
 main :: IO ()
 main = do
@@ -65,8 +61,8 @@ takensFromWave file density = do
 
 preprocess :: WAVE -> [Int]
 preprocess wav =
-  let samples = map head $ waveSamples wav in
-  let maxV = fromIntegral.maximum.map abs $ samples in -- inefficient
-  map ((rescale maxV).fromIntegral) samples
+  let samples = map (fromIntegral.head) $ waveSamples wav in
+  let maxV = maximum.map abs $ samples in -- inefficient
+  map (rescale maxV) samples
   where
-    rescale mv x = floor $ fromIntegral x * hsize/mv + hsize
+    rescale mv x = floor $ x * hsize/mv + hsize
