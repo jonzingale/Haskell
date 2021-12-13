@@ -1,35 +1,33 @@
 module Main where
 import System.IO.Unsafe (unsafePerformIO) -- mixing IO and ST
-import qualified Data.Vector.Unboxed as U
 import qualified Codec.Picture.Types as M
 import System.Environment (getArgs)
 import Codec.Picture -- JuicyPixel
 import Data.Int (Int32) -- 2^31-1
-import Control.Monad.State
 import Control.Monad.ST
-import System.Random
-import Data.WAVE
-
 import Line (drawLine)
+import Data.WAVE
 
 {--
 This module constructs phase space manifolds from wave files.
+
+usage:
+. compile.sh ; time ./Main "audio/peptideSymphony.wav" 1
+
+time ./Main "audio/HermitThrush.wav" 40
+time ./Main "audio/peptideSymphony.wav" 1
+time ./Main "audio/umeboshi1.wav" 2
+time ./Main "audio/whistle.wav" 20
+time ./Main "audio/rebab.wav" 30
+time ./Main "audio/whale.wav" 20
 --}
 
 -- Constants & Types
 type File = String
 type Density = Int
-bsize = 5000 :: Int -- image size
+bsize = 10000 :: Int -- image size
 hsize = fromIntegral bsize / 2.1 :: Float
 delay = 80 -- 120 heuristically found for Lorenz
-
--- time ./Main "audio/HermitThrush.wav" 40
--- time ./Main "audio/peptideSymphony.wav" 1
--- time ./Main "audio/umeboshi1.wav" 2
--- time ./Main "audio/whistle.wav" 20
--- time ./Main "audio/umeboshi_with_mobius.wav"
--- time ./Main "audio/rebab.wav" 30
--- time ./Main "audio/whale.wav" 20
 
 main :: IO ()
 main = do
