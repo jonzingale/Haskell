@@ -19,8 +19,8 @@ interpolate :: Point -> Point -> Param -> Point
 interpolate (x1, y1) (x2, y2) t =
   g (f x1 + t * f (x2 - x1), f y1 + t * f (y2 - y1))
   where
+    f x = fromIntegral x :: Double
     g (x, y) = (floor x, floor y) 
-    f x = fromIntegral x
 
 line :: Point -> Point -> Density -> [Point]
 line x y d =

@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # usage:
-# . compile.sh ; time ./Main "audio/peptideSymphony.wav" 1
+# . compile.sh ; time ./Main "audio/peptideSymphony.wav" 1 ; open images/tmp.png
 
 # file="$1 $2"
 
