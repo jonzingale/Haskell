@@ -6,7 +6,6 @@ import System.Process (callProcess)
 
 download url = do
     e <- fileExist $ takeFileName url
-    -- unless e $ callProcess "curl" ["-O", url]
     unless e $ callProcess "curl" ["--insecure", url]
     return $ takeFileName url
 
