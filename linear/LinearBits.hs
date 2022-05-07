@@ -29,7 +29,15 @@ test1 f = all (== True)
 
 test2 :: (Int -> Int) -> Bool
 test2 f = all (== True)
-  [f x + f y == f (x + y) | x <- [0..15], y <- [0..15]]
+  [g (f x + f y) == g (f (x + y)) | x <- [0..15], y <- [0..15]]
+  where
+    g t = mod t 16
+
+test2' :: (Int -> Int) -> [(Int, Int)]
+test2' f =
+  [(g (f x + f y), (g.f) (x + y)) | x <- [0..15], y <- [0..15]]
+  where
+    g t = mod t 16
 
 -- test3 (.&. 4) => True
 test3 :: (Int -> Int) -> Bool
