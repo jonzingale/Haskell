@@ -10,6 +10,9 @@ f a + f b = f (a + b)
 in particular...
 𝑓(𝑣,𝑣) = 𝑓(𝑣,0) + 𝑓(0,𝑣) = 2𝑓(𝑣,0) = 0
 
+Reference:
+https://math.stackexchange.com/questions/590966/why-do-xor-and-other-operators-on-binary-variables-qualify-as-linear
+
 --}
 
 -- bitwise addition
