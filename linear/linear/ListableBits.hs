@@ -1,6 +1,5 @@
 module Linear.ListableBits where
 import Prelude hiding (head, tail, length, take, drop, (!!), (++))
-import Data.Semigroup
 import Data.Bits
 
 {--
@@ -37,7 +36,6 @@ instance Semigroup Int where
   (<>) = xor
 
 instance Monoid Int where
-  mappend = (<>)
   mempty = 0
 
 -- fix vector length

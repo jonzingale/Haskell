@@ -2,7 +2,6 @@ module LinearBits where
 import Prelude hiding (head, tail, length)
 import Linear.ListableBits
 import Linear.BitHelpers
-import Data.Semigroup
 import Data.Bits
 
 {--
