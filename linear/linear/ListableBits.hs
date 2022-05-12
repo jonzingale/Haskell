@@ -6,7 +6,7 @@ import Data.Bits
 Bits of fixed length as lists
 --}
 
-class (Monoid a, Semigroup a, Eq a) => Listable a where
+class (Monoid a, Eq a) => Listable a where
   cons:: a -> a -> a
   tail :: a -> a
 
