@@ -1,5 +1,6 @@
 module Linear.ListableBits where
 import Prelude hiding (head, tail, length, take, drop, (!!), (++))
+import Data.Semigroup
 import Data.Bits
 
 {--
@@ -11,7 +12,7 @@ class (Monoid a, Eq a) => Listable a where
   tail :: a -> a
 
   head :: a -> a
-  head bs = cons mempty (tail bs) <> bs
+  head bs = cons mempty (tail bs) `mappend` bs
 
   take :: Int -> a -> a
   take 0 bs = mempty
@@ -32,18 +33,19 @@ class (Monoid a, Eq a) => Listable a where
     | n == mempty = 0
     | otherwise = 1 + length (tail n)
 
-instance Semigroup Int where
-  (<>) = xor
+-- instance Semigroup Int where
+--   (<>) = xor
 
 instance Monoid Int where
   mempty = 0
+  mappend = xor
 
 -- fix vector length
 v_len :: Int
 v_len = 5
 
 instance Listable Int where
-  cons b bs = shiftL bs v_len <> b
+  cons b bs = shiftL bs v_len `mappend` b
   tail = flip shiftR v_len
 
 -- Examples

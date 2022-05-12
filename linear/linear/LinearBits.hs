@@ -1,59 +1,63 @@
 module LinearBits where
-import qualified Linear.ListableBits as L
+import Prelude hiding (head, tail, length)
+import Linear.ListableBits
+import Linear.BitHelpers
 import Data.Bits
 
 {--
+This library treats Bits as if they were Vectors and Matrices.
+solution5 solves the WoW lights problem for 5 lights.
+
 // inv(l4)*l54
-ls =
+ls = 727834
   [[1, 0, 1, 1, 0], // 22
    [0, 0, 1, 1, 0], // 6
    [1, 1, 0, 0, 0], // 24
    [1, 1, 0, 1, 0]] // 26
-)
-// 28
-v = [1,1,1,0,0]
-// 19
-v = [1,0,0,1,1]
 
-// 4
-ls(v) = [0,1,0,0]
+22 <|> 19::Int => 18
+[1, 0, 1, 1, 0] <|> [1, 0, 0, 1, 1] => [1, 0, 0, 1, 0]
 
-write matrix multiplication bitwise.
-`xor` is addition
-`and` is multiplication
-`shift` to make arrays
+map (eval.((<|>) 19)) m => [0,1,1,0] => 6
 
-getVector 3 727834::Int => 22
-getVector 2 727834::Int => 6
-getVector 1 727834::Int => 24
-getVector 0 727834::Int => 26
+(fill 4 (19::Int)) <|> 727834 => 592402
 
 --}
 
 v = 19
 m = [26, 24, 6, 22::Int] -- 727834
+bases = [24, 28, 14, 7::Int]
 
-test :: Bool
-test = and [shiftR (shiftL x 2) 2 == x | x <- [0..100::Int]]
+-- solves 5 lights problem
+solution5 :: Int -> Int
+solution5 n = 727834 |> (31 !+ n)
 
--- toBitArray m => 727834
-toBitArray :: L.Listable a => [a] -> a
-toBitArray bs = foldr L.cons mempty bs
+solveBases = map solution5 bases == [1, 13, 11, 8]
 
--- getVector 2 (toBitArray m) => 6
-getVector :: L.Listable a => Int -> a -> a
-getVector n bs = bs L.!! n
-
-class Vector a where
-  (!+) :: a -> a -> a
+class (Listable a) => Vector a where
   (<|>) :: a -> a -> a
+  eval :: a -> a
+
+  (!+) :: a -> a -> a
+  (!+)  = mappend
+
+  fill :: Int -> a -> a
+  fill 0 v = mempty
+  fill n v = cons v $ fill (n-1) v
 
 instance Vector Int where
-  (!+)  = (<>)
+  eval n = popCount n <|> 1
   (<|>) = (.&.)
 
 class Matrix a where
-  (!*) :: a -> a -> a
+  (|>) :: a -> a -> a -- <A|v>
 
 instance Matrix Int where
-  (!*) m n = undefined
+-- TODO: write (|>) as a comonad.
+  (|>) m v =
+    let full_v = fill (length m) v in
+    chunkEvals (m <|> full_v) 0
+    where
+      chunkEvals 0 i = 0
+      chunkEvals n i =
+        shiftL (eval.head $ n) i + chunkEvals (tail n) (i+1)
