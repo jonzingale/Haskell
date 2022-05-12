@@ -39,12 +39,12 @@ instance Monoid Int where
   mempty = 0
 
 -- fix vector length
-v_length :: Int
-v_length = 5
+v_len :: Int
+v_len = 5
 
 instance Listable Int where
-  cons b bs = shiftL bs v_length <> b
-  tail = flip shiftR v_length
+  cons b bs = shiftL bs v_len <> b
+  tail = flip shiftR v_len
 
 -- Examples
 identity n = foldr cons (0::Int) [2^i | i <- [0..n-1]]
