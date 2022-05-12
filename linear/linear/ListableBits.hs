@@ -6,6 +6,10 @@ import Data.Bits
 Bits of fixed length as lists
 --}
 
+-- fix vector length
+v_len :: Int
+v_len = 5
+
 class (Monoid a, Eq a) => Listable a where
   cons:: a -> a -> a
   tail :: a -> a
@@ -37,10 +41,6 @@ instance Semigroup Int where
 
 instance Monoid Int where
   mempty = 0
-
--- fix vector length
-v_len :: Int
-v_len = 5
 
 instance Listable Int where
   cons b bs = shiftL bs v_len <> b
