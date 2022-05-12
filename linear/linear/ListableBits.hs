@@ -7,12 +7,12 @@ import Data.Bits
 Bits of fixed length as lists
 --}
 
-class (Monoid a, Eq a) => Listable a where
+class (Monoid a, Semigroup a, Eq a) => Listable a where
   cons:: a -> a -> a
   tail :: a -> a
 
   head :: a -> a
-  head bs = cons mempty (tail bs) `mappend` bs
+  head bs = cons mempty (tail bs) <> bs
 
   take :: Int -> a -> a
   take 0 bs = mempty
@@ -33,20 +33,17 @@ class (Monoid a, Eq a) => Listable a where
     | n == mempty = 0
     | otherwise = 1 + length (tail n)
 
--- instance Semigroup Int where
---   (<>) = xor
+instance Semigroup Int where
+  (<>) = xor
 
 instance Monoid Int where
+  mappend = (<>)
   mempty = 0
-  mappend = xor
 
 -- fix vector length
 v_len :: Int
 v_len = 5
 
 instance Listable Int where
-  cons b bs = shiftL bs v_len `mappend` b
+  cons b bs = shiftL bs v_len <> b
   tail = flip shiftR v_len
-
--- Examples
-identity n = foldr cons (0::Int) [2^i | i <- [0..n-1]]

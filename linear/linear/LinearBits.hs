@@ -2,6 +2,7 @@ module LinearBits where
 import Prelude hiding (head, tail, length)
 import Linear.ListableBits
 import Linear.BitHelpers
+import Data.Semigroup
 import Data.Bits
 
 {--
@@ -10,7 +11,7 @@ solution5 solves the WoW lights problem for 5 lights.
 --}
 
 solution5 :: Int -> Int
-solution5 n = 727834 |> (31 !+ n)
+solution5 n = 727834 |> (31 <> n)
 
 solvesBases :: Bool
 solvesBases = map solution5 bases == [1, 13, 11, 8]
@@ -21,9 +22,6 @@ bases = [24, 28, 14, 7]
 class (Listable a) => Vector a where
   (<|>) :: a -> a -> a
   eval :: a -> a
-
-  (!+) :: a -> a -> a
-  (!+)  = mappend
 
   fill :: Int -> a -> a
   fill 0 v = mempty
