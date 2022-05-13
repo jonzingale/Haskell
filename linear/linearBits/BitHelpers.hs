@@ -1,5 +1,5 @@
-module Linear.BitHelpers where
-import Linear.ListableBits
+module BitHelpers where
+import ListableBits
 
 -- toBitArray m => 727834
 toBitArray :: Listable a => [a] -> a

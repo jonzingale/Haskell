@@ -1,6 +1,6 @@
 module LinearBits where
 import Prelude hiding (head, tail, length)
-import Linear.ListableBits
+import ListableBits
 import Data.Bits
 
 {--

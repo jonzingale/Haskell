@@ -1,4 +1,4 @@
-module Linear.ListableBits where
+module ListableBits where
 import Prelude hiding (head, tail, length, take, drop, (!!), (++))
 import Data.Bits
 
