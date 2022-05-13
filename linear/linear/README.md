@@ -1,5 +1,6 @@
 This library treats Bits as if they were Vectors and Matrices.
-solution5 solves the WoW lights problem for 5 lights.
+
+`solution5` solves the WoW lights problem for 5 lights.
 
 ```
 solution5 n = 727834 |> (31 <> n)
