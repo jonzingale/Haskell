@@ -33,7 +33,6 @@ class Matrix a where
   (|>) :: a -> a -> a -- <A|v>
 
 instance Matrix Int where
--- TODO: write (|>) as a comonad.
   (|>) m v =
     let full_v = fill (length m) v in
     chunkEvals (m <|> full_v) 0
