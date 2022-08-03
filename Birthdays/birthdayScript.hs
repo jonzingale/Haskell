@@ -10,4 +10,7 @@ main = do
         putStr "\nPop";
         daysold pop;
 
--- ghc -o goodMorning birthdayScript.hs
+{--
+  ghc -o goodMorning birthdayScript.hs
+  rm *.hi *.o
+--}
