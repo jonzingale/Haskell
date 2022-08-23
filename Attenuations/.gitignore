@@ -6,6 +6,7 @@ data*
 Data/*
 stable/
 
-Visualizer/Images/
+**/Visualizer/Images/
+**/compiled/Images/
 MainWriter
 Main
