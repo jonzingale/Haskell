@@ -1,6 +1,5 @@
 module Nemo where
 
-
 nemo :: String
 nemo = "Nemo"
 
