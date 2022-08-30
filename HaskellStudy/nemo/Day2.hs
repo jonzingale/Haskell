@@ -1,4 +1,4 @@
-module Nemo where
+module Day2 where
 
 nemo :: String
 nemo = "Nemo"
