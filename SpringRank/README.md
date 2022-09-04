@@ -14,9 +14,9 @@ code base and preprints can be found [HERE](https://github.com/cdebacco/SpringRa
 `rm *.hi *.o`
 
 ### Dependencies:
-vector-0.13.0.0
-cassava-0.5.3.0
-extra-1.7
+cabal install --lib vector-0.13.0.0
+cabal install --lib cassava-0.5.3.0
+cabal install --lib extra-1.7
 
 ### Potential Benefits:
 - Amenable to compilation and compiler optimization.

@@ -23,7 +23,7 @@ rasmus_test = do
   print $ normalize three_edge
 
 rasmus_test2 = do
-  putStrLn "\nWhen can three edge have the same value as two?"
+  putStrLn "\nWhen can three edges have the same value as two?"
   putStrLn "ie. When is the sum of the middle values in the three case"
   putStrLn "equal to the middle in the two case?\n"
 
