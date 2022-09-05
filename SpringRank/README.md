@@ -25,3 +25,6 @@ cabal install --lib Unique-0.4.7.9
 ### Potential Benefits:
 - Amenable to compilation and compiler optimization.
 - Extendable to Cuda via `accelerate`.
+
+### Notes:
+- `.dat` file notation: <targetNode> <sourceNode> <edgeWeight> => 0 1 5
