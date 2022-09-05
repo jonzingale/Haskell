@@ -14,9 +14,13 @@ code base and preprints can be found [HERE](https://github.com/cdebacco/SpringRa
 `rm *.hi *.o`
 
 ### Dependencies:
+```
 cabal install --lib vector-0.13.0.0
 cabal install --lib cassava-0.5.3.0
 cabal install --lib extra-1.7
+cabal install --lib sparse-linear-algebra-0.3.1
+cabal install --lib Unique-0.4.7.9
+```
 
 ### Potential Benefits:
 - Amenable to compilation and compiler optimization.
