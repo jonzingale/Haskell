@@ -6,7 +6,7 @@ License-File:   LICENSE
 Author:     Jon Zingale
 Homepage:   https://jonzingale.github.io/
 Category:   Ranking Algorithms
-Synopsis:   Haskell implementation of the SpringRank algorithm by
+Synopsis:   Haskell implementation of the SpringRank algorithm authored by
     C. De Bacco, D. B. Larremore and C. Moore
 
 Library
