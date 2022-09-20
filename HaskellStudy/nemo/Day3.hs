@@ -1,10 +1,14 @@
 module Day3 where
 
-data Day = Monday | Tuesday | Wednesday | Thursday deriving (Show, Eq)
+-- datatype => dataclasses
+data Day = Monday | Tuesday | Wednesday | Thursday
+  deriving (Show, Eq)
 
 instance Ord Day where
   Monday < Tuesday = True
   Tuesday < Wednesday = True
+  Wednesday < Thursday = True
+  thursday < Thursday = True
 
 days = [Monday, Tuesday, Wednesday, thursday, Thursday]
 abcs = ["a", "b", "c"]
