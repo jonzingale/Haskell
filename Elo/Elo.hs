@@ -29,7 +29,26 @@ diffA = fst.eloDiff
 diffB :: Match -> Rank
 diffB = snd.eloDiff  
 
--- replace with logrithmic regression
+{--
+Amateur ranks are effectively linear.
+
+2600 26 6 dan
+2500 25 5 dan
+2400 24 4 dan
+2300 23 3 dan
+2200 22 2 dan
+2100 21 1 dan
+2000 20 1 kyu
+1900 19 2 kyu
+1800 18 3 kyu
+1500 15 6 kyu
+1000 10 11 kyu
+500  5 16 kyu
+100  1 20 kyu
+
+| rank == kyu = (21 - rank) * 100
+| otherwise = 100 * rank + 2000
+--}
 rankToElo :: String -> Elo
 rankToElo r =
   case r of
