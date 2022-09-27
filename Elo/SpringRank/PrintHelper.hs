@@ -9,7 +9,7 @@ module PrintHelper where
 sortRank :: Ord a => [(b, a)] -> [(b, a)]
 sortRank [] = []
 sortRank ((b,a):bas) =
-    sortRank(gte (b,a) bas) ++ [(b,a)] ++ sortRank(lt (b,a) bas)
-    where
-        lt (x,y) zs = filter (\(q,r) -> r < y) zs
-        gte (x,y) zs = filter (\(q,r) -> r >= y) zs
+  sortRank(gte (b,a) bas) ++ [(b,a)] ++ sortRank(lt (b,a) bas)
+  where
+   lt (x,y) zs = filter (\(q,r) -> r < y) zs
+   gte (x,y) zs = filter (\(q,r) -> r >= y) zs
