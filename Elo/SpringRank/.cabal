@@ -1,0 +1,17 @@
+Name:       SpringRank
+Version:    1.0.0
+Cabal-Version:  >= 1.2
+License:    MIT
+License-File:   LICENSE
+Author:     Jon Zingale
+Homepage:   https://jonzingale.github.io/
+Category:   Ranking Algorithms
+Synopsis:   Haskell implementation of the SpringRank algorithm authored by
+    C. De Bacco, D. B. Larremore and C. Moore
+
+Library
+  Build-Depends:    base,
+  vector >= 0.13.0.0, cassava >= 0.5.3.0 ,extra >= 1.7
+  sparse-linear-algebra >= 0.3.1, Unique >= 0.4.7.9
+  Exposed-modules:
+    Adjacency, CsvParser, SpringRank, Test
