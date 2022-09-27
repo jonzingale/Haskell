@@ -23,11 +23,10 @@ player is to be given a unique integer id (index for the adjacency matrix).
 [id1, name1, go_ranking1, elo1, id2, name2, go_ranking2, elo2, elo_gain]
 --}
 
-type Graph = [Edge]
-type EitherData = Either String (Vector Edge)
+example = getMatches "data/2018_matches.dat"
 
-data Edge = BadEdge | Edge { source :: !Int,  target :: !Int, value :: !Double }
-  deriving (Generic, Show)
+type Tournament = [Match]
+type EitherData = Either String (Vector Match)
 
 data Match = BadRecord | Match {
   name1 :: !String,
@@ -36,20 +35,6 @@ data Match = BadRecord | Match {
   rank2 :: !String
 } deriving (Generic, Show)
 
-instance Eq Edge where
-  (Edge s t _) == (Edge s' t' _) = s == s' && t == t'
-
-instance Semigroup Edge where
-  (<>) (Edge a b v) (Edge c d w)
-    | (Edge a b v) == mempty = (Edge c d w)
-    | (Edge c d w) == mempty = (Edge a b v)
-    | a == c && b == d = Edge a b (v + w)
-    | otherwise = BadEdge
-
-instance Monoid Edge where
-  mempty = Edge 0 0 0
-
-instance FromRecord Edge
 instance FromRecord Match
 
 records = toList.(fromRight empty).parseCsv
@@ -57,13 +42,5 @@ records = toList.(fromRight empty).parseCsv
     options = defaultDecodeOptions { decDelimiter = fromIntegral $ ord ' ' }
     parseCsv csv = decodeWith options NoHeader csv :: EitherData
 
-matchRecords = toList.(fromRight empty).parseCsv
-  where
-    options = defaultDecodeOptions { decDelimiter = fromIntegral $ ord ' ' }
-    parseCsv csv = decodeWith options NoHeader csv :: EitherData
-
-getGraph :: FilePath -> IO(Graph)
-getGraph file = liftM records $ BL.readFile file
-
-getMatches :: FilePath -> IO(Graph)
-getMatches file = liftM matchRecords $ BL.readFile file
+getMatches :: FilePath -> IO(Tournament)
+getMatches file = liftM records $ BL.readFile file
