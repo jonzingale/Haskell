@@ -48,11 +48,3 @@ qsort (x:xs) = (qsort (lt x xs)) ++ [x] ++ (qsort (gte x xs))
   where
     lt x xs = filter (> x) xs
     gte x xs = filter (<= x) xs
-
-
-
-
-
-
-
-
