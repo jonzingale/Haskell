@@ -1,6 +1,6 @@
 {-# OPTIONS_GHC -fno-warn-missing-methods #-}
 
-module NumericalHelper where
+module SpringRank.NumericalHelper where
 
 import Numeric.LinearAlgebra.Class (AdditiveGroup, (^+^), (^-^), (.*))
 import Data.Sparse.SpMatrix (SpMatrix)

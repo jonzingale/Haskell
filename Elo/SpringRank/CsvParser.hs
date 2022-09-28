@@ -1,6 +1,6 @@
 {-# LANGUAGE DeriveGeneric #-}
 
-module CsvParser where
+module SpringRank.CsvParser where
 
 import qualified Data.ByteString.Lazy as BL
 import Data.Vector (Vector, empty, toList)

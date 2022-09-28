@@ -1,6 +1,6 @@
 {-# LANGUAGE DeriveGeneric #-}
 
-module GoParser where
+module SpringRank.GoParser where
 
 import qualified Data.ByteString.Lazy as BL
 import Data.Vector (Vector, empty, toList)
@@ -8,9 +8,10 @@ import Data.Either.Extra (fromRight)
 import GHC.Generics (Generic)
 import Control.Monad (liftM)
 import Data.Char (ord)
-import Data.List (init)
+import Data.List (init, nub, findIndex)
 import Data.Csv
 import Elo (rankToElo, eloGain, Pairing(M))
+import SpringRank.CsvParser (Edge(Edge))
 
 {--
 Data here is given as matchings where the first player listed won the bout
@@ -42,12 +43,12 @@ data Table = Table {
   id1 :: !Int,
   name1 :: !String,
   rank1 :: !String,
-  elo1 :: !Float,
+  elo1 :: !Double,
   id2 :: !Int,
   name2 :: !String,
   rank2 :: !String,
-  elo2 :: !Float,
-  eloDiff :: !Float,
+  elo2 :: !Double,
+  eloDiff :: !Double,
   open :: !Bool
 } deriving (Show)
 
@@ -66,26 +67,23 @@ ex2 = genTable "SpringRank/data/2018_matches.dat"
 genTable :: FilePath -> IO [Table]
 genTable file = do
   matches <- getMatches file
-  return $ map toTable matches
+  let names = nub $ map n1 matches ++ map n2 matches
+  return $ map (toTable names) matches
   where
-    toTable (Match n1 r1 n2 r2 open) =
+    toTable ns (Match n1 r1 n2 r2 open) =
       (Table
-        (playerId n1) n1 r1 (rankToElo r1)
-        (playerId n2) n2 r2 (rankToElo r2)
+        (playerId n1 ns) n1 r1 (rankToElo r1)
+        (playerId n2 ns) n2 r2 (rankToElo r2)
         (diffElo (rankToElo r1) (rankToElo r2) open)
         (read open)
       )
-    playerId s = 1
+    playerId n ns =
+      let (Just x) = findIndex (== n) ns in x
+
     diffElo a b o
       | a < b = eloGain (M b a) False (read o)
       | otherwise = eloGain (M a b) True (read o)
 
-
-
-
-
-
-
-
-
-
+genGraph file = do
+  t <- genTable file
+  return $ map (\r -> Edge (id1 r) (id2 r) (eloDiff r)) t

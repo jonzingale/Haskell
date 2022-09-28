@@ -1,11 +1,11 @@
-module Adjacency where
+module SpringRank.Adjacency where
 import Data.Sparse.SpMatrix (SpMatrix, fromListSM)
 import Data.List (elemIndex)
 import Data.List.Unique (sortUniq)
 import Data.Maybe (fromJust)
 
 import Numeric.LinearAlgebra.Sparse (prd, prd0)
-import CsvParser
+import SpringRank.CsvParser
 
 type Rankings = [(Int, Double)]
 

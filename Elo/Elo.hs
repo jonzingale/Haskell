@@ -4,14 +4,14 @@ module Elo where
 This module computes Elo and is a helper to FairTournament.hs
 --}
 
-type Elo = Float
-type Rank = Float
+type Elo = Double
+type Rank = Double
 
 -- Where for M a b, a > b in initial rank. Dependent types?
 data Pairing = M Elo Elo deriving (Show, Eq)
 
 -- win_probability (M 1000 400) => (0.8175745, 0.18242553)
-win_probability :: Pairing -> (Float, Float)
+win_probability :: Pairing -> (Double, Double)
 win_probability (M a b) =
   let prob_b = 1 / (1 + exp((a-b)/b)) in
   (1 - prob_b, prob_b)
@@ -47,7 +47,7 @@ Amateur ranks are effectively linear.
 100  1 20 kyu
 --}
 
-rankToElo :: String -> Float
+rankToElo :: String -> Elo
 rankToElo rank
   | last rank == 'k' = (21 - toRank rank) * 100
   | otherwise = 100 * (toRank rank) + 2000
