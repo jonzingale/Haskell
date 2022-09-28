@@ -64,6 +64,11 @@ getMatches file = liftM records $ BL.readFile file
 
 ex2 = genTable "SpringRank/data/2018_matches.dat"
 
+players_with_id :: [Match] -> [(Int, String)]
+players_with_id mts =
+  let names = nub $ map n1 mts ++ map n2 mts in
+  zip [0..] names
+
 genTable :: FilePath -> IO [Table]
 genTable file = do
   matches <- getMatches file
