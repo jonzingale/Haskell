@@ -69,6 +69,11 @@ players_with_id mts =
   let names = nub $ map n1 mts ++ map n2 mts in
   zip [0..] names
 
+players :: FilePath -> IO [(Int, String)]
+players file = do
+  mts <- getMatches file
+  return $ players_with_id mts
+
 genTable :: FilePath -> IO [Table]
 genTable file = do
   matches <- getMatches file

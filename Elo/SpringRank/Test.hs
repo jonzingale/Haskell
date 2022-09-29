@@ -9,7 +9,9 @@ normalize ls = let k = 1 / (maximum.map snd $ ls) in
 
 nmgo_test = do
   -- es <- springRank "data/2018_adjusted_elo.dat"
-  rs <- genTable "SpringRank/data/2018_matches.dat"
-  print $ rs
+  -- rs <- genTable "SpringRank/data/2018_matches.dat"
+  -- print $ rs
+  ps <- players "SpringRank/data/2018_matches.dat"
+  print ps
   es <- springRank "SpringRank/data/2018_matches.dat"
   print $ sortRank $ normalize es
