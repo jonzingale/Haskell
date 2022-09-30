@@ -11,6 +11,8 @@ import Control.Monad (liftM)
 import Data.Char (ord)
 import Data.Csv
 
+example = getMatches "SpringRank/data/2018_matches.dat"
+
 instance FromRecord Match
 
 type Tournament = [Match]
@@ -23,8 +25,6 @@ data Match = BadRecord | Match {
   r2 :: !String,
   o1 :: !String
 } deriving (Generic, Show)
-
-example = getMatches "SpringRank/data/2018_matches.dat"
 
 getMatches :: FilePath -> IO(Tournament)
 getMatches file = liftM records $ BL.readFile file
