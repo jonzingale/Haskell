@@ -39,7 +39,7 @@ persons = [
   Player 1 "Kyle" "9.0k" 1200 0
   ]
 
-getPlayers:: IO ([Player])
+getPlayers :: IO ([Player])
 getPlayers =
   let file = "SpringRank/data/players.csv" in
   liftM records $ BL.readFile file
@@ -48,10 +48,12 @@ getPlayers =
     options = defaultDecodeOptions { decDelimiter = fromIntegral $ ord ' ' }
     parseCsv csv = decodeWith options NoHeader csv :: EitherData
 
-
-
-
-
-
-
-
+-- TODO: This won't be able to free generate the data structure. think.
+-- importPlayers "SpringRank/data/2018_matches.dat"
+importPlayers :: FilePath -> IO ([Player])
+importPlayers file =
+  liftM records $ BL.readFile file
+  where
+    records = toList.(fromRight empty).parseCsv
+    options = defaultDecodeOptions { decDelimiter = fromIntegral $ ord ' ' }
+    parseCsv csv = decodeWith options NoHeader csv :: EitherData

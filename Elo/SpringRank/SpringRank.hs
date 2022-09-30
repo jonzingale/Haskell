@@ -5,8 +5,7 @@ import Data.Sparse.SpMatrix (sparsifySM, nrows)
 import Data.Sparse.SpVector (SpVector, sparsifySV, onesSV)
 import Data.Sparse.Common (diagonalSM)
 
--- import CsvParser (Graph, getGraph)
-import SpringRank.GoParser (genGraph)
+import Models.Tournament (genGraph)
 import SpringRank.NumericalHelper
 import SpringRank.Adjacency
 

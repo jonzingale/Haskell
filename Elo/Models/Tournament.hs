@@ -1,17 +1,10 @@
-{-# LANGUAGE DeriveGeneric #-}
-
-module SpringRank.GoParser where
-
-import qualified Data.ByteString.Lazy as BL
-import Data.Vector (Vector, empty, toList)
-import Data.Either.Extra (fromRight)
-import GHC.Generics (Generic)
-import Control.Monad (liftM)
-import Data.Char (ord)
+module Models.Tournament where
 import Data.List (init, nub, findIndex)
-import Data.Csv
-import Elo (rankToElo, eloGain, Pairing(M))
 import SpringRank.CsvParser (Edge(Edge))
+import Elo (rankToElo, eloGain, Pairing(M))
+import Models.Matches (Match(Match), getMatches, n1, n2)
+
+example = genTable "SpringRank/data/2018_matches.dat"
 
 {--
 Data here is given as matchings where the first player listed won the bout
@@ -26,19 +19,6 @@ player is to be given a unique integer id (index for the adjacency matrix).
 [id1, name1, go_ranking1, elo1, id2, name2, go_ranking2, elo2, elo_gain, open?]
 --}
 
-example = getMatches "SpringRank/data/2018_matches.dat"
-
-type Tournament = [Match]
-type EitherData = Either String (Vector Match)
-
-data Match = BadRecord | Match {
-  n1 :: !String,
-  r1 :: !String,
-  n2 :: !String,
-  r2 :: !String,
-  o1 :: !String
-} deriving (Generic, Show)
-
 data Table = Table {
   id1 :: !Int,
   name1 :: !String,
@@ -51,28 +31,6 @@ data Table = Table {
   eloDiff :: !Double,
   open :: !Bool
 } deriving (Show)
-
-instance FromRecord Match
-
-records = toList.(fromRight empty).parseCsv
-  where
-    options = defaultDecodeOptions { decDelimiter = fromIntegral $ ord ' ' }
-    parseCsv csv = decodeWith options NoHeader csv :: EitherData
-
-getMatches :: FilePath -> IO(Tournament)
-getMatches file = liftM records $ BL.readFile file
-
-ex2 = genTable "SpringRank/data/2018_matches.dat"
-
-players_with_id :: [Match] -> [(Int, String)]
-players_with_id mts =
-  let names = nub $ map n1 mts ++ map n2 mts in
-  zip [0..] names
-
-players :: FilePath -> IO [(Int, String)]
-players file = do
-  mts <- getMatches file
-  return $ players_with_id mts
 
 genTable :: FilePath -> IO [Table]
 genTable file = do
