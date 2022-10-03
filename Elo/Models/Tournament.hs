@@ -1,10 +1,13 @@
 module Models.Tournament where
+import Data.ByteString (ByteString)
+import qualified Data.ByteString.Lazy as BL
 import Data.List (init, nub, findIndex)
 import SpringRank.CsvParser (Edge(Edge))
 import Elo (rankToElo, eloGain, Pairing(M))
 import Models.Matches (Match(Match), getMatches, n1, n2)
+import Models.Player (Player(Player), idx)
 
-example = genTable "SpringRank/data/2018_matches.dat"
+example = genTournament "SpringRank/data/2018_matches.dat"
 
 {--
 Data here is given as matchings where the first player listed won the bout
@@ -19,32 +22,33 @@ player is to be given a unique integer id (index for the adjacency matrix).
 [id1, name1, go_ranking1, elo1, id2, name2, go_ranking2, elo2, elo_gain, open?]
 --}
 
-data Table = Table {
-  id1 :: !Int,
-  name1 :: !String,
-  rank1 :: !String,
-  elo1 :: !Double,
-  id2 :: !Int,
-  name2 :: !String,
-  rank2 :: !String,
-  elo2 :: !Double,
+-- TODO: Tournament Player Player eloDiff open
+data Tournament = Tournament {
+  player1 :: Player,
+  player2 :: Player,
   eloDiff :: !Double,
   open :: !Bool
 } deriving (Show)
 
-genTable :: FilePath -> IO [Table]
-genTable file = do
+genTournament :: FilePath -> IO [Tournament]
+genTournament file = do
   matches <- getMatches file
   let names = nub $ map n1 matches ++ map n2 matches
   return $ map (toTable names) matches
   where
     toTable ns (Match n1 r1 n2 r2 open) =
-      (Table
-        (playerId n1 ns) n1 r1 (rankToElo r1)
-        (playerId n2 ns) n2 r2 (rankToElo r2)
+      (Tournament
+        (genPlayer ns n1 r1)
+        (genPlayer ns n2 r2)
         (diffElo (rankToElo r1) (rankToElo r2) open)
         (read open)
       )
+
+    -- Player idx name goRank elo tournamentRank
+    -- probably should be an empty value for a newtype
+    genPlayer ns n r =
+      Player (playerId n ns) n r (rankToElo r) 0
+
     playerId n ns =
       let (Just x) = findIndex (== n) ns in x
 
@@ -52,6 +56,7 @@ genTable file = do
       | a < b = eloGain (M b a) False (read o)
       | otherwise = eloGain (M a b) True (read o)
 
+-- generates a Tournment and then forgets into a Graph
 genGraph file = do
-  t <- genTable file
-  return $ map (\r -> Edge (id1 r) (id2 r) (eloDiff r)) t
+  t <- genTournament file
+  return $ map (\r -> Edge (idx.player1 $ r) (idx.player2 $ r) (eloDiff r)) t

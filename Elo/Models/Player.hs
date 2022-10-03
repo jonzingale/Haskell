@@ -2,15 +2,17 @@
 {-# LANGUAGE DeriveGeneric #-}
 
 module Models.Player where
-import Data.ByteString (ByteString)
 import qualified Data.ByteString.Lazy as BL
 import Data.Csv (FromRecord, ToRecord)
 import Data.Vector (Vector, empty, toList)
 import Data.Either.Extra (fromRight)
 import Control.Monad (liftM)
 import Data.Char (ord)
+import Data.List (nub)
 import GHC.Generics
 import Data.Csv
+
+import Models.Matches
 
 {--
 Todo:
@@ -27,19 +29,14 @@ type EitherData = Either String (Vector Player)
 
 data Player = Player
   { idx :: !Int,
-    name :: !ByteString,
-    goRank :: !ByteString,
+    name :: !String,
+    goRank :: !String,
     elo :: !Double,
     tournamentRank :: !Double
   } deriving (Show, Eq, Generic)
 
-persons :: [Player]
-persons = [
-  Player 0 "Billy" "10.0k" 1100 0,
-  Player 1 "Kyle" "9.0k" 1200 0
-  ]
-
-getPlayers :: IO ([Player])
+-- Player 0 "Billy" "10.0k" 1100 0,
+getPlayers :: IO [Player]
 getPlayers =
   let file = "SpringRank/data/players.csv" in
   liftM records $ BL.readFile file
@@ -48,12 +45,13 @@ getPlayers =
     options = defaultDecodeOptions { decDelimiter = fromIntegral $ ord ' ' }
     parseCsv csv = decodeWith options NoHeader csv :: EitherData
 
--- TODO: This won't be able to free generate the data structure. think.
--- importPlayers "SpringRank/data/2018_matches.dat"
-importPlayers :: FilePath -> IO ([Player])
-importPlayers file =
-  liftM records $ BL.readFile file
-  where
-    records = toList.(fromRight empty).parseCsv
-    options = defaultDecodeOptions { decDelimiter = fromIntegral $ ord ' ' }
-    parseCsv csv = decodeWith options NoHeader csv :: EitherData
+-- genPlayers "SpringRank/data/2018_matches.dat"
+genPlayers :: FilePath -> IO [Player]
+genPlayers file = do
+  matches <- getMatches file
+  let fsts = [Player 0 (n1 mt) (r1 mt) 0 0 | mt <- matches]
+  let snds = [Player 0 (n2 mt) (r2 mt) 0 0 | mt <- matches]
+  let rs = zip [0..] (nub $ fsts ++ snds)
+  let ps = [ Player i n r e t | (i, (Player _ n r e t)) <- rs]
+  return ps
+

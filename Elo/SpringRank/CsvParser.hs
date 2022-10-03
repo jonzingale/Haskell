@@ -13,9 +13,11 @@ import Data.Csv
 type Graph = [Edge]
 type EitherData = Either String (Vector Edge)
 
+-- Edge Id Id DiffElo
 data Edge = BadEdge | Edge { source :: !Int,  target :: !Int, value :: !Double }
   deriving (Generic, Show)
 
+-- edges are oriented
 instance Eq Edge where
   (Edge s t _) == (Edge s' t' _) = s == s' && t == t'
 
