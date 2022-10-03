@@ -13,6 +13,7 @@ import GHC.Generics
 import Data.Csv
 
 import Models.Matches
+import Elo (rankToElo)
 
 {--
 Todo:
@@ -21,6 +22,8 @@ Todo:
 3. generate default players from raw tournament data and save it.
 4. derive tournament data from springrank and update players table.
 --}
+
+example = genPlayers "SpringRank/data/2018_matches.dat"
 
 instance FromRecord Player
 instance ToRecord Player
@@ -45,12 +48,11 @@ getPlayers =
     options = defaultDecodeOptions { decDelimiter = fromIntegral $ ord ' ' }
     parseCsv csv = decodeWith options NoHeader csv :: EitherData
 
--- genPlayers "SpringRank/data/2018_matches.dat"
 genPlayers :: FilePath -> IO [Player]
 genPlayers file = do
   matches <- getMatches file
-  let fsts = [Player 0 (n1 mt) (r1 mt) 0 0 | mt <- matches]
-  let snds = [Player 0 (n2 mt) (r2 mt) 0 0 | mt <- matches]
+  let fsts = [Player 0 (n1 mt) (r1 mt) (rankToElo.r1 $ mt) 0 | mt <- matches]
+  let snds = [Player 0 (n2 mt) (r2 mt) (rankToElo.r2 $ mt) 0 | mt <- matches]
   let rs = zip [0..] (nub $ fsts ++ snds)
   let ps = [ Player i n r e t | (i, (Player _ n r e t)) <- rs]
   return ps
