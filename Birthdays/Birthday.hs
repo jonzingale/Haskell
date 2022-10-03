@@ -11,6 +11,7 @@ zeke = (fromGregorian 1981 11 6)
 sarah_j = (fromGregorian 1985 5 14)
 tycho = (fromGregorian 2020 3 3)
 katie = (fromGregorian 1987 6 27)
+grandmaT = (fromGregorian 1928 6 18)
 
 daysold :: Day -> IO ()
 daysold name =
