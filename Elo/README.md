@@ -1,6 +1,14 @@
 `ghci SpringRank/Test.hs`
 
-Todo:
+Todo (Dev):
 1. CsvParser -> Models/Graph.hs
 2. proper cabal package
 3. abstract tournament rankings in Test.hs
+
+Todo (Sci):
+1. generate minimal graph (tournament suggestion)
+2. reason through handicap/open comparisons
+3. validate matchings influence of graph on fixed subgraph
+4. generalize diffElo to include negative elo: eloDiff1 + eloDiff2
+5. validate scaling by pairwise multiplication
+6. jupyter notebook explaining calculations
