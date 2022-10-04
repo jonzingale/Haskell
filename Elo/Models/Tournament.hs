@@ -1,7 +1,7 @@
 module Models.Tournament where
 import Data.ByteString (ByteString)
 import qualified Data.ByteString.Lazy as BL
-import Data.List (init, nub, findIndex)
+import Data.List (nub, findIndex)
 import SpringRank.CsvParser (Edge(Edge))
 import Elo (rankToElo, eloGain, Pairing(M))
 import Models.Matches (Match(Match), getMatches, n1, n2)
@@ -12,17 +12,8 @@ example = genTournament "SpringRank/data/2018_matches.dat"
 {--
 Data here is given as matchings where the first player listed won the bout
 against the second player listed.
-
-[name1, go_ranking1, name2, go_ranking2, open?]
-
-The parser should prepare the data so that go_rankings are converted to elo,
-and the gained elo, via the match, is accounted for. Additionally, each
-player is to be given a unique integer id (index for the adjacency matrix).
-
-[id1, name1, go_ranking1, elo1, id2, name2, go_ranking2, elo2, elo_gain, open?]
 --}
 
--- TODO: Tournament Player Player eloDiff open
 data Tournament = Tournament {
   player1 :: Player,
   player2 :: Player,

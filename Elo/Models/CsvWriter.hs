@@ -10,9 +10,6 @@ import Data.Csv.Incremental
 import Data.Char (ord)
 import GHC.Generics
 
--- reverse this relation?
-import Models.Player (persons, Player(Player))
-
 -- writeToFile "SpringRank/data/players.csv" persons => IO ()
 writeToFile :: ToRecord a => FilePath -> [a] -> IO ()
 writeToFile file ds = do
