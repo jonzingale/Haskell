@@ -1,5 +1,4 @@
 module Primes where
--- import Math.NumberTheory.Primes.Factorisation -- not used, but useful
 -- import Data.Numbers.Primes  -- not used, but useful
 import FactorisationHelpers
 import System.Random
@@ -70,7 +69,8 @@ lil'toller red int = (and.take int) troofs == True
             where troofs = [ (a^red) `mod` red == a | a <-(map toInteger (clean red)) ]
 
 lil'tollerz :: Prime->Int-> Bool  
-lil'tollerz red int = ((and.take int) $ [ (a^red) `mod` red == a | a <-(knuffle [2..(red`div`2)]) ]) == True
+lil'tollerz red int = ((and.take int) $
+    [ (a^red) `mod` red == a | a <-(knuffle [2..(red`div`2)]) ]) == True
 -- knuffle may only need to go [2..(red `div`2)]
  
 clean :: Integral a => a -> [Int]
