@@ -30,4 +30,5 @@ maxi xs = maximum xs
 
 -- cause its funny
 funny :: Int
-funny = maxi [8989876, 7646534, 765, 45213556, 896753211236,doubleMe 54332, 768454356] 
+funny = maxi [8989876, 7646534, 765, 45213556,
+    896753211236,doubleMe 54332, 768454356]
