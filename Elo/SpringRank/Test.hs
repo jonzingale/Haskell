@@ -28,3 +28,4 @@ unNormGetTournamentRankings file = do
 nmgo_2018_test = getTournamentRankings "SpringRank/data/2018_matches.dat"
 nmgo_2019H_test = getTournamentRankings "SpringRank/data/2019H_matches.dat"
 nmgo_2019O_test = getTournamentRankings "SpringRank/data/2019O_matches.dat"
+nmgo_2022_test = getTournamentRankings "SpringRank/data/2022_matches.dat"
