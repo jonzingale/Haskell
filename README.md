@@ -59,4 +59,5 @@ benchmarks: True
 ```
 
 `cabal build`
+`cabal install --only-dependencies`
 `cabal run <package-name>`
