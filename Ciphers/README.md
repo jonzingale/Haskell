@@ -41,4 +41,5 @@ benchmarks: True
 ```
 
 `cabal build`
+`cabal install --only-dependencies`
 `cabal run Ciphers`
