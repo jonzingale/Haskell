@@ -1,5 +1,7 @@
 ## Ciphers
 
+`cabal run Ciphers`
+
 ### cabal for profiling
 1. cabal init
 2. edit `ciphers.cabal` executables to include ghc options
