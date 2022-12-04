@@ -1,6 +1,7 @@
 {-# LANGUAGE BangPatterns #-}
 
 module Main where
+import Control.Parallel.Strategies (rdeepseq, parListChunk, using)
 import qualified Data.ByteString.Lazy as BL
 import qualified Data.ByteString as B
 import qualified Data.Vector as U
@@ -18,17 +19,17 @@ import Data.Char
 main :: IO F.Text
 main = do
   !f <- B.readFile "./app/bigger_text.txt"
-  let msgs = U.fromList . F.chunk F.blockSize $ f
-  let encrypted = U.map F.encrypt msgs
-  let decrypted = U.map F.decrypt encrypted
-  let msg = F.feistelToText decrypted
-  test1 f msg
-  -- test2 encrypted
-  test2 decrypted
-  test3 msg
+  let len = B.length f
+  let msgs = F.chunk F.blockSize $ f
+  let encrypted = map F.encrypt msgs
+  let resultE = encrypted `using` parListChunk 4096 rdeepseq
+  let decrypted = map F.decrypt resultE
+  let resultD = decrypted `using` parListChunk 4096 rdeepseq
+  let padded_msg = F.feistelToText resultD
+  let msg = B.take len padded_msg
+  print (f == msg)
+  -- print (len, B.length msg)
+  -- print $ B.take 128 msg
+  -- print $ B.take 128 f
+  -- print msg
   return msg -- for useful return
-  where
-    -- print (f== msg) only True when blockSize = 84 and file = "./app/text.txt"
-    test1 f' m = print (f' == m) -- test invertibility, main :: IO ()
-    test2 e = print $ F.feistelToText e -- test encryption
-    test3 m = print $ B.head m -- for profiling, main :: IO Word8

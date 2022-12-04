@@ -65,7 +65,7 @@ executable Ciphers
       -threaded
       -prof
       -fprof-auto
-      "-with-rtsopts=-N -p -s -hT -i0.1"
+      "-with-rtsopts=-p -s -N4 -hT -i0.1"
 
     -- Other library packages from which modules are imported.
     other-modules:
@@ -75,7 +75,8 @@ executable Ciphers
       base ^>=4.16.4.0,
       vector >= 0.13.0.0,
       bytestring >= 0.11.3.1,
-      base64-bytestring >= 1.2.1.0
+      base64-bytestring >= 1.2.1.0,
+      parallel >= 3.2.2.0
 
     -- Directories containing source files.
     hs-source-dirs:   app
