@@ -68,6 +68,8 @@ executable Ciphers
       "-with-rtsopts=-N -p -s -hT -i0.1"
 
     -- Other library packages from which modules are imported.
+    other-modules:
+      RSA
     build-depends:
       base ^>=4.16.4.0,
       vector >= 0.13.0.0,
