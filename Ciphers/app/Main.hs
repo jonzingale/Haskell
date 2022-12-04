@@ -4,6 +4,7 @@ module Main where
 import qualified Data.ByteString.Lazy as BL
 import qualified Data.Vector as U
 import Data.Char
+-- import Feistel
 import RSA
 
 {--
