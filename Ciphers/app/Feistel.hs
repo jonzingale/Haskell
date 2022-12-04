@@ -11,7 +11,7 @@ import Data.Bits
 
 Todo:
 0. Set block size
-1. Generate key of size blockSize, elliptic curve?
+1. Generate keys of size 1/2 the blockSize, elliptic curve?
 --}
 
 type Feistel = [(Text, Text)]
