@@ -69,7 +69,8 @@ executable Ciphers
 
     -- Other library packages from which modules are imported.
     other-modules:
-      RSA
+      RSA,
+      Feistel
     build-depends:
       base ^>=4.16.4.0,
       vector >= 0.13.0.0,
