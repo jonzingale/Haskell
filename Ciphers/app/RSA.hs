@@ -1,6 +1,12 @@
 module RSA where
 import qualified Data.Vector as U
 
+{--
+c = m^e `mod` m
+d = c^(inv e) `mod` m
+(a^e)^d == (a^e)(a^e)..d..(a^e) = a^(e+..d..+e) = a^(d*e)
+--}
+
 type Key = Integer
 type Modulus = Integer
 type Message = U.Vector Integer
