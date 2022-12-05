@@ -65,7 +65,7 @@ executable Ciphers
       -threaded
       -prof
       -fprof-auto
-      "-with-rtsopts=-p -s -N4 -hT -i0.1"
+      "-with-rtsopts=-p -s -N4 -hT"
 
     -- Other library packages from which modules are imported.
     other-modules:

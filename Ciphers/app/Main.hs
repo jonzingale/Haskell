@@ -22,14 +22,14 @@ main = do
   let len = B.length f
   let msgs = F.chunk F.blockSize $ f
   let encrypted = map F.encrypt msgs
-  let resultE = encrypted `using` parListChunk 4096 rdeepseq
+  let resultE = encrypted `using` parListChunk 1024 rdeepseq
   let decrypted = map F.decrypt resultE
-  let resultD = decrypted `using` parListChunk 4096 rdeepseq
+  let resultD = decrypted `using` parListChunk 1024 rdeepseq
   let padded_msg = F.feistelToText resultD
   let msg = B.take len padded_msg
   print (f == msg)
   -- print (len, B.length msg)
   -- print $ B.take 128 msg
   -- print $ B.take 128 f
-  -- print msg
+  print msg -- for profiling
   return msg -- for useful return

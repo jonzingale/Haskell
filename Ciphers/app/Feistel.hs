@@ -36,18 +36,21 @@ type Text = BL.ByteString
 type Key = Text
 
 -- length 64 keys
-key1, key2, key3 :: BL.ByteString
+key1, key2, key3 :: Text
 Right key1 = decode "kTSFoLQRrR+hWJlLjAwXqOH5Z3ZLDWray5mBgNK7lLuHdTwab8m/v96ykTSFoLQR"
 Right key2 = decode "5npvqoiq4jgn4hvwgV6HvWEAGRTV5h7vThEjDsrydgrHSrHtDthrsgrykTSFoLQR"
 Right key3 = decode "6GWYJR2jbersEgghjJ2esgbnyuMrJEHSRthyNUjesrtThsftHtyHeWsykTSFoLQR"
 Right key4 = decode "kTSFoLQRrR+hWJlLjAwXqOH5Z3ZLDWray5mBgNK7lLuHdTwab8m/v96ykTSFoLQR"
 
+keys :: [Text]
+keys = [key3, key2, key1]
+
 blockSize :: Int
 blockSize = 64
 
 encrypt, decrypt :: (Text, Text) -> (Text, Text)
-encrypt = swap.(feistelRound key1).(feistelRound key2).(feistelRound key3)
-decrypt = swap.(feistelRound key3).(feistelRound key2).(feistelRound key1)
+encrypt = foldr (.) swap $ map feistelRound keys
+decrypt = foldr (.) swap $ map feistelRound $ reverse keys
 
 swap :: (a, b) -> (b, a)
 swap (a, b) = (b, a)
