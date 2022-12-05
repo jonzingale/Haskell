@@ -2,12 +2,12 @@
 
 module Main where
 import Control.Parallel.Strategies (rdeepseq, parListChunk, using)
-import qualified Data.ByteString.Lazy as BL
 import qualified Data.ByteString as B
-import qualified Data.Vector as U
 import qualified Feistel as F
-import qualified RSA as RSA
-import Data.Char
+-- import qualified RSA as RSA
+-- import qualified Data.ByteString.Lazy as BL
+-- import qualified Data.Vector as U
+-- import Data.Char
 
 -- main :: IO ()
 -- main = do
