@@ -1,5 +1,5 @@
 {-# LANGUAGE OverloadedStrings #-}
-{-# OPTIONS_GHC -Wincomplete-uni-patterns #-}
+{-# OPTIONS_GHC -Wno-incomplete-uni-patterns #-}
 
 module Feistel where
 import qualified Data.ByteString as B
@@ -8,7 +8,6 @@ import Data.Word
 import Data.Bits
 
 {--
-
 :set +s
 
 Todo:
