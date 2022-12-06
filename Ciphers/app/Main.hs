@@ -22,9 +22,9 @@ main = do
   let len = B.length f
   let msgs = F.chunk F.blockSize $ f
   let encrypted = map F.encrypt msgs
-  let resultE = encrypted `using` parListChunk 1024 rseq
+  let resultE = encrypted `using` parListChunk 256 rseq
   let decrypted = map F.decrypt resultE
-  let resultD = decrypted `using` parListChunk 1024 rseq
+  let resultD = decrypted `using` parListChunk 256 rseq
   let padded_msg = F.feistelToText resultD
   let msg = B.take len padded_msg
   print (f == msg)
