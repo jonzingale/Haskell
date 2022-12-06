@@ -12,23 +12,24 @@ import Data.Bits
 
 Todo:
 1. Generate keys of size 1/2 the blockSize, elliptic curve?
-2. Better padding:
-  a. get length of vector
-  b. add block sized junk
-  c. take length of vector
+2. Better padding
 
-Sun Dec  4 12:30 2022 Time and Allocation Profiling Report  (Final)
+Mon Dec  5 20:50 2022 Time and Allocation Profiling Report  (Final)
 
-  Ciphers +RTS -p -s -N4 -hT -i0.1 -RTS
+  Ciphers +RTS -p -s -N4 -hT -RTS
 
-  total time  =        0.24 secs   (948 ticks @ 1000 us, 4 processors)
-  total alloc = 31,534,292,952 bytes  (excludes profiling overheads)
+  total time  =        0.10 secs   (397 ticks @ 1000 us, 4 processors)
+  total alloc = 32,149,775,880 bytes  (excludes profiling overheads)
 
 COST CENTRE            MODULE  SRC                            %time %alloc
 
-feistelRound.f         Feistel app/Feistel.hs:59:9-42          77.2    0.6
-feistelToText.fuseBody Feistel app/Feistel.hs:65:5-32          17.7   99.2
-feistelRound           Feistel app/Feistel.hs:(58,1)-(59,42)    2.4    0.0
+feistelToText.fuseBody Feistel app/Feistel.hs:65:5-31          49.1   97.3
+feistelRound.f         Feistel app/Feistel.hs:59:9-40          26.4    1.8
+main                   Main    app/Main.hs:(20,1)-(35,12)      10.3    0.7
+decrypt                Feistel app/Feistel.hs:52:1-58           4.8    0.0
+encrypt                Feistel app/Feistel.hs:51:1-48           3.5    0.0
+feistelRound           Feistel app/Feistel.hs:(58,1)-(59,40)    2.3    0.0
+chunk                  Feistel app/Feistel.hs:(69,1)-(75,48)    1.5    0.0
 --}
 
 type Feistel = [(Text, Text)]
