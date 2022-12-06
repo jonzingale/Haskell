@@ -1,7 +1,7 @@
 {-# LANGUAGE BangPatterns #-}
 
 module Main where
-import Control.Parallel.Strategies (rdeepseq, parListChunk, using)
+import Control.Parallel.Strategies (parListChunk, using, rseq)
 import qualified Data.ByteString as B
 import qualified Feistel as F
 -- import qualified RSA as RSA
@@ -22,9 +22,9 @@ main = do
   let len = B.length f
   let msgs = F.chunk F.blockSize $ f
   let encrypted = map F.encrypt msgs
-  let resultE = encrypted `using` parListChunk 1024 rdeepseq
+  let resultE = encrypted `using` parListChunk 1024 rseq
   let decrypted = map F.decrypt resultE
-  let resultD = decrypted `using` parListChunk 1024 rdeepseq
+  let resultD = decrypted `using` parListChunk 1024 rseq
   let padded_msg = F.feistelToText resultD
   let msg = B.take len padded_msg
   print (f == msg)
