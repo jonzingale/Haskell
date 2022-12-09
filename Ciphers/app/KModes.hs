@@ -3,21 +3,17 @@ import Data.Bits -- popCount
 import Data.List
 
 {--
-setBit . clearBit = 1
+setBit . clearBit = id
 popCount is evalZ
-
 --}
 
 centroids :: [Int]
 -- 00000, 01111, 11111
 centroids = [0, 15, 31]
 
-type Vect = [Int]
+type Vect = Int
 type Mode = Vect
 type Collection = [Vect]
-
-dallas :: Int
-dallas = 31
 
 evalZ :: Bits b => b -> Int
 evalZ b = popCount b
@@ -29,30 +25,25 @@ evalF v = evalZ . xor v
 evalFs :: Bits b => b -> [b] -> [Int]
 evalFs v = map (evalF v)
 
--- transpose doesn't know about Bits as [Z2]
-mode :: (Bits b, Ord b, Num b) => [b] -> [Int]
-mode xs = (map f) . transposeB $ xs
+-- vectors MUST be of equal and finite length
+mode :: (Bits b, Ord b, Num b) => [b] -> [b]
+mode xs =
+  -- let size = 1 + (div (length xs) 2) :: Int in
+  let size = 5 :: Int in
+  (map (f size)) . transposeB $ xs
   where
-    -- bias toward zero in tiebrake
-    f v | 2 * evalZ v > bitLen v = 1 -- not getting the length of vector
-        | otherwise = 0
-    bitLen n = f n 0
-      where
-        f n a | n - 2^a >= 0 = f n (a+1)
-              | otherwise = a
+    -- bias is toward zero in tiebrake
+    f s v | 2 * evalZ v > s  = 1
+          | otherwise = 0
 
 -- Todo: Write this better
--- tranposeB centroids => [1,3,3,3,3]
 transposeB :: (Num b, Bits b, Ord b) => [b] -> [b]
 transposeB vs =
   let len = length vs in
-  [toBinInt len [res len j v| v <- vs] | j <- [0..len + 1]]
+  let bins = [[res j v| v <- vs] | j <- [0..9]] in
+  reverse . map (toBinInt len) $ bins
   where
     toBinInt l v = sum . zipWith (*) v $ [ 2^(l-z) | z <- [1..]]
-    res l i v 
-      | v .&. 2^(l-i+1) > 0 = 1
+    res i v 
+      | v .&. 2^i > 0 = 1
       | otherwise = 0
-
-
-
-
