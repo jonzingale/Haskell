@@ -39,11 +39,11 @@ mode xs =
 -- Todo: Write this better
 transposeB :: (Num b, Bits b, Ord b) => [b] -> [b]
 transposeB vs =
-  let len = length vs in
+  let len = length vs in -- 4
   let bins = [[res j v| v <- vs] | j <- [0..9]] in
   reverse . map (toBinInt len) $ bins
   where
     toBinInt l v = sum . zipWith (*) v $ [ 2^(l-z) | z <- [1..]]
-    res i v 
+    res i v
       | v .&. 2^i > 0 = 1
       | otherwise = 0
