@@ -36,7 +36,7 @@ mode xs =
     f s v | 2 * evalZ v > s  = 1
           | otherwise = 0
 
--- Todo: Write this better
+-- Todo: Write this better, specify size of vectorspace
 transposeB :: (Num b, Bits b, Ord b) => [b] -> [b]
 transposeB vs =
   let len = length vs in -- 4
