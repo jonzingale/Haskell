@@ -55,7 +55,7 @@ takensFromWave file density = do
   let ys = drop delay xs
   let zs = drop delay ys
   let as = drop delay zs
-  return $ drawLine density $ zip xs ys
+  return $ drawLine density $ zip xs zs
 
 preprocess :: WAVE -> [Int]
 preprocess wav =
