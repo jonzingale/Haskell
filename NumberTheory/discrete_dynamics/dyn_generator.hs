@@ -37,7 +37,7 @@ tensor m1 m2 =
   let mparts = map (map (\i -> scaleMatrix i m2)) ms in
   process mparts n
   where
-    -- could probably be written better, another foldr on (<->)?
+    -- can be written better: another foldr on (<->), last is inefficient, ...
     process (p:[]) i =
       foldr (<|>) (last p) (take (i-1) p)
     process (p:ps) i =
