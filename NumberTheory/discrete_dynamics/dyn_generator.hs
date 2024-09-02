@@ -1,5 +1,5 @@
 module DynGenerator where
-import Data.Matrix --  identity, permMatrix, fromLists, toLists, nrows, ncols
+import Data.Matrix
 
 {--
 NOTES:
