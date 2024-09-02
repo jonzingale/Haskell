@@ -11,12 +11,6 @@ Dyn representations as 1,0 valued adjacency matrices whose rows sum to 1.
 cabal install --lib matrix-0.3.6.0
 --}
 
-{--
-TODO:
-- newtype or data?
-- tensors? none in library!
---}
-
 ex02 = zero 2 2
 exi2 = identity 2
 ex12 = fromLists [[0,1],[1,0]]
@@ -38,7 +32,6 @@ tensor m1 m2 =
   process mparts n
   where
     -- can be written better: another foldr on (<->), last is inefficient, ...
-    process (p:[]) i =
-      foldr (<|>) (last p) (take (i-1) p)
-    process (p:ps) i =
-      foldr (<|>) (last p) (take (i-1) p) <-> process ps i
+    process (p:[]) i = pp [p] i
+    process (p:ps) i = pp (p:ps) i <-> process ps i
+    pp (p:ps) i = foldr (<|>) (last p) (take (i-1) p)
