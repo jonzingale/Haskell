@@ -4,6 +4,9 @@
 
 # Syntactic Category
 
+## TODO:
+- https://www.youtube.com/watch?v=L6LPEFteLts generic models provide point-free constructions.
+
 ## Introduction:
 The __syntactic category__, or category of __contexts__, is a functor `Con: Type Theories -> Modeling Categories`, equipped with a right adjoin `Lang: Modeling Categories -> Type Theories` recovering the *internal logic* of a given model.
 
@@ -35,5 +38,7 @@ Lang∘Con T -----> Lang M
 
 where:
 - ε relates a model of models to it's prototype model. Game of Life written in Game of Life, for instance.
-- η provides the idea of a cat, say, that is, it provides a minimal universal model which can interpret all repetitions.
-- w ~ Con∘Lang: Subcategory of generic models
+
+- η: Let T be a theory of computation that is *wrapped* in the context as a __generic or universal__ computer, Con(T). Arrows from Con(T) to another model of computation, Game of Life say, are interpretations such as Conway's original interpretation (gates built with Gosper gliders). η then gives the unique way the theory of computation T is logically given in the theory of Game of Life.
+
+- w ~ Con∘Lang: Subcategory of generic models?
