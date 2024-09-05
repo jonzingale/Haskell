@@ -51,4 +51,6 @@ incl ⊣ collapse ⊣ N
   InnerErg
 spectra ⊣ incl
     Dyn
+
+units and counits are isos.
 ```
