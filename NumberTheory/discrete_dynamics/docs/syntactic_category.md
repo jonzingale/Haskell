@@ -1,11 +1,25 @@
-- https://ncatlab.org/nlab/show/syntactic+category
-- https://www.youtube.com/watch?v=L6LPEFteLts
-- https://www.youtube.com/watch?v=VgzcAKVdfic&t=405s
+## References:
+- https://ncatlab.org/nlab/show/syntactic+category (read the references)
+- https://www.youtube.com/watch?v=L6LPEFteLts (type theory topology, pointfree)
+- https://www.youtube.com/watch?v=VgzcAKVdfic&t=405s (extension-intension)
+- https://ncatlab.org/nlab/show/abstract+general%2C+concrete+general+and+concrete+particular (general, particular, abstract, ...)
+- https://arxiv.org/abs/1811.00420 behavioral mereology
+- https://golem.ph.utexas.edu/category/2019/06/behavioral_mereology.html
+- https://www.researchgate.net/figure/Contravariant-Mapping-between-Intensional-universe-left-and-Extensional-universe-right_fig5_228926485
+- https://www.researchgate.net/publication/228926485_The_Universe_as_a_freely_generated_Information_System
+
+- http://xdel.ru/downloads/lgbooks/%28Synthese%20Library%20150%29%20A.%20F.%20Parker-Rhodes%20%28auth.%29-The%20Theory%20of%20Indistinguishables_%20A%20Search%20for%20Explanatory%20Principles%20Below%20the%20Level%20of%20Physics-Springer%20Netherlands%20%281981%29.pdf (WTF!!!)
+
+-  Lawvere, F W, Adjointness in Foundations (extension-intension)
 
 # Syntactic Category
 
 ## TODO:
 - https://www.youtube.com/watch?v=L6LPEFteLts generic models provide point-free constructions.
+- How do programming languages fit in? Hask the cat, Python, general-particular? SAT-satisfaction proof.
+- Can being in Syntactic categories be interpreted as Hegel, Nietzche, Deleuze? Can we have a logic that is not a logic of parts?
+- Logic is contra to Geometry, Intension contra to extension, mereology
+- What do universals buy me? when η is an iso for instance?
 
 ## Introduction:
 The __syntactic category__, or category of __contexts__, is a functor `Con: Type Theories -> Modeling Categories`, equipped with a right adjoin `Lang: Modeling Categories -> Type Theories` recovering the *internal logic* of a given model.
@@ -40,5 +54,8 @@ where:
 - ε relates a model of models to it's prototype model. Game of Life written in Game of Life, for instance.
 
 - η: Let T be a theory of computation that is *wrapped* in the context as a __generic or universal__ computer, Con(T). Arrows from Con(T) to another model of computation, Game of Life say, are interpretations such as Conway's original interpretation (gates built with Gosper gliders). η then gives the unique way the theory of computation T is logically given in the theory of Game of Life.
+
+- "Con(Lan(C)) → C says that there a canonical interpretation of the internal logic of a category 
+C in C itself"
 
 - w ~ Con∘Lang: Subcategory of generic models?
